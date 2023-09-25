@@ -4,9 +4,13 @@
   box-sizing: border-box;
   font-family: "Poppins", "sans-serif";
 }
+body {
+  position: relative;
+}
 $topBarWidth: 40px;
 $mainNavWidth: 100px;
 $mainBlack: black;
+$themeColor: rgb(173, 74, 74);
 @import url("https://fonts.googleapis.com/css2?family=Abel&family=Agdasima&family=Akaya+Telivigala&family=Amatic+SC&family=Bebas+Neue&family=Comfortaa:wght@300;400;600&family=Fira+Sans:ital,wght@0,200;0,300;0,500;1,100;1,200;1,700;1,800&family=Gemunu+Libre:wght@200;500;600;700;800&family=Glass+Antiqua&family=Josefin+Slab:ital,wght@0,100;0,200;0,400;0,700;1,100;1,200;1,300&family=Kanit:ital,wght@0,200;0,400;0,500;0,700;0,800;0,900;1,100;1,200;1,400;1,600;1,800;1,900&family=Life+Savers:wght@400;700&family=Michroma&family=Mukta:wght@200;400&family=Noto+Sans+Mono:wght@100;400;500;600;700;800;900&family=Open+Sans:ital,wght@0,300;0,700;0,800;1,300;1,400;1,800&family=Orbitron:wght@400;500;600;700;800&family=Oswald:wght@500&family=Permanent+Marker&family=Poppins:ital,wght@0,100;0,300;0,400;0,500;0,600;0,700;1,200;1,400&family=Quicksand:wght@300;400&family=Roboto:wght@400;500;700&family=Rubik+Vinyl&family=Satisfy&family=Shadows+Into+Light&family=Snippet&family=Solitreo&family=Syncopate:wght@400;700&display=swap");
 
 // Header Design Started
@@ -74,7 +78,7 @@ $mainBlack: black;
     .all_items {
       .links.active {
         display: block;
-        background-color: rgba(198, 117, 117, 0.084);
+        background-color: rgb(173, 74, 74);
         position: absolute;
         right: 0;
         top: calc($mainNavWidth);
@@ -123,5 +127,361 @@ $mainBlack: black;
 
 // Header Design Ended
 
-
 // Footer Design Started
+
+.main_footer {
+  bottom: 0;
+  left: 0;
+  min-height: 38vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: $mainBlack;
+  .footer_center {
+    // background: #dbc4c4;
+    width: 90%;
+    min-height: 35vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 10px;
+    .footer_items {
+      width: 300px;
+      min-height: 250px;
+      color: #ffff;
+      // background-color: rgb(19, 19, 19);
+      padding: 10px;
+      h4 {
+        letter-spacing: 0.72px;
+        margin-bottom: 15px;
+        font-weight: 500;
+      }
+      h5 {
+        font-size: 14px;
+      }
+      p {
+        font-size: 12px;
+        margin-top: 14px;
+      }
+      .footer_input {
+        input {
+          width: 120px;
+          outline: none;
+          border: none;
+          background: transparent;
+          padding: 2px;
+          font-size: 12px;
+        }
+        display: flex;
+        padding: 5px;
+        width: 160px;
+        border: 3px solid #fff;
+        border-radius: 5px;
+        align-items: center;
+      }
+    }
+  }
+}
+
+// Home Page Design Start
+$topBarwidth: 90%;
+$categoryWidth: 30%;
+.home {
+  height: 100vh;
+  .home_banner {
+    height: 360px;
+    width: 90%;
+    background-color: azure;
+    margin: auto;
+    display: flex;
+    .categoy_section {
+      width: 30%;
+      height: 100%;
+      background-color: rgb(117, 21, 212);
+    }
+    .banner {
+      width: 70%;
+      background-color: rgb(183, 197, 197);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .image_section {
+        width: 90%;
+        height: 90%;
+        background-color: rgb(14, 14, 15);
+        display: flex;
+        .image,
+        .text {
+          width: 50%;
+          background-color: rgb(27, 25, 25);
+        }
+        .image {
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+        .text {
+          background-color: rgb(41, 39, 39);
+        }
+      }
+    }
+  }
+}
+body {
+  .signup {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    justify-content: center;
+    .signup_section {
+      width: 85%;
+      // height: 80%;
+      height: 618px;
+      // background-color: rgba(0, 0, 0);
+      display: flex;
+      .image_section {
+        width: 60%;
+        background: #cbe4e8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        img {
+          width: auto;
+          height: auto;
+        }
+      }
+      .input_section {
+        width: 500px;
+        // background-color: rgb(187, 179, 179);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .controlls {
+          height: 85%;
+          width: 80%;
+          // background-color: aquamarine;
+          display: flex;
+          flex-direction: column;
+
+          align-items: center;
+          .header_text {
+            // background-color: teal;
+            width: 80%;
+            color: #0e0e0e;
+          }
+          .input_box {
+            width: 80%;
+            height: 70px;
+            // background-color: red;
+            margin-top: 5px;
+            display: flex;
+            align-items: end;
+            a {
+              color: gray;
+              text-decoration: underline;
+            }
+            .inp_l {
+              position: relative;
+              // background-color: antiquewhite;
+              width: 100%;
+              border-bottom: 1px solid gray;
+              z-index: 99;
+
+              label {
+                transition: 0.5s ease;
+                font-weight: normal;
+                font-size: 12px;
+                color: gray;
+                position: absolute;
+                left: 0px;
+                z-index: -1;
+              }
+              input {
+                background-color: transparent;
+                outline: none;
+                width: 100%;
+                border: none;
+                outline: none;
+                z-index: 99;
+              }
+              input:focus ~ label,
+              input:not(:focus):valid ~ label {
+                top: -15px;
+              }
+            }
+            button,
+            #signup {
+              width: 100%;
+              height: 70%;
+              border: none;
+              cursor: pointer;
+              text-decoration: none;
+              color: #ffff;
+              border-radius: 5px;
+              background: #db4444;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media (max-width: 553px) {
+  .main_nav {
+    .nav_bar {
+      .all_items {
+        .logo_section {
+          img {
+            width: 100px;
+          }
+        }
+        .icons {
+          .search_box {
+            input {
+              width: 100px;
+              // background-color: red;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 1060px) {
+  .main_footer {
+    .footer_center {
+      width: 100%;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+@media (max-width: 1036px) {
+  body {
+    .signup {
+      .input_section {
+        border: 1px solid gray;
+        border-radius: 5px;
+        height: 600px;
+      }
+      .signup_section {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        .image_section {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 527px) {
+  body {
+    .signup {
+      .signup_section {
+        .input_section {
+          .controlls {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Email Verification Page
+/* Global styles */
+.otp-form {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+}
+
+/* OTP input styles */
+.otp-container,
+.email-otp-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.otp-input,
+.email-otp-input {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-size: 18px;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s;
+
+  &:focus {
+    border-color: #db4444;
+  }
+}
+
+#verificationCode,
+#emailverificationCode {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s;
+
+  &:focus {
+    border-color: #db4444;
+  }
+}
+
+.email-otp {
+  margin-top: 25px;
+}
+
+/* Button styles */
+button {
+  margin-top: 15px;
+  background-color: #db4444;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #db4444;
+  }
+}
+#err {
+  color: rgb(205, 70, 70);
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid rgb(213, 171, 171);
+  padding: 5px;
+  // background: yellow;
+  min-width: 300px;
+  align-items: center;
+  border-radius: 5px;
+}
