@@ -15,17 +15,21 @@ const schema = mongoose.Schema({
     type: String,
     required: false,
   },
-  profileImage:{
-    type:String,
-    required:false
+  profileImage: {
+    type: String,
+    required: false,
   },
-  emailAuth:{
-    type:Boolean,
-    default:false
+  emailAuth: {
+    type: Boolean,
+    default: false,
   },
-  joinDate:{
-    type:Date,
-  }
+  joinDate: {
+    type: Date,
+  },
+  status: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 module.exports = mongoose.model("User", schema);

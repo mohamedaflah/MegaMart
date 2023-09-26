@@ -1,7 +1,9 @@
-<div class="side_bar">
+<div class="side_bar" id="side">
     <div class="logo">
-        <img src="/images/logo.svg" style="width: 110px;" alt="">
-        <img src="/images/side.svg" alt="">
+        <img id="lg" src="/images/logo.svg" style="width: 110px;" alt="">
+        
+            <img src="/images/side.svg" alt="" style="cursor: pointer;" id="sidebartoggle">
+        
     </div>
     <div class="links">
         <p style="margin: 0;padding:0">MENU</p>
@@ -23,4 +25,29 @@
                 Report</a>
         </div>
     </div>
+    <div class="activeLink">
+        <div class="tags">
+            <a href="">
+                <img src="/images/home.svg" alt=""></a>
+            <a href="">
+                <img src="/images/product.svg" alt="">
+                </a>
+            <a href="">
+                <img src="/images/transaction.svg" alt="">
+                </a>
+            <a href="">
+                <img src="/images/order.svg" alt="">
+                </a>
+            <a href="">
+                <img src="/images/reports.svg" alt="">
+                </a>
+        </div>
+    </div>
 </div>
+<script>
+    let sideToggle = document.querySelector("#sidebartoggle");
+    let sidebar = document.querySelector("#side");
+    sideToggle.addEventListener("click", () => {
+      sidebar.classList.toggle("active");
+    });
+</script>
