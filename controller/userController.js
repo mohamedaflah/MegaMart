@@ -178,7 +178,10 @@ async function userLoginPost(req, res) {
 
     if (!userData) {
       // User not found
-      return res.render("users/login", { profile: false, err: "User not found" });
+      return res.render("users/login", {
+        profile: false,
+        err: "User not found",
+      });
     }
 
     // Compare passwords
@@ -186,7 +189,10 @@ async function userLoginPost(req, res) {
 
     if (!passwordMatch) {
       // Passwords don't match
-      return res.render("users/login", { profile: false, err: "Incorrect password" });
+      return res.render("users/login", {
+        profile: false,
+        err: "Incorrect password",
+      });
     }
 
     // Login successful
@@ -194,10 +200,15 @@ async function userLoginPost(req, res) {
     return res.redirect("/");
   } catch (err) {
     console.error("Error during login:", err);
-    res.render("users/login", { profile: false, err: "Login failed. Please try again later." });
+    res.render("users/login", {
+      profile: false,
+      err: "Login failed. Please try again later.",
+    });
   }
 }
-
+function FailedLogin(req, res) {
+  res.render("users/failedlogin", { profile: false, err: "Login Failed" });
+}
 
 module.exports = {
   userHome,
@@ -214,4 +225,5 @@ module.exports = {
   userLogout,
   userLoginGet,
   userLoginPost,
+  FailedLogin
 };

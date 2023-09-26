@@ -10,15 +10,17 @@ app.use(
     resave: false,
     saveUninitialized: true,
   })
-  );
-  const router = require("./router/userRoute");
+);
+const router = require("./router/userRoute");
+const adminRoute = require("./router/adminRoute");
 app.use(passport.initialize());
-app.use(require('nocache')())
+app.use(require("nocache")());
 app.use(express.static("public"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/", router.router);
+app.use("/admin", adminRoute.router);
 const port = process.env.PORT;
 app.listen(port, () =>
   console.log(`Server Currenty Runnig in http://localhost:${port}`)

@@ -15,9 +15,11 @@ const {
   userLogout,
   userLoginGet,
   userLoginPost,
+  FailedLogin,
 } = require("../controller/userController");
 
 require("../auth/passportAuth");
+require("../auth/LoginwithGoogle");
 router.get("/", userHome);
 router.get("/setSession", sessionsetWhileSignupWithGoogle);
 router.get("/signup", singupGet);
@@ -25,7 +27,6 @@ router.get(
   "/auth/google",
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
-
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
@@ -33,8 +34,25 @@ router.get(
     failureRedirect: "/failedmail",
   })
 );
+
+// Routes for Google login
+// Update the route names to use "google" as the strategy name
+// Routes for Google login
+router.get(
+  "/login/google",
+  passport.authenticate("google-login", { scope: ["email", "profile"] })
+);
+router.get(
+  "/login/google/callback",
+  passport.authenticate("google-login", {
+    successRedirect: "/setSession",
+    failureRedirect: "/failedlogin",
+  })
+);
+
 router.get("/successmail", AfterMailSuccessfull);
 router.get("/failedmail", MailVerificationFail);
+router.get("/failedlogin", FailedLogin);
 router.post("/signup", singupPost);
 router.get("/mail/confirm", confirm);
 router.post("/mail/confirm", confirmPost);

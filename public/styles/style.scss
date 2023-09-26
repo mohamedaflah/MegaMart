@@ -354,7 +354,6 @@ body {
   .main_nav {
     .nav_bar {
       .all_items {
-        
         // background-color: red;
         .logo_section {
           img {
@@ -362,12 +361,12 @@ body {
           }
         }
         .icons {
-          img{
+          img {
             width: 25px;
             height: 25px;
           }
           .search_box {
-            img{
+            img {
               width: 15px;
               height: 15px;
             }
@@ -383,7 +382,6 @@ body {
     }
   }
 }
-
 
 @media (max-width: 1060px) {
   .main_footer {
@@ -518,4 +516,79 @@ button {
   min-width: 300px;
   align-items: center;
   border-radius: 5px;
+}
+$sidBarWidth: 250px;
+.home {
+  .side_bar {
+    background-color: rgb(236, 228, 228);
+    height: 100%;
+    width: 250px;
+    border-right: 1px solid rgb(200, 197, 197);
+    display: flex;
+    flex-direction: column;
+    .logo {
+      // background-color: #a46161;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      // gap: 28px;
+      padding: 0 20px;
+    }
+    .links {
+      // background-color: teal;
+      margin-top: 10px;
+      display: flex;
+      min-height: 500px;
+      padding: 0 20px;
+      flex-direction: column;
+      .tags {
+        padding: 0 5px;
+        display: flex;
+        flex-direction: column;
+        a {
+          // background-color: #333;
+          padding: 10px;
+          display: flex;
+          gap: 10px;
+          border-radius: 4.099px;
+          // background: linear-gradient(90deg, #92fe9d 0%, #00c9ff 100%);
+          margin: 10px;
+          color: #0e0e0e;
+          text-decoration: none;
+        }
+        a:nth-child(2){
+          background: linear-gradient(90deg, #92fe9d 0%, #00c9ff 100%);
+
+        }
+      }
+    }
+  }
+  .content_section {
+    background-color: #0e0e0e;
+    height: 100vh;
+    width: calc(#{100%} - #{$sidBarWidth});
+    background-color: #ffe4e4;
+    .overview_section {
+      width: 100%;
+      height: 200px;
+      // opacity: 0.15;
+      background: linear-gradient(45deg,rgb(96, 223, 125),rgb(23, 192, 161), rgb(147, 141, 141)),url('/images/rect.png');
+      display: flex;
+      justify-content: center;
+      .head_inp{
+        width: 90%;
+        height: 38px;
+        margin-top: 25px;
+        display: flex;
+        align-items: center;
+        color: #ffff;
+        // background-color: #00c9ff;
+        h5{
+
+          font-size: 25px;
+        }
+      }
+    }
+  }
 }
