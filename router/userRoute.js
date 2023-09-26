@@ -10,10 +10,16 @@ const {
   confirmPost,
   closeErr,
   otpClose,
+  sessionsetWhileSignupWithGoogle,
+  userAccount,
+  userLogout,
+  userLoginGet,
+  userLoginPost,
 } = require("../controller/userController");
 
 require("../auth/passportAuth");
 router.get("/", userHome);
+router.get("/setSession", sessionsetWhileSignupWithGoogle);
 router.get("/signup", singupGet);
 router.get(
   "/auth/google",
@@ -23,7 +29,7 @@ router.get(
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: "/",
+    successRedirect: "/setSession",
     failureRedirect: "/failedmail",
   })
 );
@@ -34,4 +40,8 @@ router.get("/mail/confirm", confirm);
 router.post("/mail/confirm", confirmPost);
 router.get("/errorMessage/close", closeErr);
 router.get("/otp/close", otpClose);
+router.get("/user/account", userAccount);
+router.get("/user/account/logout", userLogout);
+router.get("/user/login", userLoginGet);
+router.post("/user/login", userLoginPost);
 module.exports = { router };

@@ -26,10 +26,11 @@ passport.use(
           email: profile.email,
           profileImage: profile.picture,
           emailAuth: true,
+          joinDate:Date.now()
         };
-
         // Save the new user data to the database
         await new UserCollection(userInformation).save();
+        // request.session.userAuth = true;
         done(null, profile);
       }catch(err){
         console.log('error found whle passpor'+err);

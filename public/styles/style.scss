@@ -107,7 +107,7 @@ $themeColor: rgb(173, 74, 74);
     }
   }
 }
-@media (max-width: 840px) {
+@media (max-width: 1047px) {
   .main_nav {
     .nav_bar {
       .all_items {
@@ -329,7 +329,7 @@ body {
     }
   }
 }
-@media (max-width: 553px) {
+@media (max-width: 600px) {
   .main_nav {
     .nav_bar {
       .all_items {
@@ -350,6 +350,40 @@ body {
     }
   }
 }
+@media (max-width: 500px) {
+  .main_nav {
+    .nav_bar {
+      .all_items {
+        
+        // background-color: red;
+        .logo_section {
+          img {
+            width: 90px;
+          }
+        }
+        .icons {
+          img{
+            width: 25px;
+            height: 25px;
+          }
+          .search_box {
+            img{
+              width: 15px;
+              height: 15px;
+            }
+            // background-color: gold;
+            input {
+              width: 80px;
+
+              // background-color: red;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 
 @media (max-width: 1060px) {
   .main_footer {

@@ -32,6 +32,9 @@
                     <a href="">Contact</a>
                     <a href="">About</a>
                     <a href="/signup">Sign up</a>
+                    <%if(profile){%>
+                        <a href="">Orders</a>
+                        <%}%>
                 </div>
                 <div class="icons">
                     <div class="search_box">
@@ -41,6 +44,11 @@
                     <img class="whish" src="/images/heart.svg" alt="">
                     <img class="cart" src="/images/cart.svg" alt="">
                     <img class="menu" src="/images/menu_bar.svg" alt="">
+                    <%if(profile){%>
+                        <a href="/user/account">
+                            <img src="/images/userprofile.svg" alt="">
+                        </a>
+                        <% } %>
                 </div>
             </div>
         </div>

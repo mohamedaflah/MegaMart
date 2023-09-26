@@ -91,7 +91,7 @@ body {
     gap: 15px;
   }
 }
-@media (max-width: 840px) {
+@media (max-width: 1047px) {
   .main_nav .nav_bar .all_items .icons .menu {
     display: block;
     cursor: pointer;
@@ -283,12 +283,28 @@ body .signup .signup_section .input_section .controlls .input_box #signup {
   background: #db4444;
 }
 
-@media (max-width: 553px) {
+@media (max-width: 600px) {
   .main_nav .nav_bar .all_items .logo_section img {
     width: 100px;
   }
   .main_nav .nav_bar .all_items .icons .search_box input {
     width: 100px;
+  }
+}
+@media (max-width: 500px) {
+  .main_nav .nav_bar .all_items .logo_section img {
+    width: 90px;
+  }
+  .main_nav .nav_bar .all_items .icons img {
+    width: 25px;
+    height: 25px;
+  }
+  .main_nav .nav_bar .all_items .icons .search_box img {
+    width: 15px;
+    height: 15px;
+  }
+  .main_nav .nav_bar .all_items .icons .search_box input {
+    width: 80px;
   }
 }
 @media (max-width: 1060px) {

@@ -7,10 +7,20 @@ const MobileCheck = require("../auth/isValidMobile");
 const UserCollection = require("../model/UserDb");
 const bcrypt = require("bcrypt");
 function userHome(req, res) {
-  res.render("users/index", { profile: false });
+  if (req.session.userAuth) {
+    res.render("users/index", { profile: true });
+    // return;
+  } else {
+    res.render("users/index", { profile: false });
+  }
+  console.log(req.session.userAuth + " __user auth");
 }
 function singupGet(req, res) {
+  // if (req.session.userAuth) {
+  // res.redirect("/");
+  // } else {
   res.render("users/sigup", { err: false, profile: false });
+  // }
 }
 function AfterMailSuccessfull(req, res) {
   console.log(req.isAuthenticated() + "authentication__________________");
@@ -55,8 +65,10 @@ async function singupPost(req, res) {
           to: req.body.email_or_Phone,
           subject: "Megamart Confirmation Registration",
           html:
-            "<P>Thank you for Signing up! Please click the link below to confirm your registration : </p>" +
-            `<h1>Your Verification code is :${code}</h1>`,
+            "<p style='color:green;'>Thank you for Signing up! Please click the link below to confirm your registration : </p>" +
+            `<div style='width:90%;margin:auto;padding:5px;border-radius:5px;background:#2ff75e'>
+                  <h1 style='color:white'>Your Verification code is :${code}</h1>
+            </div>`,
         };
 
         // await transporter.sendMail(mailOptions)
@@ -109,15 +121,21 @@ async function singupPost(req, res) {
   }
 }
 function confirm(req, res) {
-  res.render("users/otp", { err: false, profile: false });
+  if (!req.session.userAuth) {
+    res.render("users/otp", { err: false, profile: false });
+  } else {
+    res.redirect("/");
+  }
 }
 function confirmPost(req, res) {
   if (req.body.verifyNum == codEmai) {
+    req.session.userAuth = true;
     userInformation.password = bcrypt.hashSync(userInformation.password, 10);
     new UserCollection({
       name: userInformation.name,
       email: userInformation.email_or_Phone,
       password: userInformation.password,
+      joinDate: Date.now(),
     })
       .save()
       .then(() => {
@@ -137,6 +155,50 @@ function closeErr(req, res) {
 function otpClose(req, res) {
   res.redirect("/mail/confirm");
 }
+function sessionsetWhileSignupWithGoogle(req, res) {
+  (req.session.userAuth = true), res.redirect("/");
+}
+function userAccount(req, res) {
+  res.render("users/Account", { profile: true });
+}
+function userLogout(req, res) {
+  req.session.userAuth = false;
+  res.redirect("/");
+}
+
+function userLoginGet(req, res) {
+  res.render("users/login", { profile: false, err: false });
+}
+async function userLoginPost(req, res) {
+  try {
+    const { email_or_Phone, password } = req.body;
+
+    // Check if the user exists based on email
+    const userData = await UserCollection.findOne({ email: email_or_Phone });
+
+    if (!userData) {
+      // User not found
+      return res.render("users/login", { profile: false, err: "User not found" });
+    }
+
+    // Compare passwords
+    const passwordMatch = await bcrypt.compare(password, userData.password);
+
+    if (!passwordMatch) {
+      // Passwords don't match
+      return res.render("users/login", { profile: false, err: "Incorrect password" });
+    }
+
+    // Login successful
+    req.session.userAuth = true;
+    return res.redirect("/");
+  } catch (err) {
+    console.error("Error during login:", err);
+    res.render("users/login", { profile: false, err: "Login failed. Please try again later." });
+  }
+}
+
+
 module.exports = {
   userHome,
   singupGet,
@@ -147,4 +209,9 @@ module.exports = {
   confirmPost,
   closeErr,
   otpClose,
+  sessionsetWhileSignupWithGoogle,
+  userAccount,
+  userLogout,
+  userLoginGet,
+  userLoginPost,
 };

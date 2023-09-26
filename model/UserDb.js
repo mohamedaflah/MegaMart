@@ -22,6 +22,9 @@ const schema = mongoose.Schema({
   emailAuth:{
     type:Boolean,
     default:false
+  },
+  joinDate:{
+    type:Date,
   }
 });
 
