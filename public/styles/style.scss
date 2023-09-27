@@ -6,6 +6,7 @@
 }
 body {
   position: relative;
+  background-color: #fff;
 }
 $topBarWidth: 40px;
 $mainNavWidth: 100px;
@@ -574,7 +575,7 @@ $sidBarWidth: 250px;
   }
   .side_bar.active {
     transition: all 0.4s ease;
-    // background-color: rgba(193, 158, 158, 0.658);
+    background-color:#ffff;
     width: 100px;
     position: relative;
     .links {
@@ -638,6 +639,7 @@ $sidBarWidth: 250px;
     .items_section {
       width: 100%;
       min-height: $itemSectionheight;
+      padding: 10px;
       background: #dbdde8;
 
       display: flex;

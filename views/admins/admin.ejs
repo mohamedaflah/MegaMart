@@ -82,13 +82,15 @@
                                    <%}%>
                                 </div>
                                 <div class="table_datas ">
-                                    <a href="">
-                                        <%if(data.joinDate){%>
-                                            <img src="/images/block.svg" style="width: 30px;height:30px" alt="">
-                                       <% }else{%>
-                                        <img src="/images/unblock.svg" style="width: 30px;height:30px" alt="">
-                                      <% }%>
+                                    <%if(data.status){%>
+                                        <a href="/admin/userblock/<%- data._id %>">
+                                                <img src="/images/block.svg" style="width: 30px;height:30px" alt="">
+                                        </a>
+                                    <%}else{%>
+                                        <a href="/admin/userunblock/<%- data._id %>">
+                                            <img src="/images/unblock.svg" style="width: 30px;height:30px" alt="">
                                     </a>
+                                   <% }%>
                                 </div>
                             </div>
                             <% }) %>
@@ -138,7 +140,7 @@
                                             <div class="btn_active">
                                                 Actived
                                             </div>
-                                            <a href="">
+                                            <a href="/admin/userblock/<%- data._id %>">
                                                 <img src="/images/block.svg" style="width: 25px;height:25px" alt="">
                                             </a>
                                         </div>
@@ -147,7 +149,7 @@
                                             <div class="btn_block">
                                                 Blocked
                                             </div>
-                                            <a href="">
+                                            <a href="/admin/userunblock/<%- data._id %>">
         
                                                 <img src="/images/unblock.svg" style="width: 25px;height:25px" alt="">
                                             </a>

@@ -30,7 +30,7 @@ passport.use(
         };
         // Save the new user data to the database
         await new UserCollection(userInformation).save();
-        // request.session.userAuth = true;
+        request.session.userEmail = profile.email;
         done(null, profile);
       }catch(err){
         console.log('error found whle passpor'+err);

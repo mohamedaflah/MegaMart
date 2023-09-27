@@ -8,6 +8,7 @@
 
 body {
   position: relative;
+  background-color: #fff;
 }
 
 .main_nav {
@@ -473,6 +474,7 @@ button:hover {
 }
 .home .side_bar.active {
   transition: all 0.4s ease;
+  background-color: white;
   width: 100px;
   position: relative;
 }
@@ -527,6 +529,7 @@ button:hover {
 .home .content_section .items_section {
   width: 100%;
   min-height: 75vh;
+  padding: 10px;
   background: #dbdde8;
   display: flex;
   justify-content: center;

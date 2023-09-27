@@ -8,6 +8,7 @@ const UserCollection = require("../model/UserDb");
 const bcrypt = require("bcrypt");
 function userHome(req, res) {
   if (req.session.userAuth) {
+    console.log('Email of User is __ '+req.session.userEmail);
     res.render("users/index", { profile: true });
     // return;
   } else {
@@ -130,6 +131,7 @@ function confirm(req, res) {
 function confirmPost(req, res) {
   if (req.body.verifyNum == codEmai) {
     req.session.userAuth = true;
+    req.session.userEmail=req.body.email_or_Phone
     userInformation.password = bcrypt.hashSync(userInformation.password, 10);
     new UserCollection({
       name: userInformation.name,
