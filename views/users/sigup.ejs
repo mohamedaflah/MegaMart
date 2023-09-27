@@ -6,7 +6,7 @@
             </div>
             <div class="input_section">
 
-                <form method="post" action="/signup"   class="controlls" id="form" >
+                <form method="post" action="/signup"  class="controlls" id="form">
                     <div class="header_text">
                         <h2>Create An Account</h2>
                         <p>Enter your detail below</p>
@@ -105,4 +105,24 @@
             })
         })
     </script> -->
+
+    <!-- <script>
+        $(document).ready(() => {
+            $('#form').submit(() => { // Added '$' before ('#form').submit(...)
+                let name1 = $('#name').val()
+                let email1 = $('#emailOrMobileInput').val()
+                let password1 = $("#pass").val()
+                let data = {
+                    name: name1,
+                    email_or_Phone: email1,
+                    password: password1
+                }
+                $.post("/signup", data, (data, status) => {
+                    console.log('status is ' + status)
+                })
+            })
+        })
+    </script> -->
+    
     <%-include('../partials/footer.ejs') %>
+

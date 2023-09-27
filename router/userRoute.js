@@ -17,7 +17,7 @@ const {
   userLoginPost,
   FailedLogin,
 } = require("../controller/userController");
-
+const {verifySessionAuth}=require('../middleware/verifySession')
 require("../auth/passportAuth");
 require("../auth/LoginwithGoogle");
 router.get("/", userHome);
