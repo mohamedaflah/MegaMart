@@ -159,42 +159,157 @@ body {
 .home .home_banner {
   height: 360px;
   width: 90%;
-  background-color: azure;
   margin: auto;
   display: flex;
 }
 .home .home_banner .categoy_section {
-  width: 30%;
+  width: 20%;
   height: 100%;
-  background-color: rgb(117, 21, 212);
+  border-right: 1px solid rgb(221, 214, 214);
+  display: flex;
+  align-items: center;
+}
+.home .home_banner .categoy_section .category_links {
+  width: 80%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.home .home_banner .categoy_section .category_links a {
+  height: 35px;
+  width: 90%;
+  text-decoration: none;
+  color: #0a0a0a;
 }
 .home .home_banner .banner {
-  width: 70%;
-  background-color: rgb(183, 197, 197);
+  width: 80%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .home .home_banner .banner .image_section {
-  width: 90%;
-  height: 90%;
-  background-color: rgb(14, 14, 15);
+  width: 92%;
+  height: 92%;
+  background-color: rgb(0, 0, 0);
   display: flex;
 }
 .home .home_banner .banner .image_section .image,
 .home .home_banner .banner .image_section .text {
   width: 50%;
-  background-color: rgb(27, 25, 25);
-}
-.home .home_banner .banner .image_section .image img {
-  width: 100%;
-  height: 100%;
 }
 .home .home_banner .banner .image_section .text {
-  background-color: rgb(41, 39, 39);
+  background-color: rgb(0, 0, 0);
+  display: flex;
+  align-items: center;
+  width: 51%;
+  justify-content: center;
+}
+.home .home_banner .banner .image_section .text .items {
+  width: 80%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+}
+.home .home_banner .banner .image_section .text .items .logo_txt {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+.home .home_banner .banner .image_section .text .items .logo_txt p {
+  margin: 0;
+  color: #fff;
+}
+.home .home_banner .banner .image_section .text .items .main_text {
+  flex-direction: column;
+  align-items: start;
+}
+.home .home_banner .banner .image_section .text .items .main_text a {
+  color: #fff;
+  text-decoration: none;
+  padding: 2px;
+  border-bottom: 1px solid #fff;
+}
+.home .home_banner .banner .image_section .text .items .main_text h1 {
+  color: #fff;
+  font-size: 4rem;
 }
 
+@media (max-width: 999px) {
+  .home .home_banner {
+    height: 260px;
+  }
+  .home .home_banner .banner .image_section .text .items .logo_txt h1 {
+    font-size: 3rem;
+  }
+}
+@media (max-width: 776px) {
+  .home .home_banner {
+    height: 210px;
+  }
+  .home .home_banner .categoy_section .category_links a {
+    font-size: 13px;
+  }
+  .home .home_banner .banner .image_section .text .items .logo_txt h1 {
+    font-size: 2.2rem;
+  }
+  .home .home_banner .banner .image_section .text .items .logo_txt a {
+    font-size: 12px;
+  }
+  .home .home_banner .banner .image_section .text .items .logo_txt a img {
+    width: 19px;
+    height: 18px;
+  }
+}
+@media (max-width: 660px) {
+  .home .home_banner {
+    height: 160px;
+  }
+  .home .home_banner .categoy_section .category_links a {
+    font-size: 10px;
+  }
+  .home .home_banner .banner .image_section .text .items .logo_txt.main_text {
+    gap: 0;
+  }
+  .home .home_banner .banner .image_section .text .items .logo_txt h1 {
+    font-size: 2rem;
+  }
+  .home .home_banner .banner .image_section .text .items .logo_txt img {
+    width: 33px;
+  }
+  .home .home_banner .banner .image_section .text .items .logo_txt p {
+    font-size: 10px;
+  }
+}
+@media (max-width: 540px) {
+  .home .home_banner {
+    height: 160px;
+    display: flex;
+    justify-content: center;
+  }
+  .home .home_banner .categoy_section {
+    display: none;
+  }
+  .home .home_banner .banner {
+    width: 100%;
+  }
+  .home .home_banner .banner .image_section .text .items .logo_txt.main_text {
+    gap: 0;
+  }
+  .home .home_banner .banner .image_section .text .items .logo_txt h1 {
+    font-size: 1.5rem;
+  }
+  .home .home_banner .banner .image_section .text .items .logo_txt img {
+    width: 33px;
+  }
+  .home .home_banner .banner .image_section .text .items .logo_txt p {
+    font-size: 10px;
+  }
+}
 body .signup {
   display: flex;
   align-items: center;
