@@ -4,7 +4,8 @@
             <div class="content_section">
                 <div class="overview_section">
                     <div class="head_inp">
-                        <h5>Overview</h5>
+                        <h5>Customers</h5>
+                        <a href="/admin/logout">Logout</a>
                     </div>
                 </div>
                 <div class="items_section">
@@ -47,11 +48,11 @@
                             </div>
                         </div>
                         <div class="table_content">
-                            <div class="table_datas head">Name</div>
-                            <div class="table_datas head">Email</div>
-                            <div class="table_datas head">Profile</div>
-                            <div class="table_datas head">Join Date</div>
-                            <div class="table_datas head">Status</div>
+                            <div class="table_datas head">NAME</div>
+                            <div class="table_datas head">EMAIL</div>
+                            <div class="table_datas head">PROFILE</div>
+                            <div class="table_datas head">JOIN DATE</div>
+                            <div class="table_datas head">STATUS</div>
                             <div class="table_datas head"></div>
                         </div>
                         <%usersData.forEach((data)=>{%>
@@ -68,7 +69,8 @@
                                 </div>
                                 <div class="table_datas ">
                                     <% let d = new Date(data.joinDate) %>
-                                    <%-d.getDate()%>/<%- d.getMonth()+1%>/<%-d.getFullYear()%>
+                                    <% let dayAr = ["Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday","Sunday"] %>
+                                    <%-d.getDate()%>/<%- d.getMonth()+1%>/<%-d.getFullYear()%> <%-dayAr[d.getDay()-1]%>
                                 </div>
                                 <div class="table_datas ">
                                     <%if(data.status){%>
@@ -130,7 +132,8 @@
                                     <p>Join Date</p>
                                     <p>
                                         <% let d = new Date(data.joinDate) %>
-                                    <%-d.getDate()%>/<%- d.getMonth()+1%>/<%-d.getFullYear()%>
+                                        <% let dayAr = ["Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday","Sunday"] %>
+                                        <%-d.getDate()%>/<%- d.getMonth()+1%>/<%-d.getFullYear()%> <%-dayAr[d.getDay()-1]%>
                                     </p>
                                 </div>
                                 <div class="data">
@@ -159,7 +162,7 @@
                                 </div>
                             </div>
                        <% }) %>
-                        <div class="detail">
+                        <!-- <div class="detail">
                             <div class="data">
                                 <p>Name</p>
                                 <p>Aflu</p>
@@ -185,7 +188,7 @@
                                 </div>
 
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>

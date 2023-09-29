@@ -184,8 +184,8 @@ $themeColor: rgb(173, 74, 74);
     }
   }
 }
-$overViewheight:200px;
-$itemSectionheight:75vh;
+$overViewheight: 200px;
+$itemSectionheight: 75vh;
 // Home Page Design Start
 $topBarwidth: 90%;
 $categoryWidth: 30%;
@@ -524,7 +524,7 @@ $sidBarWidth: 250px;
   .side_bar {
     transition: all 0.4s ease;
     // background-color: rgb(236, 228, 228);
-    border-right: 0.97px solid #bbb6b6;
+    border-right: 0.97px solid #e8e2e2;
     background: #fff;
     height: calc(#{$overViewheight} + #{$itemSectionheight});
     width: 250px;
@@ -564,7 +564,7 @@ $sidBarWidth: 250px;
           color: #0e0e0e;
           text-decoration: none;
         }
-        a:nth-child(1) {
+        a:nth-child(2) {
           background: linear-gradient(90deg, #92fe9d 0%, #00c9ff 100%);
         }
       }
@@ -575,7 +575,7 @@ $sidBarWidth: 250px;
   }
   .side_bar.active {
     transition: all 0.4s ease;
-    background-color:#ffff;
+    background-color: #ffff;
     width: 100px;
     position: relative;
     .links {
@@ -589,7 +589,7 @@ $sidBarWidth: 250px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        a:nth-child(1) {
+        a:nth-child(2) {
           background-color: #22d29d;
           display: flex;
           width: 50px;
@@ -627,10 +627,23 @@ $sidBarWidth: 250px;
         width: 90%;
         height: 38px;
         margin-top: 25px;
+        // background-color: red;
         display: flex;
+        justify-content: space-between;
         align-items: center;
         color: #ffff;
         // background-color: #00c9ff;
+        a {
+          background-image: linear-gradient(
+            90deg,
+            rgb(146, 254, 157) 0%,
+            rgb(0, 201, 255) 100%
+          );
+          padding: 5px 10px;
+          border-radius: 5px;
+          text-decoration: none;
+          color: #0e0e0e;
+        }
         h5 {
           font-size: 25px;
         }
@@ -644,6 +657,24 @@ $sidBarWidth: 250px;
 
       display: flex;
       justify-content: center;
+      .admin_top_control {
+        // background-color: #00c9ff;
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+        height: 50px;
+        a {
+          background-image: linear-gradient(
+            90deg,
+            rgb(146, 254, 157) 0%,
+            rgb(0, 201, 255) 100%
+          );
+          padding: 5px 10px;
+          border-radius: 5px;
+          text-decoration: none;
+          color: #0e0e0e;
+        }
+      }
       .table {
         width: 80%;
         min-height: 300px;
@@ -714,12 +745,27 @@ $sidBarWidth: 250px;
               width: 62px;
             }
           }
-          .table_datas:nth-child(1){
-            width: 10%;
+
+          .table_datas:nth-child(1) {
+            // background-color: red;
+            width: 20%;
           }
-          .table_datas:nth-child(2){
+          .table_datas:nth-child(2) {
             width: 35%;
           }
+          .table_datas:nth-child(3) {
+            width: 10%;
+          }
+
+          .table_datas:nth-child(5) {
+            width: 15%;
+            // background-color: red;
+          }
+          .table_datas:nth-child(4) {
+            width: 15%;
+            // background-color: red;
+          }
+
           .head {
             color: #898989;
           }
@@ -730,7 +776,7 @@ $sidBarWidth: 250px;
       }
       .key_val {
         background-color: rgb(18, 17, 19);
-        min-width:100%;
+        min-width: 100%;
         border: 1px solid rgba(137, 137, 137, 0.3);
         min-height: 400px;
         display: flex;
@@ -800,6 +846,7 @@ $sidBarWidth: 250px;
     .content_section {
       .items_section {
         .table {
+          width: 90%;
           .top_section {
             padding: 0 25px;
           }
@@ -807,7 +854,7 @@ $sidBarWidth: 250px;
             .table_datas {
               display: flex;
               align-items: center;
-              justify-content: center;
+              // justify-content: center;
             }
           }
         }
@@ -820,11 +867,11 @@ $sidBarWidth: 250px;
 }
 @media (max-width: 1350px) {
   .home {
-    .content_section{
-      .items_section{
-        .table{
-          .table_content{
-            .table_datas{
+    .content_section {
+      .items_section {
+        .table {
+          .table_content {
+            .table_datas {
               justify-content: start;
             }
           }
@@ -835,7 +882,8 @@ $sidBarWidth: 250px;
       position: absolute;
       left: 0;
       top: 0;
-      background-color: #e0caca7c;
+      backdrop-filter: blur(1px);
+      background-color: #eeeaea6c;
       z-index: 1;
       .logo {
         #sidebartoggle {

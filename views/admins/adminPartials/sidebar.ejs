@@ -1,17 +1,20 @@
 <div class="side_bar" id="side">
     <div class="logo">
         <img id="lg" src="/images/logo.svg" style="width: 110px;" alt="">
-        
-            <img src="/images/side.svg" alt="" style="cursor: pointer;" id="sidebartoggle">
-        
+
+        <img src="/images/side.svg" alt="" style="cursor: pointer;" id="sidebartoggle">
+
     </div>
     <div class="links">
         <p style="margin: 0;padding:0">MENU</p>
         <div class="tags">
-            <a href="">
+            <a href="/admin/overview">
                 <img src="/images/home.svg" alt="">
                 Overview</a>
-            <a href="">
+            <a href="/admin/">
+                <img src="/images/customers.svg" alt="">
+                Customers</a>
+            <a href="/admin/products">
                 <img src="/images/product.svg" alt="">
                 products</a>
             <a href="">
@@ -23,27 +26,32 @@
             <a href="">
                 <img src="/images/reports.svg" alt="">
                 Report</a>
-            <a href="">
+            <a href="/admin/category">
                 <img src="/images/categories.svg" alt="">
                 Category</a>
         </div>
     </div>
     <div class="activeLink">
         <div class="tags">
-            <a href="">
+            <a href="/admin/overview">
                 <img src="/images/home.svg" alt=""></a>
-            <a href="">
+            <a href="/admin/">
+                <img src="/images/customers.svg" alt=""></a>
+            <a href="/admin/products">
                 <img src="/images/product.svg" alt="">
-                </a>
+            </a>
             <a href="">
                 <img src="/images/transaction.svg" alt="">
-                </a>
+            </a>
             <a href="">
                 <img src="/images/order.svg" alt="">
-                </a>
+            </a>
             <a href="">
                 <img src="/images/reports.svg" alt="">
-                </a>
+            </a>
+            <a href="/admin/category">
+                <img src="/images/categories.svg" alt="">
+            </a>
         </div>
     </div>
 </div>
@@ -51,6 +59,6 @@
     let sideToggle = document.querySelector("#sidebartoggle");
     let sidebar = document.querySelector("#side");
     sideToggle.addEventListener("click", () => {
-      sidebar.classList.toggle("active");
+        sidebar.classList.toggle("active");
     });
 </script>

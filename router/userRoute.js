@@ -25,29 +25,70 @@ router.get("/setSession", sessionsetWhileSignupWithGoogle);
 router.get("/signup", singupGet);
 router.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["email", "profile"] })
+  passport.authenticate("google-signup", { scope: ["email", "profile"] })
 );
-router.get(
-  "/auth/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "/setSession",
-    failureRedirect: "/failedmail",
-  })
-);
+
+
+
+
+
+
+// router.get(
+//   "/auth/google/callback",
+//   passport.authenticate("google", {
+//     successRedirect: "/setSession",
+//     failureRedirect: "/failedmail",
+//   })
+// );
+
+
+
+router.get("/auth/google/callback", (req, res, next) => {
+  passport.authenticate("google-signup", (err, user, info) => {
+    if (err) {
+      // Handle error
+      console.error("Error during Google authentication:", err);
+      return res.redirect("/failedmail"); // Redirect to an error page
+    }
+
+    if (!user) {
+      // Handle authentication failure
+      console.error("Authentication failed:", info.message);
+      return res.redirect("/failedmail"); // Redirect to a failure page
+    }
+
+    // Manually set a session variable with user data
+    req.session.userEmail = user.email;
+
+    // Redirect to the desired page (e.g., /setSession)
+    return res.redirect("/setSession");
+  })(req, res, next); // Invoke the Passport middleware
+});
+
+
+
+
+
+
+
+
 
 // Routes for Google login
 // Update the route names to use "google" as the strategy name
 // Routes for Google login
 router.get(
-  "/login/google",
+  "/auth/login",
   passport.authenticate("google-login", { scope: ["email", "profile"] })
 );
 router.get(
-  "/login/google/callback",
-  passport.authenticate("google-login", {
-    successRedirect: "/setSession",
-    failureRedirect: "/failedlogin",
-  })
+  "/auth/login/callback",(req,res)=>{
+    passport.authenticate("google-login",(err,user,info)=>{
+      req.session.userEmail=user.email
+    }, {
+      successRedirect: "/setSession",
+      failureRedirect: "/failedlogin",
+    })
+  }
 );
 
 router.get("/successmail", AfterMailSuccessfull);

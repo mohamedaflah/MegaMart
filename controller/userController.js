@@ -4,17 +4,23 @@ const speakeasy = require("speakeasy");
 const transporter = require("../auth/nodmaile");
 const EmailCheck = require("../auth/isValidEmail");
 const MobileCheck = require("../auth/isValidMobile");
-const UserCollection = require("../model/UserDb");
+const UserCollection = require("../model/collections/UserDb");
 const bcrypt = require("bcrypt");
-function userHome(req, res) {
-  if (req.session.userAuth) {
-    console.log('Email of User is __ '+req.session.userEmail);
+async function userHome(req, res) {
+  // let userStatus=await UserCollection.find({email:req.session.userEmail})
+  // console.log(typeof req.session.userEmail+'email ');
+  const userStatus = await UserCollection.find({
+    email: req.session.userEmail,
+  });
+  console.log(userStatus[0] + "************");
+  if (req.session.userAuth && userStatus[0].status) {
     res.render("users/index", { profile: true });
     // return;
   } else {
     res.render("users/index", { profile: false });
   }
   console.log(req.session.userAuth + " __user auth");
+  console.log(req.session.userEmail + " __user email");
 }
 function singupGet(req, res) {
   // if (req.session.userAuth) {
@@ -25,7 +31,6 @@ function singupGet(req, res) {
 }
 function AfterMailSuccessfull(req, res) {
   console.log(req.isAuthenticated() + "authentication__________________");
-  console.log(req.body);
   res.redirect("/");
 }
 function MailVerificationFail(req, res) {
@@ -60,7 +65,7 @@ async function singupPost(req, res) {
         console.log("Secret ", secret.base32);
         codEmai = code;
         console.log("Code ", code);
-        console.log(req.body);
+        // console.log(req.body);
         const mailOptions = {
           from: "mohamedaflah186@gmail.com",
           to: req.body.email_or_Phone,
@@ -128,12 +133,13 @@ function confirm(req, res) {
     res.redirect("/");
   }
 }
-function confirmPost(req, res) {
+async function confirmPost(req, res) {
   if (req.body.verifyNum == codEmai) {
     req.session.userAuth = true;
-    req.session.userEmail=req.body.email_or_Phone
+    console.log("in post confirm " + userInformation);
+    req.session.userEmail = userInformation.email_or_Phone;
     userInformation.password = bcrypt.hashSync(userInformation.password, 10);
-    new UserCollection({
+    await new UserCollection({
       name: userInformation.name,
       email: userInformation.email_or_Phone,
       password: userInformation.password,
@@ -141,7 +147,7 @@ function confirmPost(req, res) {
     })
       .save()
       .then(() => {
-        console.log("data inserted into SIgnup");
+        console.log("inserted");
       });
     res.redirect("/");
   } else {
@@ -158,7 +164,8 @@ function otpClose(req, res) {
   res.redirect("/mail/confirm");
 }
 function sessionsetWhileSignupWithGoogle(req, res) {
-  (req.session.userAuth = true), res.redirect("/");
+  req.session.userAuth = true;
+  res.redirect("/");
 }
 function userAccount(req, res) {
   res.render("users/Account", { profile: true });
@@ -199,6 +206,7 @@ async function userLoginPost(req, res) {
 
     // Login successful
     req.session.userAuth = true;
+    req.session.userEmail = req.body.email_or_Phone;
     return res.redirect("/");
   } catch (err) {
     console.error("Error during login:", err);
@@ -227,5 +235,5 @@ module.exports = {
   userLogout,
   userLoginGet,
   userLoginPost,
-  FailedLogin
+  FailedLogin,
 };
