@@ -1,0 +1,152 @@
+<%-include('./adminPartials/header.ejs') %>
+    <div class="home" style="display: flex;" style="min-height:100vh">
+        <%-include('./adminPartials/sidebar.ejs')%>
+            <div class="content_section">
+                <div class="overview_section">
+                    <div class="head_inp">
+                        <h5>Category</h5>
+                        <a href="/admin/logout">Logout</a>
+                    </div>
+                </div>
+                <div class="items_section" style="flex-direction: column;">
+                    <div class="admin_top_control">
+                        <a href="">Add Category</a>
+                    </div>
+                    <div class="table" id="tb">
+                        <div class="top_section">
+                            <p>Categories</p>
+                            <div class="filter">
+                                <a href="">Filtered by
+                                    <svg width="17" height="18" viewBox="0 0 17 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.1934 15.9636V8.44873" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M13.1934 5.7159V2.30005" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M8.41016 15.9635V12.5476" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M8.41016 9.81492V2.30005" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M3.62891 15.9636V8.44873" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M3.62891 5.7159V2.30005" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M2.26172 8.44873H4.9944" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M11.8281 8.44873H14.5608" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M7.04297 9.81519H9.77565" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </a>
+                                <a href="">Sorted by
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M14.6027 7.02075L10.1484 11.475C9.62236 12.0011 8.76156 12.0011 8.23552 11.475L3.78125 7.02075"
+                                            stroke="#898989" stroke-width="1.02476" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="table_content">
+                            <div class="table_datas head">CATEGORY NAME</div>
+                            <div class="table_datas head" style="width: 10%;">SALES</div>
+                            <div class="table_datas head">STOCK</div>
+                            <div class="table_datas head">ADDED DATE</div>
+                            <div class="table_datas head"></div>
+                        </div>
+
+                            <div class="table_content data_section">
+                                <div class="table_datas ">Sound & Music</div>
+                                <div class="table_datas " style="width: 10%;">10</div>
+                                <div class="table_datas " >25</div>
+                                <div class="table_datas ">
+                                  23/05/2023
+                                </div>
+                                <div class="table_datas ">
+                                    <img src="/images/predit.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
+                                    <img src="/images/delp.svg" style="width: 30px;height: 30px;" alt="">
+                                </div>
+                            </div>
+                                <!-- <div class="table_content data_section">
+                                    <div class="table_datas ">Aflu</div>
+                                    <div class="table_datas ">Aflu@gmail.com</div>
+                                    <div class="table_datas ">
+                                        <img src="/images/userprofile.svg" style="width: 23px;height:23" alt="">
+                                    </div>
+                                    <div class="table_datas ">
+                                        23/5/2023
+                                    </div>
+                                    <div class="table_datas ">
+                                        <div class="blocked">
+                                            Blocked
+                                        </div>
+                                    </div>
+                                    <div class="table_datas ">
+                                        <a href="">
+                                            <img src="/images/unblock.svg" style="width: 30px;height:30px" alt="">
+                                        </a>
+                                    </div>
+                                </div> -->
+                    </div>
+                    <div class="key_val" id="key-val">
+        
+                            <div class="detail">
+                                <div class="data">
+                                    <p>CATEGORY NAME</p>
+                                    <p>Sound & Music</p>
+                                </div>
+                                <div class="data">
+                                    <p>SALES</p>
+                                    <p>12</p>
+                                </div>
+                                <div class="data">
+                                    <p>ADDED DATE</p>
+                                    <p>
+                                       23/03/2023
+                                    </p>
+                                </div>
+                                <div class="data">
+                                    <p>ACTION</p>
+                                    <div class="actions" style=" width: 50%;
+                                    display: flex;
+                                    align-content: center;padding:0 10px">
+
+                                        <img src="/images/predit.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
+                                        <img src="/images/delp.svg" style="width: 30px;height: 30px;" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- <div class="detail">
+                            <div class="data">
+                                <p>Name</p>
+                                <p>Aflu</p>
+                            </div>
+                            <div class="data">
+                                <p>Email</p>
+                                <p>Aflu@gmail.com</p>
+                            </div>
+                            <div class="data">
+                                <p>Join Date</p>
+                                <p>23/05/2023</p>
+                            </div>
+                            <div class="data">
+                                <p>Status</p>
+                                <div class="status" id="blocked">
+                                    <div class="btn_block">
+                                        Blocked
+                                    </div>
+                                    <a href="">
+
+                                        <img src="/images/unblock.svg" style="width: 25px;height:25px" alt="">
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+    </div>

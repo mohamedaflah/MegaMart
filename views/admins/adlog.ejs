@@ -1,0 +1,50 @@
+<%-include('./adminPartials/header.ejs') %>
+    <div class="home">
+
+        <div class="signup">
+            <div class="signup_section">
+                <div class="image_section">
+                    <img src="/images/removedSign.png" alt="">
+                </div>
+                <div class="input_section">
+
+                    <form method="post" action="/admin/login" class="controlls" id="form">
+                        <div class="header_text">
+                            <h2>Especially for Admin</h2>
+                            <p>Enter your detail below</p>
+                        </div>
+                        <%if(err){%>
+                            <p id="err"><%-err%><a href="/admin/errorMessage/close/"><img src="/images/cross.png"
+                                            style="width: 13px;height:13px" alt=""></a></p>
+                            <% } %>
+
+                                <div class="input_box">
+                                    <div class="inp_l">
+                                        <input type="text" id="emailOrMobileInput" name="email_or_Phone" autofocus
+                                            required>
+                                        <label for="emailOrMobileInput">Enter Your Email Address</label>
+                                    </div>
+                                </div>
+                                <div class="input_box">
+                                    <div class="inp_l">
+                                        <input type="password" name="password" id="pass" autofocus required>
+
+                                        <label for="pass">Password</label>
+                                    </div>
+                                </div>
+                                <div class="input_box"
+                                    style="display: flex;align-items: end;justify-content:space-between;">
+                                    <button type="submit" style="width: 150px;margin:4px;">Login</button>
+                                    <p style="padding:0"><a href="/"
+                                            style="color: rgb(201, 43, 43);text-decoration: none;"> Forgot Password?</a>
+                                    </p>
+                                </div>
+                                <!-- <div class="input_box" style="display: flex;align-items: center;justify-content: center;">
+                                <p>Create new Account <a href="/signup"> Signup</a></p>
+                            </div> -->
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
