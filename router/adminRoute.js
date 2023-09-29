@@ -23,5 +23,5 @@ router.get("/logout", adminLogout);
 router.get("/overview", admiLoginVerify, overView);
 router.get("/products", admiLoginVerify, manageProducts);
 router.get("/category", admiLoginVerify, ManageCategory);
-router.get("/category/add-category", addCategory);
+router.post("/category/add-category", addCategory);
 module.exports = { router };

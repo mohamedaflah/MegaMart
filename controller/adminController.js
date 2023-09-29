@@ -1,5 +1,6 @@
 const adminDb = require("../model/collections/adminDb");
 const userDb = require("../model/collections/UserDb");
+const categoryCollection = require("../model/collections/CategoryDb");
 const bcrypt = require("bcrypt");
 const { ObjectId } = require("mongodb");
 async function adminHomeShowuser(req, res) {
@@ -80,11 +81,17 @@ function adminLogout(req, res) {
 function overView(req, res) {
   res.render("admins/overview");
 }
-function ManageCategory(req, res) {
-  res.render("admins/category");
+async function ManageCategory(req, res) {
+  let categories=await categoryCollection.find()
+  res.render("admins/category",{categories});
 }
-function addCategory() {
-    
+async function addCategory(req, res) {
+  console.log(req.body);
+  await new categoryCollection({
+    categoryname: req.body.category,
+    addedDate: Date.now(),
+  }).save();
+  res.redirect("/admin/category");
 }
 module.exports = {
   adminHomeShowuser,
