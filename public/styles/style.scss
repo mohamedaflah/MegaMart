@@ -1075,30 +1075,39 @@ $sidBarWidth: 250px;
             display: flex;
             justify-content: center;
             .all_inp{
-              width: 60%;
+              width: 50%;
               height: 80%;
-              background: indianred;
+              // background: indianred;
               justify-content: space-around;
               display: flex;
               flex-direction: column;
               .head{
-                color: #db4444;
+                color: #db4444; 
               }
               .control_section{
                 background: #00c9ff;
                 display: flex;
                 flex-direction: column;
+                gap: 10px;
                 p{
                   margin: 0;
                 }
                 input{
-                  width: 80%;
+                  width: 100%;
                   height: 35px;
-                  padding: 5px 20px;
+                  padding: 5px 14px;
                   border: none;
                   outline: none;
                   border-radius: 3px;
                   background: #F5F5F5;
+                }
+                textarea{
+                  width: 100% ;
+                  border: none;
+                  height: 80px ;
+                  resize:none ;
+                  padding: 10px;
+                  outline: none;
                 }
               }
               #sp{
@@ -1107,10 +1116,31 @@ $sidBarWidth: 250px;
                 justify-content: start;
                 // background-color: red;
                 // height: 80px;
+                gap: 10px;
                 // gap: 10px;
-                input{
-
+                .p,.dsp{
+                  // background-color: rebeccapurple;
+                  width: 50%;
+                  input,select{
+                    width: 100% ;
+                  }
                 }
+                input{
+                  width: 150px;
+                }
+                select{
+                  // background-color: red;
+                  width: 100px;
+                  height: 30px;
+                  border: none;
+                  border-radius: 5px;
+                  padding: 0 10px;
+                }
+              }
+              #newsp{
+                background-color: rgb(203, 197, 210);
+                height: 80px;
+                
               }
             }
           }
