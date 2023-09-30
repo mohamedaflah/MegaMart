@@ -238,7 +238,73 @@ body {
   color: #fff;
   font-size: 4rem;
 }
+.home .products_section {
+  width: 90%;
+  min-height: 250px;
+  padding: 1px;
+  margin: 15px auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 25px;
+}
+.home .products_section .product_card {
+  height: 250px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+}
+.home .products_section .product_card .image_section {
+  width: 100%;
+  height: 70%;
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home .products_section .product_card .image_section img {
+  width: 70%;
+  height: 70%;
+}
+.home .products_section .product_card .detail_section {
+  height: 30%;
+  display: flex;
+  flex-direction: column;
+}
+.home .products_section .product_card .detail_section p {
+  font-size: 13px;
+}
+.home .products_section .product_card .detail_section .price {
+  display: flex;
+  gap: 20px;
+}
+.home .products_section .product_card .detail_section .price .mrp {
+  color: #898989;
+  text-decoration: line-through;
+}
+.home .products_section .product_card .detail_section .price .discounted {
+  color: #db4444;
+}
+.home .products_section .product_card .detail_section .star_rating {
+  display: flex;
+}
 
+@media (max-width: 1475px) {
+  .home .products_section {
+    -moz-column-gap: 5px;
+         column-gap: 5px;
+  }
+}
+@media (max-width: 1364px) {
+  .home .products_section .product_card {
+    width: 195px;
+  }
+}
+@media (max-width: 1322px) {
+  .home .products_section {
+    justify-content: center;
+  }
+}
 @media (max-width: 999px) {
   .home .home_banner {
     height: 260px;
@@ -717,6 +783,126 @@ button:hover {
   justify-content: center;
   font-size: 14px;
 }
+.home .content_section .items_section .add_product_section {
+  min-height: 100vh;
+  width: 100%;
+  background-color: rgba(51, 56, 57, 0.5137254902);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  transition: 0.5s ease-in-out;
+  justify-content: center;
+}
+.home .content_section .items_section .add_product_section .form_section {
+  width: 136rem;
+  height: 600px;
+  background-color: #87dabf;
+  display: flex;
+}
+.home .content_section .items_section .add_product_section .form_section .images {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home .content_section .items_section .add_product_section .form_section .images .preview_imgs {
+  width: 90%;
+  height: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home .content_section .items_section .add_product_section .form_section .images .preview_imgs .secondary {
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+}
+.home .content_section .items_section .add_product_section .form_section .images .preview_imgs .secondary input {
+  display: none;
+}
+.home .content_section .items_section .add_product_section .form_section .images .preview_imgs .secondary label {
+  width: 80%;
+  height: 22%;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+.home .content_section .items_section .add_product_section .form_section .images .preview_imgs .main {
+  width: 370px;
+  height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.home .content_section .items_section .add_product_section .form_section .images .preview_imgs .main input {
+  display: none;
+}
+.home .content_section .items_section .add_product_section .form_section .images .preview_imgs .main label {
+  width: 90%;
+  height: 90%;
+  background-color: #f5f5f5;
+  cursor: pointer;
+  font-size: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+.home .content_section .items_section .add_product_section .form_section .inputs {
+  width: 50%;
+  height: 100%;
+  background-color: #e4dbe2;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp {
+  width: 60%;
+  height: 80%;
+  background: indianred;
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+}
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp .head {
+  color: #db4444;
+}
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp .control_section {
+  background: #00c9ff;
+  display: flex;
+  flex-direction: column;
+}
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp .control_section p {
+  margin: 0;
+}
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp .control_section input {
+  width: 80%;
+  height: 35px;
+  padding: 5px 20px;
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  background: #F5F5F5;
+}
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+}
+.home .content_section .items_section .add_product_section.active {
+  transform: translateY(0);
+}
 .home .content_section .items_section .ebcf_modal.active {
   transform: translateY(0);
   transition: 0.6s ease;
@@ -894,6 +1080,26 @@ button:hover {
   width: 62px;
 }
 
+@media (max-width: 1412px) {
+  .home .content_section .items_section .add_product_section .form_section {
+    width: 120rem;
+    height: 550px;
+  }
+}
+@media (max-width: 1229px) {
+  .home .content_section .items_section .add_product_section {
+    display: flex;
+    justify-content: center;
+  }
+  .home .content_section .items_section .add_product_section .form_section {
+    display: flex;
+    background: transparent;
+    align-items: center;
+    flex-direction: column;
+    height: 90vh;
+    width: 130rem;
+  }
+}
 @media (max-width: 1472px) {
   .home .content_section .items_section .table {
     width: 90%;

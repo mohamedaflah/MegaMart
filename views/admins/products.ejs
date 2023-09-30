@@ -12,6 +12,72 @@
                     <div class="admin_top_control">
                         <a  id="mySizeChart">Add Product</a>
                     </div>
+                    <div class="add_product_section" id="adp">
+                        <img src="/images/close.png" style="width:20px;height: 20px;position:absolute;top:2%;right:2%" alt="" id="clsbtn">
+                        <form action="" class="form_section">
+                            <div class="images">
+                                <div class="preview_imgs">
+                                    <div class="secondary">
+                                        <input type="file" name="image1" id="imag1">
+                                        <label for="imag1">Upload Preview image 1
+                                            <img src="" alt="">
+                                        </label>
+                                        <input type="file" name="image2" id="imag2">
+                                        <label for="imag2">Upload Preview image 2
+                                            <img src="" alt="">
+                                        </label>
+                                        <input type="file" name="image3" id="imag3">
+                                        <label for="imag3">Upload Preview image 3
+                                            <img src="" alt="">
+                                        </label>
+                                        <input type="file" name="image4" id="imag3">
+                                        <label for="imag4">Upload Preview image 4
+                                            <img src="" alt="">
+                                        </label>
+                                    </div>
+                                    <div class="main">
+                                        <input type="file" name="" id="main">
+                                        <label for="main">Main image</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="inputs">
+                                <div class="all_inp">
+                                    <div class="head">
+                                        <h4>Add product</h4>
+                                    </div>
+                                    <div class="control_section">
+                                        <p for="">product name</p>
+                                        <input type="text" placeholder="eg:samsung">
+                                    </div>
+                                    <div class="control_section " id="sp">
+                                        <div class="p">
+
+                                            <p for="">Price</p>
+                                            <input type="text">
+                                        </div>
+                                        <div class="dsp">
+
+                                            <p for="">Discountedprice</p>
+                                            <input type="text">
+                                        </div>
+                                    </div>
+                                    <div class="control_section">
+                                        <p for="">product name</p>
+                                        <input type="text">
+                                    </div>
+                                    <div class="control_section">
+                                        <p for="">product name</p>
+                                        <input type="text">
+                                    </div>
+                                    <div class="control_section">
+                                        <p for="">product name</p>
+                                        <input type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <div class="table" id="tb">
                         <div class="top_section">
                             <p>Products</p>
@@ -164,3 +230,15 @@
                 </div>
             </div>
     </div>
+    <script>
+        let adprbtn=document.querySelector('#mySizeChart')
+        let popup=document.querySelector('.add_product_section')
+        let closeb=document.querySelector('#clsbtn')
+        adprbtn.addEventListener('click',()=>{
+            <!-- alert('ds') -->
+            popup.classList.add('active')
+        })
+        closeb.addEventListener('click',()=>{
+            popup.classList.remove('active')
+        })
+    </script>
