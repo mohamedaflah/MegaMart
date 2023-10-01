@@ -792,6 +792,7 @@ button:hover {
   left: 0;
   z-index: 99;
   display: flex;
+  transform: translateY(-100%);
   align-items: center;
   transition: 0.5s ease-in-out;
   justify-content: center;
@@ -837,6 +838,17 @@ button:hover {
   align-items: center;
   justify-content: center;
   font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+.home .content_section .items_section .add_product_section .form_section .images .preview_imgs .secondary label img {
+  position: absolute;
+  height: auto;
+  width: 70%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
 }
 .home .content_section .items_section .add_product_section .form_section .images .preview_imgs .main {
   width: 370px;
@@ -858,6 +870,17 @@ button:hover {
   align-items: center;
   justify-content: center;
   font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+.home .content_section .items_section .add_product_section .form_section .images .preview_imgs .main label img {
+  position: absolute;
+  height: auto;
+  width: 70%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
 }
 .home .content_section .items_section .add_product_section .form_section .inputs {
   width: 50%;
@@ -878,7 +901,6 @@ button:hover {
   color: #db4444;
 }
 .home .content_section .items_section .add_product_section .form_section .inputs .all_inp .control_section {
-  background: #00c9ff;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -893,7 +915,7 @@ button:hover {
   border: none;
   outline: none;
   border-radius: 3px;
-  background: #F5F5F5;
+  background: #f5f5f5;
 }
 .home .content_section .items_section .add_product_section .form_section .inputs .all_inp .control_section textarea {
   width: 100%;
@@ -903,31 +925,59 @@ button:hover {
   padding: 10px;
   outline: none;
 }
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp .end {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp .end button {
+  width: 50%;
+  height: 35px;
+  font-size: 13px;
+}
 .home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp {
   display: flex;
   flex-direction: row;
   justify-content: start;
   gap: 10px;
 }
-.home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp .p, .home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp .dsp {
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp .p,
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp .dsp {
   width: 50%;
 }
-.home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp .p input, .home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp .p select, .home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp .dsp input, .home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp .dsp select {
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp .p input,
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp .p select,
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp .dsp input,
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp .dsp select {
   width: 100%;
+}
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp .p {
+  background-color: 0;
 }
 .home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp input {
   width: 150px;
 }
 .home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp select {
   width: 100px;
-  height: 30px;
+  height: 35px;
   border: none;
   border-radius: 5px;
   padding: 0 10px;
+  background: white;
 }
-.home .content_section .items_section .add_product_section .form_section .inputs .all_inp #newsp {
-  background-color: rgb(203, 197, 210);
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp #spc {
+  display: flex;
+  width: 100%;
   height: 80px;
+  position: relative;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+}
+.home .content_section .items_section .add_product_section .form_section .inputs .all_inp #sp #spc input {
+  width: 82px;
+  padding: 0 5px;
+  font-size: 10px;
 }
 .home .content_section .items_section .add_product_section.active {
   transform: translateY(0);
@@ -1125,8 +1175,18 @@ button:hover {
     background: transparent;
     align-items: center;
     flex-direction: column;
-    height: 90vh;
+    min-height: 90vh;
     width: 130rem;
+  }
+  .home .content_section .items_section .add_product_section .form_section .images {
+    background-color: #1a1a1a;
+    width: 80%;
+  }
+  .home .content_section .items_section .add_product_section .form_section .inputs {
+    width: 80%;
+    background-color: #232222;
+    padding-bottom: 10px;
+    color: white;
   }
 }
 @media (max-width: 1472px) {

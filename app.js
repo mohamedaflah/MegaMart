@@ -3,6 +3,8 @@ const passport = require("passport");
 const session = require("express-session");
 const app = express();
 require("dotenv").config();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 // app.use(require('morgan')())
 app.use(
   session({
@@ -22,8 +24,6 @@ app.use(passport.initialize());
 app.use(require("nocache")());
 app.use(express.static("public"));
 app.set("view engine", "ejs");
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use("/", router.router);
 app.use("/admin", adminRoute.router);
 const port = process.env.PORT;
