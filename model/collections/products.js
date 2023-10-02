@@ -47,7 +47,6 @@ const schema = mongoose.Schema({
   },
   discount: {
     type: Number,
-    required: true,
   },
   image: [imageSchema],
   brand: {
@@ -55,6 +54,14 @@ const schema = mongoose.Schema({
   },
   description: {
     type: String,
+    required: true,
+  },
+  addedDate: {
+    type: Date,
+  },
+  currentStatus: {
+    type: Boolean,
+    default: true,
   },
   specification: [specificationSchema],
 });

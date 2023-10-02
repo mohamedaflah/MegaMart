@@ -132,8 +132,8 @@
                                     <p>Join Date</p>
                                     <p>
                                         <% let d = new Date(data.joinDate) %>
-                                        <% let dayAr = ["Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday","Sunday"] %>
-                                        <%-d.getDate()%>/<%- d.getMonth()+1%>/<%-d.getFullYear()%> <%-dayAr[d.getDay()-1]%>
+                                        <% let dayArr = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] %>
+                                        <%- d.getDate() %>/<%- d.getMonth() + 1 %>/<%- d.getFullYear() %> <%- dayArr[d.getDay()] %><%-d.getDay()%>
                                     </p>
                                 </div>
                                 <div class="data">

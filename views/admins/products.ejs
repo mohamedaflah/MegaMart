@@ -107,7 +107,7 @@
                                     </div>
                                     <div class="control_section">
                                         <p for="">Description</p>
-                                        <textarea name="description" id=""></textarea>
+                                        <textarea name="description" id="" required></textarea>
                                     </div>
                                     <div class="control_section end">
                                         <button type="submit">submit</button>
@@ -144,25 +144,30 @@
                             <div class="table_datas head"></div>
                             <!-- <div class="table_datas head"></div> -->
                         </div>
-                  
+                        <%productData.forEach((value)=>{%>
                             <div class="table_content data_section">
-                                <div class="table_datas ">Boat Airpod</div>
-                                <div class="table_datas " style="width: 10%;">1000₹</div>
+                                <div class="table_datas "><%-value.productName%></div>
+                                <div class="table_datas " style="width: 10%;"><%-value.price%></div>
                                 <div class="table_datas ">
                                
-                                        <img src="" style="width: 23px;height:23;border-radius: 50%;">
+                                        <!-- <img src="" style="width: 23px;height:23;border-radius: 50%;"> -->
                 
 
-                                            <img src="/images/boat.jpg" style="width: 33px;height:33" alt="">
-                          
+                                            <img src="/product-images/<%-value.image[0].mainimage%>" style="width: 33px;height:33" alt="">
                                 </div>
                                 <div class="table_datas ">
-                                   Headphones
+                                   <%-value.category%>
                                 </div>
                                 <div class="table_datas ">
+                                    <%if(value.currentStatus){%>
                                         <div class="active" style="width: 70px;">
                                             In Stock
                                         </div>
+                                  <%  }else{%>
+                                    <div class="blocked" style="width: 70px;">
+                                        expired
+                                    </div>
+                                   <% }%>
                                 </div>
                                 <div class="table_datas ">
                                         <img src="/images/predit.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
@@ -170,6 +175,7 @@
                                 </div>
                                 
                             </div>
+                       <% })%>
                             
                                 <!-- <div class="table_content data_section">
                                     <div class="table_datas ">Aflu</div>

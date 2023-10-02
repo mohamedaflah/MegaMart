@@ -8,9 +8,11 @@ const schema = mongoose.Schema({
   },
   sales: {
     type: Number,
+    default: 0,
   },
   stock: {
     type: Number,
+    default: 0,
   },
   addedDate: {
     type: Date,

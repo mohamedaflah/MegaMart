@@ -6,18 +6,19 @@ const EmailCheck = require("../auth/isValidEmail");
 const MobileCheck = require("../auth/isValidMobile");
 const UserCollection = require("../model/collections/UserDb");
 const bcrypt = require("bcrypt");
+const productsCollection=require('../model/collections/products')
 async function userHome(req, res) {
   // let userStatus=await UserCollection.find({email:req.session.userEmail})
   // console.log(typeof req.session.userEmail+'email ');
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
-  console.log(userStatus[0] + "************");
+  let productData=await productsCollection.find()
   if (req.session.userAuth && userStatus[0].status) {
-    res.render("users/index", { profile: true });
+    res.render("users/index", { profile: true,productData });
     // return;
   } else {
-    res.render("users/index", { profile: false });
+    res.render("users/index", { profile: false,productData });
   }
   console.log(req.session.userAuth + " __user auth");
   console.log(req.session.userEmail + " __user email");
