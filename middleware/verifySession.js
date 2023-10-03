@@ -1,4 +1,6 @@
+
 function verifySessionAuth(req,res,next){
+   
     if(req.session.userAuth){
         next()
     }else{

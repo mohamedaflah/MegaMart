@@ -16,6 +16,7 @@ const {
   userLoginGet,
   userLoginPost,
   FailedLogin,
+  detailProductGet,
 } = require("../controller/userController");
 const {verifySessionAuth}=require('../middleware/verifySession')
 require("../auth/passportAuth");
@@ -28,7 +29,7 @@ router.get(
   passport.authenticate("google-signup", { scope: ["email", "profile"] })
 );
 
-
+router.get('/products/product-detail/:id',verifySessionAuth,detailProductGet)
 
 
 

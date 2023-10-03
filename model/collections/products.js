@@ -64,6 +64,10 @@ const schema = mongoose.Schema({
     default: true,
   },
   specification: [specificationSchema],
+  deletionStatus: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Products", schema);

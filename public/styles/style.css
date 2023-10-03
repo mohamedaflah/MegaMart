@@ -300,7 +300,7 @@ body {
     width: 195px;
   }
 }
-@media (max-width: 1322px) {
+@media (max-width: 1330px) {
   .home .products_section {
     justify-content: center;
   }
@@ -806,6 +806,7 @@ button:hover {
 .home .content_section .items_section .add_product_section .form_section .images {
   width: 50%;
   height: 100%;
+  background: #e4dbe2;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -12,14 +12,16 @@
                     <div class="admin_top_control">
                         <button  id="mySizeChart">Add Category</button>
                     </div>
-                    <div id="mySizeChartModal" class="ebcf_modal">
+                    <div id="mySizeChartModal" class="ebcf_modal" style="transform: translateY(0);">
                         <div class="control_section">
                             <div class="cls" >
-                                <img src="/images/Closebtn.svg" alt="" id="clsbtn">
+                                <a href="/admin/category">
+                                    <img src="/images/Closebtn.svg" alt="" id="clsbtn">
+                                </a>
                             </div>
-                            <form action="/admin/category/add-category" method="post">
-                                <input type="text" name="category" placeholder="add new Category" id="">
-                                <button type="submit">add</button>
+                            <form action="/admin/category/edit-category/<%-categories._id%>" method="post">
+                                <input type="text" name="category" value="<%-categories.categoryname%>" placeholder="Edit category" id="">
+                                <button type="submit">update </button>
                             </form>
                         </div>
                     </div>
@@ -68,35 +70,33 @@
                             <div class="table_datas head">ADDED DATE</div>
                             <div class="table_datas head"></div>
                         </div>
-                        <%categories.forEach((category)=>{%>
                             <div class="table_content data_section">
-                                <div class="table_datas "><%-category.categoryname%></div>
+                                <div class="table_datas "><%-categories.categoryname%></div>
                                 <div class="table_datas " style="width: 10%;">
-                                    <%if(category.stock){%>
-                                        <%-category.stock%>
+                                    <%if(categories.stock){%>
+                                        <%-categories.stock%>
                                     <%}else{%>
                                         0
                                     <%}%>
                                 </div>
                                 <div class="table_datas " >
-                                    <%if(category.sales){%>
-                                        <%-category.sales%>
+                                    <%if(categories.sales){%>
+                                        <%-categories.sales%>
                                     <%}else{%>
                                         0
                                     <%}%>
                                 </div>
                                 <div class="table_datas ">
-                                    <% let d = new Date(category.addedDate ) %>
+                                    <% let d = new Date(categories.addedDate ) %>
                                     <% let dayAr = ["Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday","Sunday"] %>
                                     <%-d.getDate()%>/<%- d.getMonth()+1%>/<%-d.getFullYear()%> <%-dayAr[d.getDay()-1]%>
                                 </div>
                                 <div class="table_datas ">
-                                    <a href="/admin/category/edit-category/<%-category._id%>">
+                                    <a href="/admin/category/edit-category/<%-categories.categoryId%>">
                                         <img src="/images/predit.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
                                     </a>
                                 </div>
                             </div>
-                        <%})%>
                     </div>
                     <div class="key_val" id="key-val">
         
@@ -126,45 +126,7 @@
                                     </div>
                                 </div>
                             </div>
-                        <!-- <div class="detail">
-                            <div class="data">
-                                <p>Name</p>
-                                <p>Aflu</p>
-                            </div>
-                            <div class="data">
-                                <p>Email</p>
-                                <p>Aflu@gmail.com</p>
-                            </div>
-                            <div class="data">
-                                <p>Join Date</p>
-                                <p>23/05/2023</p>
-                            </div>
-                            <div class="data">
-                                <p>Status</p>
-                                <div class="status" id="blocked">
-                                    <div class="btn_block">
-                                        Blocked
-                                    </div>
-                                    <a href="">
-
-                                        <img src="/images/unblock.svg" style="width: 25px;height:25px" alt="">
-                                    </a>
-                                </div>
-
-                            </div>
-                        </div> -->
                     </div>
                 </div>
             </div>
     </div>
-    <script>
-        var addCatgorybutton=document.getElementById("mySizeChart")
-        var categoryPopup=document.getElementById("mySizeChartModal")
-        var closePopup=document.getElementById('clsbtn')
-        addCatgorybutton.addEventListener('click',()=>{
-            categoryPopup.classList.add("active")
-        })
-        closePopup.addEventListener('click',()=>{
-            categoryPopup.classList.remove("active")
-        })
-    </script>

@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const multer = require("multer");
-const crypto=require('crypto')
+const crypto = require("crypto");
 const { admiLoginVerify } = require("../middleware/adminVerify");
 const {
   adminHomeShowuser,
@@ -15,6 +15,12 @@ const {
   ManageCategory,
   addCategory,
   addProduct,
+  editCategoryGet,
+  editCategoryPost,
+  getEditProduct,
+  postEditProduct,
+  deleteProduct,
+  recoverProduct,
 } = require("../controller/adminController");
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
@@ -30,9 +36,9 @@ const storage = multer.diskStorage({
     cb(null, "./public/product-images/");
   },
   filename: function (req, file, cb) {
-    const randomeString=crypto.randomBytes(3).toString('hex')
-    const timestamp=Date.now()
-    const uniqueFile=`${timestamp}-${randomeString}`
+    const randomeString = crypto.randomBytes(3).toString("hex");
+    const timestamp = Date.now();
+    const uniqueFile = `${timestamp}-${randomeString}`;
     cb(null, uniqueFile + ".png");
   },
 });
@@ -50,4 +56,15 @@ router.post("/products/add-products", upload.fields(uploadFields), addProduct);
 
 router.get("/category", admiLoginVerify, ManageCategory);
 router.post("/category/add-category", addCategory);
+router.get("/category/edit-category/:id", admiLoginVerify, editCategoryGet);
+router.post("/category/edit-category/:id", editCategoryPost);
+router.get("/products/edit-product/:id", getEditProduct);
+
+router.post(
+  "/products/edit-products/:id",
+  upload.fields(uploadFields),
+  postEditProduct
+);
+router.get("/products/delete-product/:id", deleteProduct);
+router.get("/products/recover-product/:id", recoverProduct);
 module.exports = { router };
