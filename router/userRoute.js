@@ -17,6 +17,7 @@ const {
   userLoginPost,
   FailedLogin,
   detailProductGet,
+  addTocart,
 } = require("../controller/userController");
 const {verifySessionAuth}=require('../middleware/verifySession')
 const {sesionVerification}=require('../middleware/functionalityVerify')
@@ -105,4 +106,5 @@ router.get("/user/account", userAccount);
 router.get("/user/account/logout", userLogout);
 router.get("/user/login", userLoginGet);
 router.post("/user/login", userLoginPost);
+router.get('/users/product/add-to-cart/:id',addTocart)
 module.exports = { router };

@@ -7,6 +7,7 @@ const MobileCheck = require("../auth/isValidMobile");
 const UserCollection = require("../model/collections/UserDb");
 const bcrypt = require("bcrypt");
 const productsCollection = require("../model/collections/products");
+const cartCollection = require("../model/collections/cart");
 const { ObjectId } = require("bson");
 
 async function userHome(req, res) {
@@ -17,10 +18,29 @@ async function userHome(req, res) {
   });
   let productData = await productsCollection.find();
   if (req.session.userAuth && userStatus[0].status) {
-    res.render("users/index", { profile: true, productData });
+    const userData = await UserCollection.findOne({
+      email: req.session.userEmail,
+    });
+    const userId = userData._id;
+    const cartData = await cartCollection.findOne({
+      userId: new ObjectId(userId),
+    });
+    var cartCount = 0;
+    if (cartData) {
+      cartCount = cartData.products.length;
+    } else {
+      cartCount = 0;
+    }
+    console.log("data of a cart " + cartCount);
+    res.render("users/index", {
+      profile: true,
+      productData,
+      cartCount,
+      id: userStatus[0]._id,
+    });
     // return;
   } else {
-    res.render("users/index", { profile: false, productData });
+    res.render("users/index", { profile: false, productData, id: false });
   }
   console.log(req.session.userAuth + " __user auth");
   console.log(req.session.userEmail + " __user email");
@@ -29,7 +49,12 @@ function singupGet(req, res) {
   // if (req.session.userAuth) {
   // res.redirect("/");
   // } else {
-  res.render("users/sigup", { err: false, profile: false });
+  res.render("users/sigup", {
+    err: false,
+    profile: false,
+    cartCount: 0,
+    id: false,
+  });
   // }
 }
 function AfterMailSuccessfull(req, res) {
@@ -58,7 +83,7 @@ async function singupPost(req, res) {
       } else if (dupUsername.length > 0) {
         res.render("users/sigup", {
           err: "Username is Already Exist Enter Unique",
-          profile:false
+          profile: false,
         });
       } else {
         const secret = speakeasy.generateSecret({ length: 6 });
@@ -132,7 +157,12 @@ async function singupPost(req, res) {
 }
 function confirm(req, res) {
   if (!req.session.userAuth) {
-    res.render("users/otp", { err: false, profile: false });
+    res.render("users/otp", {
+      err: false,
+      profile: false,
+      cartCount: 0,
+      id: false,
+    });
   } else {
     res.redirect("/");
   }
@@ -150,14 +180,17 @@ async function confirmPost(req, res) {
       joinDate: Date.now(),
     })
       .save()
-      .then(() => {
+      .then((dat, err) => {
         console.log("inserted");
+        req.session.userId = dat._id;
       });
     res.redirect("/");
   } else {
     res.render("users/otp", {
       err: "Verification Failed and Pleas Try Agin!!...",
       profile: false,
+      cartCount: 0,
+      id: false,
     });
   }
 }
@@ -171,8 +204,21 @@ function sessionsetWhileSignupWithGoogle(req, res) {
   req.session.userAuth = true;
   res.redirect("/");
 }
-function userAccount(req, res) {
-  res.render("users/Account", { profile: true });
+async function userAccount(req, res) {
+  const userData = await UserCollection.findOne({
+    email: req.session.userEmail,
+  });
+  const userId = userData._id;
+  const cartData = await cartCollection.findOne({
+    userId: new ObjectId(userId),
+  });
+  var cartCount = 0;
+  if (cartData) {
+    cartCount = cartData.products.length;
+  } else {
+    cartCount = 0;
+  }
+  res.render("users/Account", { profile: true, cartCount, id: userId });
 }
 function userLogout(req, res) {
   req.session.userAuth = false;
@@ -180,7 +226,12 @@ function userLogout(req, res) {
 }
 
 function userLoginGet(req, res) {
-  res.render("users/login", { profile: false, err: false });
+  res.render("users/login", {
+    profile: false,
+    err: false,
+    cartCount: 0,
+    id: false,
+  });
 }
 async function userLoginPost(req, res) {
   try {
@@ -194,6 +245,8 @@ async function userLoginPost(req, res) {
       return res.render("users/login", {
         profile: false,
         err: "User not found",
+        cartCount: false,
+        id: false,
       });
     }
 
@@ -205,6 +258,7 @@ async function userLoginPost(req, res) {
       return res.render("users/login", {
         profile: false,
         err: "Incorrect password",
+        id: false,
       });
     }
 
@@ -214,10 +268,14 @@ async function userLoginPost(req, res) {
     const userStatus = await UserCollection.find({
       email: req.session.userEmail,
     });
-    if(userStatus[0].status){
+    if (userStatus[0].status) {
       return res.redirect("/");
-    }else{
-      res.render('users/login',{profile:false,err:'Your Access has been denied by admin'})
+    } else {
+      res.render("users/login", {
+        profile: false,
+        err: "Your Access has been denied by admin",
+        id: false,
+      });
     }
   } catch (err) {
     console.error("Error during login:", err);
@@ -228,13 +286,30 @@ async function userLoginPost(req, res) {
   }
 }
 function FailedLogin(req, res) {
-  res.render("users/failedlogin", { profile: false, err: "Login Failed" });
+  res.render("users/failedlogin", {
+    profile: false,
+    err: "Login Failed",
+    cartCount: 0,
+    id: false,
+  });
 }
 async function detailProductGet(req, res) {
-  
   let proId = req.params.id;
-  let mainImageas=req.params.image
+  let mainImageas = req.params.image;
   console.log(proId);
+  const userData = await UserCollection.findOne({
+    email: req.session.userEmail,
+  });
+  const userId = userData._id;
+  const cartData = await cartCollection.findOne({
+    userId: new ObjectId(userId),
+  });
+  var cartCount = 0;
+  if (cartData) {
+    cartCount = cartData.products.length;
+  } else {
+    cartCount = 0;
+  }
   // let productData = await productsCollection.aggregate([
   //   {
   //     $lookup: {
@@ -263,11 +338,11 @@ async function detailProductGet(req, res) {
   // ]);
   let productData = await productsCollection.aggregate([
     {
-      $match:{_id:new ObjectId(proId)}
+      $match: { _id: new ObjectId(proId) },
     },
     {
       $lookup: {
-        from: "categories", 
+        from: "categories",
         localField: "category",
         foreignField: "_id",
         as: "categoryInfo",
@@ -285,7 +360,7 @@ async function detailProductGet(req, res) {
         price: true,
         discount: true,
         brand: true,
-        description:true,
+        description: true,
         image: {
           $map: {
             input: "$image",
@@ -317,7 +392,96 @@ async function detailProductGet(req, res) {
     },
   ]);
   console.log(JSON.stringify(productData));
-  res.render("users/productDetail", { profile: true,productData,mainImageas});
+  res.render("users/productDetail", {
+    profile: true,
+    productData,
+    mainImageas,
+    cartCount,
+    id: userId,
+  });
+}
+async function addTocart(req, res) {
+  try {
+    let productId = req.params.id;
+    let userId = await UserCollection.findOne({ email: req.session.userEmail });
+    let userCartExistStatus = await cartCollection.findOne({
+      userId: new ObjectId(userId._id),
+    });
+    console.log(userCartExistStatus + " exits skjkl");
+    if (!userCartExistStatus) {
+      await new cartCollection({
+        userId: new ObjectId(userId._id),
+        products: [
+          {
+            productId: new ObjectId(productId),
+            qty: 1,
+          },
+        ],
+      }).save();
+    } else {
+      // const userCart = await cartCollection.findOne({
+      //   userId: new ObjectId(userId),
+      // });
+      // const productAlreadyExist = userCart.products.findIndex(
+      //   (product) => productId == new ObjectId(productId)
+      // );
+      // if (productAlreadyExist !== -1) {
+      //   userCart.products[productAlreadyExist].qty++;
+      // } else {
+      const productExist = await cartCollection.aggregate([
+        {
+          $match: { userId: new ObjectId(userId) },
+        },
+        {
+          $unwind: "$products",
+        },
+        {
+          $match: { "products.productId": new ObjectId(productId) },
+        },
+      ]);
+
+      console.log(
+        JSON.stringify(productExist) + "+++++++++++exist status_____________-"
+      );
+      if (productExist.length <= 0) {
+        await cartCollection.updateOne(
+          {
+            userId: new ObjectId(userId),
+          },
+          {
+            $push: {
+              products: {
+                productId: new ObjectId(productId),
+                qty: 1,
+              },
+            },
+          }
+        );
+      } else {
+        // await cartCollection.updateOne(
+        //   {
+        //     userId: new ObjectId(userId),
+        //     "products.productId": new ObjectId(productId),
+        //   },
+        //   {
+        //     $set: { "products.$.qty": updateQty },
+        //   }
+        // );
+        let data = await cartCollection.updateOne(
+          {
+            userId: new ObjectId(userId),
+            "products.productId": new ObjectId(productId),
+          },
+          { $inc: { "products.$.qty": 1 } }
+        );
+
+        console.log("finded data " + data);
+      }
+    }
+    res.redirect("/");
+  } catch (err) {
+    console.log("error in add to cart" + err);
+  }
 }
 module.exports = {
   userHome,
@@ -336,4 +500,5 @@ module.exports = {
   userLoginPost,
   FailedLogin,
   detailProductGet,
+  addTocart,
 };

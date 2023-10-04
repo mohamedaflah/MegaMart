@@ -152,16 +152,22 @@ function overView(req, res) {
 }
 async function ManageCategory(req, res) {
   let categories = await categoryCollection.find();
-  res.render("admins/category", { categories });
+  res.render("admins/category", { categories,err:false });
 }
 async function addCategory(req, res) {
   try {
+    let categories = await categoryCollection.find();
     console.log(req.body);
-    await new categoryCollection({
-      categoryname: req.body.category,
-      addedDate: Date.now(),
-    }).save();
-    res.redirect("/admin/category");
+    let categoryExist=await categoryCollection.findOne({categoryname:req.body.category})
+    if(!categoryExist){
+      await new categoryCollection({
+        categoryname: req.body.category,
+        addedDate: Date.now(),
+      }).save();
+      res.redirect("/admin/category");
+    }else{
+      res.render('admins/category',{categories,err:"Category Already Exist!!"})
+    }
   } catch (err) {
     console.log("error in add cate" + err);
   }

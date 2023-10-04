@@ -39,7 +39,7 @@
                         <a href="">Orders</a>
                         <%}else{%>
                             <a href="/signup">Sign up</a>
-                        <%}%>
+                            <%}%>
                 </div>
                 <div class="icons">
                     <div class="search_box">
@@ -47,13 +47,22 @@
                         <img src="/images/search.svg" alt="">
                     </div>
                     <img class="whish" src="/images/heart.svg" alt="">
-                    <img class="cart" src="/images/cart.svg" alt="">
-                    <img class="menu" src="/images/menu_bar.svg" alt="">
                     <%if(profile){%>
-                        <a href="/user/account">
-                            <img src="/images/userprofile.svg" alt="">
+                        <a href="" class="crt">
+                            <span><%-cartCount%></span>
+                            <img class="cart" src="/images/cart.svg" alt="">
                         </a>
-                        <% } %>
+                        <% }else{%>
+                            <a href="/user/login">
+                                <img class="cart" src="/images/cart.svg" alt="">
+                            </a>
+                            <% }%>
+                                <img class="menu" src="/images/menu_bar.svg" alt="">
+                                <%if(profile){%>
+                                    <a href="/user/account">
+                                        <img src="/images/userprofile.svg" alt="">
+                                    </a>
+                                <% } %>
                 </div>
             </div>
         </div>
