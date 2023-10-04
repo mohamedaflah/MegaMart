@@ -173,14 +173,6 @@ async function addProduct(req, res) {
     const img3 = req.files["image2"][0];
     const img4 = req.files["image3"][0];
     const img5 = req.files["image4"][0];
-
-    // Do whatever you want with these files.
-    console.log("Uploaded files:");
-    console.log(main);
-    console.log(img2);
-    console.log(img3);
-    console.log(img4);
-    console.log(img5);
     const {
       productname,
       price,
@@ -455,8 +447,11 @@ async function deleteProduct(req, res) {
 }
 async function recoverProduct(req, res) {
   let productId = req.params.id;
-  await productCollection.updateOne({_id:new ObjectId(productId)},{$set:{deletionStatus:false}})
-  res.redirect('/admin/products')
+  await productCollection.updateOne(
+    { _id: new ObjectId(productId) },
+    { $set: { deletionStatus: false } }
+  );
+  res.redirect("/admin/products");
 }
 module.exports = {
   adminHomeShowuser,

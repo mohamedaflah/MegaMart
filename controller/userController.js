@@ -7,6 +7,7 @@ const MobileCheck = require("../auth/isValidMobile");
 const UserCollection = require("../model/collections/UserDb");
 const bcrypt = require("bcrypt");
 const productsCollection = require("../model/collections/products");
+const { ObjectId } = require("bson");
 
 async function userHome(req, res) {
   // let userStatus=await UserCollection.find({email:req.session.userEmail})
@@ -57,6 +58,7 @@ async function singupPost(req, res) {
       } else if (dupUsername.length > 0) {
         res.render("users/sigup", {
           err: "Username is Already Exist Enter Unique",
+          profile:false
         });
       } else {
         const secret = speakeasy.generateSecret({ length: 6 });
@@ -209,7 +211,14 @@ async function userLoginPost(req, res) {
     // Login successful
     req.session.userAuth = true;
     req.session.userEmail = req.body.email_or_Phone;
-    return res.redirect("/");
+    const userStatus = await UserCollection.find({
+      email: req.session.userEmail,
+    });
+    if(userStatus[0].status){
+      return res.redirect("/");
+    }else{
+      res.render('users/login',{profile:false,err:'Your Access has been denied by admin'})
+    }
   } catch (err) {
     console.error("Error during login:", err);
     res.render("users/login", {
@@ -221,10 +230,95 @@ async function userLoginPost(req, res) {
 function FailedLogin(req, res) {
   res.render("users/failedlogin", { profile: false, err: "Login Failed" });
 }
-function detailProductGet(req, res) {
-
+async function detailProductGet(req, res) {
+  
+  let proId = req.params.id;
+  let mainImageas=req.params.image
+  console.log(proId);
+  // let productData = await productsCollection.aggregate([
+  //   {
+  //     $lookup: {
+  //       from: "categories",
+  //       localField: "category",
+  //       foreignField: "_id",
+  //       as: "categoryInfo",
+  //     },
+  //   },
+  //   {
+  //     $unwind: "$categoryInfo",
+  //   },
+  //   {
+  //     $project: {
+  //       productName: 1,
+  //       category: "$categoryInfo.categoryname",
+  //       price: 1,
+  //       discount: 1,
+  //       image: 1,
+  //       brand: 1,
+  //       specification: 1,
+  //       currentStatus: 1,
+  //       deletionStatus: 1,
+  //     },
+  //   },
+  // ]);
+  let productData = await productsCollection.aggregate([
+    {
+      $match:{_id:new ObjectId(proId)}
+    },
+    {
+      $lookup: {
+        from: "categories", 
+        localField: "category",
+        foreignField: "_id",
+        as: "categoryInfo",
+      },
+    },
+    {
+      $unwind: "$categoryInfo",
+    },
+    {
+      $project: {
+        productName: 1,
+        category: "$categoryInfo.categoryname",
+        categoryId: "$categoryInfo._id",
+        _id: true,
+        price: true,
+        discount: true,
+        brand: true,
+        description:true,
+        image: {
+          $map: {
+            input: "$image",
+            as: "img",
+            in: {
+              mainimage: "$$img.mainimage",
+              image1: "$$img.image1",
+              image2: "$$img.image2",
+              image3: "$$img.image3",
+              image4: "$$img.image4",
+            },
+          },
+        },
+        specification: {
+          $map: {
+            input: "$specification",
+            as: "spec",
+            in: {
+              spec1: "$$spec.spec1",
+              spec2: "$$spec.spec2",
+              spec3: "$$spec.spec3",
+              spec4: "$$spec.spec4",
+            },
+          },
+        },
+        currentStatus: true,
+        deletionStatus: true,
+      },
+    },
+  ]);
+  console.log(JSON.stringify(productData));
+  res.render("users/productDetail", { profile: true,productData,mainImageas});
 }
-
 module.exports = {
   userHome,
   singupGet,

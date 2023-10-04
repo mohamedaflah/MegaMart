@@ -19,6 +19,7 @@ const {
   detailProductGet,
 } = require("../controller/userController");
 const {verifySessionAuth}=require('../middleware/verifySession')
+const {sesionVerification}=require('../middleware/functionalityVerify')
 require("../auth/passportAuth");
 require("../auth/LoginwithGoogle");
 router.get("/", userHome);
@@ -29,7 +30,7 @@ router.get(
   passport.authenticate("google-signup", { scope: ["email", "profile"] })
 );
 
-router.get('/products/product-detail/:id',verifySessionAuth,detailProductGet)
+router.get('/products/product-detail/:id/:image',sesionVerification,detailProductGet)
 
 
 

@@ -140,7 +140,7 @@
         </div>
         <%productData.forEach((data)=>{%>
             <%if(!data.deletionStatus){%>
-                <a href="/products/product-detail/<%-data._id%>" style="text-decoration: none;color:black">
+                <a href="products/product-detail/<%-data._id%>/mainimage" style="text-decoration: none;color:black">
                     <div class="product_card">
                         <div class="image_section">
                             <img src="/product-images/<%-data.image[0].mainimage%>" alt="">

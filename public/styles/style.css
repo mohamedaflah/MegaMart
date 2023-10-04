@@ -251,6 +251,8 @@ body {
 .home .products_section .product_card {
   height: 250px;
   width: 200px;
+  color: #000;
+  text-decoration: none;
   display: flex;
   flex-direction: column;
 }
@@ -605,6 +607,249 @@ button:hover {
   border-radius: 5px;
 }
 
+.home .product_detail_section {
+  width: 130rem;
+  margin: auto;
+  display: flex;
+  height: 580px;
+}
+.home .product_detail_section .preview_images {
+  width: 60%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home .product_detail_section .preview_images .imgs {
+  width: 90%;
+  height: 85%;
+  display: flex;
+  justify-content: space-between;
+}
+.home .product_detail_section .preview_images .imgs .secondaries {
+  width: 25%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.home .product_detail_section .preview_images .imgs .secondaries .prviewImg {
+  width: 100%;
+  height: 23%;
+  background: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home .product_detail_section .preview_images .imgs .secondaries .prviewImg img {
+  height: auto;
+  width: 70%;
+}
+.home .product_detail_section .preview_images .imgs .main {
+  width: 72%;
+  height: 100%;
+  background: #F5F5F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home .product_detail_section .preview_images .imgs .main img {
+  height: auto;
+  width: 60%;
+}
+.home .product_detail_section .descriptions {
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.home .product_detail_section .descriptions .contents {
+  width: 90%;
+  height: 85%;
+  display: flex;
+  flex-direction: column;
+}
+.home .product_detail_section .descriptions .contents .head_part {
+  display: flex;
+  flex-direction: column;
+  min-height: 55%;
+  border-bottom: 1px solid gray;
+}
+.home .product_detail_section .descriptions .contents .head_part h1 {
+  font-size: 25px;
+}
+.home .product_detail_section .descriptions .contents .head_part .ratings {
+  display: flex;
+  align-items: center;
+}
+.home .product_detail_section .descriptions .contents .head_part .rate_and_desc {
+  padding-bottom: 10px;
+  height: auto;
+}
+.home .product_detail_section .descriptions .contents .head_part .rate_and_desc .price {
+  display: flex;
+  gap: 25px;
+}
+.home .product_detail_section .descriptions .contents .head_part .rate_and_desc .price .mrp {
+  text-decoration: line-through;
+  color: #5d5656;
+}
+.home .product_detail_section .descriptions .contents .head_part .rate_and_desc .price h3 {
+  font-size: 15px;
+}
+.home .product_detail_section .descriptions .contents .head_part .rate_and_desc p {
+  font-size: 12px;
+}
+.home .product_detail_section .descriptions .contents .head_part .rate_and_desc ul {
+  list-style: none;
+  font-size: 13px;
+}
+.home .product_detail_section .descriptions .contents .function_part {
+  width: 100%;
+  height: 50%;
+  padding-top: 30px;
+}
+.home .product_detail_section .descriptions .contents .function_part .btns {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.home .product_detail_section .descriptions .contents .function_part .btns .qty {
+  border: 1px solid rgb(196, 196, 196);
+  height: 40px;
+  width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.home .product_detail_section .descriptions .contents .function_part .btns .qty a {
+  border: 1px solid rgb(196, 196, 196);
+  border-top: none;
+  border-bottom: none;
+  text-decoration: none;
+  color: #000;
+  display: flex;
+  font-size: 18px;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 45px;
+}
+.home .product_detail_section .descriptions .contents .function_part .btns .qty .plus {
+  background-color: #db4444;
+  color: #fff;
+  text-decoration: none;
+}
+.home .product_detail_section .descriptions .contents .function_part .btns .addtocart {
+  height: 40px;
+  width: 160px;
+  display: flex;
+  align-items: center;
+  background-color: #db4444;
+  text-decoration: none;
+  justify-content: center;
+  color: #ffffff;
+  border-radius: 3px;
+}
+.home .product_detail_section .descriptions .contents .function_part .btns .whish {
+  border-radius: 3px;
+  border: 1px solid #e0dcdc;
+}
+@media (max-width: 1348px) {
+  .home .product_detail_section {
+    width: 115rem;
+    height: 540px;
+  }
+}
+@media (max-width: 1172px) {
+  .home .product_detail_section {
+    width: 100rem;
+    height: 450px;
+  }
+}
+@media (max-width: 1015px) {
+  .home .product_detail_section {
+    height: 400px;
+    align-items: center;
+    width: 95rem;
+    justify-content: center;
+  }
+  .home .product_detail_section .preview_images {
+    width: 90%;
+  }
+  .home .product_detail_section .preview_images .imgs {
+    flex-direction: column-reverse;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+  }
+  .home .product_detail_section .preview_images .imgs .secondaries {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    height: 30%;
+  }
+  .home .product_detail_section .preview_images .imgs .secondaries .prviewImg {
+    height: 100%;
+    width: 23%;
+  }
+  .home .product_detail_section .preview_images .imgs .main {
+    width: 100%;
+  }
+  .home .product_detail_section .descriptions {
+    width: 90%;
+  }
+}
+@media (max-width: 953px) {
+  .home .product_detail_section {
+    flex-direction: column;
+    height: 100vh;
+    width: 700px;
+  }
+}
+@media (max-width: 722px) {
+  .home .product_detail_section {
+    width: 600px;
+  }
+}
+@media (max-width: 613px) {
+  .home .product_detail_section {
+    width: 500px;
+  }
+}
+@media (max-width: 503px) {
+  .home .product_detail_section {
+    width: 400px;
+  }
+  .home .product_detail_section .preview_images {
+    height: 50%;
+  }
+}
+@media (max-width: 405px) {
+  .home .product_detail_section {
+    width: 340px;
+  }
+  .home .product_detail_section .descriptions .contents .function_part .btns .qty {
+    width: 70px;
+    height: 25px;
+  }
+  .home .product_detail_section .descriptions .contents .function_part .btns .qty a {
+    width: 20px;
+  }
+  .home .product_detail_section .descriptions .contents .function_part .btns .addtocart {
+    width: 120px;
+    height: 27px;
+    font-size: 10px;
+  }
+  .home .product_detail_section .descriptions .contents .function_part .btns .whish {
+    height: 25px;
+    font-size: 10px;
+  }
+}
 .home .side_bar {
   transition: all 0.4s ease;
   border-right: 0.97px solid #e8e2e2;

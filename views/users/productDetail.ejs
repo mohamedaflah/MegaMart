@@ -1,6 +1,75 @@
 <%-include('../partials/header.ejs') %>
 <div class="home">
-    Details
+    <div class="product_detail_section">
+        <div class="preview_images">
+            <div class="imgs">
+                <div class="secondaries">
+                    <a href="/products/product-detail/<%-productData[0]._id%>/image1" class="prviewImg preview1">
+                        <img src="/product-images/<%-productData[0].image[0].image1%>" alt="">
+                    </a>
+                    <a href="/products/product-detail/<%-productData[0]._id%>/image2" class="prviewImg preview2">
+                        <img src="/product-images/<%-productData[0].image[0].image2%>" alt="">
+                    </a>
+                    <a href="/products/product-detail/<%-productData[0]._id%>/image3" class="prviewImg preview3">
+                        <img src="/product-images/<%-productData[0].image[0].image3%>" alt="">
+                    </a>
+                    <a href="/products/product-detail/<%-productData[0]._id%>/image4" class="prviewImg preview4">
+                        <img src="/product-images/<%-productData[0].image[0].image4%>" alt="">
+                    </a>
+                </div>
+                <a href="/products/product-detail/<%-productData[0]._id%>/mainimage" class="main">
+                    <img src="/product-images/<%-productData[0].image[0][mainImageas]%>" alt="">
+                </a>
+            </div>
+        </div>
+        <div class="descriptions">
+            <div class="contents">
+                <div class="head_part">
+                
+                        <h1><%-productData[0].productName%></h1>
+                        <div class="ratings">
+                            <img src="/images/star.svg" alt="">
+                            <img src="/images/star.svg" alt="">
+                            <img src="/images/star.svg" alt="">
+                            <img src="/images/star.svg" alt="">
+                            <img src="/images/star.svg" alt="">
+                        </div>
+                        <div class="rate_and_desc">
+                            <div class="price">
+                                <%if(productData[0].discount){%>
+                                    <h3 class="discounted"><%-productData[0].discount%>₹</h3>
+                               <% }%>
+                               
+                                <h3 class="
+                                <%if(productData[0].discount){%>
+                                    mrp
+                               <% }else{%>
+                                discounted
+                              <% }%>
+                                "><%-productData[0].price%>₹</h3>
+                            </div>
+                            <p><%-productData[0].description%></p>
+                            <ul>
+                               <%for(let data in productData[0].specification[0]){%>
+                                <li><%-productData[0].specification[0][data]%></li>
+                             <%  }%>
+                            </ul>
+                        </div>
+                </div>
+                <div class="function_part">
+                    <div class="btns">
+                        <div class="qty">
+                            <a href="" class="minus">-</a>
+                            2
+                            <a href="" class="plus">+</a>
+                        </div>
+                        <a href="" class="addtocart">Add to Cart</a>
+                        <a href="" class="whish"><img class="whish" src="/images/heart.svg" alt=""></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
     <%-include('../partials/footer.ejs') %>
 </div>
