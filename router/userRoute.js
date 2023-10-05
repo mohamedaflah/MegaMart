@@ -18,9 +18,10 @@ const {
   FailedLogin,
   detailProductGet,
   addTocart,
+  getCartPage,
 } = require("../controller/userController");
-const {verifySessionAuth}=require('../middleware/verifySession')
-const {sesionVerification}=require('../middleware/functionalityVerify')
+const { verifySessionAuth } = require("../middleware/verifySession");
+const { sesionVerification } = require("../middleware/functionalityVerify");
 require("../auth/passportAuth");
 require("../auth/LoginwithGoogle");
 router.get("/", userHome);
@@ -31,10 +32,11 @@ router.get(
   passport.authenticate("google-signup", { scope: ["email", "profile"] })
 );
 
-router.get('/products/product-detail/:id/:image',sesionVerification,detailProductGet)
-
-
-
+router.get(
+  "/products/product-detail/:id/:image",
+  sesionVerification,
+  detailProductGet
+);
 
 // router.get(
 //   "/auth/google/callback",
@@ -43,8 +45,6 @@ router.get('/products/product-detail/:id/:image',sesionVerification,detailProduc
 //     failureRedirect: "/failedmail",
 //   })
 // );
-
-
 
 router.get("/auth/google/callback", (req, res, next) => {
   passport.authenticate("google-signup", (err, user, info) => {
@@ -68,14 +68,6 @@ router.get("/auth/google/callback", (req, res, next) => {
   })(req, res, next); // Invoke the Passport middleware
 });
 
-
-
-
-
-
-
-
-
 // Routes for Google login
 // Update the route names to use "google" as the strategy name
 // Routes for Google login
@@ -83,16 +75,18 @@ router.get(
   "/auth/login",
   passport.authenticate("google-login", { scope: ["email", "profile"] })
 );
-router.get(
-  "/auth/login/callback",(req,res)=>{
-    passport.authenticate("google-login",(err,user,info)=>{
-      req.session.userEmail=user.email
-    }, {
+router.get("/auth/login/callback", (req, res) => {
+  passport.authenticate(
+    "google-login",
+    (err, user, info) => {
+      req.session.userEmail = user.email;
+    },
+    {
       successRedirect: "/setSession",
       failureRedirect: "/failedlogin",
-    })
-  }
-);
+    }
+  );
+});
 
 router.get("/successmail", AfterMailSuccessfull);
 router.get("/failedmail", MailVerificationFail);
@@ -106,5 +100,6 @@ router.get("/user/account", userAccount);
 router.get("/user/account/logout", userLogout);
 router.get("/user/login", userLoginGet);
 router.post("/user/login", userLoginPost);
-router.get('/users/product/add-to-cart/:id',addTocart)
+router.get("/users/product/add-to-cart/:id", addTocart);
+router.get("/users/product/cart/showcart/:id",sesionVerification, getCartPage);
 module.exports = { router };

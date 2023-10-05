@@ -7,7 +7,7 @@ const MobileCheck = require("../auth/isValidMobile");
 const UserCollection = require("../model/collections/UserDb");
 const bcrypt = require("bcrypt");
 const productsCollection = require("../model/collections/products");
-const cartCollection = require("../model/collections/cart");
+const cartCollection = require("cart");
 const { ObjectId } = require("bson");
 
 async function userHome(req, res) {
@@ -483,6 +483,54 @@ async function addTocart(req, res) {
     console.log("error in add to cart" + err);
   }
 }
+async function getCartPage(req, res) {
+  try {
+    const userData = await UserCollection.findOne({
+      email: req.session.userEmail,
+    });
+    const userId = userData._id;
+    const cartData = await cartCollection.findOne({
+      userId: new ObjectId(userId),
+    });
+    var cartCount = 0;
+    if (cartData) {
+      cartCount = cartData.products.length;
+    } else {
+      cartCount = 0;
+    }
+    let userCartdata = await cartCollection.aggregate([
+      { $match: { userId: new ObjectId(userId) } },
+      {
+        $unwind: "$products",
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.productId",
+          foreignField: "_id",
+          as: "cartData",
+        },
+      },
+      {
+        $unwind: "$cartData",
+      },
+    ]);
+    console.log(JSON.stringify(userCartdata) + "data");
+    let totalAmount = 0;
+    userCartdata.forEach((cardata) => {
+      totalAmount += cardata.cartData.price * cardata.products.qty;
+    });
+    res.render("users/cart", {
+      profile: true,
+      id: req.params.id,
+      cartCount,
+      userCartdata,
+      totalAmount,
+    });
+  } catch (err) {
+    console.log("Error found in User cart " + err);
+  }
+}
 module.exports = {
   userHome,
   singupGet,
@@ -501,4 +549,5 @@ module.exports = {
   FailedLogin,
   detailProductGet,
   addTocart,
+  getCartPage,
 };
