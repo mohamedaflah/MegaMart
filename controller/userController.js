@@ -7,7 +7,7 @@ const MobileCheck = require("../auth/isValidMobile");
 const UserCollection = require("../model/collections/UserDb");
 const bcrypt = require("bcrypt");
 const productsCollection = require("../model/collections/products");
-const cartCollection = require("cart");
+const cartCollection = require("../model/collections/cart");
 const { ObjectId } = require("bson");
 
 async function userHome(req, res) {
@@ -599,46 +599,61 @@ function forgotPassword(req, res) {
     profile: false,
     cartCount: false,
     id: false,
+    err:false
   });
 }
 var forgotInfo;
 var fogotCode;
-function forgotPassPost(req, res) {
-  forgotInfo = req.body.forgotemail;
-  const secret = speakeasy.generateSecret({ length: 6 });
-  const code = speakeasy.totp({
-    secret: secret.base32,
-    encoding: "base32",
-  });
-  console.log("forgot ", secret.base32);
-  fogotCode = code;
-  console.log("forgot ", code);
-  // console.log(req.body);
-  const mailOptions = {
-    from: process.env.USER_EMAIL,
-    to: req.body.forgotemail,
-    subject: "Changing Password",
-    html:
-      "<p style='color:teal;'>Change Your Password : </p>" +
-      `<div style='width:90%;margin:auto;padding:5px;border-radius:5px;background:#2ff75e'>
-            <h1 style='color:white'>Your Verification code is :${code}</h1>
-      </div>`,
-  };
-
-  // await transporter.sendMail(mailOptions)
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error("Error sending email:", error);
-      res.status(500).json({
-        error: "An error occurred while sending the confirmation email.",
+async function forgotPassPost(req, res) {
+  try{
+    forgotInfo = req.body.forgotemail;
+    const userExist=await UserCollection.findOne({email:forgotInfo})
+    if(!userExist){
+      return  res.render("users/forgotpass", {
+        profile: false,
+        cartCount: false,
+        id: false,
+        err:"Email Not Found"
       });
-    } else {
-      console.log("Email sent:", info.response);
-      console.log("code in 201_________" + codEmai);
-      userInformation = req.body;
-      res.status(201).redirect("/users/accounts/forgotpassword/confirm");
     }
-  });
+    const secret = speakeasy.generateSecret({ length: 6 });
+    const code = speakeasy.totp({
+      secret: secret.base32,
+      encoding: "base32",
+    });
+    console.log("forgot ", secret.base32);
+    fogotCode = code;
+    console.log("forgot ", code);
+    // console.log(req.body);
+    const mailOptions = {
+      from: process.env.USER_EMAIL,
+      to: req.body.forgotemail,
+      subject: "Changing Password",
+      html:
+        "<p style='color:teal;'>Change Your Password : </p>" +
+        `<div style='width:90%;margin:auto;padding:5px;border-radius:5px;background:#2ff75e'>
+              <h1 style='color:white'>Your Verification code is :${code}</h1>
+        </div>`,
+    };
+  
+    // await transporter.sendMail(mailOptions)
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error sending email:", error);
+        res.status(500).json({
+          error: "An error occurred while sending the confirmation email.",
+        });
+      } else {
+        console.log("Email sent:", info.response);
+        console.log("code in 201_________" + codEmai);
+        userInformation = req.body;
+        res.status(201).redirect("/users/accounts/forgotpassword/confirm");
+      }
+    });
+
+  }catch(err){
+    console.log('Error Founded in Sending otp Mail for Changing Password'+err)
+  }
 }
 async function forgotPassConfirm(req, res) {
   res.render("users/forgotconfirm", {

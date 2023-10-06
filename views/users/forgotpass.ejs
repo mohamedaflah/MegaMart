@@ -1,5 +1,8 @@
 <%-include('../partials/header.ejs') %>
-<div class="home" style="display: flex;align-items: center;justify-content: center;">
+<div class="home" style="display: flex;align-items: center;justify-content: center;position: relative;">
+    <%if(err){%>
+        <p id="err" style="width: 150px;position: absolute;top:25%;left:50%;transform: translateX(-50%);"><%-err%><a href="/users/accounts/forgotpassword/"><img src="/images/cross.png" style="width: 13px;height:13px" alt=""></a></p>
+   <% } %>
     <form action="/users/accounts/forgotpassword" method="post" class="forgot">
         <div class="controll">
             <input type="email" placeholder="Enter Your Email Address" name="forgotemail" required>
