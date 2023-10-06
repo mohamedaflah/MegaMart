@@ -37,10 +37,16 @@ async function userHome(req, res) {
       productData,
       cartCount,
       id: userStatus[0]._id,
+      err: false,
     });
     // return;
   } else {
-    res.render("users/index", { profile: false, productData, id: false });
+    res.render("users/index", {
+      profile: false,
+      productData,
+      id: false,
+      err: false,
+    });
   }
   console.log(req.session.userAuth + " __user auth");
   console.log(req.session.userEmail + " __user email");
@@ -205,10 +211,7 @@ function sessionsetWhileSignupWithGoogle(req, res) {
   res.redirect("/");
 }
 async function userAccount(req, res) {
-  const userData = await UserCollection.findOne({
-    email: req.session.userEmail,
-  });
-  const userId = userData._id;
+  const userId = req.params.id;
   const cartData = await cartCollection.findOne({
     userId: new ObjectId(userId),
   });
@@ -515,20 +518,177 @@ async function getCartPage(req, res) {
         $unwind: "$cartData",
       },
     ]);
-    console.log(JSON.stringify(userCartdata) + "data");
     let totalAmount = 0;
     userCartdata.forEach((cardata) => {
       totalAmount += cardata.cartData.price * cardata.products.qty;
     });
-    res.render("users/cart", {
-      profile: true,
-      id: req.params.id,
-      cartCount,
-      userCartdata,
-      totalAmount,
-    });
+    if (userCartdata.length <= 0) {
+      // console.log(JSON.stringify(userCartdata) + "data");
+      res.render("users/cart", {
+        profile: true,
+        id: req.params.id,
+        cartCount,
+        userCartdata,
+        totalAmount,
+        empty: false,
+      });
+    } else {
+      res.render("users/cart", {
+        profile: true,
+        id: req.params.id,
+        cartCount,
+        userCartdata,
+        totalAmount,
+        empty: true,
+      });
+    }
   } catch (err) {
     console.log("Error found in User cart " + err);
+  }
+}
+async function increaseQuantity(req, res) {
+  const userId = req.params.userId;
+  const productId = req.params.productId;
+  await cartCollection.updateOne(
+    {
+      userId: new ObjectId(userId),
+      "products.productId": new ObjectId(productId),
+    },
+    {
+      $inc: { "products.$.qty": 1 },
+    }
+  );
+
+  res.redirect(`/users/product/cart/showcart/${userId}`);
+}
+async function decreaseQuantity(req, res) {
+  const userId = req.params.userId;
+  const productId = req.params.productId;
+  await cartCollection.updateOne(
+    {
+      userId: new ObjectId(userId),
+      "products.productId": new ObjectId(productId),
+    },
+    {
+      $inc: { "products.$.qty": -1 },
+    }
+  );
+
+  res.redirect(`/users/product/cart/showcart/${userId}`);
+}
+async function deleteItemFromCart(req, res) {
+  const userId = req.params.userId;
+  const productId = req.params.productId;
+  await cartCollection.updateOne(
+    {
+      userId: new ObjectId(userId),
+      "products.productId": new ObjectId(productId),
+    },
+    {
+      $pull: {
+        products: {
+          productId: new ObjectId(productId),
+        },
+      },
+    }
+  );
+  res.redirect(`/users/product/cart/showcart/${userId}`);
+}
+function forgotPassword(req, res) {
+  res.render("users/forgotpass", {
+    profile: false,
+    cartCount: false,
+    id: false,
+  });
+}
+var forgotInfo;
+var fogotCode;
+function forgotPassPost(req, res) {
+  forgotInfo = req.body.forgotemail;
+  const secret = speakeasy.generateSecret({ length: 6 });
+  const code = speakeasy.totp({
+    secret: secret.base32,
+    encoding: "base32",
+  });
+  console.log("forgot ", secret.base32);
+  fogotCode = code;
+  console.log("forgot ", code);
+  // console.log(req.body);
+  const mailOptions = {
+    from: process.env.USER_EMAIL,
+    to: req.body.forgotemail,
+    subject: "Changing Password",
+    html:
+      "<p style='color:teal;'>Change Your Password : </p>" +
+      `<div style='width:90%;margin:auto;padding:5px;border-radius:5px;background:#2ff75e'>
+            <h1 style='color:white'>Your Verification code is :${code}</h1>
+      </div>`,
+  };
+
+  // await transporter.sendMail(mailOptions)
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Error sending email:", error);
+      res.status(500).json({
+        error: "An error occurred while sending the confirmation email.",
+      });
+    } else {
+      console.log("Email sent:", info.response);
+      console.log("code in 201_________" + codEmai);
+      userInformation = req.body;
+      res.status(201).redirect("/users/accounts/forgotpassword/confirm");
+    }
+  });
+}
+async function forgotPassConfirm(req, res) {
+  res.render("users/forgotconfirm", {
+    err: false,
+    profile: false,
+    id: false,
+    cartCount: false,
+  });
+}
+function forgotPassConfirmPost(req, res) {
+  const otpNum = req.body.verifyNum;
+  const mail = forgotInfo;
+  if (otpNum == fogotCode) {
+    res.redirect("/users/account/forgotpassword/changepassword/");
+  } else {
+    res.render("users/forgotconfirm", {
+      err: "Verificatoin Failed",
+      profile: false,
+      id: false,
+      cartCount: false,
+    });
+  }
+}
+function forgotPasswordPasswordEnter(req, res) {
+  res.render("users/forgotpassenter", {
+    profile: false,
+    id: false,
+    cartCount: 0,
+    err: false,
+  });
+}
+async function forgotPasswordPasswordEnterPost(req, res) {
+  if (req.body.firstpassword == req.body.secondpassword) {
+    req.body.firstpassword = bcrypt.hashSync(req.body.firstpassword, 10);
+    await UserCollection.updateOne(
+      { email: forgotInfo },
+      {
+        $set: {
+          password: req.body.firstpassword,
+        },
+      }
+    );
+    res.redirect('/user/login')
+  }else{
+    res.render("users/forgotpassenter", {
+      profile: false,
+      id: false,
+      cartCount: 0,
+      err: "Password Not Same",
+    });
   }
 }
 module.exports = {
@@ -550,4 +710,13 @@ module.exports = {
   detailProductGet,
   addTocart,
   getCartPage,
+  increaseQuantity,
+  decreaseQuantity,
+  deleteItemFromCart,
+  forgotPassword,
+  forgotPassPost,
+  forgotPassConfirm,
+  forgotPassConfirmPost,
+  forgotPasswordPasswordEnter,
+  forgotPasswordPasswordEnterPost,
 };

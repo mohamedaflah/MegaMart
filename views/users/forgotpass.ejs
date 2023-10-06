@@ -1,0 +1,13 @@
+<%-include('../partials/header.ejs') %>
+<div class="home" style="display: flex;align-items: center;justify-content: center;">
+    <form action="/users/accounts/forgotpassword" method="post" class="forgot">
+        <div class="controll">
+            <input type="email" placeholder="Enter Your Email Address" name="forgotemail" required>
+            <button type="submit">submit</button>
+        </div>
+        <div class="lnk">
+            <a href="/user/login">Login</a>
+        </div>
+    </form>
+</div>
+<%-include('../partials/footer.ejs') %>

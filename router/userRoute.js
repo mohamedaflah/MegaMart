@@ -19,8 +19,18 @@ const {
   detailProductGet,
   addTocart,
   getCartPage,
+  increaseQuantity,
+  decreaseQuantity,
+  deleteItemFromCart,
+  forgotPassword,
+  forgotPassPost,
+  forgotPassConfirm,
+  forgotPassConfirmPost,
+  forgotPasswordPasswordEnter,
+  forgotPasswordPasswordEnterPost,
 } = require("../controller/userController");
 const { verifySessionAuth } = require("../middleware/verifySession");
+const { checkingUserStatus } = require("../middleware/statusVerify");
 const { sesionVerification } = require("../middleware/functionalityVerify");
 require("../auth/passportAuth");
 require("../auth/LoginwithGoogle");
@@ -96,10 +106,30 @@ router.get("/mail/confirm", confirm);
 router.post("/mail/confirm", confirmPost);
 router.get("/errorMessage/close", closeErr);
 router.get("/otp/close", otpClose);
-router.get("/user/account", userAccount);
-router.get("/user/account/logout", userLogout);
+router.get("/user/account/:id", userAccount);
+router.get("/user/accounts/logout", userLogout);
 router.get("/user/login", userLoginGet);
 router.post("/user/login", userLoginPost);
 router.get("/users/product/add-to-cart/:id", addTocart);
-router.get("/users/product/cart/showcart/:id",sesionVerification, getCartPage);
+router.get("/users/product/cart/showcart/:id", sesionVerification, getCartPage);
+router.get(
+  "/users/product/cart/increaseqty/:userId/:productId/",
+  increaseQuantity
+);
+router.get(
+  "/users/product/cart/decreaseqty/:userId/:productId/",
+  decreaseQuantity
+);
+router.get(
+  "/users/product/cart/deleteitemfromcart/:userId/:productId/",
+  deleteItemFromCart
+);
+router.get("/users/accounts/forgotpassword/", forgotPassword);
+router.post("/users/accounts/forgotpassword", forgotPassPost);
+router.get("/users/accounts/forgotpassword/confirm", forgotPassConfirm);
+router.post("/users/accounts/forgotpassword/confirm", forgotPassConfirmPost);
+router
+  .route("/users/account/forgotpassword/changepassword/")
+  .get(forgotPasswordPasswordEnter)
+  .post(forgotPasswordPasswordEnterPost);
 module.exports = { router };

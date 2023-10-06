@@ -1,0 +1,21 @@
+<%-include('../partials/header.ejs') %>
+<div class="home" style="display: flex;align-items: center;justify-content: center;">
+    <form action="/users/account/forgotpassword/changepassword/" method="post" class="forgot">
+        <%if(err){%>
+            <p id="err" style="width: 150px;margin:auto"><%-err%><a href="/users/account/forgotpassword/changepassword/"><img src="/images/cross.png" style="width: 13px;height:13px" alt=""></a></p>
+       <% } %>
+        <div class="controll">
+            <input type="password" placeholder="Create New Password" name="firstpassword" required>
+        </div>
+        <div class="controll">
+            <input type="password" placeholder="Confirm Password" name="secondpassword" required>
+        </div>
+        <div class="controll">
+            <button type="submit">Save</button>
+        </div>
+        <div class="lnk">
+            <a href="/user/login">Login</a>
+        </div>
+    </form>
+</div>
+<%-include('../partials/footer.ejs') %>

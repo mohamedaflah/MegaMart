@@ -15,6 +15,9 @@
         integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link rel="stylesheet" href="/styles/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -59,10 +62,10 @@
                             <% }%>
                                 <img class="menu" src="/images/menu_bar.svg" alt="">
                                 <%if(profile){%>
-                                    <a href="/user/account">
+                                    <a href="/user/account/<%-id%>">
                                         <img src="/images/userprofile.svg" alt="">
                                     </a>
-                                <% } %>
+                                    <% } %>
                 </div>
             </div>
         </div>

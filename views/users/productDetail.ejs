@@ -17,7 +17,7 @@
                         <img src="/product-images/<%-productData[0].image[0].image4%>" alt="">
                     </a>
                 </div>
-                <a href="/products/product-detail/<%-productData[0]._id%>/mainimage" class="main">
+                <a href="/products/product-detail/<%-productData[0]._id%>/mainimage" class="main" id="img-container">
                     <img src="/product-images/<%-productData[0].image[0][mainImageas]%>" alt="">
                 </a>
             </div>
@@ -73,3 +73,11 @@
     </div>
     <%-include('../partials/footer.ejs') %>
 </div>
+<script>
+    let options={
+        width:300,
+        zoomWidth:300,
+        offset:{vertical:0,horizontal:210}
+    }
+    new ImageZoom(document.getElementById('img-container'),options)
+</script>
