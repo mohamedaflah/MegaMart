@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+require('dotenv').config()
 const { ObjectId } = mongoose.Schema.Types;
 
 const imageSchema = new mongoose.Schema({
@@ -70,4 +71,5 @@ const schema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Products", schema);
+// module.exports = mongoose.model("Products", schema);
+module.exports = mongoose.model(process.env.PRODUCTS_COLLECTION, schema);

@@ -1,4 +1,5 @@
 require("../config");
+require('dotenv').config()
 const mongoose = require("mongoose");
 const schema = mongoose.Schema({
   email: {
@@ -19,4 +20,5 @@ const schema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Admin", schema);
+// module.exports = mongoose.model("Admin", schema);
+module.exports = mongoose.model(process.env.ADMIN_COLLECTION, schema);

@@ -28,6 +28,10 @@ const {
   forgotPassConfirmPost,
   forgotPasswordPasswordEnter,
   forgotPasswordPasswordEnterPost,
+  enterAddress,
+  checkOut,
+  postUserAddress,
+  placeOrder,
 } = require("../controller/userController");
 const { verifySessionAuth } = require("../middleware/verifySession");
 const { checkingUserStatus } = require("../middleware/statusVerify");
@@ -132,4 +136,7 @@ router
   .route("/users/account/forgotpassword/changepassword/")
   .get(forgotPasswordPasswordEnter)
   .post(forgotPasswordPasswordEnterPost);
+router.get('/users/product/cart/checkout/:userId',checkOut)  
+router.route('/users/product/checkout/address/:userId').get(enterAddress).post(postUserAddress)
+router.get('/users/product/cart/checkout/place-order/:userId',placeOrder)
 module.exports = { router };

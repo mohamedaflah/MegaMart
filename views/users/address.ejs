@@ -1,0 +1,98 @@
+<%-include('../partials/header.ejs') %>
+    <div class="signup">
+        <div class="checkout">
+            <div class="heading">
+                <h1>Billing Details</h1>
+            </div>
+            <form class="checkandAddress" action="/users/product/checkout/address/<%-id%>" method="post">
+                <div class="checkoutform">
+                    <div class="controller">
+                        <label for="">name</label>
+                        <input required type="text" name="name" >
+                    </div>
+                    <div class="controller">
+                        <label for="">email</label>
+                        <input required type="email" name="email" >
+                    </div>
+                    <div class="controller">
+                        <label for="">state</label>
+                        <input required type="text" name="state">
+                    </div>
+                    <div class="controller">
+                        <label for="">district</label>
+                        <input required type="text" name="district">
+                    </div>
+                    <div class="controller">
+                        <label for="">pincode</label>
+                        <input required type="text" name="pincode">
+                    </div>
+                    <div class="controller">
+                        <label for="">street</label>
+                        <input required type="text" name="street">
+                    </div>
+                    <div class="controller">
+                        <label for="">phone</label>
+                        <input required type="text" name="phone">
+                    </div>
+                    <div class="controller">
+                        <label for="">Apartment, floor, etc. (optional)</label>
+                        <input required type="text" name="apartment">
+                    </div>
+                </div>
+                <div class="checkoutbox">
+                    <div class="item_box">
+                        <%userCartdata.forEach((data)=>{%>
+                            <div class="priceandimg">
+                                <div class="img" qty="<%-data.products.qty%>">
+                                    <img src="/product-images/<%-data.cartData.image[0].mainimage%>" width="40px" height="auto" alt="">
+                                </div>
+                                <div class="name"><%-data.cartData.productName%></div>
+                                <div class="price">₹<%-data.cartData.discount*data.products.qty%></div>
+                            </div>
+                      <%  })%>
+                        <div class="priceandimg sub">
+                            <div class="name" >Subtotal  </div>
+                            <div class="price">₹<%-totalAmount%></div>
+                        </div>
+                        <div class="priceandimg sub">
+                            <div class="name" >Shipping  </div>
+                            <div class="price">Free</div>
+                        </div>
+                        <div class="priceandimg sub total">
+                            <div class="name" >Total  </div>
+                            <div class="price">₹<%-totalAmount%></div>
+                        </div>
+                        <div class="priceandimg select">
+                            <div class="radio">
+                                <div class="btn">
+                                    <input type="radio" name="payment_method" value="Bank" id="">
+                                </div>
+                                <p>Bank</p>
+                            </div>
+                            <div class="imgs">
+                                <img src="/images/fstBkash.svg" alt="">
+                                <img src="/images/visacard.svg" alt="">
+                                <img src="/images/Mastercard.svg" alt="">
+                                <img src="/images/hndi.svg" alt="">
+                            </div>
+                        </div>
+                        <div class="priceandimg select">
+                            <div class="radio">
+                                <div class="btn">
+                                    <input type="radio" name="payment_method" value="COD" id="">
+                                </div>
+                                <p>Cash on delivery</p>
+                            </div>
+                            
+                        </div>
+                        <div class="priceandimg select button">
+                            <button type="submit">Place Order</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>    
+    <%-include('../partials/footer.ejs') %>
+

@@ -52,7 +52,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="cols price" style="justify-content: space-between;">₹<%-cartdata.products.qty*cartdata.cartData.price%>
+                        <div class="cols price" style="justify-content: space-between;">₹<%-cartdata.products.qty*cartdata.cartData.discount%>
                             <a href="/users/product/cart/deleteitemfromcart/<%-id%>/<%-cartdata.products.productId%>/">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="12" cy="12" r="9" fill="#DB4444"/>
@@ -64,7 +64,7 @@
                 <%})%>
             </div>
             <div class="returnandupdate">
-                <a href="">Return to Shop</a>
+                <a href="" id="return">Return to Shop</a>
                 <a href="">Update cart</a>
             </div>
             <div class="place-order">
@@ -83,7 +83,7 @@
                         <div class="txt"><span>Shipping</span> <span>Free</span></div>
                         <div class="txt"><span>Total</span> <span>₹<%-totalAmount%></span></div>
                         <div class="txt">
-                            <a href="">Process to Checkout</a>
+                            <a href="/users/product/cart/checkout/<%-id%>">Process to Checkout</a>
                         </div>
                     </div>
                 </div>

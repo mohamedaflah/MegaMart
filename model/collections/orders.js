@@ -1,5 +1,5 @@
 require("../config");
-require('dotenv').config()
+require("dotenv").config();
 const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 const schema = mongoose.Schema({
@@ -7,10 +7,21 @@ const schema = mongoose.Schema({
     type: ObjectId,
     required: true,
   },
+  paymentmode: {
+    type: String,
+    required: true,
+  },
+  delverydate: {
+    type: Date,
+  },
+  status: {
+    type: String,
+  },
   products: [
     {
       productId: {
         type: ObjectId,
+        required: true,
       },
       qty: {
         type: Number,
@@ -18,6 +29,4 @@ const schema = mongoose.Schema({
     },
   ],
 });
-
-// module.exports = mongoose.model("Cart", schema);
-module.exports = mongoose.model(process.env.CART_COLLECTION, schema);
+module.exports = mongoose.model(process.env.ORDERS_COLLECTION, schema);

@@ -8,7 +8,10 @@ const UserCollection = require("../model/collections/UserDb");
 const bcrypt = require("bcrypt");
 const productsCollection = require("../model/collections/products");
 const cartCollection = require("../model/collections/cart");
+const orderCollection = require("../model/collections/orders");
+const addressCollection = require("../model/collections/address");
 const { ObjectId } = require("bson");
+const { getCartCount, getUserCartData } = require("../helper/cart-helper");
 
 async function userHome(req, res) {
   // let userStatus=await UserCollection.find({email:req.session.userEmail})
@@ -22,15 +25,7 @@ async function userHome(req, res) {
       email: req.session.userEmail,
     });
     const userId = userData._id;
-    const cartData = await cartCollection.findOne({
-      userId: new ObjectId(userId),
-    });
-    var cartCount = 0;
-    if (cartData) {
-      cartCount = cartData.products.length;
-    } else {
-      cartCount = 0;
-    }
+    var cartCount = await getCartCount(userId)
     console.log("data of a cart " + cartCount);
     res.render("users/index", {
       profile: true,
@@ -48,8 +43,6 @@ async function userHome(req, res) {
       err: false,
     });
   }
-  console.log(req.session.userAuth + " __user auth");
-  console.log(req.session.userEmail + " __user email");
 }
 function singupGet(req, res) {
   // if (req.session.userAuth) {
@@ -492,35 +485,11 @@ async function getCartPage(req, res) {
       email: req.session.userEmail,
     });
     const userId = userData._id;
-    const cartData = await cartCollection.findOne({
-      userId: new ObjectId(userId),
-    });
-    var cartCount = 0;
-    if (cartData) {
-      cartCount = cartData.products.length;
-    } else {
-      cartCount = 0;
-    }
-    let userCartdata = await cartCollection.aggregate([
-      { $match: { userId: new ObjectId(userId) } },
-      {
-        $unwind: "$products",
-      },
-      {
-        $lookup: {
-          from: "products",
-          localField: "products.productId",
-          foreignField: "_id",
-          as: "cartData",
-        },
-      },
-      {
-        $unwind: "$cartData",
-      },
-    ]);
+    const cartCount=await getCartCount(userId)
+    let userCartdata = await getUserCartData(userId);
     let totalAmount = 0;
     userCartdata.forEach((cardata) => {
-      totalAmount += cardata.cartData.price * cardata.products.qty;
+      totalAmount += cardata.cartData.discount * cardata.products.qty;
     });
     if (userCartdata.length <= 0) {
       // console.log(JSON.stringify(userCartdata) + "data");
@@ -599,21 +568,21 @@ function forgotPassword(req, res) {
     profile: false,
     cartCount: false,
     id: false,
-    err:false
+    err: false,
   });
 }
 var forgotInfo;
 var fogotCode;
 async function forgotPassPost(req, res) {
-  try{
+  try {
     forgotInfo = req.body.forgotemail;
-    const userExist=await UserCollection.findOne({email:forgotInfo})
-    if(!userExist){
-      return  res.render("users/forgotpass", {
+    const userExist = await UserCollection.findOne({ email: forgotInfo });
+    if (!userExist) {
+      return res.render("users/forgotpass", {
         profile: false,
         cartCount: false,
         id: false,
-        err:"Email Not Found"
+        err: "Email Not Found",
       });
     }
     const secret = speakeasy.generateSecret({ length: 6 });
@@ -635,7 +604,7 @@ async function forgotPassPost(req, res) {
               <h1 style='color:white'>Your Verification code is :${code}</h1>
         </div>`,
     };
-  
+
     // await transporter.sendMail(mailOptions)
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
@@ -650,9 +619,10 @@ async function forgotPassPost(req, res) {
         res.status(201).redirect("/users/accounts/forgotpassword/confirm");
       }
     });
-
-  }catch(err){
-    console.log('Error Founded in Sending otp Mail for Changing Password'+err)
+  } catch (err) {
+    console.log(
+      "Error Founded in Sending otp Mail for Changing Password" + err
+    );
   }
 }
 async function forgotPassConfirm(req, res) {
@@ -696,14 +666,132 @@ async function forgotPasswordPasswordEnterPost(req, res) {
         },
       }
     );
-    res.redirect('/user/login')
-  }else{
+    res.redirect("/user/login");
+  } else {
     res.render("users/forgotpassenter", {
       profile: false,
       id: false,
       cartCount: 0,
       err: "Password Not Same",
     });
+  }
+}
+async function checkOut(req, res) {
+  const userId = req.params.userId;
+  let useraddressIsExist = await addressCollection.findOne({userId:new ObjectId(userId)});
+  console.log(useraddressIsExist+'        ext')
+  if (!useraddressIsExist) {
+    res.redirect(`/users/product/checkout/address/${userId}`);
+  }else{
+    res.redirect(`/users/product/cart/checkout/place-order/${userId}`)
+  }
+}
+async function placeOrder(req,res){
+  const userId=req.params.userId
+  const cartCount=await getCartCount(userId)
+  res.render('users/place-order',{profile:true,cartCount,id:userId})
+}
+async function enterAddress(req, res) {
+  const userId = req.params.userId;
+  let userCartdata = await getUserCartData(userId)
+  console.log(JSON.stringify(userCartdata));
+  // const cartData = await cartCollection.findOne({
+  //   userId: new ObjectId(userId),
+  // });
+  // var cartCount = 0;
+  // if (cartData) {
+  //   cartCount = cartData.products.length;
+  // }
+  let cartCount=await getCartCount(userId)
+  let totalAmount = 0;
+  userCartdata.forEach((cardata) => {
+    totalAmount += cardata.cartData.discount * cardata.products.qty;
+  });
+  res.render("users/address", {
+    profile: true,
+    id: userId,
+    cartCount,
+    userCartdata,
+    totalAmount,
+  });
+}
+async function postUserAddress(req, res) {
+  const userId = req.params.userId;
+  const {
+    name,
+    email,
+    state,
+    district,
+    pincode,
+    street,
+    phone,
+    apartment,
+    payment_method,
+  } = req.body;
+  console.log("Name  " + name);
+  console.log("Eamil  " + email);
+  console.log("state  " + state);
+  console.log("district  " + district);
+  console.log("place  " + pincode);
+  console.log("street  " + street);
+  console.log("phone  " + phone);
+  console.log("apartment  " + apartment);
+  console.log("payment  " + payment_method);
+  const userCartdata = await getUserCartData(userId);
+  // const productIds = userCartdata.map(
+  //   (cartItem) => cartItem.products.productId
+  // );
+  // const quantities = userCartdata.map((cartItem) => cartItem.products.qty);
+  const products = userCartdata.map((cartItem) => ({
+    productId: cartItem.products.productId,
+    qty: cartItem.products.qty,
+  }));
+  // console.log(userCartdata+' orders data')
+  // console.log('            sadf'+JSON.stringify(products)+'this is the products')
+  let totalAmount = 0;
+  userCartdata.forEach((cardata) => {
+    totalAmount += cardata.cartData.discount * cardata.products.qty;
+  });
+  await new addressCollection({
+    userId: new ObjectId(userId),
+    addresses:[
+      {
+        name: name,
+        state: state,
+        district: district,
+        pincode: pincode,
+        street: street,
+        phone: phone,
+        apartmentOrBuilding: apartment,
+        email: email,
+        addedDate: Date.now(),
+      }
+    ]
+  }).save();
+  await new orderCollection({
+    userId: new ObjectId(userId),
+    paymentmode: payment_method,
+    delverydate: Date.now(),
+    status: "Placed",
+    // totalAmount:totalAmount,
+    products: products,
+    //  productIds.map((productId) => {
+    //   const cartItem = userCartdata.find(
+    //     (item) => item.cartData._id.toString() === productId.toString()
+    //   );
+    //   const qty = cartItem ? cartItem.products.qty : 0; // Get the quantity from the cart data
+    //   return {
+
+    //     productId: new ObjectId(productId),
+    //     qty: qty,
+    //   };
+    // }),
+  }).save();
+  await cartCollection.deleteOne({ userId: new ObjectId(userId) }).then(() => {
+    console.log("deleted");
+  });
+  if (payment_method == "COD") {
+    res.redirect("/");
   }
 }
 module.exports = {
@@ -734,4 +822,8 @@ module.exports = {
   forgotPassConfirmPost,
   forgotPasswordPasswordEnter,
   forgotPasswordPasswordEnterPost,
+  enterAddress,
+  checkOut,
+  postUserAddress,
+  placeOrder,
 };
