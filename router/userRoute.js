@@ -32,6 +32,9 @@ const {
   checkOut,
   postUserAddress,
   placeOrder,
+  placeOrderPost,
+  addingAddressGet,
+  addinAddressPost
 } = require("../controller/userController");
 const { verifySessionAuth } = require("../middleware/verifySession");
 const { checkingUserStatus } = require("../middleware/statusVerify");
@@ -136,7 +139,18 @@ router
   .route("/users/account/forgotpassword/changepassword/")
   .get(forgotPasswordPasswordEnter)
   .post(forgotPasswordPasswordEnterPost);
-router.get('/users/product/cart/checkout/:userId',checkOut)  
-router.route('/users/product/checkout/address/:userId').get(enterAddress).post(postUserAddress)
-router.get('/users/product/cart/checkout/place-order/:userId',placeOrder)
+router.get("/users/product/cart/checkout/:userId",verifySessionAuth, checkOut);
+router
+  .route("/users/product/checkout/address/:userId")
+  .get(enterAddress)
+  .post(postUserAddress);
+router
+  .route("/users/product/cart/checkout/place-order/:userId", verifySessionAuth)
+  .get(placeOrder)
+  .post(placeOrderPost);
+router
+  .route("/users/account/address/add-address/:userId",verifySessionAuth)
+  .get(addingAddressGet)
+  .post(addinAddressPost);
+
 module.exports = { router };

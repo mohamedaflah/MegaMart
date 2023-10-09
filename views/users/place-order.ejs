@@ -4,37 +4,57 @@
             <div class="heading">
                 <h1>Place order</h1>
             </div>
-            <form class="checkandAddress" action="" method="post">
+            <form class="checkandAddress" action="/users/product/cart/checkout/place-order/<%-id%>" method="post">
                 <div class="checkoutform place_order">
-                   <div class="address">
-                    <div class="select">
-                        s
-                    </div>
-                    <div class="data">
-                        <p>Mohammed Aflah</p>
-                        <p>Tirurangadi Street</p>
-                        <p>676306 pin</p>
-                        <p>Malappuram</p>
-                        <p>Kerala</p>
-                        <p>koolathaflah@gmail.com</p>
-                        <p>+91 94446100107</p>
-                        <p>Mikro Grapheio Room3</p>
-                    </div>
-                   </div>
+                    <!-- <a href="/users/account/address/add-address/<%-id%>" class="add">
+                        Add Address
+                    </a> -->
+                    <%addressData.addresses.forEach((data,index)=>{%>
+                        <div class="address">
+                         <div class="select">
+                             <input type="radio" id="rd" name="address" value="<%-index%>" required>
+                             <!-- <label for="rd" class="rbtn"></label> -->
+                             <div class="icons " style="display:flex;gap:10px">
+                                 <a href="">
+                                     <img src="/images/editsv.svg" style="width: 20px ;height:20px"  alt="">
+                                 </a>
+                                 <a href="">
+                                     <img src="/images/bin.svg" style="width: 20px ;height:20px" alt="">
+                                 </a>
+                             </div>
+                         </div>
+                         <div class="data">
+                             <p><%-data.name%></p>
+                             <p><%-data.street%> Street</p>
+                             <p><%-data.pincode%> pin</p>
+                             <p><%-data.district%></p>
+                             <p><%-data.state%></p>
+                             <p><%-data.email%></p>
+                             <p>+91 <%-data.phone%></p>
+                             <p><%-data.apartmentOrBuilding%> </p>
+                         </div>
+                        </div>
+                    <%})%>
                 </div>
                 <div class="checkoutbox">
                     <div class="item_box">
+                        <%cartData.forEach((data)=>{%>
                             <div class="priceandimg">
-                                <div class="img" qty="">
-                                    <img src="" width="40px" height="auto" alt="">
+                                <div class="img" qty="<%-data.products.qty%>">
+                                    <img src="/product-images/<%-data.cartData.image[0].mainimage%>" width="40px" height="auto" alt="">
                                 </div>
-                                <div class="name">asd</div>
-                                <div class="price">₹45</div>
+                                <div class="name"><%-data.cartData.productName%>></div>
+                                <%if(!data.cartData.discount){%>
+                                    <div class="price">₹<%-data.cartData.price%></div>
+                                    <% }else{%>
+                                        <div class="price">₹<%-data.cartData.discount%></div>
+                               <% }%>
                             </div>
+                       <% })%>
                  
                         <div class="priceandimg sub">
                             <div class="name" >Subtotal  </div>
-                            <div class="price">₹</div>
+                            <div class="price">₹<%-totalAmount%></div>
                         </div>
                         <div class="priceandimg sub">
                             <div class="name" >Shipping  </div>
@@ -42,7 +62,7 @@
                         </div>
                         <div class="priceandimg sub total">
                             <div class="name" >Total  </div>
-                            <div class="price"></div>
+                            <div class="price">₹<%-totalAmount%></div>
                         </div>
                         <div class="priceandimg select">
                             <div class="radio">
@@ -67,8 +87,11 @@
                             </div>
                             
                         </div>
-                        <div class="priceandimg select button">
+                        <div class="priceandimg select button" style="justify-content: space-between;">
                             <button type="submit">Place Order</button>
+                            <a   id="add" href="/users/account/address/add-address/<%-id%>" class="add">
+                                Add Address
+                            </a>
                         </div>
                     </div>
                 </div>

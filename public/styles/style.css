@@ -174,6 +174,97 @@ body {
 .home {
   height: 100vh;
 }
+.home .acc {
+  width: 90%;
+  min-height: 600px;
+  background-color: #00c9ff;
+}
+.home .acc .brudcump {
+  width: 100%;
+  height: 90px;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+}
+.home .acc .profile {
+  width: 100%;
+  min-height: 550px;
+  background-color: #22d29d;
+  display: flex;
+}
+.home .acc .profile .side {
+  height: 550px;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.home .acc .profile .side .side_content {
+  width: 100%;
+  height: 30%;
+}
+.home .acc .profile .side .side_content p {
+  font-weight: 500;
+}
+.home .acc .profile .side .side_content .lnk {
+  display: flex;
+  flex-direction: column;
+  padding-left: 25px;
+  align-items: start;
+}
+.home .acc .profile .side .side_content .lnk a {
+  color: #393939;
+  text-decoration: none;
+  margin-top: 5px;
+}
+.home .acc .profile .edit {
+  width: 70%;
+  height: 550px;
+  background: tan;
+  box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+.home .acc .profile .edit .allcontrol {
+  width: 90%;
+  height: 90%;
+  background-color: rgb(96, 223, 125);
+  display: flex;
+  flex-direction: column;
+}
+.home .acc .profile .edit .allcontrol .head {
+  width: 100%;
+  height: 50px;
+}
+.home .acc .profile .edit .allcontrol .head h4 {
+  color: #db4444;
+}
+.home .acc .profile .edit .allcontrol .controll {
+  width: 100%;
+  height: 80px;
+  background-color: wheat;
+  display: flex;
+}
+.home .acc .profile .edit .allcontrol .controll .ctrl {
+  height: 100%;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+.home .acc .profile .edit .allcontrol .controll .ctrl label {
+  font-weight: 400;
+}
+.home .acc .profile .edit .allcontrol .controll .ctrl input {
+  height: 36px;
+  border: none;
+  outline: none;
+  border-radius: 4px;
+  background: #f5f5f5;
+  padding-left: 10px;
+}
 .home .forgot {
   width: 500px;
   height: 300px;
@@ -641,6 +732,17 @@ body {
     font-size: 10px;
   }
 }
+#add {
+  background-color: #db4444;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 10px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  z-index: 99;
+  right: 5%;
+}
+
 body .signup {
   display: flex;
   align-items: center;
@@ -673,36 +775,81 @@ body .signup .checkout .checkandAddress .checkoutbox {
   width: 50%;
 }
 body .signup .checkout .checkandAddress .place_order {
-  background-color: red;
+  background-color: #f5f5f5;
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 500px;
+  overflow-y: scroll;
+  border-radius: 4px;
+  padding: 10px 0;
+  row-gap: 10px;
+  position: relative;
 }
 body .signup .checkout .checkandAddress .place_order .address {
   width: 90%;
   height: 300px;
-  background-color: #00c9ff;
+  border-radius: 4px;
+  border: 1px solid black;
+  padding: 5px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
 }
-body .signup .checkout .checkandAddress .place_order .address .data {
+body .signup .checkout .checkandAddress .place_order .address .select {
+  display: flex;
+  justify-content: space-between;
+}
+body .signup .checkout .checkandAddress .place_order .address .select input[type=radio] {
+  scale: 1.2;
+}
+body .signup .checkout .checkandAddress .place_order .data {
   min-height: 70%;
   min-width: 90%;
-  background: #22d29d;
 }
-body .signup .checkout .checkandAddress .checkoutform .controller {
+body .signup .checkout .addadrs {
+  width: 80%;
+}
+body .signup .checkout .addadrs .checkoutform {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+body .signup .checkout .addadrs .checkoutform .btn {
+  width: 90%;
+  height: 80px;
+}
+body .signup .checkout .addadrs .checkoutform .btn button {
+  width: 150px;
+}
+body .signup .checkout .addadrs .checkoutform .controller {
+  width: 50%;
+}
+body .signup .checkout .place-order::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #f5f5f5;
+}
+body .signup .checkout .place-order::-webkit-scrollbar {
+  width: 10px;
+  background-color: #f5f5f5;
+}
+body .signup .checkout .place-order::-webkit-scrollbar-thumb {
+  background-color: #000000;
+  border: 2px solid #555555;
+}
+body .signup .checkout .checkoutform .controller {
   width: 100%;
   height: 80px;
   display: flex;
   flex-direction: column;
   align-items: start;
 }
-body .signup .checkout .checkandAddress .checkoutform .controller label {
+body .signup .checkout .checkoutform .controller label {
   font-weight: 300;
   text-transform: capitalize;
   color: #373636;
 }
-body .signup .checkout .checkandAddress .checkoutform .controller input {
+body .signup .checkout .checkoutform .controller input {
   height: 40px;
   width: 450px;
   border: none;
@@ -711,24 +858,24 @@ body .signup .checkout .checkandAddress .checkoutform .controller input {
   background: #f5f5f5;
   padding: 0 15px;
 }
-body .signup .checkout .checkandAddress .checkoutbox {
+body .signup .checkout .checkoutbox {
   display: flex;
   justify-content: start;
   align-items: center;
   flex-direction: column;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box {
+body .signup .checkout .checkoutbox .item_box {
   width: 400px;
   min-height: 300px;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .priceandimg {
+body .signup .checkout .checkoutbox .item_box .priceandimg {
   width: 100%;
   height: 50px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .priceandimg .img {
+body .signup .checkout .checkoutbox .item_box .priceandimg .img {
   height: 100%;
   width: 15%;
   display: flex;
@@ -736,7 +883,7 @@ body .signup .checkout .checkandAddress .checkoutbox .item_box .priceandimg .img
   justify-content: start;
   position: relative;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .priceandimg .img::after {
+body .signup .checkout .checkoutbox .item_box .priceandimg .img::after {
   position: absolute;
   width: 15px;
   font-size: 10px;
@@ -751,112 +898,112 @@ body .signup .checkout .checkandAddress .checkoutbox .item_box .priceandimg .img
   border-radius: 50%;
   content: attr(qty);
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .priceandimg .name {
+body .signup .checkout .checkoutbox .item_box .priceandimg .name {
   height: 100%;
   width: 65%;
   display: flex;
   align-items: center;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .priceandimg .price {
+body .signup .checkout .checkoutbox .item_box .priceandimg .price {
   height: 100%;
   width: 20%;
   display: flex;
   align-items: center;
   justify-content: end;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .sub {
+body .signup .checkout .checkoutbox .item_box .sub {
   border-bottom: 1px solid black;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .total {
+body .signup .checkout .checkoutbox .item_box .total {
   border-bottom: none;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .select .radio {
+body .signup .checkout .checkoutbox .item_box .select .radio {
   display: flex;
   align-items: center;
   justify-content: start;
   min-width: 20%;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .select .radio p {
+body .signup .checkout .checkoutbox .item_box .select .radio p {
   margin: 0;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .select .radio .btn {
+body .signup .checkout .checkoutbox .item_box .select .radio .btn {
   height: 15px;
   position: relative;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .select .radio .btn input {
+body .signup .checkout .checkoutbox .item_box .select .radio .btn input {
   position: absolute;
   top: -4px;
   left: 20px;
   scale: 1.4;
   accent-color: black;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .select .imgs {
+body .signup .checkout .checkoutbox .item_box .select .imgs {
   height: 25px;
   width: 50%;
   display: flex;
   align-items: center;
   justify-content: end;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .button {
+body .signup .checkout .checkoutbox .item_box .button {
   display: flex;
   align-items: center;
   justify-content: start;
 }
-body .signup .checkout .checkandAddress .checkoutbox .item_box .button button {
+body .signup .checkout .checkoutbox .item_box .button button {
   margin: 0;
   font-size: 13px;
 }
-body .signup .signup_section {
+body .signup_section {
   width: 85%;
   height: 618px;
   display: flex;
 }
-body .signup .signup_section .image_section {
+body .signup_section .image_section {
   width: 60%;
   background: #cbe4e8;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-body .signup .signup_section .image_section img {
+body .signup_section .image_section img {
   width: auto;
   height: auto;
 }
-body .signup .signup_section .input_section {
+body .signup_section .input_section {
   width: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-body .signup .signup_section .input_section .controlls {
+body .signup_section .input_section .controlls {
   height: 85%;
   width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-body .signup .signup_section .input_section .controlls .header_text {
+body .signup_section .input_section .controlls .header_text {
   width: 80%;
   color: #0e0e0e;
 }
-body .signup .signup_section .input_section .controlls .input_box {
+body .signup_section .input_section .controlls .input_box {
   width: 80%;
   height: 70px;
   margin-top: 5px;
   display: flex;
   align-items: end;
 }
-body .signup .signup_section .input_section .controlls .input_box a {
+body .signup_section .input_section .controlls .input_box a {
   color: gray;
   text-decoration: underline;
 }
-body .signup .signup_section .input_section .controlls .input_box .inp_l {
+body .signup_section .input_section .controlls .input_box .inp_l {
   position: relative;
   width: 100%;
   border-bottom: 1px solid gray;
   z-index: 99;
 }
-body .signup .signup_section .input_section .controlls .input_box .inp_l label {
+body .signup_section .input_section .controlls .input_box .inp_l label {
   transition: 0.5s ease;
   font-weight: normal;
   font-size: 12px;
@@ -865,7 +1012,7 @@ body .signup .signup_section .input_section .controlls .input_box .inp_l label {
   left: 0px;
   z-index: -1;
 }
-body .signup .signup_section .input_section .controlls .input_box .inp_l input {
+body .signup_section .input_section .controlls .input_box .inp_l input {
   background-color: transparent;
   outline: none;
   width: 100%;
@@ -873,12 +1020,12 @@ body .signup .signup_section .input_section .controlls .input_box .inp_l input {
   outline: none;
   z-index: 99;
 }
-body .signup .signup_section .input_section .controlls .input_box .inp_l input:focus ~ label,
-body .signup .signup_section .input_section .controlls .input_box .inp_l input:not(:focus):valid ~ label {
+body .signup_section .input_section .controlls .input_box .inp_l input:focus ~ label,
+body .signup_section .input_section .controlls .input_box .inp_l input:not(:focus):valid ~ label {
   top: -15px;
 }
-body .signup .signup_section .input_section .controlls .input_box button,
-body .signup .signup_section .input_section .controlls .input_box #signup {
+body .signup_section .input_section .controlls .input_box button,
+body .signup_section .input_section .controlls .input_box #signup {
   width: 100%;
   height: 70%;
   border: none;
@@ -892,7 +1039,6 @@ body .signup .signup_section .input_section .controlls .input_box #signup {
 @media (max-width: 1009px) {
   body .signup .checkout {
     width: 98%;
-    background: #00c9ff;
   }
   body .signup .checkout .checkandAddress .checkoutform .controller input {
     width: 320px;
@@ -1046,6 +1192,50 @@ button:hover {
   border-radius: 5px;
 }
 
+.home {
+  position: relative;
+}
+.home .prfile {
+  position: absolute;
+  top: 0;
+  right: 5%;
+  width: 200px;
+  height: 180px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.313);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-backdrop-filter: blur(75px);
+          backdrop-filter: blur(75px);
+  display: none;
+}
+.home .prfile .lnk {
+  width: 90%;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+}
+.home .prfile .lnk a {
+  margin: 4px 0;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  text-decoration: none;
+}
+.home .prfile .lnk a .imgs {
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home .prfile .lnk a span {
+  font-size: 12px;
+  margin: 5px;
+}
+.home .active {
+  display: block;
+}
 .home .product_detail_section {
   width: 130rem;
   margin: auto;

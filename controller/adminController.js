@@ -8,16 +8,6 @@ const fs = require("fs");
 const { ObjectId } = require("mongodb");
 // const formidable = require("formidable");
 async function adminHomeShowuser(req, res) {
-  // let hashedPass = bcrypt.hashSync("admin786", 10);
-  // let data = await new adminDb({
-  //   email: "admin@gmail.com",
-  //   password: hashedPass,
-  //   joinDate: Date.now(),
-  // })
-  //   .save()
-  //   .then(() => {
-  //     console.log("inserted admin");
-  //   });
   let usersData = await userDb.find().sort({ joinDate: -1 });
   res.render("admins/admin", { usersData });
 }
@@ -80,25 +70,6 @@ async function manageProducts(req, res) {
     let categories = await categoryCollection.find();
     let productData = await productCollection.find();
     let newData = { ...productData };
-    // for (let i = 0; i < productData.length; i++) {
-    //   let catId = productData[i].category;
-    //   console.log(catId);
-    //   let categoryData = await categoryCollection.find({ _id: catId });
-    //   console.log(categoryData + "this is a cateory data_______________");
-    //   // console.log(categoryData[0].categoryname,"this is the ct name")
-    //   productData[i].category = categoryData.categoryname;
-    // }
-    // for (let i = 0; i < newData.length; i++) {
-    //   let catId = newData[i].category;
-    //   console.log(catId);
-    //   let categoryData = await categoryCollection.find({ _id: catId });
-    //   console.log(categoryData + "this is a category data_______________");
-    //   if (categoryData[0] && categoryData[0].categoryname) {
-    //     console.log("reached");
-    //     newData[i].category = categoryData[0].categoryname;
-    //   }
-    // }
-    // console.log("updated category _+_+" + newData);
     for (let i = 0; i < productData.length; i++) {
       let catId = newData[i].category;
       let catName = await categoryCollection.findOne({ _id: catId });
@@ -152,21 +123,26 @@ function overView(req, res) {
 }
 async function ManageCategory(req, res) {
   let categories = await categoryCollection.find();
-  res.render("admins/category", { categories,err:false });
+  res.render("admins/category", { categories, err: false });
 }
 async function addCategory(req, res) {
   try {
     let categories = await categoryCollection.find();
     console.log(req.body);
-    let categoryExist=await categoryCollection.findOne({categoryname:req.body.category})
-    if(!categoryExist){
+    let categoryExist = await categoryCollection.findOne({
+      categoryname: req.body.category,
+    });
+    if (!categoryExist) {
       await new categoryCollection({
         categoryname: req.body.category,
         addedDate: Date.now(),
       }).save();
       res.redirect("/admin/category");
-    }else{
-      res.render('admins/category',{categories,err:"Category Already Exist!!"})
+    } else {
+      res.render("admins/category", {
+        categories,
+        err: "Category Already Exist!!",
+      });
     }
   } catch (err) {
     console.log("error in add cate" + err);
@@ -184,6 +160,7 @@ async function addProduct(req, res) {
       price,
       discount,
       brand,
+      stock,
       category,
       spec1,
       spec2,
@@ -215,6 +192,7 @@ async function addProduct(req, res) {
         spec3: spec3,
         spec4: spec4,
       },
+      stock: stock,
     }).save();
     let data = await categoryCollection.find({ categoryname: category });
     // console.log(data + " __ this category data");

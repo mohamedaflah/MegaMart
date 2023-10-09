@@ -80,10 +80,17 @@
                                         </div>
                                     </div>
                                     <div class="control_section " id="sp">
-                                        <div class="p">
+                                        <div class="p" style="width: 100%;">
 
                                             <p for="">Brand</p>
                                             <input type="text" name="brand" required>
+                                        </div>
+                                    </div>
+                                    <div class="control_section " id="sp">
+                                        <div class="p">
+
+                                            <p for="">Stock</p>
+                                            <input type="text" name="stock" required>
                                         </div>
                                         <div class="dsp">
 
@@ -159,13 +166,13 @@
                                    <%-value.category%>
                                 </div>
                                 <div class="table_datas ">
-                                    <%if(value.currentStatus){%>
-                                        <div class="active" style="width: 70px;">
+                                    <%if(!value.deletionStatus){%>
+                                        <div class="active" style="width: 85px;">
                                             In Stock
                                         </div>
                                   <%  }else{%>
-                                    <div class="blocked" style="width: 70px;">
-                                        expired
+                                    <div class="blocked" style="width: 85px;">
+                                        out of stock
                                     </div>
                                    <% }%>
                                 </div>

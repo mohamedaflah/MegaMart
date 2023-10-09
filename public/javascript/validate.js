@@ -8,3 +8,9 @@
 //     })
 //     event.preventDefault()
 // }
+let but=document.querySelector('#profile_btn')
+
+but.addEventListener('click',()=>{
+    // alert('hel')
+    document.querySelector('.prfile').classList.toggle('active')
+})

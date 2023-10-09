@@ -1,0 +1,52 @@
+<%-include('../partials/header.ejs') %>
+    <div class="signup">
+        <div class="checkout">
+            <div class="heading">
+                <h1>Add new Address</h1>
+            </div>
+            <form class="checkandAddress addadrs" action="/users/account/address/add-address/<%-id%>" method="post">
+                <div class="checkoutform">
+                    <div class="controller">
+                        
+                        <label for="">name</label>
+                        <input required type="text" name="name" >
+                    </div>
+                    <div class="controller">
+                        <label for="">email</label>
+                        <input required type="email" name="email" >
+                    </div>
+                    <div class="controller">
+                        <label for="">state</label>
+                        <input required type="text" name="state">
+                    </div>
+                    <div class="controller">
+                        <label for="">district</label>
+                        <input required type="text" name="district">
+                    </div>
+                    <div class="controller">
+                        <label for="">pincode</label>
+                        <input required type="text" name="pincode">
+                    </div>
+                    <div class="controller">
+                        <label for="">street</label>
+                        <input required type="text" name="street">
+                    </div>
+                    <div class="controller">
+                        <label for="">phone</label>
+                        <input required type="text" name="phone">
+                    </div>
+                    <div class="controller">
+                        <label for="">Apartment, floor, etc. (optional)</label>
+                        <input required type="text" name="apartment">
+                    </div>
+                    <div class="btn">
+                    <button type="submit">Save</button>
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+    </div>    
+    <%-include('../partials/footer.ejs') %>
+

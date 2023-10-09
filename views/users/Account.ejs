@@ -1,5 +1,60 @@
 <%-include('../partials/header.ejs') %>
-<div class="home">
-    <a href="/user/accounts/logout">Logout</a>
+<div class="home" style="display: flex;align-items: center;justify-content: center;">
+    <%-include('../partials/profiletoggle.ejs')%>
+    <div class="acc">
+        <div class="brudcump">
+            <span>Home&nbsp&nbsp /&nbsp&nbsp My Account</span>
+            <div>
+                <span>Welcome! </span><span style="color: #db4444;"> Md Rimel</span>
+            </div>
+        </div>
+        <div class="profile">
+            <div class="side">
+                <div class="side_content">
+                    <p>Manage My Account</p>
+                    <div class="lnk">
+                        <a href="">My Profile</a>
+                        <a href="">Address Book</a>
+                        <a href=""></a>
+                    </div>
+                </div>
+                <div class="side_content">
+                    <p>Manage Orders</p>
+                    <div class="lnk">
+                        <a href="">My Profile</a>
+                        <a href="">Address Book</a>
+                        <a href=""></a>
+                    </div>
+                </div>
+                <div class="side_content">
+                    <p>Manage WhishList</p>
+                    <div class="lnk">
+                        <a href="">My Returbs</a>
+                        <a href="">My Cancelation</a>
+                        <a href=""></a>
+                    </div>
+                </div>
+            </div>
+            <div class="edit">
+                <div class="allcontrol">
+                    <div class="head">
+                        <h4>Edit Your Profile</h4>
+                    </div>
+                    <div class="controll">
+                        <div class="ctrl">
+                            <label for="">Name</label>
+                            <input type="text" name="" id="">
+                        </div>
+                        <div class="ctrl">
+                            <label for="">Email</label>
+                            <input type="text" name="" id="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- <a href="/user/accounts/logout">Logout</a> -->
 </div>
 <%-include('../partials/footer.ejs') %>

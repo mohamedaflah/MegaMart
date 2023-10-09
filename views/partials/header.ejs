@@ -41,7 +41,7 @@
                     <%if(profile){%>
                         <a href="">Orders</a>
                         <%}else{%>
-                            <a href="/signup">Sign up</a>
+                            <a href="/user/login">Login</a>
                             <%}%>
                 </div>
                 <div class="icons">
@@ -62,7 +62,7 @@
                             <% }%>
                                 <img class="menu" src="/images/menu_bar.svg" alt="">
                                 <%if(profile){%>
-                                    <a href="/user/account/<%-id%>">
+                                    <a id="profile_btn">
                                         <img src="/images/userprofile.svg" alt="">
                                     </a>
                                     <% } %>

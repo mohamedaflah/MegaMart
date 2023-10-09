@@ -11,7 +11,11 @@ const cartCollection = require("../model/collections/cart");
 const orderCollection = require("../model/collections/orders");
 const addressCollection = require("../model/collections/address");
 const { ObjectId } = require("bson");
-const { getCartCount, getUserCartData } = require("../helper/cart-helper");
+const {
+  getCartCount,
+  getUserCartData,
+  getTotalAmount,
+} = require("../helper/cart-helper");
 
 async function userHome(req, res) {
   // let userStatus=await UserCollection.find({email:req.session.userEmail})
@@ -25,7 +29,7 @@ async function userHome(req, res) {
       email: req.session.userEmail,
     });
     const userId = userData._id;
-    var cartCount = await getCartCount(userId)
+    var cartCount = await getCartCount(userId);
     console.log("data of a cart " + cartCount);
     res.render("users/index", {
       profile: true,
@@ -485,7 +489,7 @@ async function getCartPage(req, res) {
       email: req.session.userEmail,
     });
     const userId = userData._id;
-    const cartCount=await getCartCount(userId)
+    const cartCount = await getCartCount(userId);
     let userCartdata = await getUserCartData(userId);
     let totalAmount = 0;
     userCartdata.forEach((cardata) => {
@@ -678,22 +682,38 @@ async function forgotPasswordPasswordEnterPost(req, res) {
 }
 async function checkOut(req, res) {
   const userId = req.params.userId;
-  let useraddressIsExist = await addressCollection.findOne({userId:new ObjectId(userId)});
-  console.log(useraddressIsExist+'        ext')
+  let useraddressIsExist = await addressCollection.findOne({
+    userId: new ObjectId(userId),
+  });
+  console.log(useraddressIsExist + "        ext");
   if (!useraddressIsExist) {
     res.redirect(`/users/product/checkout/address/${userId}`);
-  }else{
-    res.redirect(`/users/product/cart/checkout/place-order/${userId}`)
+  } else {
+    res.redirect(`/users/product/cart/checkout/place-order/${userId}`);
   }
 }
-async function placeOrder(req,res){
-  const userId=req.params.userId
-  const cartCount=await getCartCount(userId)
-  res.render('users/place-order',{profile:true,cartCount,id:userId})
+async function placeOrder(req, res) {
+  const userId = req.params.userId;
+  const cartCount = await getCartCount(userId);
+  const addressData = await addressCollection.findOne({
+    userId: new ObjectId(userId),
+  });
+  const cartData = await getUserCartData(userId);
+  const totalAmount = await getTotalAmount(userId);
+  // console.log(JSON.stringify(addressData) + "address data");
+  console.log(JSON.stringify(cartData));
+  res.render("users/place-order", {
+    profile: true,
+    cartCount,
+    id: userId,
+    addressData,
+    cartData,
+    totalAmount,
+  });
 }
 async function enterAddress(req, res) {
   const userId = req.params.userId;
-  let userCartdata = await getUserCartData(userId)
+  let userCartdata = await getUserCartData(userId);
   console.log(JSON.stringify(userCartdata));
   // const cartData = await cartCollection.findOne({
   //   userId: new ObjectId(userId),
@@ -702,11 +722,9 @@ async function enterAddress(req, res) {
   // if (cartData) {
   //   cartCount = cartData.products.length;
   // }
-  let cartCount=await getCartCount(userId)
-  let totalAmount = 0;
-  userCartdata.forEach((cardata) => {
-    totalAmount += cardata.cartData.discount * cardata.products.qty;
-  });
+  const cartCount = await getCartCount(userId);
+  const totalAmount = await getTotalAmount(userId);
+
   res.render("users/address", {
     profile: true,
     id: userId,
@@ -748,13 +766,11 @@ async function postUserAddress(req, res) {
   }));
   // console.log(userCartdata+' orders data')
   // console.log('            sadf'+JSON.stringify(products)+'this is the products')
-  let totalAmount = 0;
-  userCartdata.forEach((cardata) => {
-    totalAmount += cardata.cartData.discount * cardata.products.qty;
-  });
+  let totalAmount = await getTotalAmount(userId);
+
   await new addressCollection({
     userId: new ObjectId(userId),
-    addresses:[
+    addresses: [
       {
         name: name,
         state: state,
@@ -765,15 +781,26 @@ async function postUserAddress(req, res) {
         apartmentOrBuilding: apartment,
         email: email,
         addedDate: Date.now(),
-      }
-    ]
+      },
+    ],
   }).save();
   await new orderCollection({
     userId: new ObjectId(userId),
     paymentmode: payment_method,
     delverydate: Date.now(),
-    status: "Placed",
+    status: "Pending",
     // totalAmount:totalAmount,
+    address: {
+      name: name,
+      state: state,
+      district: district,
+      pincode: pincode,
+      street: street,
+      phone: phone,
+      apartmentOrBuilding: apartment,
+      email: email,
+      addedDate: Date.now(),
+    },
     products: products,
     //  productIds.map((productId) => {
     //   const cartItem = userCartdata.find(
@@ -793,6 +820,68 @@ async function postUserAddress(req, res) {
   if (payment_method == "COD") {
     res.redirect("/");
   }
+}
+async function placeOrderPost(req, res) {
+  const userId = req.params.userId;
+  console.log(JSON.stringify(req.body) + "body of request");
+  const addressdata = await addressCollection.aggregate([
+    {
+      $match: {
+        userId: new ObjectId(userId),
+      },
+    },
+    {
+      $project: {
+        address: { $arrayElemAt: ["$addresses", Number(req.body.address)] },
+      },
+    },
+  ]);
+  console.log(JSON.stringify(addressdata.addresses) + " acced wit index");
+  const userCartdata = await getUserCartData(userId);
+  const products = userCartdata.map((cartItem) => ({
+    productId: cartItem.products.productId,
+    qty: cartItem.products.qty,
+  }));
+  await new orderCollection({
+    userId: new ObjectId(userId),
+    paymentmode: req.body.payment_method,
+    delverydate: Date.now(),
+    status: "Pending",
+    address: addressdata.addresses,
+    products: products,
+  }).save();
+  await cartCollection.deleteOne({ userId: new ObjectId(userId) });
+  res.redirect("/");
+}
+async function addingAddressGet(req, res) {
+  const userId = req.params.userId;
+  const cartCount = await getCartCount(userId);
+  res.render("users/addAddress", { id: userId, profile: true, cartCount });
+}
+async function addinAddressPost(req, res) {
+  const { name, email, state, district, pincode, street, phone, apartment } =
+    req.body;
+  const userId = req.params.userId;
+  await addressCollection.updateOne(
+    { userId: new ObjectId(userId) },
+    {
+      $push: {
+        addresses: {
+          name: name,
+          state: state,
+          district: district,
+          pincode: pincode,
+          street: street,
+          phone: phone,
+          apartmentOrBuilding: apartment,
+          email: email,
+          addedDate: Date.now(),
+        },
+      },
+    }
+  );
+  // http://localhost:5001/users/product/cart/checkout/place-order/651a9eeb4ff6eaf25dbaa56f
+  res.redirect(`/users/product/cart/checkout/place-order/${userId}`)
 }
 module.exports = {
   userHome,
@@ -826,4 +915,7 @@ module.exports = {
   checkOut,
   postUserAddress,
   placeOrder,
+  placeOrderPost,
+  addingAddressGet,
+  addinAddressPost,
 };

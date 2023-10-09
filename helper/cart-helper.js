@@ -32,6 +32,30 @@ module.exports = {
 
     return userCart;
   },
+  getTotalAmount: async (userId) => {
+    let userCart = await cartCollection.aggregate([
+      { $match: { userId: new ObjectId(userId) } },
+      {
+        $unwind: "$products",
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.productId",
+          foreignField: "_id",
+          as: "cartData",
+        },
+      },
+      {
+        $unwind: "$cartData",
+      },
+    ]);
+    let totalAmount = 0;
+    userCart.forEach((cardata) => {
+      totalAmount += cardata.cartData.discount * cardata.products.qty;
+    });
+    return totalAmount;
+  },
 };
 
 // let userCartdata = await cartCollection.aggregate([

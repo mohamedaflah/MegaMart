@@ -69,6 +69,9 @@ const schema = mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  stock:{
+    type:Number
+  }
 });
 
 // module.exports = mongoose.model("Products", schema);
