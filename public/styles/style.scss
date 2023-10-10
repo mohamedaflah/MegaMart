@@ -212,6 +212,44 @@ $topBarwidth: 90%;
 $categoryWidth: 30%;
 
 .home {
+  position: relative;
+  .filter {
+    position: absolute;
+    top:0;
+    right: 5%;
+    width: 350px;
+    height: 300px;
+    background: #d4d4d44f;
+    backdrop-filter: blur(2px);
+    display: none;
+    .control{
+      width: 90%;
+      display: flex;
+      // background:red ;
+      margin: auto;
+      min-height: 25px;
+      justify-content: space-between;
+      padding: 5px;
+      input{
+        width: 150px;
+        border: none;
+        font-size: 12px;
+        height: 25px;
+        padding: 0 10px;
+        border-radius: 5px;
+      }
+      button{
+        height: 25px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+      }
+    }
+  }
+  .filter.active{
+    display: block;
+  }
   .acc {
     width: 90%;
     min-height: 600px;
@@ -569,7 +607,7 @@ $categoryWidth: 30%;
       width: 20%;
       height: 100%;
       // background-color: rgb(117, 21, 212);
-
+      overflow-y: auto;
       border-right: 1px solid rgb(221, 214, 214);
       display: flex;
       align-items: center;
@@ -931,7 +969,7 @@ body {
         flex-direction: column;
         a {
           // width: 100%;
-  
+
           // background-color: #ff0084;
           margin: 4px 0;
           display: flex;

@@ -1,15 +1,5 @@
 <%-include('../partials/header.ejs') %>
 <div class="home">
-    <form class="filter" id="filter" method="post" action="/users/product/filteredby/minandmax/">
-        <div class="control">
-            
-            <input type="number" name="min" placeholder="minimun price">
-            <input type="number" name="max" placeholder="maximum price">
-        </div>
-        <div class="control">
-            <button type="submit">filter</button>
-        </div>
-    </form>
     <style>
         .home .home_banner .banner .image_section .image{
             background: url('/images/new15-removebg-preview.png');
@@ -23,7 +13,7 @@
         <div class="categoy_section">
             <div class="category_links">
                 <%categories.forEach((data)=>{%>
-                    <a href="/users/product/categories/categoriesby/<%-data._id%>"><%-data.categoryname %></a>
+                    <a href="http://localhost:5001/products/product-detail/<%-data._id%>/mainimage"><%-data.categoryname %></a>
                 <%})%>
             </div>
         </div>
@@ -57,11 +47,11 @@
   
         <%productData.forEach((data)=>{%>
             <%if(!data.deletionStatus){%>
-                <a href="products/product-detail/<%-data._id%>/mainimage" style="text-decoration: none;color:black">
+                <a href="http://localhost:5001/products/product-detail/<%-data._id%>/mainimage" style="text-decoration: none;color:black" >
                     <div class="product_card">
                         <div class="image_section">
                             <!-- <div class="move">
-                                <a href="/users/product/add-to-cart/<%-data._id%>">
+                                <a href="/users/product/add-to-cart/">
                                     <img src="/images/moveto.svg" alt="">
                                 </a>
                                 <a href="">
@@ -99,13 +89,5 @@
            <% }%>
        <% })%>
     </div>
-    <script>
-        let filterdrop = document.querySelector("#filter");
-let filterBtn = document.querySelector("#filterbtn");
-filterBtn.addEventListener('click',()=>{
-
-    filterdrop.classList.toggle("active")
-})
-    </script>
     <%-include('../partials/footer.ejs') %>
 </div>

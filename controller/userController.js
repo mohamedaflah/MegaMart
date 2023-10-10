@@ -16,6 +16,7 @@ const {
   getUserCartData,
   getTotalAmount,
 } = require("../helper/cart-helper");
+const CategoryDb = require("../model/collections/CategoryDb");
 
 async function userHome(req, res) {
   // let userStatus=await UserCollection.find({email:req.session.userEmail})
@@ -23,7 +24,10 @@ async function userHome(req, res) {
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
+
   let productData = await productsCollection.find();
+  const categories = await CategoryDb.find();
+  console.log(categories);
   if (req.session.userAuth && userStatus[0].status) {
     const userData = await UserCollection.findOne({
       email: req.session.userEmail,
@@ -31,12 +35,14 @@ async function userHome(req, res) {
     const userId = userData._id;
     var cartCount = await getCartCount(userId);
     console.log("data of a cart " + cartCount);
+
     res.render("users/index", {
       profile: true,
       productData,
       cartCount,
       id: userStatus[0]._id,
       err: false,
+      categories,
     });
     // return;
   } else {
@@ -45,6 +51,7 @@ async function userHome(req, res) {
       productData,
       id: false,
       err: false,
+      categories,
     });
   }
 }
@@ -1086,6 +1093,180 @@ async function userOrders(req, res) {
     orderDetail,
   });
 }
+async function searchProduct(req, res) {
+  console.log(req.body.searchdata);
+  const productData = await productsCollection.find({
+    productName: { $regex: "^" + req.body.searchdata, $options: "i" },
+  });
+  const userStatus = await UserCollection.find({
+    email: req.session.userEmail,
+  });
+
+  if (req.session.userAuth && userStatus[0].status) {
+    const userData = await UserCollection.findOne({
+      email: req.session.userEmail,
+    });
+    const userId = userData._id;
+    var cartCount = await getCartCount(userId);
+    const categories = await CategoryDb.find();
+    console.log("data of a cart " + cartCount);
+    res.render("users/index", {
+      profile: true,
+      productData,
+      cartCount,
+      id: userStatus[0]._id,
+      err: false,
+      categories,
+    });
+    // return;
+  } else {
+    res.render("users/index", {
+      profile: false,
+      productData,
+      id: false,
+      err: false,
+      categories,
+    });
+  }
+}
+async function filteredbyCategory(req, res) {
+  const categoryId = req.params.categoryId;
+  // let data = await CategoryDb.aggregate([
+  //   {
+  //     $match: { _id: new ObjectId(categoryId) },
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: process.env.PRODUCTS_COLLECTION,
+  //       localField: "_id",
+  //       foreignField: "category",
+  //       as: "categoryInfo",
+  //     },
+  //   },
+  // ]);
+  const productData = await productsCollection.aggregate([
+    {
+      $match: {
+        category: new ObjectId(categoryId), // Match products with the specified category ID
+      },
+    },
+    {
+      $lookup: {
+        from: "categories", // Use the name of your Category collection here
+        localField: "category",
+        foreignField: "_id",
+        as: "categoryInfo",
+      },
+    },
+    {
+      $unwind: "$categoryInfo",
+    },
+    {
+      $project: {
+        productName: 1,
+        price: 1,
+        image: 1,
+        discount: 1,
+        brand: 1,
+        description: 1,
+        addedDate: 1,
+        currentStatus: 1,
+        specification: 1,
+        deletionStatus: 1,
+        stock: 1,
+        category: "$categoryInfo.categoryname",
+        categoryId: "$categoryInfo._id",
+        categorySales: "$categoryInfo.sales",
+        categoryStock: "$categoryInfo.stock",
+        categoryAddedDate: "$categoryInfo.addedDate",
+        categoryImage: "$categoryInfo.categoryImage",
+      },
+    },
+  ]);
+  console.log(JSON.stringify(productData));
+  const userStatus = await UserCollection.find({
+    email: req.session.userEmail,
+  });
+
+  const categories = await CategoryDb.find();
+  if (req.session.userAuth && userStatus[0].status) {
+    const userData = await UserCollection.findOne({
+      email: req.session.userEmail,
+    });
+    const userId = userData._id;
+    var cartCount = await getCartCount(userId);
+    console.log("data of a cart " + cartCount);
+
+    res.render("users/filteredcategory", {
+      profile: true,
+      productData,
+      cartCount,
+      id: userStatus[0]._id,
+      err: false,
+      categories,
+    });
+    // return;
+  } else {
+    res.render("users/filteredcategory", {
+      profile: false,
+      productData,
+      id: false,
+      err: false,
+      categories,
+    });
+  }
+}
+async function filteredbyMinandMaxPrice(req, res) {
+  const { min, max } = req.body;
+  res.redirect(`/users/product/filteredby/minandmax/${min}/${max}/`)
+}
+async function filteredbyMinandMaxGet(req, res) {
+
+  console.log('reached');
+
+  const { min, max } = req.params;
+  console.log(`min in ${min}  max in ${max}`);
+  const productData = await productsCollection.find({
+    $or: [
+      { price: { $gt: min, $lt: max } },
+      { discount: { $gt: min, $lt: max } }
+    ]
+  }).exec();
+  
+  console.log(min+' '+max)
+  console.log(JSON.stringify(productData)+'product data')
+  const userStatus = await UserCollection.find({
+    email: req.session.userEmail,
+  });
+
+  const categories=await CategoryDb.find()
+  if (req.session.userAuth && userStatus[0].status) {
+    const userData = await UserCollection.findOne({
+      email: req.session.userEmail,
+    });
+    const userId = userData._id;
+    var cartCount = await getCartCount(userId);
+    console.log("data of a cart " + cartCount);
+
+    res.render("users/filterbyprice", {
+      profile: true,
+      productData,
+      cartCount,
+      id: userStatus[0]._id,
+      err: false,
+      categories,
+    });
+    // return;
+  } else {
+    res.render("users/filterbyprice", {
+      profile: false,
+      productData,
+      id: false,
+      err: false,
+      categories,
+    });
+  }
+}
 module.exports = {
   userHome,
   singupGet,
@@ -1125,4 +1306,8 @@ module.exports = {
   updateAddressPost,
   deleteUserAddress,
   userOrders,
+  searchProduct,
+  filteredbyCategory,
+  filteredbyMinandMaxPrice,
+  filteredbyMinandMaxGet
 };

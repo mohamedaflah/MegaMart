@@ -19,6 +19,9 @@ const schema = mongoose.Schema({
     type: Date,
     required: true,
   },
+  categoryImage:{
+    type:String,
+  }
 });
 
 // module.exports = mongoose.model("Category", schema);

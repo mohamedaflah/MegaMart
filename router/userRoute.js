@@ -39,6 +39,10 @@ const {
   updateAddressPost,
   deleteUserAddress,
   userOrders,
+  searchProduct,
+  filteredbyCategory,
+  filteredbyMinandMaxPrice,
+  filteredbyMinandMaxGet,
 } = require("../controller/userController");
 const { verifySessionAuth } = require("../middleware/verifySession");
 const { checkingUserStatus } = require("../middleware/statusVerify");
@@ -170,5 +174,15 @@ router.get(
   "/users/product/orders/trackorders/:userId",
   verifySessionAuth,
   userOrders
+);
+router.post("/users/product/search-product/", searchProduct);
+router.get(
+  "/users/product/categories/categoriesby/:categoryId",
+  filteredbyCategory
+);
+router.post("/users/product/filteredby/minandmax/", filteredbyMinandMaxPrice);
+router.get(
+  "/users/product/filteredby/minandmax/:min/:max/",
+  filteredbyMinandMaxGet
 );
 module.exports = { router };

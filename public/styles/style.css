@@ -172,7 +172,45 @@ body {
 }
 
 .home {
+  position: relative;
   height: 100vh;
+}
+.home .filter {
+  position: absolute;
+  top: 0;
+  right: 5%;
+  width: 350px;
+  height: 300px;
+  background: rgba(212, 212, 212, 0.3098039216);
+  -webkit-backdrop-filter: blur(2px);
+          backdrop-filter: blur(2px);
+  display: none;
+}
+.home .filter .control {
+  width: 90%;
+  display: flex;
+  margin: auto;
+  min-height: 25px;
+  justify-content: space-between;
+  padding: 5px;
+}
+.home .filter .control input {
+  width: 150px;
+  border: none;
+  font-size: 12px;
+  height: 25px;
+  padding: 0 10px;
+  border-radius: 5px;
+}
+.home .filter .control button {
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+.home .filter.active {
+  display: block;
 }
 .home .acc {
   width: 90%;
@@ -497,6 +535,7 @@ body {
 .home .home_banner .categoy_section {
   width: 20%;
   height: 100%;
+  overflow-y: auto;
   border-right: 1px solid rgb(221, 214, 214);
   display: flex;
   align-items: center;

@@ -1,15 +1,5 @@
 <%-include('../partials/header.ejs') %>
 <div class="home">
-    <form class="filter" id="filter" method="post" action="/users/product/filteredby/minandmax/">
-        <div class="control">
-            
-            <input type="number" name="min" placeholder="minimun price">
-            <input type="number" name="max" placeholder="maximum price">
-        </div>
-        <div class="control">
-            <button type="submit">filter</button>
-        </div>
-    </form>
     <style>
         .home .home_banner .banner .image_section .image{
             background: url('/images/new15-removebg-preview.png');
@@ -27,25 +17,6 @@
                 <%})%>
             </div>
         </div>
-        <div class="banner">
-            <div class="image_section">
-                <div class="text">
-                    <div class="items">
-                        <div class="logo_txt">
-                            <img src="/images/applelogo.svg" alt="">
-                            <p>iphone 15 series</p>
-                        </div>
-                        <div class="logo_txt main_text">
-                            <h1>Up to 10% off voucher</h1>
-                            <a href="">Shop now <img src="/images/rightgo.svg" alt=""></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="image">
-                    <!-- <img src="/images/iphone15.jpg" alt=""> -->
-                </div>
-            </div>
-        </div>
     </div>
     <%if(err){%>
 
@@ -57,11 +28,11 @@
   
         <%productData.forEach((data)=>{%>
             <%if(!data.deletionStatus){%>
-                <a href="products/product-detail/<%-data._id%>/mainimage" style="text-decoration: none;color:black">
+                <a href="http://localhost:5001/products/product-detail/<%-data._id%>/mainimage" style="text-decoration: none;color:black" >
                     <div class="product_card">
                         <div class="image_section">
                             <!-- <div class="move">
-                                <a href="/users/product/add-to-cart/<%-data._id%>">
+                                <a href="/users/product/add-to-cart/">
                                     <img src="/images/moveto.svg" alt="">
                                 </a>
                                 <a href="">
@@ -99,13 +70,5 @@
            <% }%>
        <% })%>
     </div>
-    <script>
-        let filterdrop = document.querySelector("#filter");
-let filterBtn = document.querySelector("#filterbtn");
-filterBtn.addEventListener('click',()=>{
-
-    filterdrop.classList.toggle("active")
-})
-    </script>
     <%-include('../partials/footer.ejs') %>
 </div>

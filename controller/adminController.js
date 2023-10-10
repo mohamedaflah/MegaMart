@@ -1,8 +1,8 @@
 const adminDb = require("../model/collections/adminDb");
 const userDb = require("../model/collections/UserDb");
 const categoryCollection = require("../model/collections/CategoryDb");
+const orderCollection = require("../model/collections/orders");
 const bcrypt = require("bcrypt");
-
 const productCollection = require("../model/collections/products");
 const fs = require("fs");
 const { ObjectId } = require("mongodb");
@@ -248,25 +248,6 @@ async function postEditProduct(req, res) {
     } = req.body;
     console.log("category is a ++++++++++" + category);
     let categoryId = await categoryCollection.find({ categoryname: category });
-    // const main = req.files["main"][0];
-    // const img2 = req.files["image1"][0];
-    // const img3 = req.files["image2"][0];
-    // const img4 = req.files["image3"][0];
-    // const img5 = req.files["image4"][0];
-    // await productCollection.findByIdAndUpdate(new ObjectId(proId), {
-    //   productName: productname,
-    //   category: new ObjectId(categoryId._id),
-    //   price: price,
-    //   discount: discount,
-    //   brand: brand,
-    //   description: description,
-    //   specification:[ {
-    //     spec1: spec1,
-    //     spec2: spec2,
-    //     spec3: spec3,
-    //     spec4: spec4,
-    //   }],
-    // });
     await productCollection.updateOne(
       { _id: new ObjectId(proId) },
       {
@@ -344,83 +325,6 @@ async function postEditProduct(req, res) {
   }
 }
 
-// async function postEditProduct(req, res) {
-//   try {
-//     const proId = req.params.id;
-//     const {
-//       productname,
-//       price,
-//       discount,
-//       brand,
-//       category,
-//       spec1,
-//       spec2,
-//       spec3,
-//       spec4,
-//       description,
-//     } = req.body;
-//     let catId=categoryCollection.findOne({categoryname:category})
-//     const updateFields = {
-//       productName: productname,
-//       category: new ObjectId(catId._id),
-//       price: price,
-//       discount: discount,
-//       brand: brand,
-//       description: description,
-//       specification: {
-//         spec1: spec1,
-//         spec2: spec2,
-//         spec3: spec3,
-//         spec4: spec4,
-//       },
-//     };
-
-//     // Check if main image is provided in the request and update it if necessary
-//     if (req.files && req.files["main"] && req.files["main"][0]) {
-//       updateFields.image = updateFields.image || {}; // Ensure image field exists
-//       updateFields.image.mainimage = req.files["main"][0].filename;
-//     }
-
-//     // Check if image1 is provided in the request and update it if necessary
-//     if (req.files && req.files["image1"] && req.files["image1"][0]) {
-//       updateFields.image = updateFields.image || {}; // Ensure image field exists
-//       updateFields.image.image1 = req.files["image1"][0].filename;
-//     }
-
-//     // Check if image2 is provided in the request and update it if necessary
-//     if (req.files && req.files["image2"] && req.files["image2"][0]) {
-//       updateFields.image = updateFields.image || {}; // Ensure image field exists
-//       updateFields.image.image2 = req.files["image2"][0].filename;
-//     }
-
-//     // Check if image3 is provided in the request and update it if necessary
-//     if (req.files && req.files["image3"] && req.files["image3"][0]) {
-//       updateFields.image = updateFields.image || {}; // Ensure image field exists
-//       updateFields.image.image3 = req.files["image3"][0].filename;
-//     }
-
-//     // Check if image4 is provided in the request and update it if necessary
-//     if (req.files && req.files["image4"] && req.files["image4"][0]) {
-//       updateFields.image = updateFields.image || {}; // Ensure image field exists
-//       updateFields.image.image4 = req.files["image4"][0].filename;
-//     }
-
-//     // Find the current product to get the existing image information
-//     const currentProduct = await productCollection.findById(proId);
-
-//     // If the image fields are not provided in the request, retain the existing images
-//     if (!updateFields.image) {
-//       updateFields.image = currentProduct.image;
-//     }
-
-//     // Update the product using the combined updateFields
-//     await productCollection.findByIdAndUpdate(new ObjectId(proId), updateFields);
-
-//     res.redirect('/admin/products');
-//   } catch (err) {
-//     console.error(`Error in updating product: ${err}`);
-//   }
-// }
 async function deleteProduct(req, res) {
   let proId = req.params.id;
   await productCollection.updateOne(
@@ -436,6 +340,14 @@ async function recoverProduct(req, res) {
     { $set: { deletionStatus: false } }
   );
   res.redirect("/admin/products");
+}
+async function listAllOrders(req, res) {
+  // await orderCollection.aggregate([
+  //   {
+  //     $
+  //   }
+  // ])
+  res.render('admins/listOrders')
 }
 module.exports = {
   adminHomeShowuser,
@@ -456,4 +368,5 @@ module.exports = {
   postEditProduct,
   deleteProduct,
   recoverProduct,
+  listAllOrders,
 };

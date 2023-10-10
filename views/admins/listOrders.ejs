@@ -1,0 +1,167 @@
+<%-include('./adminPartials/header.ejs') %>
+    <div class="home" style="display: flex;" style="min-height:100vh">
+        <%-include('./adminPartials/sidebar.ejs')%>
+            <div class="content_section">
+                <div class="overview_section">
+                    <div class="head_inp">
+                        <h5>Orders</h5>
+                        <a href="/admin/logout">Logout</a>
+                    </div>
+                </div>
+                <div class="items_section" style="flex-direction: column;">
+                    <div class="table" id="tb">
+                        <div class="top_section">
+                            <p>Products</p>
+                            <div class="filter">
+                                <a href="">Filtered by
+                                    <img src="/images/filter.svg" alt="">
+                                </a>
+                                <a href="">Sorted by
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M14.6027 7.02075L10.1484 11.475C9.62236 12.0011 8.76156 12.0011 8.23552 11.475L3.78125 7.02075"
+                                            stroke="#898989" stroke-width="1.02476" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="table_content">
+                            <div class="table_datas head">PRODUCT NAME</div>
+                            <div class="table_datas head" style="width: 10%;">PRICE</div>
+                            <div class="table_datas head">IMAGE</div>
+                            <div class="table_datas head">CATEGORY</div>
+                            <div class="table_datas head">Status</div>
+                            <div class="table_datas head"></div>
+                            <!-- <div class="table_datas head"></div> -->
+                        </div>
+                            <div class="table_content data_section">
+                                <div class="table_datas ">Game</div>
+                                <div class="table_datas " style="width: 10%;">₹2300</div>
+                                <div class="table_datas ">
+                               
+                                        <!-- <img src="" style="width: 23px;height:23;border-radius: 50%;"> -->
+                
+
+                                            <img src="/images/redrm.png" style="width: 33px;height:33" alt="">
+                                </div>
+                                <div class="table_datas ">
+                                  Heaphone
+                                </div>
+                                <div class="table_datas ">
+                                        <div class="active" style="width: 85px;">
+                                            Placed
+                                        </div>
+                                </div>
+                                <div class="table_datas ">
+                                    <a href="" style="text-decoration: none;" title="Edit product">
+                                        <img src="/images/predit.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
+                                    </a>
+           
+                                        <a href="" title="Recover product">
+                                            <img src="/images/recover.svg" style="width: 30px;height: 30px;" alt="">
+                                        </a>
+                                </div>
+                                
+                            </div>
+
+                            
+                                <!-- <div class="table_content data_section">
+                                    <div class="table_datas ">Aflu</div>
+                                    <div class="table_datas ">Aflu@gmail.com</div>
+                                    <div class="table_datas ">
+                                        <img src="/images/userprofile.svg" style="width: 23px;height:23" alt="">
+                                    </div>
+                                    <div class="table_datas ">
+                                        23/5/2023
+                                    </div>
+                                    <div class="table_datas ">
+                                        <div class="blocked">
+                                            Blocked
+                                        </div>
+                                    </div>
+                                    <div class="table_datas ">
+                                        <a href="">
+                                            <img src="/images/unblock.svg" style="width: 30px;height:30px" alt="">
+                                        </a>
+                                    </div>
+                                </div> -->
+                    </div>
+                    <div class="key_val" id="key-val">
+                 
+                            <div class="detail">
+                                <div class="data">
+                                    <p>PRODUCT NAME</p>
+                                    <p>bOAT headset</p>
+                                </div>  
+                                <div class="data">
+                                    <p>PRICE</p>
+                                    <p>1000₹</p>
+                                </div>
+                                <div class="data">
+                                    <p>IMAGE</p>
+                                    <div class="status" id="blocked">
+                                        <div class="btn_active">
+                                            In Stock
+                                        </div>
+                                        <a href="/">
+                                            <img src="/images/boat.jpg" style="width: 35px;height:35px" alt="">
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="data">
+                                    <p>Status</p>
+                                        <div class="status" id="blocked">
+                                            <div class="btn_active">
+                                                Actived
+                                            </div>
+                                            <a href="/">
+                                                <img src="/images/block.svg" style="width: 25px;height:25px" alt="">
+                                            </a>
+                                        </div>
+                                        <div class="status" id="blocked">
+                                            <div class="btn_block">
+                                                Blocked
+                                            </div>
+                                            <a href="">
+        
+                                                <img src="/images/unblock.svg" style="width: 25px;height:25px" alt="">
+                                            </a>
+                                        </div>
+      
+    
+                                </div>
+                            </div>
+      
+                        <!-- <div class="detail">
+                            <div class="data">
+                                <p>Name</p>
+                                <p>Aflu</p>
+                            </div>
+                            <div class="data">
+                                <p>Email</p>
+                                <p>Aflu@gmail.com</p>
+                            </div>
+                            <div class="data">
+                                <p>Join Date</p>
+                                <p>23/05/2023</p>
+                            </div>
+                            <div class="data">
+                                <p>Status</p>
+                                <div class="status" id="blocked">
+                                    <div class="btn_block">
+                                        Blocked
+                                    </div>
+                                    <a href="">
+
+                                        <img src="/images/unblock.svg" style="width: 25px;height:25px" alt="">
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+    </div>
