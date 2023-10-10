@@ -43,6 +43,7 @@ const {
   filteredbyCategory,
   filteredbyMinandMaxPrice,
   filteredbyMinandMaxGet,
+  getPaymentSuccess
 } = require("../controller/userController");
 const { verifySessionAuth } = require("../middleware/verifySession");
 const { checkingUserStatus } = require("../middleware/statusVerify");
@@ -183,6 +184,8 @@ router.get(
 router.post("/users/product/filteredby/minandmax/", filteredbyMinandMaxPrice);
 router.get(
   "/users/product/filteredby/minandmax/:min/:max/",
+  verifySessionAuth,
   filteredbyMinandMaxGet
 );
+router.get('/users/product/checkout/payment/success/:userId',verifySessionAuth,getPaymentSuccess)
 module.exports = { router };

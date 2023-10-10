@@ -175,7 +175,7 @@ body {
   position: relative;
   height: 100vh;
 }
-.home .filter {
+.home .filter1 {
   position: absolute;
   top: 0;
   right: 5%;
@@ -186,7 +186,7 @@ body {
           backdrop-filter: blur(2px);
   display: none;
 }
-.home .filter .control {
+.home .filter1 .control {
   width: 90%;
   display: flex;
   margin: auto;
@@ -194,7 +194,7 @@ body {
   justify-content: space-between;
   padding: 5px;
 }
-.home .filter .control input {
+.home .filter1 .control input {
   width: 150px;
   border: none;
   font-size: 12px;
@@ -202,7 +202,7 @@ body {
   padding: 0 10px;
   border-radius: 5px;
 }
-.home .filter .control button {
+.home .filter1 .control button {
   height: 25px;
   display: flex;
   align-items: center;
@@ -2031,6 +2031,9 @@ button:hover {
   border-radius: 24.594px;
   background: rgba(245, 37, 37, 0.418);
   width: 62px;
+}
+.home .content_section .items_section .table .table_content .ordertb {
+  font-size: 12px;
 }
 .home .content_section .items_section .table .table_content .table_datas:nth-child(1) {
   width: 20%;

@@ -745,44 +745,64 @@ async function enterAddress(req, res) {
   });
 }
 async function postUserAddress(req, res) {
-  const userId = req.params.userId;
-  const {
-    name,
-    email,
-    state,
-    district,
-    pincode,
-    street,
-    phone,
-    apartment,
-    payment_method,
-  } = req.body;
-  console.log("Name  " + name);
-  console.log("Eamil  " + email);
-  console.log("state  " + state);
-  console.log("district  " + district);
-  console.log("place  " + pincode);
-  console.log("street  " + street);
-  console.log("phone  " + phone);
-  console.log("apartment  " + apartment);
-  console.log("payment  " + payment_method);
-  const userCartdata = await getUserCartData(userId);
-  // const productIds = userCartdata.map(
-  //   (cartItem) => cartItem.products.productId
-  // );
-  // const quantities = userCartdata.map((cartItem) => cartItem.products.qty);
-  const products = userCartdata.map((cartItem) => ({
-    productId: cartItem.products.productId,
-    qty: cartItem.products.qty,
-  }));
-  // console.log(userCartdata+' orders data')
-  // console.log('            sadf'+JSON.stringify(products)+'this is the products')
-  let totalAmount = await getTotalAmount(userId);
+  try {
+    const userId = req.params.userId;
+    const {
+      name,
+      email,
+      state,
+      district,
+      pincode,
+      street,
+      phone,
+      apartment,
+      payment_method,
+    } = req.body;
+    console.log("Name  " + name);
+    console.log("Eamil  " + email);
+    console.log("state  " + state);
+    console.log("district  " + district);
+    console.log("place  " + pincode);
+    console.log("street  " + street);
+    console.log("phone  " + phone);
+    console.log("apartment  " + apartment);
+    console.log("payment  " + payment_method);
+    const userCartdata = await getUserCartData(userId);
+    // const productIds = userCartdata.map(
+    //   (cartItem) => cartItem.products.productId
+    // );
+    // const quantities = userCartdata.map((cartItem) => cartItem.products.qty);
+    const products = userCartdata.map((cartItem) => ({
+      productId: cartItem.products.productId,
+      qty: cartItem.products.qty,
+    }));
+    // console.log(userCartdata+' orders data')
+    // console.log('            sadf'+JSON.stringify(products)+'this is the products')
+    let totalAmount = await getTotalAmount(userId);
 
-  await new addressCollection({
-    userId: new ObjectId(userId),
-    addresses: [
-      {
+    await new addressCollection({
+      userId: new ObjectId(userId),
+      addresses: [
+        {
+          name: name,
+          state: state,
+          district: district,
+          pincode: pincode,
+          street: street,
+          phone: phone,
+          apartmentOrBuilding: apartment,
+          email: email,
+          addedDate: Date.now(),
+        },
+      ],
+    }).save();
+    await new orderCollection({
+      userId: new ObjectId(userId),
+      paymentmode: payment_method,
+      delverydate: Date.now(),
+      status: "Pending",
+      // totalAmount:totalAmount,
+      address: {
         name: name,
         state: state,
         district: district,
@@ -793,32 +813,18 @@ async function postUserAddress(req, res) {
         email: email,
         addedDate: Date.now(),
       },
-    ],
-  }).save();
-  await new orderCollection({
-    userId: new ObjectId(userId),
-    paymentmode: payment_method,
-    delverydate: Date.now(),
-    status: "Pending",
-    // totalAmount:totalAmount,
-    address: {
-      name: name,
-      state: state,
-      district: district,
-      pincode: pincode,
-      street: street,
-      phone: phone,
-      apartmentOrBuilding: apartment,
-      email: email,
-      addedDate: Date.now(),
-    },
-    products: products,
-  }).save();
-  await cartCollection.deleteOne({ userId: new ObjectId(userId) }).then(() => {
-    console.log("deleted");
-  });
-  if (payment_method == "COD") {
-    res.redirect("/");
+      products: products,
+    }).save();
+    await cartCollection
+      .deleteOne({ userId: new ObjectId(userId) })
+      .then(() => {
+        console.log("deleted");
+      });
+    if (payment_method == "COD") {
+      res.redirect(`/users/product/checkout/payment/success/${userId}`);
+    }
+  } catch (err) {
+    console.log("error in post address" + err);
   }
 }
 async function placeOrderPost(req, res) {
@@ -843,11 +849,12 @@ async function placeOrderPost(req, res) {
       products: products,
     }).save();
     await cartCollection.deleteOne({ userId: new ObjectId(userId) });
-    res.redirect("/");
+    res.redirect(`/users/product/checkout/payment/success/${userId}`);
   } catch (err) {
     console.log("error in checkout " + err);
   }
 }
+
 async function addingAddressGet(req, res) {
   const userId = req.params.userId;
   const cartCount = await getCartCount(userId);
@@ -950,91 +957,6 @@ async function userOrders(req, res) {
   const userDetail = await UserCollection.findOne({
     _id: new ObjectId(userId),
   });
-  // const orderDetail=await orderCollection.aggregate([
-  //   {
-  //     $lookup:{
-  //       from:process.env.PRODUCTS_COLLECTION,
-  //       localField:"products.productId",
-  //       foreignField:"_id",
-  //       as:"orderDetails"
-  //     }
-  //   }
-  // ])
-  // const orderDetail = await UserCollection.aggregate([
-  //   {
-  //     $match: { _id: new ObjectId(userId) }, // Match the specific user by ID
-  //   },
-  //   {
-  //     $lookup: {
-  //       from: "orders", // Name of the orders collection
-  //       localField: "_id", // User's "_id" is used to match with "userId" in orders
-  //       foreignField: "userId",
-  //       as: "userOrders",
-  //     },
-  //   },
-  //   {
-  //     $unwind: "$userOrders", // Unwind the user's orders array
-  //   },
-  //   {
-  //     $lookup: {
-  //       from: "products", // Name of the products collection
-  //       localField: "userOrders.products.productId",
-  //       foreignField: "_id",
-  //       as: "userOrders.products.productDetails",
-  //     },
-  //   },
-  //   {
-  //     $unwind: "$userOrders.products.productDetails",
-  //   },
-  //   {
-  //     $group: {
-  //       _id: "$_id", // Group by the user's ID
-  //       userAddress: { $first: "$userAddress" }, // Include user address
-  //       userOrders: { $push: "$userOrders" }, // Include user orders
-  //     },
-  //   },
-  // ]);
-  // const orderDetail = await UserCollection.aggregate([
-  //   {
-  //     $match: { _id: new ObjectId(userId) }, // Match the specific user by ID
-  //   },
-  //   {
-  //     $lookup: {
-  //       from: "orders", // Name of the orders collection
-  //       localField: "_id", // User's "_id" is used to match with "userId" in orders
-  //       foreignField: "userId",
-  //       as: "userOrders",
-  //     },
-  //   },
-  //   {
-  //     $unwind: {
-  //       path: "$userOrders", // Unwind the user's orders array
-  //       preserveNullAndEmptyArrays: true, // Preserve documents that don't have orders
-  //     },
-  //   },
-  //   {
-  //     $lookup: {
-  //       from: "products", // Name of the products collection
-  //       localField: "userOrders.products.productId",
-  //       foreignField: "_id",
-  //       as: "userOrders.products.productDetails",
-  //     },
-  //   },
-  //   {
-  //     $unwind: {
-  //       path: "$userOrders.products.productDetails",
-  //       preserveNullAndEmptyArrays: true, // Preserve documents without product details
-  //     },
-  //   },
-  //   {
-  //     $project: {
-  //       _id: 1, // Include user's _id
-  //       userAddress: 1, // Include user address
-  //       userOrders: 1, // Include user orders
-  //       userOrders_products: "$userOrders.products", // Unwind userOrders.products
-  //     },
-  //   },
-  // ]);
   const orderDetail = await UserCollection.aggregate([
     {
       $match: { _id: new ObjectId(userId) },
@@ -1102,13 +1024,13 @@ async function searchProduct(req, res) {
     email: req.session.userEmail,
   });
 
+  const categories = await CategoryDb.find();
   if (req.session.userAuth && userStatus[0].status) {
-    const userData = await UserCollection.findOne({
+    const userData = await UserCollection.find({
       email: req.session.userEmail,
     });
-    const userId = userData._id;
     var cartCount = await getCartCount(userId);
-    const categories = await CategoryDb.find();
+    const userId = userData[0]._id;
     console.log("data of a cart " + cartCount);
     res.render("users/index", {
       profile: true,
@@ -1218,28 +1140,29 @@ async function filteredbyCategory(req, res) {
 }
 async function filteredbyMinandMaxPrice(req, res) {
   const { min, max } = req.body;
-  res.redirect(`/users/product/filteredby/minandmax/${min}/${max}/`)
+  res.redirect(`/users/product/filteredby/minandmax/${min}/${max}/`);
 }
 async function filteredbyMinandMaxGet(req, res) {
-
-  console.log('reached');
+  console.log("reached");
 
   const { min, max } = req.params;
   console.log(`min in ${min}  max in ${max}`);
-  const productData = await productsCollection.find({
-    $or: [
-      { price: { $gt: min, $lt: max } },
-      { discount: { $gt: min, $lt: max } }
-    ]
-  }).exec();
-  
-  console.log(min+' '+max)
-  console.log(JSON.stringify(productData)+'product data')
+  const productData = await productsCollection
+    .find({
+      $or: [
+        { price: { $gt: min, $lt: max } },
+        { discount: { $gt: min, $lt: max } },
+      ],
+    })
+    .exec();
+
+  console.log(min + " " + max);
+  console.log(JSON.stringify(productData) + "product data");
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
 
-  const categories=await CategoryDb.find()
+  const categories = await CategoryDb.find();
   if (req.session.userAuth && userStatus[0].status) {
     const userData = await UserCollection.findOne({
       email: req.session.userEmail,
@@ -1265,6 +1188,16 @@ async function filteredbyMinandMaxGet(req, res) {
       err: false,
       categories,
     });
+  }
+}
+async function getPaymentSuccess(req, res) {
+  try{
+
+    const userId=req.params.userId;
+    const cartCount=await getCartCount(userId)
+    res.render('users/paymentsuccess',{profile:true,cartCount,id:userId});
+  }catch(err){
+console.log('Error in paysucces'+err);
   }
 }
 module.exports = {
@@ -1309,5 +1242,6 @@ module.exports = {
   searchProduct,
   filteredbyCategory,
   filteredbyMinandMaxPrice,
-  filteredbyMinandMaxGet
+  filteredbyMinandMaxGet,
+  getPaymentSuccess,
 };

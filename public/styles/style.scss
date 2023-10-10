@@ -213,7 +213,7 @@ $categoryWidth: 30%;
 
 .home {
   position: relative;
-  .filter {
+  .filter1 {
     position: absolute;
     top:0;
     right: 5%;
@@ -2455,6 +2455,11 @@ $sidBarWidth: 250px;
               background: rgba(245, 37, 37, 0.418);
               width: 62px;
             }
+          }
+          .ordertb
+          {
+            // background-color: red;
+            font-size: 12px;
           }
 
           .table_datas:nth-child(1) {

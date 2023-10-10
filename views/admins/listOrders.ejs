@@ -9,9 +9,9 @@
                     </div>
                 </div>
                 <div class="items_section" style="flex-direction: column;">
-                    <div class="table" id="tb">
+                    <div class="table" id="tb" style="width: 95%;">
                         <div class="top_section">
-                            <p>Products</p>
+                            <p>Orders</p>
                             <div class="filter">
                                 <a href="">Filtered by
                                     <img src="/images/filter.svg" alt="">
@@ -28,65 +28,50 @@
                             </div>
                         </div>
                         <div class="table_content">
-                            <div class="table_datas head">PRODUCT NAME</div>
-                            <div class="table_datas head" style="width: 10%;">PRICE</div>
+                            <div class="table_datas head">ORDER ID</div>
+                            <div class="table_datas head" style="width: 10%;">PRODUCT</div>
                             <div class="table_datas head">IMAGE</div>
-                            <div class="table_datas head">CATEGORY</div>
+                            <div class="table_datas head">USER ID</div>
                             <div class="table_datas head">Status</div>
-                            <div class="table_datas head"></div>
+                            <div class="table_datas head" style="width:15%">DATE</div>
+                            <div class="table_datas head">DETAILS</div>
                             <!-- <div class="table_datas head"></div> -->
                         </div>
+                        
+                        <% orderDetail.forEach((order) => { %>
+                            <% const product = order.products.productDetails; %>
                             <div class="table_content data_section">
-                                <div class="table_datas ">Game</div>
-                                <div class="table_datas " style="width: 10%;">₹2300</div>
-                                <div class="table_datas ">
-                               
-                                        <!-- <img src="" style="width: 23px;height:23;border-radius: 50%;"> -->
-                
-
-                                            <img src="/images/redrm.png" style="width: 33px;height:33" alt="">
+                                <div class="table_datas ordertb">#<%- order._id %></div>
+                                <div class="table_datas ordertb" style="width: 10%;">
+                                    <% if (product) { %>
+                                        <%- product.productName %>
+                                    <% } %>
                                 </div>
-                                <div class="table_datas ">
-                                  Heaphone
+                                <div class="table_datas ordertb">
+                                    <% if (product && product.image && product.image[0]) { %>
+                                        <img src="/product-images/<%- product.image[0].mainimage %>" style="width: 33px; height: 33px;" alt="">
+                                    <% } %>
                                 </div>
-                                <div class="table_datas ">
-                                        <div class="active" style="width: 85px;">
-                                            Placed
-                                        </div>
+                                <div class="table_datas ordertb">
+                                    #<%- '234fsd234' %>
                                 </div>
-                                <div class="table_datas ">
-                                    <a href="" style="text-decoration: none;" title="Edit product">
-                                        <img src="/images/predit.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
-                                    </a>
-           
-                                        <a href="" title="Recover product">
-                                            <img src="/images/recover.svg" style="width: 30px;height: 30px;" alt="">
-                                        </a>
+                                <div class="table_datas ordertb">
+                                    <div class="active" style="width: 85px;">
+                                        <%- order.status %>
+                                    </div>
                                 </div>
-                                
+                                <div class="table_datas ordertb" style="width:15%">
+                                    <%let date=new Date(order.delverydate)%>
+                                    <%let days=["Sunday","Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday"]%>
+                                    <%-date.getDate()%>/<%-date.getMonth()%>/<%-date.getFullYear()%><br> <%-days[date.getDay()]%>
+                                    
+                                </div>
+                                <div class="table_datas ordertb">
+                                    <a href="<%= `/order/${order._id}` %>">View Details</a>
+                                </div>
                             </div>
+                        <% }) %>    
 
-                            
-                                <!-- <div class="table_content data_section">
-                                    <div class="table_datas ">Aflu</div>
-                                    <div class="table_datas ">Aflu@gmail.com</div>
-                                    <div class="table_datas ">
-                                        <img src="/images/userprofile.svg" style="width: 23px;height:23" alt="">
-                                    </div>
-                                    <div class="table_datas ">
-                                        23/5/2023
-                                    </div>
-                                    <div class="table_datas ">
-                                        <div class="blocked">
-                                            Blocked
-                                        </div>
-                                    </div>
-                                    <div class="table_datas ">
-                                        <a href="">
-                                            <img src="/images/unblock.svg" style="width: 30px;height:30px" alt="">
-                                        </a>
-                                    </div>
-                                </div> -->
                     </div>
                     <div class="key_val" id="key-val">
                  

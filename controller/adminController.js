@@ -342,12 +342,163 @@ async function recoverProduct(req, res) {
   res.redirect("/admin/products");
 }
 async function listAllOrders(req, res) {
+  // const orderDetail = await userDb.aggregate([
+  //   {
+  //     $lookup: {
+  //       from: "orders",
+  //       localField: "_id",
+  //       foreignField: "userId",
+  //       as: "userOrders",
+  //     },
+  //   },
+  //   {
+  //     $unwind: "$userOrders",
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "products",
+  //       localField: "userOrders.products.productId",
+  //       foreignField: "_id",
+  //       as: "userOrders.products.productDetails",
+  //     },
+  //   },
+  //   {
+  //     $unwind: "$userOrders.products.productDetails",
+  //   },
+  //   {
+  //     $project: {
+  //       _id: 1,
+  //       userOrders: {
+  //         _id: "$userOrders._id",
+  //         userId: "$userOrders.userId",
+  //         paymentmode: "$userOrders.paymentmode",
+  //         delverydate: "$userOrders.delverydate",
+  //         status: "$userOrders.status",
+  //         address: "$userOrders.address",
+  //         products: "$userOrders.products.productDetails", // Reshape here
+  //       },
+
+  //     },
+  //   },
+  //   {
+  //     $group: {
+  //       _id: "$_id",
+  //       userAddress: { $first: "$userAddress" },
+  //       userOrders: { $push: "$userOrders" },
+  //     },
+  //   },
+  // ]);
+
+  // const orderDetail=await orderCollection.aggregate([
+  //   {
+  //     $lookup: {
+  //       from: 'users', // Use the name of your Users collection here
+  //       localField: 'userId',
+  //       foreignField: '_id',
+  //       as: 'user',
+  //     },
+  //   },
+  //   {
+  //     $unwind: '$user',
+  //   },
+  //   {
+  //     $unwind: '$products',
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: 'products', // Use the name of your Products collection here
+  //       localField: 'products.productId',
+  //       foreignField: '_id',
+  //       as: 'product',
+  //     },
+  //   },
+  //   {
+  //     $unwind: '$product',
+  //   },
+  //   {
+  //     $group: {
+  //       _id: '$_id',
+  //       userId: { $first: '$userId' },
+  //       paymentmode: { $first: '$paymentmode' },
+  //       delverydate: { $first: '$delverydate' },
+  //       status: { $first: '$status' },
+  //       address: { $first: '$address' },
+  //       user: { $first: '$user' },
+  //       products: {
+  //         $push: {
+  //           productId: '$product._id',
+  //           qty: '$products.qty',
+  //           productName: '$product.productName', // Add other product fields as needed
+  //         },
+  //       },
+  //     },
+  //   },
+  //   {
+  //     $project: {
+  //       _id: 1,
+  //       userId: 1,
+  //       paymentmode: 1,
+  //       delverydate: 1,
+  //       status: 1,
+  //       address: 1,
+  //       'user._id': 1,
+  //       'user.name': 1, // Add other user fields as needed
+  //       products: 1,
+  //     },
+  //   },
+  // ])
+
+
+  const orderDetail=await orderCollection.aggregate([
+    {
+      $lookup: {
+        from: 'users', // Use the name of your Users collection here
+        localField: 'userId',
+        foreignField: '_id',
+        as: 'user',
+      },
+    },
+    {
+      $unwind: '$user',
+    },
+    {
+      $unwind: '$products',
+    },
+    {
+      $lookup: {
+        from: 'products', // Use the name of your Products collection here
+        localField: 'products.productId',
+        foreignField: '_id',
+        as: 'product',
+      },
+    },
+    {
+      $unwind: '$product',
+    },
+    {
+      $project: {
+        _id: 1,
+        userId: 1,
+        paymentmode: 1,
+        delverydate: 1,
+        status: 1,
+        address: 1,
+        user: 1, // This will contain all user details
+        products: {
+          productId: '$product._id',
+          qty: '$products.qty',
+          productDetails: '$product', // This will contain all product details
+        },
+      },
+    },
+  ])
+  console.log(JSON.stringify(orderDetail) + " orders ");
   // await orderCollection.aggregate([
   //   {
   //     $
   //   }
   // ])
-  res.render('admins/listOrders')
+  res.render("admins/listOrders",{orderDetail});
 }
 module.exports = {
   adminHomeShowuser,
