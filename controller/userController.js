@@ -493,7 +493,11 @@ async function getCartPage(req, res) {
     let userCartdata = await getUserCartData(userId);
     let totalAmount = 0;
     userCartdata.forEach((cardata) => {
-      totalAmount += cardata.cartData.discount * cardata.products.qty;
+      if (cardata.carData && cardata.carData.discount) {
+        totalAmount += cardata.cartData.discount * cardata.products.qty;
+      } else {
+        totalAmount += cardata.cartData.price * cardata.products.qty;
+      }
     });
     if (userCartdata.length <= 0) {
       // console.log(JSON.stringify(userCartdata) + "data");
@@ -802,17 +806,6 @@ async function postUserAddress(req, res) {
       addedDate: Date.now(),
     },
     products: products,
-    //  productIds.map((productId) => {
-    //   const cartItem = userCartdata.find(
-    //     (item) => item.cartData._id.toString() === productId.toString()
-    //   );
-    //   const qty = cartItem ? cartItem.products.qty : 0; // Get the quantity from the cart data
-    //   return {
-
-    //     productId: new ObjectId(productId),
-    //     qty: qty,
-    //   };
-    // }),
   }).save();
   await cartCollection.deleteOne({ userId: new ObjectId(userId) }).then(() => {
     console.log("deleted");
@@ -822,36 +815,31 @@ async function postUserAddress(req, res) {
   }
 }
 async function placeOrderPost(req, res) {
-  const userId = req.params.userId;
-  console.log(JSON.stringify(req.body) + "body of request");
-  const addressdata = await addressCollection.aggregate([
-    {
-      $match: {
-        userId: new ObjectId(userId),
-      },
-    },
-    {
-      $project: {
-        address: { $arrayElemAt: ["$addresses", Number(req.body.address)] },
-      },
-    },
-  ]);
-  console.log(JSON.stringify(addressdata.addresses) + " acced wit index");
-  const userCartdata = await getUserCartData(userId);
-  const products = userCartdata.map((cartItem) => ({
-    productId: cartItem.products.productId,
-    qty: cartItem.products.qty,
-  }));
-  await new orderCollection({
-    userId: new ObjectId(userId),
-    paymentmode: req.body.payment_method,
-    delverydate: Date.now(),
-    status: "Pending",
-    address: addressdata.addresses,
-    products: products,
-  }).save();
-  await cartCollection.deleteOne({ userId: new ObjectId(userId) });
-  res.redirect("/");
+  try {
+    const userId = req.params.userId;
+    console.log(JSON.stringify(req.body) + "body of request");
+    const addressdata = await addressCollection.findOne({
+      userId: new ObjectId(userId),
+    });
+    // addressdata = addressdata.addresses[Number(req.body.address)];
+    const userCartdata = await getUserCartData(userId);
+    const products = userCartdata.map((cartItem) => ({
+      productId: cartItem.products.productId,
+      qty: cartItem.products.qty,
+    }));
+    await new orderCollection({
+      userId: new ObjectId(userId),
+      paymentmode: req.body.payment_method,
+      delverydate: Date.now(),
+      status: "Pending",
+      address: addressdata.addresses[Number(req.body.address)],
+      products: products,
+    }).save();
+    await cartCollection.deleteOne({ userId: new ObjectId(userId) });
+    res.redirect("/");
+  } catch (err) {
+    console.log("error in checkout " + err);
+  }
 }
 async function addingAddressGet(req, res) {
   const userId = req.params.userId;
@@ -881,7 +869,222 @@ async function addinAddressPost(req, res) {
     }
   );
   // http://localhost:5001/users/product/cart/checkout/place-order/651a9eeb4ff6eaf25dbaa56f
-  res.redirect(`/users/product/cart/checkout/place-order/${userId}`)
+  res.redirect(`/users/product/cart/checkout/place-order/${userId}`);
+}
+async function updateAddresGet(req, res) {
+  const userId = req.params.userId;
+  const addressId = req.params.addressId;
+  const addressData = await addressCollection.find(
+    { userId: new ObjectId(userId), "addresses._id": new ObjectId(addressId) },
+    { "addresses.$": true }
+  );
+  // let data1 = await addressCollection.updateOne(
+  //   {
+  //     userId: new ObjectId(userId),
+  //     "addresses._id": new ObjectId(productId),
+  //   },
+  //   { $inc: { "products.$.qty": 1 } }
+  // );
+  // console.log(JSON.stringify(data)+' {{{{{{{{{{{{{{{{{{{{{data ')
+  const cartCount = await getCartCount(userId);
+  res.render("users/editAddress", {
+    cartCount,
+    id: userId,
+    profile: true,
+    addressData,
+  });
+}
+async function updateAddressPost(req, res) {
+  const { name, email, state, district, pincode, street, phone, apartment } =
+    req.body;
+  const userId = req.params.userId;
+  const addressId = req.params.addressId;
+  await addressCollection.updateOne(
+    {
+      userId: new ObjectId(userId),
+      "addresses._id": new ObjectId(addressId),
+    },
+    {
+      $set: {
+        "addresses.$.name": name,
+        "addresses.$.state": state,
+        "addresses.$.district": district,
+        "addresses.$.pincode": pincode,
+        "addresses.$.street": street,
+        "addresses.$.phone": phone,
+        "addresses.$.apartmentOrBuilding": apartment,
+        "addresses.$.email": email,
+        "addresses.$.addedDate": Date.now(),
+      },
+    }
+  );
+  res.redirect(
+    `http://localhost:5001/users/product/cart/checkout/place-order/${userId}`
+  );
+}
+async function deleteUserAddress(req, res) {
+  const userId = req.params.userId;
+  const addressId = req.params.addressId;
+  await addressCollection.updateOne(
+    { userId: new ObjectId(userId) },
+    {
+      $pull: {
+        addresses: { _id: new ObjectId(addressId) },
+      },
+    }
+  );
+  res.redirect(
+    `http://localhost:5001/users/product/cart/checkout/place-order/${userId}`
+  );
+}
+async function userOrders(req, res) {
+  const userId = req.params.userId;
+  const cartCount = await getCartCount(userId);
+  const userDetail = await UserCollection.findOne({
+    _id: new ObjectId(userId),
+  });
+  // const orderDetail=await orderCollection.aggregate([
+  //   {
+  //     $lookup:{
+  //       from:process.env.PRODUCTS_COLLECTION,
+  //       localField:"products.productId",
+  //       foreignField:"_id",
+  //       as:"orderDetails"
+  //     }
+  //   }
+  // ])
+  // const orderDetail = await UserCollection.aggregate([
+  //   {
+  //     $match: { _id: new ObjectId(userId) }, // Match the specific user by ID
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "orders", // Name of the orders collection
+  //       localField: "_id", // User's "_id" is used to match with "userId" in orders
+  //       foreignField: "userId",
+  //       as: "userOrders",
+  //     },
+  //   },
+  //   {
+  //     $unwind: "$userOrders", // Unwind the user's orders array
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "products", // Name of the products collection
+  //       localField: "userOrders.products.productId",
+  //       foreignField: "_id",
+  //       as: "userOrders.products.productDetails",
+  //     },
+  //   },
+  //   {
+  //     $unwind: "$userOrders.products.productDetails",
+  //   },
+  //   {
+  //     $group: {
+  //       _id: "$_id", // Group by the user's ID
+  //       userAddress: { $first: "$userAddress" }, // Include user address
+  //       userOrders: { $push: "$userOrders" }, // Include user orders
+  //     },
+  //   },
+  // ]);
+  // const orderDetail = await UserCollection.aggregate([
+  //   {
+  //     $match: { _id: new ObjectId(userId) }, // Match the specific user by ID
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "orders", // Name of the orders collection
+  //       localField: "_id", // User's "_id" is used to match with "userId" in orders
+  //       foreignField: "userId",
+  //       as: "userOrders",
+  //     },
+  //   },
+  //   {
+  //     $unwind: {
+  //       path: "$userOrders", // Unwind the user's orders array
+  //       preserveNullAndEmptyArrays: true, // Preserve documents that don't have orders
+  //     },
+  //   },
+  //   {
+  //     $lookup: {
+  //       from: "products", // Name of the products collection
+  //       localField: "userOrders.products.productId",
+  //       foreignField: "_id",
+  //       as: "userOrders.products.productDetails",
+  //     },
+  //   },
+  //   {
+  //     $unwind: {
+  //       path: "$userOrders.products.productDetails",
+  //       preserveNullAndEmptyArrays: true, // Preserve documents without product details
+  //     },
+  //   },
+  //   {
+  //     $project: {
+  //       _id: 1, // Include user's _id
+  //       userAddress: 1, // Include user address
+  //       userOrders: 1, // Include user orders
+  //       userOrders_products: "$userOrders.products", // Unwind userOrders.products
+  //     },
+  //   },
+  // ]);
+  const orderDetail = await UserCollection.aggregate([
+    {
+      $match: { _id: new ObjectId(userId) },
+    },
+    {
+      $lookup: {
+        from: "orders",
+        localField: "_id",
+        foreignField: "userId",
+        as: "userOrders",
+      },
+    },
+    {
+      $unwind: "$userOrders",
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "userOrders.products.productId",
+        foreignField: "_id",
+        as: "userOrders.products.productDetails",
+      },
+    },
+    {
+      $unwind: "$userOrders.products.productDetails",
+    },
+    {
+      $project: {
+        _id: 1,
+        userOrders: {
+          _id: "$userOrders._id",
+          userId: "$userOrders.userId",
+          paymentmode: "$userOrders.paymentmode",
+          delverydate: "$userOrders.delverydate",
+          status: "$userOrders.status",
+          address: "$userOrders.address",
+          products: "$userOrders.products.productDetails", // Reshape here
+          __v: "$userOrders.__v",
+        },
+        __v: 1,
+      },
+    },
+    {
+      $group: {
+        _id: "$_id",
+        userAddress: { $first: "$userAddress" },
+        userOrders: { $push: "$userOrders" },
+      },
+    },
+  ]);
+  console.log(JSON.stringify(orderDetail) + "details of orders");
+  res.render("users/orders", {
+    profile: true,
+    cartCount,
+    id: userId,
+    orderDetail,
+  });
 }
 module.exports = {
   userHome,
@@ -918,4 +1121,8 @@ module.exports = {
   placeOrderPost,
   addingAddressGet,
   addinAddressPost,
+  updateAddresGet,
+  updateAddressPost,
+  deleteUserAddress,
+  userOrders,
 };

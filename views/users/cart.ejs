@@ -53,7 +53,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="cols price" style="justify-content: space-between;">₹<%-cartdata.products.qty*cartdata.cartData.discount%>
+                        <div class="cols price" style="justify-content: space-between;">₹
+                            <%if(cartdata.cartData && cartdata.cartData.discount){%>
+                                <%-cartdata.products.qty*cartdata.cartData.discount%>
+                                <% }else{%>
+                                    <%-cartdata.products.qty*cartdata.cartData.price%>
+                          <% }%>
                             <a href="/users/product/cart/deleteitemfromcart/<%-id%>/<%-cartdata.products.productId%>/">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="12" cy="12" r="9" fill="#DB4444"/>

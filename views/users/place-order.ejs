@@ -1,5 +1,6 @@
 <%-include('../partials/header.ejs') %>
     <div class="signup">
+        <%-include('../partials/profiletoggle.ejs')%>
         <div class="checkout">
             <div class="heading">
                 <h1>Place order</h1>
@@ -15,10 +16,10 @@
                              <input type="radio" id="rd" name="address" value="<%-index%>" required>
                              <!-- <label for="rd" class="rbtn"></label> -->
                              <div class="icons " style="display:flex;gap:10px">
-                                 <a href="">
+                                 <a href="/users/product/cart/checkout/place-order/edit-address/<%-id%>/<%-data._id%>">
                                      <img src="/images/editsv.svg" style="width: 20px ;height:20px"  alt="">
                                  </a>
-                                 <a href="">
+                                 <a href="/users/product/cart/checkout/place-order/delete-address/<%-id%>/<%-data._id%>">
                                      <img src="/images/bin.svg" style="width: 20px ;height:20px" alt="">
                                  </a>
                              </div>
