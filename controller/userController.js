@@ -395,6 +395,7 @@ async function detailProductGet(req, res) {
         },
         currentStatus: true,
         deletionStatus: true,
+        stock:true,
       },
     },
   ]);
@@ -410,6 +411,11 @@ async function detailProductGet(req, res) {
 async function addTocart(req, res) {
   try {
     let productId = req.params.id;
+    const currentProduct=await productsCollection.findOne({_id:new ObjectId(productId)});
+    console.log(currentProduct+'    curent product in add to cart')
+    if(currentProduct && currentProduct.stock<=0){
+      return res.redirect(`/products/product-detail/${productId}/mainimage`)
+    }
     let userId = await UserCollection.findOne({ email: req.session.userEmail });
     let userCartExistStatus = await cartCollection.findOne({
       userId: new ObjectId(userId._id),
@@ -533,6 +539,12 @@ async function getCartPage(req, res) {
 async function increaseQuantity(req, res) {
   const userId = req.params.userId;
   const productId = req.params.productId;
+  const currentData=await productsCollection.findOne({_id:new ObjectId(productId)})
+  if(currentData && currentData.stock){
+    if(currentData.qty>=currentData.stock){
+      return
+    }
+  }
   await cartCollection.updateOne(
     {
       userId: new ObjectId(userId),
@@ -820,6 +832,24 @@ async function postUserAddress(req, res) {
       .then(() => {
         console.log("deleted");
       });
+    products.forEach(async (product) => {
+      const currentData = await productsCollection.findOne({
+        _id: new ObjectId(product.productId),
+      });
+      if(currentData && currentData.stock){
+        const minusdata = currentData.stock - product.qty;
+        if (minusdata >= 0) {
+          await productsCollection.updateOne(
+            { _id: new ObjectId(product.productId) },
+            {
+              $inc: {
+                stock:  -product.qty,
+              },
+            }
+          );
+        }
+      }
+    });
     if (payment_method == "COD") {
       res.redirect(`/users/product/checkout/payment/success/${userId}`);
     }
@@ -849,6 +879,24 @@ async function placeOrderPost(req, res) {
       products: products,
     }).save();
     await cartCollection.deleteOne({ userId: new ObjectId(userId) });
+    products.forEach(async (product) => {
+      const currentData = await productsCollection.findOne({
+        _id: new ObjectId(product.productId),
+      });
+      if(currentData && currentData.stock){
+        const minusdata = currentData.stock - product.qty;
+        if (minusdata >= 0) {
+          await productsCollection.updateOne(
+            { _id: new ObjectId(product.productId) },
+            {
+              $inc: {
+                stock:  -product.qty,
+              },
+            }
+          );
+        }
+      }
+    });
     res.redirect(`/users/product/checkout/payment/success/${userId}`);
   } catch (err) {
     console.log("error in checkout " + err);
@@ -1191,13 +1239,16 @@ async function filteredbyMinandMaxGet(req, res) {
   }
 }
 async function getPaymentSuccess(req, res) {
-  try{
-
-    const userId=req.params.userId;
-    const cartCount=await getCartCount(userId)
-    res.render('users/paymentsuccess',{profile:true,cartCount,id:userId});
-  }catch(err){
-console.log('Error in paysucces'+err);
+  try {
+    const userId = req.params.userId;
+    const cartCount = await getCartCount(userId);
+    res.render("users/paymentsuccess", {
+      profile: true,
+      cartCount,
+      id: userId,
+    });
+  } catch (err) {
+    console.log("Error in paysucces" + err);
   }
 }
 module.exports = {

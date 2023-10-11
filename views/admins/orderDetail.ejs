@@ -1,0 +1,113 @@
+<%-include('./adminPartials/header.ejs') %>
+    <div class="home" style="display: flex;" style="min-height:100vh">
+        <%-include('./adminPartials/sidebar.ejs')%>
+            <div class="content_section">
+                <div class="overview_section">
+                    <div class="head_inp">
+                        <h5>Orders Detail</h5>
+                        <a href="/admin/logout">Logout</a>
+                    </div>
+                </div>
+                <div class="items_section" style="flex-direction: row;align-items: center;">
+                    <div class="summary_detail">
+                        <div class="sm_customer">
+                            <div class="items_summary">
+                                <div class="head_row">
+                                    <div class="content hd">
+                                        Item Summary
+                                    </div>
+                                    <div class="content hd">Qty</div>
+                                    <div class="content hd">Price</div>
+                                    <div class="content hd">Total</div>
+                                </div>
+                                <%orderDetail.forEach((value)=>{%>
+                                    <% const product = value.products.productDetails; %>
+                                    <div class="head_row">
+                                        <div class="content " style="padding-left: 5px;">
+                                            <img src="/product-images/<%-product.image[0].mainimage%>" style="width: 33px;height: auto;" alt="">
+                                            <span style="margin-left: 10px;"><%-product.productName%></span>
+                                        </div>
+                                        <div class="content"><%-value.products.qty%></div>
+                                        <div class="content">
+                                            <%if(product.discount){%>
+                                                ₹<%-product.discount%>
+                                                <% }else{%>
+                                                    ₹<%-product.price%>
+                                           <%}%>
+                                        </div>
+                                        <div class="content">
+                                            <%if(product.discount){%>
+                                                ₹<%-product.discount*value.products.qty%>
+                                                <% }else{%>
+                                                    ₹<%-product.price*value.products.qty%>
+                                           <%}%>
+                                        </div>
+                                    </div>
+                                <%})%>
+                            </div>
+                            <div class="items_summary">
+                                <div class="header">
+                                    Customer and Order Details
+                                </div>
+                                <%const addrs=orderDetail[0].address%>
+                                <%for(key in addrs){%>
+                                    <div class="header cont">
+                                        <span><%-key%></span>
+                                        <span><%-addrs[key]%></span>
+                                    </div>
+                               <% }%>
+                            </div>
+                        </div>
+                        <div class="nums">
+                            <div class="order_summary">
+                                <div class="order_center">
+                                    <form class="order_hd">
+                                        <span>Order Summary</span>
+                                        
+                                            <select name="status" id="">
+                                                <option value="Pending">pending</option>
+                                                <option value="Confirmed">confirmed</option>
+                                                <option value="Shipped">shipped</option>
+                                                <option value="Delivered">shipped</option>
+                                                <!-- <option value="Canceled">shipped</option> -->
+                                            </select>
+                                        
+                                    </form>
+                                    <div class="order_hd">
+                                        <span>Order Created</span>
+                                        
+                                            <span>
+                                                <%let date=new Date(orderDetail[0].delverydate)%>
+                                                <%-date.getDate()%>/<%-date.getMonth()%>/<%-date.getFullYear()%>
+                                            </span>
+                                        
+                                    </div>
+                                    <div class="order_hd">
+                                        <span>Sub Total</span>
+                                        
+                                            <span>₹<%-totalAmount%></span>
+                                        
+                                    </div>
+                                    <div class="order_hd">
+                                        <span>Shipping</span>
+                                        
+                                            <span>Free</span>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="total">
+                                <span>
+
+                                    Total
+                                </span><span>
+                                    ₹<%-totalAmount%>
+
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+    </div>

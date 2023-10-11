@@ -103,6 +103,7 @@ async function manageProducts(req, res) {
           specification: true,
           currentStatus: true,
           deletionStatus: true,
+          stock: true,
         },
       },
     ]);
@@ -253,7 +254,7 @@ async function postEditProduct(req, res) {
       {
         $set: {
           productName: productname,
-          category: categoryId._id,
+          category: categoryId[0]._id,
           price: price,
           discount: discount,
           brand: brand,
@@ -448,32 +449,31 @@ async function listAllOrders(req, res) {
   //   },
   // ])
 
-
-  const orderDetail=await orderCollection.aggregate([
+  const orderDetail = await orderCollection.aggregate([
     {
       $lookup: {
-        from: 'users', // Use the name of your Users collection here
-        localField: 'userId',
-        foreignField: '_id',
-        as: 'user',
+        from: "users", // Use the name of your Users collection here
+        localField: "userId",
+        foreignField: "_id",
+        as: "user",
       },
     },
     {
-      $unwind: '$user',
+      $unwind: "$user",
     },
     {
-      $unwind: '$products',
+      $unwind: "$products",
     },
     {
       $lookup: {
-        from: 'products', // Use the name of your Products collection here
-        localField: 'products.productId',
-        foreignField: '_id',
-        as: 'product',
+        from: "products", // Use the name of your Products collection here
+        localField: "products.productId",
+        foreignField: "_id",
+        as: "product",
       },
     },
     {
-      $unwind: '$product',
+      $unwind: "$product",
     },
     {
       $project: {
@@ -485,20 +485,95 @@ async function listAllOrders(req, res) {
         address: 1,
         user: 1, // This will contain all user details
         products: {
-          productId: '$product._id',
-          qty: '$products.qty',
-          productDetails: '$product', // This will contain all product details
+          productId: "$product._id",
+          qty: "$products.qty",
+          productDetails: "$product", // This will contain all product details
         },
       },
     },
-  ])
+  ]);
   console.log(JSON.stringify(orderDetail) + " orders ");
   // await orderCollection.aggregate([
   //   {
   //     $
   //   }
   // ])
-  res.render("admins/listOrders",{orderDetail});
+  res.render("admins/listOrders", { orderDetail });
+}
+async function getOrderDetails(req, res) {
+  const orderId = req.params.orderId;
+  const userId = req.params.userId;
+  const orderDetail = await orderCollection.aggregate([
+    {
+      $match: {
+        _id:new ObjectId(orderId), // Assuming ObjectId is used for _id field
+        userId:new ObjectId(userId), // Assuming ObjectId is used for userId
+      },
+    },
+    {
+      $lookup: {
+        from: "users", // Use the name of your Users collection here
+        localField: "userId",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    {
+      $unwind: "$user",
+    },
+    {
+      $unwind: "$products",
+    },
+    {
+      $lookup: {
+        from: "products", // Use the name of your Products collection here
+        localField: "products.productId",
+        foreignField: "_id",
+        as: "product",
+      },
+    },
+    {
+      $unwind: "$product",
+    },
+    {
+      $project: {
+        _id: 1,
+        userId: 1,
+        paymentmode: 1,
+        delverydate: 1,
+        status: 1,
+        address: 1,
+        user: 1, // This will contain all user details
+        products: {
+          productId: "$product._id",
+          qty: "$products.qty",
+          productDetails: "$product", // This will contain all product details
+        },
+      },
+    },
+  ]);
+  console.log(JSON.stringify(orderDetail)+' specific order')
+  var totalAmount=0;
+  orderDetail.forEach((order) => {
+    const product = order.products.productDetails;
+    const quantity = order.products.qty;
+    console.log('produt  '+JSON.stringify(product.price)+'  pr  '+JSON.stringify(quantity)+'     qty')
+    var price;
+    if(product.discount){
+      price=product.discount
+    }else{
+      price=product.price;
+    }
+    console.log(price+' proc')
+  
+    // Calculate the subtotal for this product
+    const subtotal = quantity * price;
+   console.log(subtotal+'  sub total')
+    // Add the subtotal to the total amount
+    totalAmount =totalAmount+ subtotal;
+  });
+  console.log('total Amt       '+totalAmount)
+  res.render("admins/orderDetail",{orderDetail,totalAmount});
 }
 module.exports = {
   adminHomeShowuser,
@@ -520,4 +595,5 @@ module.exports = {
   deleteProduct,
   recoverProduct,
   listAllOrders,
+  getOrderDetails,
 };

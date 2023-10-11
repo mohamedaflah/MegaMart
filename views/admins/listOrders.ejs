@@ -65,9 +65,13 @@
                                     <%let days=["Sunday","Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday"]%>
                                     <%-date.getDate()%>/<%-date.getMonth()%>/<%-date.getFullYear()%><br> <%-days[date.getDay()]%>
                                     
+                                    
                                 </div>
                                 <div class="table_datas ordertb">
-                                    <a href="<%= `/order/${order._id}` %>">View Details</a>
+                                    <a href="/admin/products/orders/list-orders/orders-detail/<%-order._id%>/<%-order.userId%>/">
+                                        <!-- <img src="/images/view.svg" alt=""> -->
+                                        view detail
+                                    </a>
                                 </div>
                             </div>
                         <% }) %>    

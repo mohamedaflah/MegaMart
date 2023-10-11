@@ -147,6 +147,7 @@
                             <div class="table_datas head" style="width: 10%;">PRICE</div>
                             <div class="table_datas head">IMAGE</div>
                             <div class="table_datas head">CATEGORY</div>
+                            <div class="table_datas head">STOCK</div>
                             <div class="table_datas head">Status</div>
                             <div class="table_datas head"></div>
                             <!-- <div class="table_datas head"></div> -->
@@ -164,6 +165,11 @@
                                 </div>
                                 <div class="table_datas ">
                                    <%-value.category%>
+                                </div>
+                                <div class="table_datas " style="padding-left: 5px;">
+                                   <%if(value && value.stock>=0){%>
+                                    <%-value.stock%>
+                                   <%}%>
                                 </div>
                                 <div class="table_datas ">
                                     <%if(!value.deletionStatus){%>

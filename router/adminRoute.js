@@ -21,7 +21,8 @@ const {
   postEditProduct,
   deleteProduct,
   recoverProduct,
-  listAllOrders
+  listAllOrders,
+  getOrderDetails,
 } = require("../controller/adminController");
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
@@ -68,5 +69,10 @@ router.post(
 );
 router.get("/products/delete-product/:id", deleteProduct);
 router.get("/products/recover-product/:id", recoverProduct);
-router.get("/products/orders/list-orders/",admiLoginVerify,listAllOrders);
+router.get("/products/orders/list-orders/", admiLoginVerify, listAllOrders);
+router.get(
+  "/products/orders/list-orders/orders-detail/:orderId/:userId",
+  admiLoginVerify,
+  getOrderDetails
+);
 module.exports = { router };

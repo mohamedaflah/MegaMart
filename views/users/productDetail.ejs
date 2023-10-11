@@ -27,7 +27,13 @@
             <div class="contents">
                 <div class="head_part">
                 
-                        <h1><%-productData[0].productName%></h1>
+                        <h1 style="display: flex;justify-content: space-between;"><%-productData[0].productName%> 
+                            <%if( productData[0].stock<=0) {%>
+                                <span
+                                span style="font-size: 10px;padding: 5px;background: rgba(210, 210, 80, 0.536);
+                                display: flex;align-items: center;justify-content: center;border-radius: 10px;">Currently Unavailable</span>
+                            <%}%>
+                        </h1>
                         <div class="ratings">
                             <img src="/images/star.svg" alt="">
                             <img src="/images/star.svg" alt="">
@@ -59,12 +65,13 @@
                 </div>
                 <div class="function_part">
                     <div class="btns">
-                        <div class="qty">
+                        <!-- <div class="qty">
                             <a href="" class="minus">-</a>
                             2
                             <a href="" class="plus">+</a>
-                        </div>
-                        <a href="/users/product/add-to-cart/<%-productData[0]._id%>" class="addtocart">Add to Cart</a>
+                        </div> -->
+                        
+                            <a href="/users/product/add-to-cart/<%-productData[0]._id%>" class="addtocart">Add to Cart</a>
                         <a href="" class="whish"><img class="whish" src="/images/heart.svg" alt=""></a>
                     </div>
                 </div>
