@@ -212,96 +212,21 @@ body {
 .home .filter.active {
   display: block;
 }
-.home .acc {
-  width: 90%;
-  min-height: 600px;
+.home .profile_card {
+  width: 110rem;
+  min-height: 590px;
+  background-color: #00c9ff;
+  display: flex;
+}
+.home .profile_card .side_section {
+  width: 30%;
+  min-height: 500px;
   background-color: #00c9ff;
 }
-.home .acc .brudcump {
-  width: 100%;
-  height: 90px;
-  display: flex;
-  align-items: start;
-  justify-content: space-between;
-}
-.home .acc .profile {
-  width: 100%;
-  min-height: 550px;
-  background-color: #22d29d;
-  display: flex;
-}
-.home .acc .profile .side {
-  height: 550px;
-  width: 30%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.home .acc .profile .side .side_content {
-  width: 100%;
-  height: 30%;
-}
-.home .acc .profile .side .side_content p {
-  font-weight: 500;
-}
-.home .acc .profile .side .side_content .lnk {
-  display: flex;
-  flex-direction: column;
-  padding-left: 25px;
-  align-items: start;
-}
-.home .acc .profile .side .side_content .lnk a {
-  color: #393939;
-  text-decoration: none;
-  margin-top: 5px;
-}
-.home .acc .profile .edit {
+.home .profile_card .content_s {
   width: 70%;
-  height: 550px;
-  background: tan;
-  box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.05);
-  display: flex;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-}
-.home .acc .profile .edit .allcontrol {
-  width: 90%;
-  height: 90%;
-  background-color: rgb(96, 223, 125);
-  display: flex;
-  flex-direction: column;
-}
-.home .acc .profile .edit .allcontrol .head {
-  width: 100%;
-  height: 50px;
-}
-.home .acc .profile .edit .allcontrol .head h4 {
-  color: #db4444;
-}
-.home .acc .profile .edit .allcontrol .controll {
-  width: 100%;
-  height: 80px;
-  background-color: wheat;
-  display: flex;
-}
-.home .acc .profile .edit .allcontrol .controll .ctrl {
-  height: 100%;
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-}
-.home .acc .profile .edit .allcontrol .controll .ctrl label {
-  font-weight: 400;
-}
-.home .acc .profile .edit .allcontrol .controll .ctrl input {
-  height: 36px;
-  border: none;
-  outline: none;
-  border-radius: 4px;
-  background: #f5f5f5;
-  padding-left: 10px;
+  min-height: 500px;
+  background-color: #0faff0;
 }
 .home .forgot {
   width: 500px;
@@ -339,6 +264,9 @@ body {
   width: 90px;
   font-size: 12px;
   margin: 0 10px;
+}
+.home .forsort.actived {
+  display: flex;
 }
 .home .cart_secttion {
   width: 90%;
@@ -648,11 +576,12 @@ body {
 }
 .home .products_section .product_card .image_section img {
   width: 70%;
-  height: 70%;
+  height: auto;
 }
 .home .products_section .product_card .detail_section {
   height: 30%;
   display: flex;
+  position: relative;
   flex-direction: column;
 }
 .home .products_section .product_card .detail_section p {
@@ -1276,6 +1205,56 @@ button:hover {
 .home {
   position: relative;
 }
+.home .forsort {
+  width: 300px;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  display: none;
+  top: 0;
+  right: 30%;
+  height: 200px;
+}
+.home .forsort .sorts {
+  background-color: #f5f5f5;
+  height: 100%;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  transition: 0.3s;
+}
+.home .forsort .sorts .spprice:hover {
+  cursor: pointer;
+  background-color: #e8e8e8;
+}
+.home .forsort .price {
+  font-size: 12px;
+  min-height: 25px;
+  width: 100%;
+  background-color: rgb(142, 133, 133) f5f5;
+  border-bottom: 1px solid rgb(195, 193, 193);
+  display: flex;
+  color: #000;
+  text-decoration: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 7px;
+  text-transform: capitalize;
+}
+.home .forsort .price img {
+  rotate: -90deg;
+}
+.home .forsort .additions {
+  width: 50%;
+  height: 100%;
+  display: none;
+}
+.home .forsort .additions .pr {
+  background: #f5f5f5;
+}
+.home .forsort .additions.ACTIVE {
+  display: block;
+}
 .home .prfile {
   position: absolute;
   top: 0;
@@ -1710,9 +1689,6 @@ button:hover {
 .home .content_section .items_section .summary_detail .sm_customer .items_summary .head_row .content {
   display: flex;
   align-items: center;
-}
-.home .content_section .items_section .summary_detail .sm_customer .items_summary .head_row .hd {
-  font-weight: 500;
 }
 .home .content_section .items_section .summary_detail .sm_customer .items_summary .head_row .content:nth-child(1) {
   width: 30%;

@@ -97,7 +97,10 @@
                                             <p for="">Category</p>
                                             <select name="category" id="">
                                                     <%categories.forEach((value)=>{%>
-                                                        <option value="<%-value.categoryname%>"><%-value.categoryname%></option>
+                                                        <%if(value.categorystatus){%>
+
+                                                            <option value="<%-value.categoryname%>"><%-value.categoryname%></option>
+                                                        <%}%>
                                                <% })%>
                                             </select>
                                         </div>

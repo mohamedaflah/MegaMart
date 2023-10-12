@@ -93,8 +93,10 @@ async function manageProducts(req, res) {
       {
         $project: {
           productName: 1,
+          addedDate: 1,
           category: "$categoryInfo.categoryname",
           categoryId: "$categoryInfo._id",
+          categorystatus: "$categoryInfo.categorystatus",
           _id: true,
           price: true,
           discount: true,
@@ -104,6 +106,11 @@ async function manageProducts(req, res) {
           currentStatus: true,
           deletionStatus: true,
           stock: true,
+        },
+      },
+      {
+        $sort: {
+          addedDate: -1, // Sort by date in descending order (latest first)
         },
       },
     ]);
@@ -216,6 +223,14 @@ async function editCategoryPost(req, res) {
   await categoryCollection.findByIdAndUpdate(new ObjectId(id), {
     categoryname: req.body.category,
   });
+  res.redirect("/admin/category");
+}
+async function unListCategory(req, res) {
+  const id = req.params.id;
+  await categoryCollection.updateOne(
+    { _id: new ObjectId(id) },
+    { $set: { categorystatus: false } }
+  );
   res.redirect("/admin/category");
 }
 async function getEditProduct(req, res) {
@@ -506,8 +521,8 @@ async function getOrderDetails(req, res) {
   const orderDetail = await orderCollection.aggregate([
     {
       $match: {
-        _id:new ObjectId(orderId), // Assuming ObjectId is used for _id field
-        userId:new ObjectId(userId), // Assuming ObjectId is used for userId
+        _id: new ObjectId(orderId), // Assuming ObjectId is used for _id field
+        userId: new ObjectId(userId), // Assuming ObjectId is used for userId
       },
     },
     {
@@ -552,28 +567,49 @@ async function getOrderDetails(req, res) {
       },
     },
   ]);
-  console.log(JSON.stringify(orderDetail)+' specific order')
-  var totalAmount=0;
+  console.log(JSON.stringify(orderDetail) + " specific order");
+  var totalAmount = 0;
   orderDetail.forEach((order) => {
     const product = order.products.productDetails;
     const quantity = order.products.qty;
-    console.log('produt  '+JSON.stringify(product.price)+'  pr  '+JSON.stringify(quantity)+'     qty')
+    console.log(
+      "produt  " +
+        JSON.stringify(product.price) +
+        "  pr  " +
+        JSON.stringify(quantity) +
+        "     qty"
+    );
     var price;
-    if(product.discount){
-      price=product.discount
-    }else{
-      price=product.price;
+    if (product.discount) {
+      price = product.discount;
+    } else {
+      price = product.price;
     }
-    console.log(price+' proc')
-  
+    console.log(price + " proc");
+
     // Calculate the subtotal for this product
     const subtotal = quantity * price;
-   console.log(subtotal+'  sub total')
+    console.log(subtotal + "  sub total");
     // Add the subtotal to the total amount
-    totalAmount =totalAmount+ subtotal;
+    totalAmount = totalAmount + subtotal;
   });
-  console.log('total Amt       '+totalAmount)
-  res.render("admins/orderDetail",{orderDetail,totalAmount});
+  console.log("total Amt       " + totalAmount);
+  res.render("admins/orderDetail", { orderDetail, totalAmount });
+}
+async function changeOrderStatus(req, res) {
+  const ordeId = req.params.orderId;
+  const userId = req.params.userId;
+  await orderCollection.updateOne(
+    { _id: new ObjectId(ordeId), userId: new ObjectId(userId) },
+    {
+      $set: {
+        status: req.body.status,
+      },
+    }
+  );
+  console.log(ordeId+'     r')
+  console.log(userId+'id')
+  res.redirect(`/admin/products/orders/list-orders/orders-detail/${ordeId}/${userId}/`)
 }
 module.exports = {
   adminHomeShowuser,
@@ -590,10 +626,12 @@ module.exports = {
   addProduct,
   editCategoryGet,
   editCategoryPost,
+  unListCategory,
   getEditProduct,
   postEditProduct,
   deleteProduct,
   recoverProduct,
   listAllOrders,
   getOrderDetails,
+  changeOrderStatus,
 };

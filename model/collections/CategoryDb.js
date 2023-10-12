@@ -1,5 +1,5 @@
 require("../config");
-require('dotenv').config()
+require("dotenv").config();
 const mongoose = require("mongoose");
 const schema = mongoose.Schema({
   categoryname: {
@@ -19,9 +19,13 @@ const schema = mongoose.Schema({
     type: Date,
     required: true,
   },
-  categoryImage:{
-    type:String,
-  }
+  categoryImage: {
+    type: String,
+  },
+  categorystatus: {
+    type: Boolean,
+    default:true,
+  },
 });
 
 // module.exports = mongoose.model("Category", schema);

@@ -61,14 +61,17 @@
                         <div class="nums">
                             <div class="order_summary">
                                 <div class="order_center">
-                                    <form class="order_hd">
+                                    <form class="order_hd" method="post" action="/admin/products/orders/list-orders/orders/changin-status/<%-orderDetail[0]._id%>/<%-orderDetail[0].userId%>">
                                         <span>Order Summary</span>
                                         
-                                            <select name="status" id="">
-                                                <option value="Pending">pending</option>
-                                                <option value="Confirmed">confirmed</option>
-                                                <option value="Shipped">shipped</option>
-                                                <option value="Delivered">shipped</option>
+                                            <select name="status" id="" onchange="this.form.submit()">
+                                                <%let status=["Pending","Confirmed","Shipped","Delivered"]%>
+                                                <option value="<%-orderDetail[0].status %>" selected><%-orderDetail[0].status %></option>
+                                                <%status.forEach((status)=>{%>
+                                                    <%if(status!=orderDetail[0].status){%>
+                                                        <option value="<%-status %>"><%-status %></option>
+                                                    <%}%>
+                                               <% })%>
                                                 <!-- <option value="Canceled">shipped</option> -->
                                             </select>
                                         

@@ -52,7 +52,13 @@ module.exports = {
     ]);
     let totalAmount = 0;
     userCart.forEach((cardata) => {
-      totalAmount += cardata.cartData.discount * cardata.products.qty;
+      if (cardata.cartData.discount) {
+        totalAmount =
+          totalAmount + cardata.cartData.discount * cardata.products.qty;
+      } else {
+        totalAmount =
+          totalAmount + cardata.cartData.price * cardata.products.qty;
+      }
     });
     return totalAmount;
   },

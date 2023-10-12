@@ -19,7 +19,13 @@
                             <img src="/product-images/<%-cartdata.cartData.image[0].mainimage%>" style="width:50px;height:auto" alt="">
                             <span style="margin-left: 20px;"><%-cartdata.cartData.productName%></span>
                         </div>
-                        <div class="cols price">₹<%-cartdata.cartData.price%></div>
+                        <div class="cols price">
+                            <%if(cartdata.cartData && cartdata.cartData.discount){%>
+                                ₹<%-cartdata.cartData.discount%>
+                                <% }else{%>
+                                    ₹<%-cartdata.cartData.price%>
+                           <%}%>
+                        </div>
                         <div class="cols qty">
                             <div class="qty_button">
                                 <div class="text">
@@ -69,7 +75,7 @@
                     </div>
                 <%})%>
             </div>
-            <div class="returnandupdate">
+            <div class="returnandupdate" style="visibility: hidden;">
                 <a href="" id="return">Return to Shop</a>
                 <a href="">Update cart</a>
             </div>

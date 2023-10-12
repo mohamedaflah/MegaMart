@@ -130,6 +130,19 @@
     crossorigin="anonymous"></script>
 <script src="/javascript/script.js"></script>
 <script src="/javascript/validate.js"></script>
+<script>
+    const popup=document.querySelector('.forsort')
+    const srtBtn=document.querySelector(".sorting")
+    const additionbtn=document.querySelector("#spric");
+    const adpop=document.querySelector(".additions");
+    srtBtn.addEventListener("click",()=>{
+        popup.classList.toggle('actived')
+
+    })
+    additionbtn.addEventListener("click",()=>{
+        adpop.classList.toggle("ACTIVE")
+    })
+</script>
 </body>
 
 </html>

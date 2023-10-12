@@ -1,4 +1,5 @@
 const router = require("express").Router();
+
 const passport = require("passport");
 const {
   userHome,
@@ -43,7 +44,9 @@ const {
   filteredbyCategory,
   filteredbyMinandMaxPrice,
   filteredbyMinandMaxGet,
-  getPaymentSuccess
+  getPaymentSuccess,
+  cancelOrder,
+  sortProducts,
 } = require("../controller/userController");
 const { verifySessionAuth } = require("../middleware/verifySession");
 const { checkingUserStatus } = require("../middleware/statusVerify");
@@ -54,25 +57,25 @@ router.get("/", userHome);
 router.get("/setSession", sessionsetWhileSignupWithGoogle);
 router.get("/signup", singupGet);
 router.get(
-  "/auth/google",
-  passport.authenticate("google-signup", { scope: ["email", "profile"] })
-);
-
-router.get(
   "/products/product-detail/:id/:image",
   sesionVerification,
   detailProductGet
 );
 
-// router.get(
-//   "/auth/google/callback",
-//   passport.authenticate("google", {
-//     successRedirect: "/setSession",
-//     failureRedirect: "/failedmail",
-//   })
-// );
+router.get(
+  "/auth/google/signup",
+  (req, res, next) => {
+    // Add a query parameter to indicate signup
+    req.query.action = "signup";
+    console.log(JSON.stringify(req.query)+'   nm000000')
+    next();
+  },
+  passport.authenticate("google-signup", { scope: ["email", "profile"] })
+);
 
 router.get("/auth/google/callback", (req, res, next) => {
+  const operation = req.query;
+  console.log("operation is ++++++++" + JSON.stringify(operation));
   passport.authenticate("google-signup", (err, user, info) => {
     if (err) {
       // Handle error
@@ -83,7 +86,12 @@ router.get("/auth/google/callback", (req, res, next) => {
     if (!user) {
       // Handle authentication failure
       console.error("Authentication failed:", info.message);
-      return res.redirect("/failedmail"); // Redirect to a failure page
+      return   res.render("users/sigup", {
+        err: "Signup Failed",
+        profile: false,
+        cartCount: 0,
+        id: false,
+      });; // Redirect to a failure page
     }
 
     // Manually set a session variable with user data
@@ -94,24 +102,30 @@ router.get("/auth/google/callback", (req, res, next) => {
   })(req, res, next); // Invoke the Passport middleware
 });
 
-// Routes for Google login
-// Update the route names to use "google" as the strategy name
-// Routes for Google login
+
 router.get(
-  "/auth/login",
+  "/auth/google/login",
   passport.authenticate("google-login", { scope: ["email", "profile"] })
 );
-router.get("/auth/login/callback", (req, res) => {
-  passport.authenticate(
-    "google-login",
-    (err, user, info) => {
-      req.session.userEmail = user.email;
-    },
-    {
-      successRedirect: "/setSession",
-      failureRedirect: "/failedlogin",
+router.get("/auth/google/login/callback", (req, res, next) => {
+  passport.authenticate("google-login", (err, user, info) => {
+    console.log("reached      +++++++++++++");
+    if (err) {
+      console.error("Error during Google login authentication:", err);
+      return res.redirect("/failedlogin");
     }
-  );
+    if (!user) {
+      console.error("Authentication failed during Google login:", info.message);
+      return   res.render("users/sigup", {
+        err: "User not found",
+        profile: false,
+        cartCount: 0,
+        id: false,
+      });
+    }
+    req.session.userEmail = user.email;
+    return res.redirect("/setSession");
+  })(req, res, next); // Invoke the Passport middleware
 });
 
 router.get("/successmail", AfterMailSuccessfull);
@@ -187,5 +201,14 @@ router.get(
   verifySessionAuth,
   filteredbyMinandMaxGet
 );
-router.get('/users/product/checkout/payment/success/:userId',verifySessionAuth,getPaymentSuccess)
+router.get(
+  "/users/product/checkout/payment/success/:userId",
+  verifySessionAuth,
+  getPaymentSuccess
+);
+router.get(
+  "/users/products/orders/cancelorder/:orderId/:userId/:productId",
+  cancelOrder
+);
+router.get('/users/products/sort-product/:sortorder/',sortProducts)
 module.exports = { router };

@@ -7,9 +7,9 @@ passport.use(
   "google-login",
   new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:5001/auth/login/callback",
+      clientID: process.env.LOGIN_CLIENT_ID,
+      clientSecret: process.env.LOGIN_SECRET_ID,
+      callbackURL: "http://localhost:5001/auth/google/login/callback",
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {

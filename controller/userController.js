@@ -25,7 +25,7 @@ async function userHome(req, res) {
     email: req.session.userEmail,
   });
 
-  let productData = await productsCollection.find();
+  let productData = await productsCollection.find().sort({ addedDate: -1 });
   const categories = await CategoryDb.find();
   console.log(categories);
   if (req.session.userAuth && userStatus[0].status) {
@@ -293,12 +293,13 @@ async function userLoginPost(req, res) {
   }
 }
 function FailedLogin(req, res) {
-  res.render("users/failedlogin", {
-    profile: false,
-    err: "Login Failed",
-    cartCount: 0,
-    id: false,
-  });
+  // res.render("users/failedlogin", {
+  //   profile: false,
+  //   err: "Login Failed",
+  //   cartCount: 0,
+  //   id: false,
+  // });
+  res.send("failed");
 }
 async function detailProductGet(req, res) {
   let proId = req.params.id;
@@ -395,7 +396,7 @@ async function detailProductGet(req, res) {
         },
         currentStatus: true,
         deletionStatus: true,
-        stock:true,
+        stock: true,
       },
     },
   ]);
@@ -408,13 +409,16 @@ async function detailProductGet(req, res) {
     id: userId,
   });
 }
+var qty = [];
 async function addTocart(req, res) {
   try {
     let productId = req.params.id;
-    const currentProduct=await productsCollection.findOne({_id:new ObjectId(productId)});
-    console.log(currentProduct+'    curent product in add to cart')
-    if(currentProduct && currentProduct.stock<=0){
-      return res.redirect(`/products/product-detail/${productId}/mainimage`)
+    const currentProduct = await productsCollection.findOne({
+      _id: new ObjectId(productId),
+    });
+    console.log(currentProduct + "    curent product in add to cart");
+    if (currentProduct && currentProduct.stock <= 0) {
+      return res.redirect(`/products/product-detail/${productId}/mainimage`);
     }
     let userId = await UserCollection.findOne({ email: req.session.userEmail });
     let userCartExistStatus = await cartCollection.findOne({
@@ -504,14 +508,9 @@ async function getCartPage(req, res) {
     const userId = userData._id;
     const cartCount = await getCartCount(userId);
     let userCartdata = await getUserCartData(userId);
-    let totalAmount = 0;
-    userCartdata.forEach((cardata) => {
-      if (cardata.carData && cardata.carData.discount) {
-        totalAmount += cardata.cartData.discount * cardata.products.qty;
-      } else {
-        totalAmount += cardata.cartData.price * cardata.products.qty;
-      }
-    });
+    // let totalAmount = 0;
+    let totalAmount = await getTotalAmount(userId);
+    console.log(totalAmount + " in cart");
     if (userCartdata.length <= 0) {
       // console.log(JSON.stringify(userCartdata) + "data");
       res.render("users/cart", {
@@ -539,10 +538,12 @@ async function getCartPage(req, res) {
 async function increaseQuantity(req, res) {
   const userId = req.params.userId;
   const productId = req.params.productId;
-  const currentData=await productsCollection.findOne({_id:new ObjectId(productId)})
-  if(currentData && currentData.stock){
-    if(currentData.qty>=currentData.stock){
-      return
+  const currentData = await productsCollection.findOne({
+    _id: new ObjectId(productId),
+  });
+  if (currentData && currentData.stock) {
+    if (currentData.qty >= currentData.stock) {
+      return;
     }
   }
   await cartCollection.updateOne(
@@ -827,6 +828,12 @@ async function postUserAddress(req, res) {
       },
       products: products,
     }).save();
+    // qty = [];
+    let cartDt = await cartCollection.findOne({ userId: new ObjectId(userId) });
+    cartDt.products.forEach((data) => {
+      qty.push(data.qty);
+    });
+    console.log(qty + " 999999999999     ");
     await cartCollection
       .deleteOne({ userId: new ObjectId(userId) })
       .then(() => {
@@ -836,14 +843,14 @@ async function postUserAddress(req, res) {
       const currentData = await productsCollection.findOne({
         _id: new ObjectId(product.productId),
       });
-      if(currentData && currentData.stock){
+      if (currentData && currentData.stock) {
         const minusdata = currentData.stock - product.qty;
         if (minusdata >= 0) {
           await productsCollection.updateOne(
             { _id: new ObjectId(product.productId) },
             {
               $inc: {
-                stock:  -product.qty,
+                stock: -product.qty,
               },
             }
           );
@@ -857,6 +864,7 @@ async function postUserAddress(req, res) {
     console.log("error in post address" + err);
   }
 }
+
 async function placeOrderPost(req, res) {
   try {
     const userId = req.params.userId;
@@ -878,19 +886,25 @@ async function placeOrderPost(req, res) {
       address: addressdata.addresses[Number(req.body.address)],
       products: products,
     }).save();
+    // qty=[]
+    let cartDt = await cartCollection.findOne({ userId: new ObjectId(userId) });
+    cartDt.products.forEach((data) => {
+      qty.push(data.qty);
+    });
+    console.log(qty + "(((((((9");
     await cartCollection.deleteOne({ userId: new ObjectId(userId) });
     products.forEach(async (product) => {
       const currentData = await productsCollection.findOne({
         _id: new ObjectId(product.productId),
       });
-      if(currentData && currentData.stock){
+      if (currentData && currentData.stock) {
         const minusdata = currentData.stock - product.qty;
         if (minusdata >= 0) {
           await productsCollection.updateOne(
             { _id: new ObjectId(product.productId) },
             {
               $inc: {
-                stock:  -product.qty,
+                stock: -product.qty,
               },
             }
           );
@@ -1056,11 +1070,13 @@ async function userOrders(req, res) {
     },
   ]);
   console.log(JSON.stringify(orderDetail) + "details of orders");
+  console.log(qty + "in order1111111111112222222    ");
   res.render("users/orders", {
     profile: true,
     cartCount,
     id: userId,
     orderDetail,
+    qty,
   });
 }
 async function searchProduct(req, res) {
@@ -1251,6 +1267,67 @@ async function getPaymentSuccess(req, res) {
     console.log("Error in paysucces" + err);
   }
 }
+async function cancelOrder(req, res) {
+  try {
+    const userId = req.params.userId;
+    const orderId = req.params.orderId;
+    const productId = req.params.productId;
+    await orderCollection.updateOne(
+      { _id: new ObjectId(orderId), userId: new ObjectId(userId) },
+      {
+        $pull: {
+          products: { productId: new ObjectId(productId) },
+        },
+      }
+    );
+    res.redirect(
+      `http://localhost:5001/users/product/orders/trackorders/${userId}`
+    );
+  } catch (err) {
+    console.log("Error during cancel order" + err);
+  }
+}
+async function sortProducts(req, res) {
+  let sortOrder = req.params.sortorder;
+  const userStatus = await UserCollection.find({
+    email: req.session.userEmail,
+  });
+  let productData;
+  if (sortOrder == "latest") {
+    productData = await productsCollection.find().sort({ addedDate: -1 });
+  } else if (sortOrder == "oldest") {
+    productData = await productsCollection.find().sort({ addedDate: 1 });
+  } else if (sortOrder == "pricehightolow") {
+    productData = await productsCollection.find().sort({ price: -1 });
+  } else if (sortOrder == "pricelowtohigh") {
+    productData = await productsCollection.find().sort({ price: 1 });
+  }
+  const categories = await CategoryDb.find();
+  if (req.session.userAuth && userStatus[0].status) {
+    const userData = await UserCollection.findOne({
+      email: req.session.userEmail,
+    });
+    const userId = userData._id;
+    var cartCount = await getCartCount(userId);
+    res.render("users/sort", {
+      profile: true,
+      productData,
+      cartCount,
+      id: userStatus[0]._id,
+      err: false,
+      categories,
+    });
+    // return;
+  } else {
+    res.render("users/sort", {
+      profile: false,
+      productData,
+      id: false,
+      err: false,
+      categories,
+    });
+  }
+}
 module.exports = {
   userHome,
   singupGet,
@@ -1295,4 +1372,6 @@ module.exports = {
   filteredbyMinandMaxPrice,
   filteredbyMinandMaxGet,
   getPaymentSuccess,
+  cancelOrder,
+  sortProducts,
 };

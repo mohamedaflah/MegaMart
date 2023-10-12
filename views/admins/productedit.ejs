@@ -93,7 +93,7 @@
                                             <select name="category" id="">
                                                         <option value="<%-currentProuductCategory.categoryname%>" selected><%-currentProuductCategory.categoryname%></option>
                                                         <%categories.forEach((category)=>{%>
-                                                            <%if(currentProuductCategory.categoryname !=category.categoryname){%>
+                                                            <%if(currentProuductCategory.categoryname !=category.categoryname && category.categorystatus){%>
                                                                 <option value="<%-category.categoryname%>"><%-category.categoryname%></option>
                                                            <% }%>
                                                        <% })%>

@@ -17,12 +17,14 @@ const {
   addProduct,
   editCategoryGet,
   editCategoryPost,
+  unListCategory,
   getEditProduct,
   postEditProduct,
   deleteProduct,
   recoverProduct,
   listAllOrders,
   getOrderDetails,
+  changeOrderStatus,
 } = require("../controller/adminController");
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
@@ -60,6 +62,7 @@ router.get("/category", admiLoginVerify, ManageCategory);
 router.post("/category/add-category", addCategory);
 router.get("/category/edit-category/:id", admiLoginVerify, editCategoryGet);
 router.post("/category/edit-category/:id", editCategoryPost);
+router.get("/category/unlist-category/:id",unListCategory);
 router.get("/products/edit-product/:id", getEditProduct);
 
 router.post(
@@ -75,4 +78,6 @@ router.get(
   admiLoginVerify,
   getOrderDetails
 );
+router.post('/products/orders/list-orders/orders/changin-status/:orderId/:userId',changeOrderStatus)
+
 module.exports = { router };
