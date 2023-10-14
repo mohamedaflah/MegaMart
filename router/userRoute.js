@@ -109,7 +109,6 @@ router.get(
 );
 router.get("/auth/google/login/callback", (req, res, next) => {
   passport.authenticate("google-login", (err, user, info) => {
-    console.log("reached      +++++++++++++");
     if (err) {
       console.error("Error during Google login authentication:", err);
       return res.redirect("/failedlogin");
@@ -177,7 +176,7 @@ router
   .post(addinAddressPost);
 router
   .route(
-    "/users/product/cart/checkout/place-order/edit-address/:userId/:addressId"
+    "/users/product/cart/checkout/place-order/edit-address/:userId/:addressId",
   )
   .get(updateAddresGet)
   .post(updateAddressPost);
@@ -207,7 +206,7 @@ router.get(
   getPaymentSuccess
 );
 router.get(
-  "/users/products/orders/cancelorder/:orderId/:userId/:productId",
+  "/users/products/orders/cancelorder/:orderId/:userId/:productId/:qty",
   cancelOrder
 );
 router.get('/users/products/sort-product/:sortorder/',sortProducts)

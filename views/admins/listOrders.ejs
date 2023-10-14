@@ -32,7 +32,7 @@
                             <div class="table_datas head" style="width: 10%;">PRODUCT</div>
                             <div class="table_datas head">IMAGE</div>
                             <div class="table_datas head">USER ID</div>
-                            <div class="table_datas head">Status</div>
+                            <div class="table_datas head">STATUS</div>
                             <div class="table_datas head" style="width:15%">DATE</div>
                             <div class="table_datas head">DETAILS</div>
                             <!-- <div class="table_datas head"></div> -->
@@ -49,16 +49,34 @@
                                 </div>
                                 <div class="table_datas ordertb">
                                     <% if (product && product.image && product.image[0]) { %>
-                                        <img src="/product-images/<%- product.image[0].mainimage %>" style="width: 33px; height: 33px;" alt="">
+                                        <img src="/product-images/<%- product.image[0].mainimage %>" style="width: 33px; height: auto;" alt="">
                                     <% } %>
                                 </div>
                                 <div class="table_datas ordertb">
                                     #<%- '234fsd234' %>
                                 </div>
                                 <div class="table_datas ordertb">
-                                    <div class="active" style="width: 85px;">
-                                        <%- order.status %>
-                                    </div>
+                                    <%if(order.status=="Shipped"){%>
+                                        <div class="active" style="width: 85px;background:rgba(153, 255, 19, 0.635)">
+                                            <%- order.status %>
+                                        </div>
+                                    <%}else if(order.status=="Confirmed"){%>
+                                        <div class="active" style="width: 85px;background:rgba(245, 216, 1, 0.635)">
+                                            <%- order.status %>
+                                        </div>
+                                    <%}else if(order.status=="Delivered"){%>
+                                        <div class="active" style="width: 85px;background:rgba(6, 245, 2, 0.636);">
+                                            <%- order.status %>
+                                        </div>
+                                    <%}else if(order.status=="Pending"){%>
+                                        <div class="active" style="width: 85px;background: rgba(255, 54, 8, 0.635);">
+                                            <%- order.status %>
+                                        </div>
+                                    <%}else if(order.status=="Canceled"){%>
+                                            <div class="active" style="width: 85px;background: rgba(223, 156, 12, 0.636);">
+                                                <%- order.status %>
+                                            </div>
+                                     <%}%>
                                 </div>
                                 <div class="table_datas ordertb" style="width:15%">
                                     <%let date=new Date(order.delverydate)%>

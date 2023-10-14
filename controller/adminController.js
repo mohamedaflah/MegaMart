@@ -20,6 +20,13 @@ async function adminLoginGet(req, res) {
 }
 async function adminLoginPost(req, res) {
   try {
+    // console.log(JSON.stringify(req.body)+'admin ')
+    // req.body.password=bcrypt.hashSync(req.body.password,10)
+    // await new adminDb({
+    //   email:req.body.email_or_Phone,
+    //   password:req.body.password,
+    //   joinDate:Date.now()
+    // }).save()
     let getData = await adminDb.find({ email: req.body.email_or_Phone });
 
     if (getData.length > 0) {
@@ -255,6 +262,7 @@ async function postEditProduct(req, res) {
       price,
       discount,
       brand,
+      stock,
       category,
       spec1,
       spec2,
@@ -282,6 +290,7 @@ async function postEditProduct(req, res) {
               spec4: spec4,
             },
           ],
+          stock: stock,
         },
       }
     );
@@ -607,9 +616,25 @@ async function changeOrderStatus(req, res) {
       },
     }
   );
-  console.log(ordeId+'     r')
-  console.log(userId+'id')
-  res.redirect(`/admin/products/orders/list-orders/orders-detail/${ordeId}/${userId}/`)
+  console.log(ordeId + "     r");
+  console.log(userId + "id");
+  res.redirect(
+    `/admin/products/orders/list-orders/orders-detail/${ordeId}/${userId}/`
+  );
+}
+async function filterUser(req, res) {
+  const filterOrder = req.params.filterorder;
+  var usersData;
+  if (filterOrder == "blocked") {
+    usersData = await userDb.find({ status: false });
+  } else if (filterOrder == "unblocked") {
+    usersData = await userDb.find({ status: true });
+  } else if (filterOrder == "latest") {
+    usersData = await userDb.find().sort({ joinDate: -1 });
+  } else if (filterOrder == "oldest") {
+    usersData = await userDb.find().sort({ joinDate: 1 });
+  }
+  res.render("admins/filteruser", { usersData });
 }
 module.exports = {
   adminHomeShowuser,
@@ -634,4 +659,5 @@ module.exports = {
   listAllOrders,
   getOrderDetails,
   changeOrderStatus,
+  filterUser,
 };

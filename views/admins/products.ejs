@@ -90,7 +90,7 @@
                                         <div class="p">
 
                                             <p for="">Stock</p>
-                                            <input type="text" name="stock" required>
+                                            <input type="number" name="stock" required>
                                         </div>
                                         <div class="dsp">
 
@@ -131,10 +131,10 @@
                         <div class="top_section">
                             <p>Products</p>
                             <div class="filter">
-                                <a href="">Filtered by
+                                <a  id="filterproduct" onclick="popup()">Filtered by
                                     <img src="/images/filter.svg" alt="">
                                 </a>
-                                <a href="">Sorted by
+                                <a  id="sortproduct">Sorted by
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -144,6 +144,19 @@
                                     </svg>
                                 </a>
                             </div>
+                        </div>
+                        <div class="filterArea productfilter" id="filterpop" >
+                            <a href="/admin//user/filter/blocked">Out of Stock</a>
+                            <a href="/admin/user/filter/unblocked">In Stock</a>
+                            <a href="/admin/">All</a>
+                        </div>
+                        <div class="sorted productsort" id="productstock">
+                            <a href="/admin/user/filter/latest">Latest</a>
+                            <a href="/admin/user/filter/oldest">Oldest</a>
+                            <a href="javascript:void(0);" onclick="sortByName()">
+                                Name
+                                <img src="/images/sort.svg" style="transform: rotate(-90deg);" alt="">
+                            </a>
                         </div>
                         <div class="table_content">
                             <div class="table_datas head">PRODUCT NAME</div>
@@ -175,7 +188,7 @@
                                    <%}%>
                                 </div>
                                 <div class="table_datas ">
-                                    <%if(!value.deletionStatus){%>
+                                    <%if(!value.deletionStatus && value.stock>0){%>
                                         <div class="active" style="width: 85px;">
                                             In Stock
                                         </div>
@@ -349,4 +362,6 @@
                 img.src = "";
             }
         }
+     
     </script>
+    

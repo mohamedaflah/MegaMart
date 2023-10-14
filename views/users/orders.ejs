@@ -16,7 +16,8 @@
                     <div class="cols price">Status</div>
                 </div>
                 <%i=0%>                       
-                    <%orderDetail.forEach((value)=>{%>
+                    <%orderDetail.forEach((value,index)=>{%>
+                        
                         <%value.userOrders.forEach((value)=>{%>    
                             
                             <div class="row">
@@ -31,14 +32,17 @@
                                             ₹<%-value.products.price%>
                                    <% }%>
                                 </div>
-                                <div class="cols price"><%-qty[i]%></div>
+                                <div class="cols price">
+                                    
+                                    <%-qty[i]%>
+                                </div>
                                 <div class="cols price" style="justify-content: space-between;">
-                                   <!-- ₹4500 -->
+
                                    <%if(value.products && value.products.discount){%>
                                     ₹<%-value.products.discount*qty[i]%>
                                     <%}else{%>
                                         ₹<%-value.products.price*qty[i]%>
-                                   <% }%>
+                                   <%}%>
                                    
                                 </div>
                                 <div class="cols price" style="justify-content: space-between;">
@@ -65,9 +69,13 @@
                                                 <span style="background: rgba(6, 245, 2, 0.636);padding:2px 10px;border-radius: 10px;font-size: 12px;color:#ffff">
                                                     <%-value.status%>
                                                 </span>
+                                    <%}else if(value.status=='Canceled'){%>
+                                                <span style="background: rgba(223, 156, 12, 0.636);padding:2px 10px;border-radius: 10px;font-size: 12px;color:#ffff">
+                                                        <%-value.status%>
+                                                </span>
                                     <%}%>
                                    <%if(value.status!='Delivered'){%>
-                                    <a href="/users/products/orders/cancelorder/<%-value._id%>/<%-value.userId%>/<%-value.products._id%>" title="Cancel Order">
+                                    <a href="/users/products/orders/cancelorder/<%-value._id%>/<%-value.userId%>/<%-value.products._id%>/<%-qty[i]%>" title="Cancel Order">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <circle cx="12" cy="12" r="9" fill="#DB4444"/>
                                             <path d="M9 15L12 12M15 9L11.9994 12M11.9994 12L9 9M12 12L15 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

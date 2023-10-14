@@ -24,6 +24,14 @@ async function userHome(req, res) {
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
+  if (userStatus.length>0 && !userStatus[0].status) {
+    return res.render("users/login", {
+      profile: false,
+      err: "Your Permission Denied by Admin",
+      cartCount: false,
+      id: false,
+    });
+  }
 
   let productData = await productsCollection.find().sort({ addedDate: -1 });
   const categories = await CategoryDb.find();
@@ -46,6 +54,7 @@ async function userHome(req, res) {
     });
     // return;
   } else {
+    // req.session.qty=[]
     res.render("users/index", {
       profile: false,
       productData,
@@ -256,6 +265,14 @@ async function userLoginPost(req, res) {
         id: false,
       });
     }
+    // else if (!userData.status) {
+    //   return res.render("users/login", {
+    //     profile: false,
+    //     err: "Your Permission Denied by Admin",
+    //     cartCount: false,
+    //     id: false,
+    //   });
+    // }
 
     // Compare passwords
     const passwordMatch = await bcrypt.compare(password, userData.password);
@@ -409,7 +426,6 @@ async function detailProductGet(req, res) {
     id: userId,
   });
 }
-var qty = [];
 async function addTocart(req, res) {
   try {
     let productId = req.params.id;
@@ -771,14 +787,14 @@ async function postUserAddress(req, res) {
       apartment,
       payment_method,
     } = req.body;
-    console.log("Name  " + name);
-    console.log("Eamil  " + email);
-    console.log("state  " + state);
-    console.log("district  " + district);
-    console.log("place  " + pincode);
-    console.log("street  " + street);
-    console.log("phone  " + phone);
-    console.log("apartment  " + apartment);
+    // console.log("Name  " + name);
+    // console.log("Eamil  " + email);
+    // console.log("state  " + state);
+    // console.log("district  " + district);
+    // console.log("place  " + pincode);
+    // console.log("street  " + street);
+    // console.log("phone  " + phone);
+    // console.log("apartment  " + apartment);
     console.log("payment  " + payment_method);
     const userCartdata = await getUserCartData(userId);
     // const productIds = userCartdata.map(
@@ -809,6 +825,39 @@ async function postUserAddress(req, res) {
         },
       ],
     }).save();
+    // new
+    // const existingOrder = await orderCollection.findOne({
+    //   userId: new ObjectId(userId),
+    // });
+    const addressdata = await addressCollection.findOne({
+      userId: new ObjectId(userId),
+    });
+    // if (existingOrder) {
+    //   // Update the existing order by pushing products to the array
+    //   await orderCollection.updateOne(
+    //     { _id: existingOrder._id },
+    //     {
+    //       $push: {
+    //         products: products, // Add new products to the array
+    //       },
+    //     }
+    //   );
+    // } else {
+    //   // Create a new order document
+    //   await new orderCollection({
+    //     userId: new ObjectId(userId),
+    //     paymentmode: req.body.payment_method,
+    //     delverydate: Date.now(),
+    //     status: "Pending",
+    //     address: addressdata.addresses[Number(req.body.address)],
+    //     products: products,
+    //   }).save();
+    // }
+
+    //new end
+
+    //start
+
     await new orderCollection({
       userId: new ObjectId(userId),
       paymentmode: payment_method,
@@ -828,12 +877,10 @@ async function postUserAddress(req, res) {
       },
       products: products,
     }).save();
-    // qty = [];
-    let cartDt = await cartCollection.findOne({ userId: new ObjectId(userId) });
-    cartDt.products.forEach((data) => {
-      qty.push(data.qty);
-    });
-    console.log(qty + " 999999999999     ");
+
+    // end
+
+    // console.log(qty + " 999999999999     ");
     await cartCollection
       .deleteOne({ userId: new ObjectId(userId) })
       .then(() => {
@@ -864,7 +911,6 @@ async function postUserAddress(req, res) {
     console.log("error in post address" + err);
   }
 }
-
 async function placeOrderPost(req, res) {
   try {
     const userId = req.params.userId;
@@ -887,11 +933,7 @@ async function placeOrderPost(req, res) {
       products: products,
     }).save();
     // qty=[]
-    let cartDt = await cartCollection.findOne({ userId: new ObjectId(userId) });
-    cartDt.products.forEach((data) => {
-      qty.push(data.qty);
-    });
-    console.log(qty + "(((((((9");
+    // console.log(qty + "(((((((9");
     await cartCollection.deleteOne({ userId: new ObjectId(userId) });
     products.forEach(async (product) => {
       const currentData = await productsCollection.findOne({
@@ -913,9 +955,84 @@ async function placeOrderPost(req, res) {
     });
     res.redirect(`/users/product/checkout/payment/success/${userId}`);
   } catch (err) {
-    console.log("error in checkout " + err);
+    console.log("error in checkout place order post" + err);
   }
 }
+
+// async function placeOrderPost(req, res) {
+//   try {
+//     const userId = req.params.userId;
+//     console.log(JSON.stringify(req.body) + "body of request");
+//     let addressdata = await addressCollection.findOne({
+//       userId: new ObjectId(userId),
+//     });
+//     addressdata = addressdata.addresses[Number(req.body.address)];
+//     const userCartdata = await getUserCartData(userId);
+//     let products = userCartdata.map((cartItem) => ({
+//       productId: cartItem.products.productId,
+//       qty: cartItem.products.qty,
+//     }));
+//     // start
+//     // let existingOrder = await orderCollection.findOne({
+//     //   userId: new ObjectId(userId),
+//     // });
+//     // // if (existingOrder) {
+//     // //   // Update the existing order by pushing products to the array
+//     // //   await orderCollection.updateOne(
+//     // //     { _id: existingOrder._id },
+//     // //     {
+//     // //       $push: {
+//     // //         products: products, // Add new products to the array
+//     // //       },
+//     // //     }
+//     // //   );
+//     // // } else {
+//     // //   // Create a new order document
+//     // //   await new orderCollection({
+//     // //     userId: new ObjectId(userId),
+//     // //     paymentmode: req.body.payment_method,
+//     // //     delverydate: Date.now(),
+//     // //     status: "Pending",
+//     // //     address: addressdata.addresses[Number(req.body.address)],
+//     // //     products: products,
+//     // //   }).save();
+//     // // }
+
+//     // end
+//     await new orderCollection({
+//       userId: new ObjectId(userId),
+//       paymentmode: req.body.payment_method,
+//       delverydate: Date.now(),
+//       status: "Pending",
+//       address: addressdata.addresses[Number(req.body.address)],
+//       products: products,
+//     }).save();
+
+//     // console.log(qty + "(((((((9");
+//     await cartCollection.deleteOne({ userId: new ObjectId(userId) });
+//     products.forEach(async (product) => {
+//       let currentData = await productsCollection.findOne({
+//         _id: new ObjectId(product.productId),
+//       });
+//       if (currentData && currentData.stock) {
+//         let minusdata = currentData.stock - product.qty;
+//         if (minusdata >= 0) {
+//           await productsCollection.updateOne(
+//             { _id: new ObjectId(product.productId) },
+//             {
+//               $inc: {
+//                 stock: -product.qty,
+//               },
+//             }
+//           );
+//         }
+//       }
+//     });
+//     res.redirect(`/users/product/checkout/payment/success/${userId}`);
+//   } catch (err) {
+//     console.log("error in checkout " + err);
+//   }
+// }
 
 async function addingAddressGet(req, res) {
   const userId = req.params.userId;
@@ -1069,8 +1186,23 @@ async function userOrders(req, res) {
       },
     },
   ]);
+
+  let orderqtys = await orderCollection.find({
+    userId: new ObjectId(userId),
+  });
+  console.log(JSON.stringify(orderqtys) + "   orders is _>");
+  let qty = [];
+  orderqtys.forEach((value) => {
+    value.products.forEach((qt) => {
+      qty.push(qt.qty);
+    });
+  });
+  console.log(qty + "<----->       p");
+  console.log(JSON.stringify(orderqtys) + "order s");
+  console.log(JSON.stringify(orderqtys) + "     oreder quantities ");
   console.log(JSON.stringify(orderDetail) + "details of orders");
-  console.log(qty + "in order1111111111112222222    ");
+  // console.log(req.session.qty + " <-in order1111111111112222222    ");
+
   res.render("users/orders", {
     profile: true,
     cartCount,
@@ -1093,8 +1225,8 @@ async function searchProduct(req, res) {
     const userData = await UserCollection.find({
       email: req.session.userEmail,
     });
-    var cartCount = await getCartCount(userId);
     const userId = userData[0]._id;
+    var cartCount = await getCartCount(userId);
     console.log("data of a cart " + cartCount);
     res.render("users/index", {
       profile: true,
@@ -1269,16 +1401,19 @@ async function getPaymentSuccess(req, res) {
 }
 async function cancelOrder(req, res) {
   try {
+    const quantity = Number(req.params.qty);
     const userId = req.params.userId;
     const orderId = req.params.orderId;
     const productId = req.params.productId;
     await orderCollection.updateOne(
       { _id: new ObjectId(orderId), userId: new ObjectId(userId) },
       {
-        $pull: {
-          products: { productId: new ObjectId(productId) },
-        },
+        $set: { status: "Canceled" },
       }
+    );
+    await productsCollection.updateOne(
+      { _id: new ObjectId(productId) },
+      { $inc: { qty: quantity } }
     );
     res.redirect(
       `http://localhost:5001/users/product/orders/trackorders/${userId}`
@@ -1328,6 +1463,7 @@ async function sortProducts(req, res) {
     });
   }
 }
+
 module.exports = {
   userHome,
   singupGet,

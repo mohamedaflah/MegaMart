@@ -89,14 +89,16 @@ body {
 }
 
 .main_nav .nav_bar .all_items .links.active {
-  display: block;
-  background-color: rgb(173, 74, 74);
+  display: flex;
+  background-color: rgba(193, 187, 187, 0.716);
   position: absolute;
   right: 0;
+  z-index: 99;
   top: 100px;
   display: flex;
   flex-direction: column;
   width: 200px;
+  height: 100vh;
   padding: 10px;
 }
 
@@ -2066,6 +2068,68 @@ button:hover {
   overflow: hidden;
   margin: auto;
 }
+.home .content_section .items_section .table .filterArea {
+  position: absolute;
+  top: 65px;
+  right: 12%;
+  background-color: #0a0a0a;
+  min-height: 100px;
+  min-height: 100px;
+  padding: 5px;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  display: none;
+}
+.home .content_section .items_section .table .filterArea a {
+  text-decoration: none;
+  color: #fff;
+  width: 100%;
+  height: 30px;
+  font-size: 12px;
+  z-index: 99;
+  border: 1px solid #8f8c8c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-radius: 4px;
+  margin-bottom: 3px;
+}
+.home .content_section .items_section .table .productfilter.active {
+  display: block;
+}
+.home .content_section .items_section .table .filterArea.active {
+  display: flex;
+}
+.home .content_section .items_section .table .sorted {
+  position: absolute;
+  top: 65px;
+  right: 10px;
+  width: 100px;
+  height: 100px;
+  z-index: 99;
+  background-color: rgb(0, 0, 0);
+  display: none;
+}
+.home .content_section .items_section .table .sorted a {
+  text-decoration: none;
+  padding: 0 10px;
+  cursor: pointer;
+  color: #fff;
+  width: 100%;
+  height: 30px;
+  font-size: 12px;
+  border: 1px solid #8f8c8c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 4px;
+  margin-bottom: 3px;
+}
+.home .content_section .items_section .table .sorted.active {
+  display: block;
+}
 .home .content_section .items_section .table .top_section {
   width: 100%;
   height: 80px;
@@ -2081,6 +2145,7 @@ button:hover {
 .home .content_section .items_section .table .top_section .filter {
   display: flex;
   gap: 5px;
+  cursor: pointer;
 }
 .home .content_section .items_section .table .top_section .filter a {
   padding: 10px;
@@ -2100,6 +2165,7 @@ button:hover {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgba(137, 137, 137, 0.3);
+  position: relative;
 }
 .home .content_section .items_section .table .table_content .table_datas {
   color: #ffffff;

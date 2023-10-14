@@ -25,6 +25,7 @@ const {
   listAllOrders,
   getOrderDetails,
   changeOrderStatus,
+  filterUser,
 } = require("../controller/adminController");
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
@@ -79,5 +80,5 @@ router.get(
   getOrderDetails
 );
 router.post('/products/orders/list-orders/orders/changin-status/:orderId/:userId',changeOrderStatus)
-
+router.get('/user/filter/:filterorder',filterUser)
 module.exports = { router };

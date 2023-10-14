@@ -65,7 +65,7 @@
                                         <span>Order Summary</span>
                                         
                                             <select name="status" id="" onchange="this.form.submit()">
-                                                <%let status=["Pending","Confirmed","Shipped","Delivered"]%>
+                                                <%let status=["Pending","Confirmed","Shipped","Delivered","Canceled"]%>
                                                 <option value="<%-orderDetail[0].status %>" selected><%-orderDetail[0].status %></option>
                                                 <%status.forEach((status)=>{%>
                                                     <%if(status!=orderDetail[0].status){%>
