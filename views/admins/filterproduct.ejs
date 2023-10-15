@@ -5,27 +5,15 @@
                 <div class="overview_section">
                     <div class="head_inp">
                         <h5>Products</h5>
-                        <div style="display: flex;gap: 20px;">
-                            <form class="inp" style="height: 30px;display: flex;align-items: center;justify-content: start;background: #29292c;border-radius: 4.099px;padding: 0 10px;" method="post" action="/admin/products/serach/searchproduct/">
-                                <input type="text" style="height: 100%;border: none;outline: none;background:transparent;font-size: 12px;" placeholder="Search Product" name="search">
-                                <button style="height: 100%;width: 20px;margin: 0;padding: 0;background: transparent;display: flex;align-items: center;justify-content: center;">
-
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M20 20L16.2223 16.2156M18.3158 11.1579C18.3158 13.0563 17.5617 14.8769 16.2193 16.2193C14.8769 17.5617 13.0563 18.3158 11.1579 18.3158C9.2595 18.3158 7.43886 17.5617 6.0965 16.2193C4.75413 14.8769 4 13.0563 4 11.1579C4 9.2595 4.75413 7.43886 6.0965 6.0965C7.43886 4.75413 9.2595 4 11.1579 4C13.0563 4 14.8769 4.75413 16.2193 6.0965C17.5617 7.43886 18.3158 9.2595 18.3158 11.1579V11.1579Z" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-                                        </svg>
-                                        
-                                </button>
-                            </form>
-                            <a href="/admin/logout">Logout</a>
-                        </div>
+                        <a href="/admin/logout">Logout</a>
                     </div>
                 </div>
                 <div class="items_section" style="flex-direction: column;">
                     <div class="admin_top_control">
-                        <a  id="mySizeChart" onclick="addProdcut()">Add Product</a>
+                        <a  id="mySizeChart">Add Product</a>
                     </div>
                     <div class="add_product_section" id="adp">
-                        <img src="/images/close.png" style="width:20px;height: 20px;position:absolute;top:5%;right:2%;cursor:pointer" alt="" id="clsbtn" onclick="closeProduct()">
+                        <img src="/images/close.png" style="width:20px;height: 20px;position:absolute;top:5%;right:2%;cursor:pointer" alt="" id="clsbtn">
                         <form action="/admin/products/add-products" method="post" class="form_section" enctype="multipart/form-data">
                             <div class="images">
                                 <div class="preview_imgs">
@@ -167,7 +155,7 @@
                         </div>
                         <div class="filterArea" id="filterpop" >
                             <a href="/admin/products/filter-product/outofstock/">Out of Stock</a>
-                            <a href="/admin//products/filter-product/instock/">In Stock</a>
+                            <a href="/admin/products/filter-product/instock/">In Stock</a>
                             <a href="/admin/products/">All</a>
                         </div>
                         <div class="sorted" id="productstock">
@@ -339,13 +327,28 @@
         let popup=document.querySelector('.add_product_section')
         let closeb=document.querySelector('#clsbtn')
         adprbtn.addEventListener('click',()=>{
-            
+            <!-- alert('ds') -->
             popup.classList.add('active')
         })
         closeb.addEventListener('click',()=>{
             popup.classList.remove('active')
         })
         document.getElementById("plus").addEventListener('click',addSpecificationField)
+        function addSpecificationField() {
+            var count=1
+            let input = `
+                <input type="text" placeholder="Specification" name=spc${count}>
+            `;
+            document.querySelector(".dynamic_inpt").appendChild(dynamicInput);
+        }
+    
+        // Function to remove the last specification input field
+        function removeSpecificationField() {
+            const dynamicInputs = document.querySelectorAll(".dynamic_inpt input");
+            if (dynamicInputs.length > 0) {
+                dynamicInputs[dynamicInputs.length - 1].remove();
+            }
+        }
         function previewImage(inputId, imgId,label) {
             const input = document.getElementById(inputId);
             const img = document.getElementById(imgId);
@@ -367,14 +370,6 @@
                 img.src = "";
             }
         }
-       // function popup() {
-            
-         //   document.getElementById("filterpop").classList.toggle("active")
-        //}
-        //function sortpop() {
-         //   document.getElementById("productstock").classList.toggle('active')
-        //}
-        
      
     </script>
     

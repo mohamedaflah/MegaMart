@@ -81,7 +81,9 @@
                                         
                                             <span>
                                                 <%let date=new Date(orderDetail[0].delverydate)%>
-                                                <%-date.getDate()%>/<%-date.getMonth()%>/<%-date.getFullYear()%>
+                                                <% let monthAr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
+                                                <%let days=["Sunday","Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday"]%>
+                                                <%-date.getDate()%> <%-monthAr[date.getMonth()+1]%> <%-date.getFullYear()%> <%-days[date.getDay()]%>
                                             </span>
                                         
                                     </div>

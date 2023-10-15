@@ -1264,7 +1264,7 @@ button:hover {
   width: 200px;
   height: 180px;
   border-radius: 4px;
-  background: rgba(0, 0, 0, 0.313);
+  background: rgba(0, 0, 0, 0.685);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1391,6 +1391,17 @@ button:hover {
 }
 .home .product_detail_section .descriptions .contents .head_part .rate_and_desc p {
   font-size: 12px;
+  height: 80px;
+  overflow-y: auto;
+}
+.home .product_detail_section .descriptions .contents .head_part .rate_and_desc p::-webkit-scrollbar {
+  background-color: rgb(215, 212, 212);
+  width: 5px;
+  border-radius: 20px;
+}
+.home .product_detail_section .descriptions .contents .head_part .rate_and_desc p::-webkit-scrollbar-thumb {
+  background-color: rgb(198, 194, 194);
+  border-radius: 30px;
 }
 .home .product_detail_section .descriptions .contents .head_part .rate_and_desc ul {
   list-style: none;
@@ -2095,9 +2106,6 @@ button:hover {
   padding: 0 10px;
   border-radius: 4px;
   margin-bottom: 3px;
-}
-.home .content_section .items_section .table .productfilter.active {
-  display: block;
 }
 .home .content_section .items_section .table .filterArea.active {
   display: flex;

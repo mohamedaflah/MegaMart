@@ -58,8 +58,8 @@ async function blockUser(req, res) {
     .updateOne({ _id: new ObjectId(userId) }, { $set: { status: false } })
     .then(() => {
       console.log("user blocked");
-      req.session.userAuth = false;
     });
+  req.session.userAuth = false;
   res.redirect("/admin/");
 }
 
@@ -636,6 +636,242 @@ async function filterUser(req, res) {
   }
   res.render("admins/filteruser", { usersData });
 }
+async function filtereProduct(req, res) {
+  const filterorder = req.params.filtereorder;
+  let categories = await categoryCollection.find();
+  if (filterorder == "outofstock") {
+    let combined = await productCollection.aggregate([
+      {
+        $match: {
+          $or: [{ deletionStatus: true }, { stock: { $lt: 1 } }],
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "categoryInfo",
+        },
+      },
+      {
+        $unwind: "$categoryInfo",
+      },
+      {
+        $project: {
+          productName: 1,
+          addedDate: 1,
+          category: "$categoryInfo.categoryname",
+          categoryId: "$categoryInfo._id",
+          categorystatus: "$categoryInfo.categorystatus",
+          _id: true,
+          price: true,
+          discount: true,
+          image: true,
+          brand: true,
+          specification: true,
+          currentStatus: true,
+          deletionStatus: true,
+          stock: true,
+        },
+      },
+      {
+        $sort: {
+          addedDate: -1,
+        },
+      },
+    ]);
+    res.render("admins/filterproduct", { productData: combined, categories });
+  } else if (filterorder == "instock") {
+    let combined = await productCollection.aggregate([
+      {
+        $match: {
+          deletionStatus: false,
+          stock: { $gt: 0 },
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "categoryInfo",
+        },
+      },
+      {
+        $unwind: "$categoryInfo",
+      },
+      {
+        $project: {
+          productName: 1,
+          addedDate: 1,
+          category: "$categoryInfo.categoryname",
+          categoryId: "$categoryInfo._id",
+          categorystatus: "$categoryInfo.categorystatus",
+          _id: true,
+          price: true,
+          discount: true,
+          image: true,
+          brand: true,
+          specification: true,
+          currentStatus: true,
+          deletionStatus: true,
+          stock: true,
+        },
+      },
+      {
+        $sort: {
+          addedDate: -1,
+        },
+      },
+    ]);
+    res.render("admins/filterproduct", { productData: combined, categories });
+  } else if (filterorder == "latest") {
+    // productData = await productCollection.find().sort({ addedDate: -1 });
+    let combined = await productCollection.aggregate([
+      {
+        $sort: {
+          addedDate: -1,
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "categoryInfo",
+        },
+      },
+      {
+        $unwind: "$categoryInfo",
+      },
+      {
+        $project: {
+          productName: 1,
+          addedDate: 1,
+          category: "$categoryInfo.categoryname",
+          categoryId: "$categoryInfo._id",
+          categorystatus: "$categoryInfo.categorystatus",
+          _id: true,
+          price: true,
+          discount: true,
+          image: true,
+          brand: true,
+          specification: true,
+          currentStatus: true,
+          deletionStatus: true,
+          stock: true,
+        },
+      },
+    ]);
+    res.render("admins/filterproduct", { productData: combined, categories });
+  } else if (filterorder == "oldest") {
+    let combined = await productCollection.aggregate([
+      {
+        $sort: {
+          addedDate: 1,
+        },
+      },
+      {
+        $lookup: {
+          from: "categories",
+          localField: "category",
+          foreignField: "_id",
+          as: "categoryInfo",
+        },
+      },
+      {
+        $unwind: "$categoryInfo",
+      },
+      {
+        $project: {
+          productName: 1,
+          addedDate: 1,
+          category: "$categoryInfo.categoryname",
+          categoryId: "$categoryInfo._id",
+          categorystatus: "$categoryInfo.categorystatus",
+          _id: true,
+          price: true,
+          discount: true,
+          image: true,
+          brand: true,
+          specification: true,
+          currentStatus: true,
+          deletionStatus: true,
+          stock: true,
+        },
+      },
+    ]);
+    res.render("admins/filterproduct", { productData: combined, categories });
+  }
+}
+async function serchUser(req, res) {
+  const searchData = req.body.search;
+  const usersData = await userDb.find({
+    name: { $regex: "^" + searchData, $options: "i" },
+  });
+  res.render('admins/admin',{usersData})
+  // const productData = await productsCollection.find({
+  //   productName: { $regex: "^" + req.body.searchdata, $options: "i" },
+  // });
+}
+async function searchProduct(req,res){
+  const searchTerm=req.body.search;
+  let combined = await productCollection.aggregate([
+    {
+      $match: {  
+            $or: [
+              { productName: { $regex: searchTerm, $options: "i" } }, // Case-insensitive product name search
+              { brand: { $regex: searchTerm, $options: "i" } }, // Case-insensitive brand search
+            ]  
+      }
+    },
+    {
+      $sort: {
+        addedDate: -1
+      }
+    },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "category",
+        foreignField: "_id",
+        as: "categoryInfo",
+      },
+    },
+    {
+      $unwind: "$categoryInfo",
+    },
+    {
+      $project: {
+        productName: 1,
+        addedDate: 1,
+        category: "$categoryInfo.categoryname",
+        categoryId: "$categoryInfo._id",
+        categorystatus: "$categoryInfo.categorystatus",
+        _id: true,
+        price: true,
+        discount: true,
+        image: true,
+        brand: true,
+        specification: true,
+        currentStatus: true,
+        deletionStatus: true,
+        stock: true,
+      },
+    },
+  ]);
+  const categories=await categoryCollection.find()
+  res.render("admins/products", { categories, productData: combined });
+}
+async function recoverCategory(req,res){
+  const id = req.params.id;
+  await categoryCollection.updateOne(
+    { _id: new ObjectId(id) },
+    { $set: { categorystatus: true } }
+  );
+  res.redirect("/admin/category");
+}
 module.exports = {
   adminHomeShowuser,
   adminLoginGet,
@@ -660,4 +896,8 @@ module.exports = {
   getOrderDetails,
   changeOrderStatus,
   filterUser,
+  filtereProduct,
+  serchUser,
+  searchProduct,
+  recoverCategory,
 };

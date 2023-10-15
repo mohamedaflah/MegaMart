@@ -88,15 +88,22 @@
                                 <div class="table_datas ">
                                     <% let d = new Date(category.addedDate ) %>
                                     <% let dayAr = ["Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday","Sunday"] %>
-                                    <%-d.getDate()%>/<%- d.getMonth()+1%>/<%-d.getFullYear()%> <%-dayAr[d.getDay()-1]%>
+                                    <% let monthAr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
+                                    <%-d.getDate()%> <%- monthAr[d.getMonth()+1]%> <%-d.getFullYear()%> <%-dayAr[d.getDay()-1]%>
                                 </div>
                                 <div class="table_datas ">
                                     <a href="/admin/category/edit-category/<%-category._id%>">
                                         <img src="/images/predit.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
                                     </a>
-                                    <a href="/admin/category/unlist-category/<%-category._id%>">
-                                        <img src="/images/delp.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
-                                    </a>
+                                    <%if(category.categorystatus){%>
+                                        <a href="/admin/category/unlist-category/<%-category._id%>">
+                                            <img src="/images/delp.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
+                                        </a>
+                                        <%}else{%>
+                                            <a href="/admin/category/recover-category/<%-category._id%>">
+                                                <img src="/images/recover.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
+                                            </a>
+                                    <%}%>
                                 </div>
                             </div>
                         <%})%>

@@ -139,7 +139,7 @@ router.get("/user/account/:id", userAccount);
 router.get("/user/accounts/logout", userLogout);
 router.get("/user/login", userLoginGet);
 router.post("/user/login", userLoginPost);
-router.get("/users/product/add-to-cart/:id", addTocart);
+router.get("/users/product/add-to-cart/:id", sesionVerification,addTocart);
 router.get("/users/product/cart/showcart/:id", sesionVerification, getCartPage);
 router.get(
   "/users/product/cart/increaseqty/:userId/:productId/",

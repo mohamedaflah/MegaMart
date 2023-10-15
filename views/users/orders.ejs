@@ -48,7 +48,8 @@
                                 <div class="cols price" style="justify-content: space-between;">
                                     <% let date=new Date(value.delverydate) %>
                                     <% let days=["Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday","Sunday"]%>
-                                    <%-date.getDate()%>/<%-date.getMonth()%>/<%-date.getFullYear()%>
+                                    <% let monthAr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
+                                    <%-date.getDate()%> <%-monthAr[date.getMonth()+1]%> <%-date.getFullYear()%>
                                     <%-days[date.getDay()-1]%>
                                 </div>
                                 <div class="cols price" style="justify-content: space-between;">

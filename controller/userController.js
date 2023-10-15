@@ -17,6 +17,7 @@ const {
   getTotalAmount,
 } = require("../helper/cart-helper");
 const CategoryDb = require("../model/collections/CategoryDb");
+const isValidMail = require("../auth/isValidEmail");
 
 async function userHome(req, res) {
   // let userStatus=await UserCollection.find({email:req.session.userEmail})
@@ -24,7 +25,7 @@ async function userHome(req, res) {
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
-  if (userStatus.length>0 && !userStatus[0].status) {
+  if (userStatus.length > 0 && !userStatus[0].status) {
     return res.render("users/login", {
       profile: false,
       err: "Your Permission Denied by Admin",
@@ -86,6 +87,12 @@ function MailVerificationFail(req, res) {
 var codEmai;
 var userInformation;
 async function singupPost(req, res) {
+  if (!req.body.email_or_Phone || !req.body.password || !req.body.name) {
+    return res.render("users/sigup", {
+      err: "Must be Enter Values in All Field",
+      profile: false,
+    });
+  }
   if (EmailCheck(req.body.email_or_Phone)) {
     try {
       let dupEmail = await UserCollection.find({
@@ -105,6 +112,14 @@ async function singupPost(req, res) {
           profile: false,
         });
       } else {
+        const password = req.body.password;
+        const passwordCondition = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+        if (!password.match(passwordCondition)) {
+          return res.render("users/sigup", {
+            err: "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one special character, and one number.",
+            profile: false,
+          });
+        }
         const secret = speakeasy.generateSecret({ length: 6 });
         const code = speakeasy.totp({
           secret: secret.base32,
@@ -146,33 +161,39 @@ async function singupPost(req, res) {
       console.log("error is :" + err);
       res.json({ error: "failed" }).status(500);
     }
-  } else if (MobileCheck(req.body.email_or_Phone)) {
-    try {
-      console.log("reached______________");
-      console.log("number is " + req.body.email_or_Phone);
-      // firebase.auth()
-      const serviceAccount = require("../auth/megamart-bb04d-firebase-adminsdk-8hi61-3eb4004ba6.json");
-      admin.initializeApp(
-        {
-          credential: admin.credential.cert(serviceAccount),
-        },
-        "MegaMart"
-      );
-      const otp = require("../auth/otpgen").generateOTP();
-      // await admin.auth().createUser({
-      //   phoneNumber: `+91${req.body.email_or_Phone}`,
-      // });
-      const phone = `+91${req.body.email_or_Phone}`;
-      const user = await admin.auth().getUserByPhoneNumber(phone);
-
-      // If the user already exists, you can send the OTP to the existing user
-      const verificationResult = await admin.auth().createSessionCookie(phone);
-
-      console.log("Otp sended Success" + verificationResult);
-    } catch (err) {
-      console.log("error in otp" + err);
-    }
+  } else {
+    res.render("users/sigup", {
+      err: "Must be Enter Only Email Incuding '@'",
+      profile: false,
+    });
   }
+  // else if (MobileCheck(req.body.email_or_Phone)) {
+  //   try {
+  //     console.log("reached______________");
+  //     console.log("number is " + req.body.email_or_Phone);
+  //     // firebase.auth()
+  //     const serviceAccount = require("../auth/megamart-bb04d-firebase-adminsdk-8hi61-3eb4004ba6.json");
+  //     admin.initializeApp(
+  //       {
+  //         credential: admin.credential.cert(serviceAccount),
+  //       },
+  //       "MegaMart"
+  //     );
+  //     const otp = require("../auth/otpgen").generateOTP();
+  //     // await admin.auth().createUser({
+  //     //   phoneNumber: `+91${req.body.email_or_Phone}`,
+  //     // });
+  //     const phone = `+91${req.body.email_or_Phone}`;
+  //     const user = await admin.auth().getUserByPhoneNumber(phone);
+
+  //     // If the user already exists, you can send the OTP to the existing user
+  //     const verificationResult = await admin.auth().createSessionCookie(phone);
+
+  //     console.log("Otp sended Success" + verificationResult);
+  //   } catch (err) {
+  //     console.log("error in otp" + err);
+  //   }
+  // }
 }
 function confirm(req, res) {
   if (!req.session.userAuth) {
@@ -252,7 +273,22 @@ function userLoginGet(req, res) {
 async function userLoginPost(req, res) {
   try {
     const { email_or_Phone, password } = req.body;
-
+    if (!email_or_Phone || !password) {
+      return res.render("users/login", {
+        profile: false,
+        err: "Please Fillout All Field",
+        cartCount: false,
+        id: false,
+      });
+    }
+    // if(EmailCheck(req.body.email_or_Phone)){
+    //   return res.render("users/login", {
+    //     profile: false,
+    //     err: "Enter Valid Email Including '@'",
+    //     cartCount: false,
+    //     id: false,
+    //   });
+    // }
     // Check if the user exists based on email
     const userData = await UserCollection.findOne({ email: email_or_Phone });
 
@@ -562,6 +598,15 @@ async function increaseQuantity(req, res) {
       return;
     }
   }
+
+  let data = await cartCollection.findOne(
+    {
+      userId: new ObjectId(userId),
+      "products.productId": new ObjectId(productId),
+    },
+  );
+  let updated=data.products[0].qty+1;
+  console.log('daata i________ '+updated)
   await cartCollection.updateOne(
     {
       userId: new ObjectId(userId),
@@ -629,6 +674,7 @@ async function forgotPassPost(req, res) {
         err: "Email Not Found",
       });
     }
+
     const secret = speakeasy.generateSecret({ length: 6 });
     const code = speakeasy.totp({
       secret: secret.base32,
@@ -680,6 +726,7 @@ async function forgotPassConfirm(req, res) {
 function forgotPassConfirmPost(req, res) {
   const otpNum = req.body.verifyNum;
   const mail = forgotInfo;
+
   if (otpNum == fogotCode) {
     res.redirect("/users/account/forgotpassword/changepassword/");
   } else {
@@ -702,6 +749,16 @@ function forgotPasswordPasswordEnter(req, res) {
 async function forgotPasswordPasswordEnterPost(req, res) {
   if (req.body.firstpassword == req.body.secondpassword) {
     req.body.firstpassword = bcrypt.hashSync(req.body.firstpassword, 10);
+    const passwordCondition = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    const pass = req.body.firstpassword;
+    if (!pass.match(passwordCondition)) {
+      return res.render("users/forgotpassenter", {
+        profile: false,
+        id: false,
+        cartCount: 0,
+        err: "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter and one number.",
+      });
+    }
     await UserCollection.updateOne(
       { email: forgotInfo },
       {

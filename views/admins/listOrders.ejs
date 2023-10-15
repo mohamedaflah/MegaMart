@@ -81,7 +81,8 @@
                                 <div class="table_datas ordertb" style="width:15%">
                                     <%let date=new Date(order.delverydate)%>
                                     <%let days=["Sunday","Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday"]%>
-                                    <%-date.getDate()%>/<%-date.getMonth()%>/<%-date.getFullYear()%><br> <%-days[date.getDay()]%>
+                                    <% let monthAr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
+                                    <%-date.getDate()%> <%-monthAr[date.getMonth()+1]%> <%-date.getFullYear()%> <br> <%-days[date.getDay()]%>
                                     
                                     
                                 </div>

@@ -1572,7 +1572,7 @@ $sidBarWidth: 250px;
     width: 200px;
     height: 180px;
     border-radius: 4px;
-    background: rgba(0, 0, 0, 0.313);
+    background: rgba(0, 0, 0, 0.685);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1710,6 +1710,22 @@ $sidBarWidth: 250px;
             // background-color: #7b8280;
             p {
               font-size: 12px;
+              // background-color: red;
+              height: 80px;
+              overflow-y: auto;
+            }
+            p::-webkit-scrollbar {
+              // display: none;
+              background-color: rgb(215, 212, 212);
+              width:5px;
+              border-radius: 20px;
+            }
+            p::-webkit-scrollbar-thumb{
+              // height: 2px;
+              // width: 2px;
+              background-color: rgb(198, 194, 194);
+              // background-color: #000;
+              border-radius: 30px;
             }
             ul {
               list-style: none;
@@ -2543,9 +2559,6 @@ $sidBarWidth: 250px;
             border-radius: 4px;
             margin-bottom: 3px;
           }
-        }
-        .productfilter.active {
-          display: block;
         }
         .filterArea.active {
           display: flex;

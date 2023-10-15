@@ -26,6 +26,10 @@ const {
   getOrderDetails,
   changeOrderStatus,
   filterUser,
+  filtereProduct,
+  serchUser,
+  searchProduct,
+  recoverCategory,
 } = require("../controller/adminController");
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
@@ -64,6 +68,7 @@ router.post("/category/add-category", addCategory);
 router.get("/category/edit-category/:id", admiLoginVerify, editCategoryGet);
 router.post("/category/edit-category/:id", editCategoryPost);
 router.get("/category/unlist-category/:id",unListCategory);
+router.get('/category/recover-category/:id',recoverCategory)
 router.get("/products/edit-product/:id", getEditProduct);
 
 router.post(
@@ -80,5 +85,8 @@ router.get(
   getOrderDetails
 );
 router.post('/products/orders/list-orders/orders/changin-status/:orderId/:userId',changeOrderStatus)
-router.get('/user/filter/:filterorder',filterUser)
+router.get('/user/filter/:filterorder/',filterUser)
+router.get('/products/filter-product/:filtereorder/',filtereProduct)
+router.post('/user/search/searchuser',serchUser)
+router.post('/products/serach/searchproduct/',searchProduct)
 module.exports = { router };
