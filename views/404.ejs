@@ -1,0 +1,29 @@
+<%-include('./partials/header.ejs') %>
+    <div class="home d-flex" style="display: flex;align-items: center;justify-content: center;">
+        <div class="err_section">
+            <div class="brudcrum">
+                <span>Home</span> <span>/</span> <span>404 Error</span>
+            </div>
+            <div class="err_show">
+                <div class="content">
+                    <div class="heading">
+                        <h1>404 Not Found</h1>
+                    </div>
+                    <div class="paras">
+                        <p>Your visited page not found. You may go home page.</p>
+                        <a href="/" class="backbutton">Back to Home Page</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let filterdrop = document.querySelector("#filter");
+        let filterBtn = document.querySelector("#filterbtn");
+        filterBtn.addEventListener('click', () => {
+
+            filterdrop.classList.toggle("active")
+        })
+    </script>
+<%-include('./partials/footer.ejs') %>
+        </div>

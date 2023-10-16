@@ -47,6 +47,7 @@ const {
   getPaymentSuccess,
   cancelOrder,
   sortProducts,
+  // resendOTP,
 } = require("../controller/userController");
 const { verifySessionAuth } = require("../middleware/verifySession");
 const { checkingUserStatus } = require("../middleware/statusVerify");
@@ -115,7 +116,7 @@ router.get("/auth/google/login/callback", (req, res, next) => {
     }
     if (!user) {
       console.error("Authentication failed during Google login:", info.message);
-      return   res.render("users/sigup", {
+      return   res.render("users/login", {
         err: "User not found",
         profile: false,
         cartCount: 0,
@@ -133,6 +134,7 @@ router.get("/failedlogin", FailedLogin);
 router.post("/signup", singupPost);
 router.get("/mail/confirm", confirm);
 router.post("/mail/confirm", confirmPost);
+// router.get('/main/confirm/resendotp/',resendOTP)
 router.get("/errorMessage/close", closeErr);
 router.get("/otp/close", otpClose);
 router.get("/user/account/:id", userAccount);
@@ -209,5 +211,8 @@ router.get(
   "/users/products/orders/cancelorder/:orderId/:userId/:productId/:qty",
   cancelOrder
 );
+// router.get('*',(req,res)=>{
+//   res.send('hel')
+// })
 router.get('/users/products/sort-product/:sortorder/',sortProducts)
 module.exports = { router };

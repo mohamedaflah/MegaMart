@@ -8,7 +8,7 @@
                         <div style="display: flex;gap: 20px;">
                             <form class="inp" style="height: 30px;display: flex;align-items: center;justify-content: start;background: #29292c;border-radius: 4.099px;padding: 0 10px;" method="post" action="/admin/products/serach/searchproduct/">
                                 <input type="text" style="height: 100%;border: none;outline: none;background:transparent;font-size: 12px;" placeholder="Search Product" name="search">
-                                <button style="height: 100%;width: 20px;margin: 0;padding: 0;background: transparent;display: flex;align-items: center;justify-content: center;">
+                                <button style="height: 100%;width: 20px;margin: 0;padding: 0;background: transparent;display: flex;align-items: center;justify-content: center;" type="submit">
 
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M20 20L16.2223 16.2156M18.3158 11.1579C18.3158 13.0563 17.5617 14.8769 16.2193 16.2193C14.8769 17.5617 13.0563 18.3158 11.1579 18.3158C9.2595 18.3158 7.43886 17.5617 6.0965 16.2193C4.75413 14.8769 4 13.0563 4 11.1579C4 9.2595 4.75413 7.43886 6.0965 6.0965C7.43886 4.75413 9.2595 4 11.1579 4C13.0563 4 14.8769 4.75413 16.2193 6.0965C17.5617 7.43886 18.3158 9.2595 18.3158 11.1579V11.1579Z" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
@@ -30,28 +30,28 @@
                             <div class="images">
                                 <div class="preview_imgs">
                                     <div class="secondary">
-                                        <input type="file" name="image1" accept="image/*" id="imag1" required onchange="previewImage('imag1', 'im1','1l')">
+                                        <input type="file" name="image1" accept="image/*" id="imag1"  onchange="previewImage('imag1', 'im1','1l')">
                                         <label for="imag1">
                                             <p id="1l">
                                                 Upload Preview image 1
                                             </p>
                                             <img src="" alt="" id="im1">
                                         </label>
-                                        <input type="file" name="image2" accept="image/*" id="imag2" required onchange="previewImage('imag2', 'im2','l2')">
+                                        <input type="file" name="image2" accept="image/*" id="imag2"  onchange="previewImage('imag2', 'im2','l2')">
                                         <label for="imag2">
                                             <p id="l2">
                                                 Upload Preview image 2
                                             </p>
                                             <img src="" alt="" id="im2">
                                         </label>
-                                        <input type="file" name="image3" accept="image/*" id="imag3" required onchange="previewImage('imag3', 'im3','l3')">
+                                        <input type="file" name="image3" accept="image/*" id="imag3"  onchange="previewImage('imag3', 'im3','l3')">
                                         <label for="imag3">
                                             <p id="l3">
                                                 Upload Preview image 3
                                             </p>
                                             <img src="" alt="" id="im3">
                                         </label>
-                                        <input type="file" name="image4" accept="image/*" id="imag4" required onchange="previewImage('imag4', 'im4','l4')">
+                                        <input type="file" name="image4" accept="image/*" id="imag4"  onchange="previewImage('imag4', 'im4','l4')">
                                         <label for="imag4">
                                             <p id="l4">
                                                 Upload Preview image 4
@@ -60,7 +60,7 @@
                                         </label>
                                     </div>
                                     <div class="main">
-                                        <input type="file" name="main"  accept="image/*" id="main" required onchange="previewImage('main', 'mn','ml')">
+                                        <input type="file" name="main"  accept="image/*" id="main"  onchange="previewImage('main', 'mn','ml')">
                                         <label for="main">
                                             <p id="ml">
                                                 Main image
@@ -77,13 +77,13 @@
                                     </div>
                                     <div class="control_section">
                                         <p for="">product name</p>
-                                        <input type="text"  name="productname" required>
+                                        <input type="text"  name="productname" >
                                     </div>
                                     <div class="control_section " id="sp">
                                         <div class="p">
 
                                             <p for="">Price</p>
-                                            <input type="number" name="price" required>
+                                            <input type="number" name="price" >
                                         </div>
                                         <div class="dsp">
 
@@ -95,14 +95,14 @@
                                         <div class="p" style="width: 100%;">
 
                                             <p for="">Brand</p>
-                                            <input type="text" name="brand" required>
+                                            <input type="text" name="brand" >
                                         </div>
                                     </div>
                                     <div class="control_section " id="sp">
                                         <div class="p">
 
                                             <p for="">Stock</p>
-                                            <input type="number" name="stock" required>
+                                            <input type="number" name="stock" >
                                         </div>
                                         <div class="dsp">
 
@@ -129,7 +129,7 @@
                                     </div>
                                     <div class="control_section">
                                         <p for="">Description</p>
-                                        <textarea name="description" id="" required></textarea>
+                                        <textarea name="description" id="" ></textarea>
                                     </div>
                                     <div class="control_section end">
                                         <button type="submit">submit</button>
@@ -143,17 +143,9 @@
                         <div class="top_section">
                             <p>Products</p>
                             <div class="filter">
-                                <a  id="filterproduct" onclick="popup()">Filtered by
+                                <a  id="filterproduct" onclick="popup1()">Filtered by
                                     <img src="/images/filter.svg" alt="">
                                 </a>
-                                <script>
-                                    function popup() {
-                                        document.getElementById("filterpop").classList.toggle("active")
-                                    }
-                                    function sortpop() {
-                                        document.getElementById("productstock").classList.toggle('active')
-                                    }
-                                </script>
                                 <a  id="sortproduct" onclick="sortpop()">Sorted by
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -367,14 +359,7 @@
                 img.src = "";
             }
         }
-       // function popup() {
-            
-         //   document.getElementById("filterpop").classList.toggle("active")
-        //}
-        //function sortpop() {
-         //   document.getElementById("productstock").classList.toggle('active')
-        //}
-        
-     
     </script>
+    <!-- <script defer src="/javascript/validate.js"></script> -->
+    
     

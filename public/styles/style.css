@@ -177,6 +177,84 @@ body {
   position: relative;
   height: 100vh;
 }
+.home .err_section {
+  width: 90%;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin: auto;
+}
+.home .err_section .brudcrum {
+  height: 50px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.home .err_section .brudcrum span {
+  margin-right: 10px;
+}
+.home .err_section .err_show {
+  width: 100%;
+  height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.home .err_section .err_show .content {
+  width: 90%;
+  height: 80%;
+}
+.home .err_section .err_show .content .heading {
+  display: flex;
+  justify-content: center;
+}
+.home .err_section .err_show .content .heading h1 {
+  font-size: 4.9vw;
+  color: #000;
+}
+.home .err_section .err_show .content .paras {
+  width: 100%;
+  height: 40%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+}
+.home .err_section .err_show .content .paras p {
+  margin-top: 10px;
+}
+.home .err_section .err_show .content .paras .backbutton {
+  width: 220px;
+  height: 45px;
+  background: #db4444;
+  color: #ffffff;
+  display: flex;
+  text-decoration: none;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4px;
+}
+.home .related {
+  width: 90%;
+  height: 30px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.home .related p {
+  margin: 0;
+  color: #db4444;
+  font-size: 12px;
+  font-weight: 500;
+}
+.home .related .red_bx {
+  width: 13px;
+  height: 80%;
+  background: #db4444;
+  border-radius: 3px;
+}
 .home .filter1 {
   position: absolute;
   top: 0;
@@ -216,19 +294,183 @@ body {
 }
 .home .profile_card {
   width: 110rem;
-  min-height: 590px;
-  background-color: #00c9ff;
+  height: 590px;
+  padding: 5px;
+  border-radius: 5px;
   display: flex;
 }
 .home .profile_card .side_section {
   width: 30%;
   min-height: 500px;
-  background-color: #00c9ff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  border-right: 1px solid black;
+}
+.home .profile_card .side_section .profile_with_img {
+  width: 90%;
+  background-color: #f5f5f5;
+  height: 100px;
+  border-radius: 5px;
+  display: flex;
+  padding: 0 5px;
+  align-items: center;
+}
+.home .profile_card .side_section .profile_with_img .img-s {
+  height: 90px;
+  width: 90px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.home .profile_card .side_section .profile_with_img .img-s img {
+  width: 100%;
+  height: auto;
+}
+.home .profile_card .side_section .profile_with_img .oth {
+  height: 90px;
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+  justify-content: space-between;
+}
+.home .profile_card .side_section .profile_with_img .oth .user_ {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: end;
+}
+.home .profile_card .side_section .profile_with_img .oth .user_:nth-child(2) {
+  align-items: start;
+}
+.home .profile_card .side_section .navigations {
+  width: 90%;
+  height: 80%;
+}
+.home .profile_card .side_section .navigations .acc_manage {
+  width: 100%;
+  min-height: 80px;
+}
+.home .profile_card .side_section .navigations .acc_manage .links {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 75%;
+  gap: 5px;
+}
+.home .profile_card .side_section .navigations .acc_manage .links a {
+  color: black;
+  text-decoration: none;
 }
 .home .profile_card .content_s {
   width: 70%;
   min-height: 500px;
-  background-color: #0faff0;
+}
+.home .profile_card .content_s .profile_card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.home .profile_card .content_s .profile_card .basic_info {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  border-bottom: 1px solid black;
+  padding: 0 5px;
+  justify-content: space-between;
+}
+.home .profile_card .content_s .profile_card .basic_info a {
+  width: 100px;
+  height: 25px;
+  background: #db4444;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+.home .profile_card .content_s .profile_card .datas {
+  width: 100%;
+  height: 200px;
+  padding: 0 5px;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.home .profile_card .content_s .profile_card .datas .contrl {
+  width: 100%;
+}
+.home .profile_card .content_s .profile_card .datas .contrl p {
+  margin: 2px;
+}
+.home .profile_card .content_s .profile_card .datas .contrl .mail {
+  height: 30px;
+  width: 100%;
+  display: flex;
+  padding: 0 5px;
+  align-items: center;
+  border: 1px solid #e9e5e5;
+  border-radius: 4px;
+}
+.home .profile_card .content_s .profile_card .shippingAddresses {
+  width: 100%;
+  height: 323px;
+  padding: 0 5px;
+  overflow-y: auto;
+}
+.home .profile_card .content_s .profile_card .shippingAddresses .head {
+  width: 100%;
+  height: 40px;
+  border-bottom: 1px solid #e9e5e5;
+}
+.home .profile_card .content_s .profile_card .shippingAddresses .head h2 {
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+.home .profile_card .content_s .profile_card .shippingAddresses .ship_section {
+  width: 100%;
+  height: 85%;
+  margin-top: 5px;
+  display: flex;
+  border: 1px solid black;
+  border-radius: 4px;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.home .profile_card .content_s .profile_card .shippingAddresses .ship_section .ico {
+  padding: 0px 5px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 10px;
+}
+.home .profile_card .content_s .profile_card .shippingAddresses .ship_section .ctrls {
+  width: 100%;
+  height: 50px;
+  display: flex;
+}
+.home .profile_card .content_s .profile_card .shippingAddresses .ship_section .ctrls .eaches {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  text-transform: capitalize;
+  padding: 0 5px;
+}
+.home .profile_card .content_s .profile_card .shippingAddresses .ship_section .ctrls .eaches p {
+  margin: 0;
+}
+.home .profile_card .content_s .profile_card .shippingAddresses .ship_section .ctrls .eaches .cont {
+  width: 90%;
+  height: 25px;
+  border: 1px solid #e9e5e5;
+  display: flex;
+  padding: 0 5px;
+  align-items: center;
+  border-radius: 2px;
 }
 .home .forgot {
   width: 500px;
@@ -570,6 +812,7 @@ body {
   position: absolute;
   top: 5%;
   align-items: center;
+  z-index: 99;
   gap: 2px;
   justify-content: center;
   right: 3%;
@@ -604,6 +847,67 @@ body {
   display: flex;
 }
 
+@media (max-width: 1115px) {
+  .home .profile_card {
+    width: 90rem;
+  }
+}
+@media (max-width: 944px) {
+  .home .profile_card {
+    width: 80rem;
+    height: 550px;
+  }
+}
+@media (max-width: 841px) {
+  .home .profile_card {
+    width: 90%;
+    height: 500px;
+  }
+  .home .profile_card .side_section .profile_with_img {
+    height: 80px;
+  }
+  .home .profile_card .side_section .profile_with_img .img-s {
+    height: 60px;
+    width: 60px;
+  }
+  .home .profile_card .side_section .profile_with_img .oth .user_ {
+    font-size: 12px;
+  }
+}
+@media (max-width: 713px) {
+  .home .profile_card {
+    width: 90%;
+    height: 490px;
+  }
+  .home .profile_card .side_section .profile_with_img {
+    height: 70px;
+  }
+  .home .profile_card .side_section .profile_with_img .img-s {
+    height: 50px;
+    width: 50px;
+  }
+  .home .profile_card .side_section .profile_with_img .oth .user_ {
+    font-size: 11px;
+  }
+  .home .profile_card .content_s .profile_card .shippingAddresses .head h2 {
+    font-size: 23px;
+  }
+}
+@media (max-width: 653px) {
+  .home .profile_card .side_section .profile_with_img {
+    height: 60px;
+  }
+  .home .profile_card .side_section .profile_with_img .img-s {
+    height: 35px;
+    width: 35px;
+  }
+  .home .profile_card .side_section .profile_with_img .oth .user_ {
+    font-size: 11px;
+  }
+  .home .profile_card .content_s .profile_card .shippingAddresses .head h2 {
+    font-size: 23px;
+  }
+}
 @media (max-width: 870px) {
   .home .cart_secttion .place-order {
     flex-direction: column;
@@ -787,12 +1091,11 @@ body .signup .checkout .checkandAddress .checkoutbox {
   width: 50%;
 }
 body .signup .checkout .checkandAddress .place_order {
-  background-color: #f5f5f5;
   display: flex;
   flex-direction: column;
   align-items: center;
   height: 500px;
-  overflow-y: scroll;
+  overflow-y: auto;
   border-radius: 4px;
   padding: 10px 0;
   row-gap: 10px;

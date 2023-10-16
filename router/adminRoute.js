@@ -30,6 +30,9 @@ const {
   serchUser,
   searchProduct,
   recoverCategory,
+  addProductgetwhileError,
+  addCategoryWhileErr,
+  serchCategory,
 } = require("../controller/adminController");
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
@@ -61,7 +64,9 @@ const uploadFields = [
 ];
 
 router.post("/products/add-products", upload.fields(uploadFields), addProduct);
-// router.post("/products/add-products", addProduct);
+
+router.get("/products/add-products/:errortype", addProductgetwhileError);
+router.get('/category/add-category/:errortype',addCategoryWhileErr)
 
 router.get("/category", admiLoginVerify, ManageCategory);
 router.post("/category/add-category", addCategory);
@@ -89,4 +94,8 @@ router.get('/user/filter/:filterorder/',filterUser)
 router.get('/products/filter-product/:filtereorder/',filtereProduct)
 router.post('/user/search/searchuser',serchUser)
 router.post('/products/serach/searchproduct/',searchProduct)
+router.post('/category/serach/searchcategory/',serchCategory)
+// router.get('*',(req,res)=>{
+//   res.send('hel')
+// })
 module.exports = { router };

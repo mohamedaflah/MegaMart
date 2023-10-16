@@ -52,8 +52,125 @@
     </div> -->
     <!-- <a href="/user/accounts/logout">Logout</a> -->
     <div class="profile_card">
-        <div class="side_section"></div>
-        <div class="content_s"></div>
+        <div class="side_section">
+            <div class="profile_with_img">
+                <div class="img-s">
+                    <img src="/images/profile.jpg" alt="">
+                </div>
+                <div class="oth">
+                    <div class="user_">
+                        <%-userData.name%>
+                    </div>
+                    <div class="user_">
+                        <%-userData.email%>
+                    </div>
+                </div>
+            </div>
+            <div class="navigations">
+                <div class="acc_manage">
+                    <p>Manage My Orders</p>
+                    <div class="links">
+                        <a href="">My Orders</a>
+                        <a href="">My Cancelation</a>
+                        <a href="">My Return</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content_s">
+            <div class="profile_card">
+                <div class="basic_info">
+                    <h4>Profile</h4>
+                    <a href="">Update</a>
+                </div>
+                <div class="datas">
+                    <div class="contrl">
+                        <p>Username</p>
+                        <div class="mail"><%-userData.name%></div>
+                    </div>
+                    <div class="contrl">
+                        <p>Email</p>
+                        <div class="mail"><%-userData.email%></div>
+                    </div>
+                </div>
+                <div class="shippingAddresses">
+                    <div class="head">
+                        <h2>shipping address</h2>
+                    </div>
+                    <%if(!addressData){%>
+address not Added
+                    <%}%>
+                    <%addressData.addresses.forEach((data)=>{%>
+                        <div class="ship_section">
+                            <div class="ico">
+                                <a href="/users/product/cart/checkout/place-order/edit-address/<%-id%>/<%-data._id%>">
+                                    <img src="/images/editsv.svg" style="width: 20px ;height:20px"  alt="">
+                                </a>
+                                <a href="/users/product/cart/checkout/place-order/delete-address/<%-id%>/<%-data._id%>">
+                                    <img src="/images/bin.svg" style="width: 20px ;height:20px" alt="">
+                                </a>
+                            </div>
+                            <div class="ctrls">
+                                <div class="eaches">
+                                    <p>name</p>
+                                    <div class="cont">
+                                        <%-data.name%>
+                                    </div>
+                                </div>
+                                <div class="eaches">
+                                    <p>state</p>
+                                    <div class="cont">
+                                        <%-data.state%>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ctrls">
+                                <div class="eaches">
+                                    <p>district</p>
+                                    <div class="cont">
+                                        <%-data.district%>
+                                    </div>
+                                </div>
+                                <div class="eaches">
+                                    <p>pin</p>
+                                    <div class="cont">
+                                        <%-data.pincode%>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ctrls">
+                                <div class="eaches">
+                                    <p>street</p>
+                                    <div class="cont">
+                                        <%-data.street%>
+                                    </div>
+                                </div>
+                                <div class="eaches">
+                                    <p>phone</p>
+                                    <div class="cont">
+                                        <%=data.phone%>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ctrls">
+                                <div class="eaches">
+                                    <p>Apartemnt</p>
+                                    <div class="cont">
+                                        <%-data.apartmentOrBuilding%>
+                                    </div>
+                                </div>
+                                <div class="eaches">
+                                    <p>email</p>
+                                    <div class="cont">
+                                        <%-data.email%>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <%})%>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>

@@ -143,7 +143,9 @@ async function ManageCategory(req, res) {
 async function addCategory(req, res) {
   try {
     let categories = await categoryCollection.find();
-    console.log(req.body);
+    if (!req.body.category) {
+      return res.redirect("/admin/category/add-category/nullfield");
+    }
     let categoryExist = await categoryCollection.findOne({
       categoryname: req.body.category,
     });
@@ -154,10 +156,7 @@ async function addCategory(req, res) {
       }).save();
       res.redirect("/admin/category");
     } else {
-      res.render("admins/category", {
-        categories,
-        err: "Category Already Exist!!",
-      });
+      return res.redirect("/admin/category/add-category/duplicate");
     }
   } catch (err) {
     console.log("error in add cate" + err);
@@ -165,11 +164,6 @@ async function addCategory(req, res) {
 }
 async function addProduct(req, res) {
   try {
-    const main = req.files["main"][0];
-    const img2 = req.files["image1"][0];
-    const img3 = req.files["image2"][0];
-    const img4 = req.files["image3"][0];
-    const img5 = req.files["image4"][0];
     const {
       productname,
       price,
@@ -183,7 +177,21 @@ async function addProduct(req, res) {
       spec4,
       description,
     } = req.body;
-
+    if (
+      !productname ||
+      !price ||
+      !brand ||
+      !stock ||
+      !category ||
+      !description
+    ) {
+      return res.redirect(`/admin/products/add-products/nullfield`);
+    }
+    const main = req.files["main"][0];
+    const img2 = req.files["image1"][0];
+    const img3 = req.files["image2"][0];
+    const img4 = req.files["image3"][0];
+    const img5 = req.files["image4"][0];
     console.log("name is " + productname);
     let categoryId = await categoryCollection.find({ categoryname: category });
     await new productCollection({
@@ -515,13 +523,13 @@ async function listAllOrders(req, res) {
         },
       },
     },
+    {
+      $sort: {
+        delverydate: -1, // Sort by delivery date in descending order (latest first)
+      },
+    },
   ]);
   console.log(JSON.stringify(orderDetail) + " orders ");
-  // await orderCollection.aggregate([
-  //   {
-  //     $
-  //   }
-  // ])
   res.render("admins/listOrders", { orderDetail });
 }
 async function getOrderDetails(req, res) {
@@ -810,26 +818,26 @@ async function serchUser(req, res) {
   const usersData = await userDb.find({
     name: { $regex: "^" + searchData, $options: "i" },
   });
-  res.render('admins/admin',{usersData})
+  res.render("admins/admin", { usersData });
   // const productData = await productsCollection.find({
   //   productName: { $regex: "^" + req.body.searchdata, $options: "i" },
   // });
 }
-async function searchProduct(req,res){
-  const searchTerm=req.body.search;
+async function searchProduct(req, res) {
+  const searchTerm = req.body.search;
   let combined = await productCollection.aggregate([
     {
-      $match: {  
-            $or: [
-              { productName: { $regex: searchTerm, $options: "i" } }, // Case-insensitive product name search
-              { brand: { $regex: searchTerm, $options: "i" } }, // Case-insensitive brand search
-            ]  
-      }
+      $match: {
+        $or: [
+          { productName: { $regex: searchTerm, $options: "i" } }, // Case-insensitive product name search
+          { brand: { $regex: searchTerm, $options: "i" } }, // Case-insensitive brand search
+        ],
+      },
     },
     {
       $sort: {
-        addedDate: -1
-      }
+        addedDate: -1,
+      },
     },
     {
       $lookup: {
@@ -861,16 +869,48 @@ async function searchProduct(req,res){
       },
     },
   ]);
-  const categories=await categoryCollection.find()
+  const categories = await categoryCollection.find();
   res.render("admins/products", { categories, productData: combined });
 }
-async function recoverCategory(req,res){
+async function recoverCategory(req, res) {
   const id = req.params.id;
   await categoryCollection.updateOne(
     { _id: new ObjectId(id) },
     { $set: { categorystatus: true } }
   );
   res.redirect("/admin/category");
+}
+async function addProductgetwhileError(req, res) {
+  const errortype = req.params.errortype;
+  let err;
+  if (errortype == "nullfield") {
+    err = "Please Fillout All Field";
+  } else {
+    err = false;
+  }
+  let categories = await categoryCollection.find();
+  res.render("admins/addproduct", { err, categories });
+}
+async function addCategoryWhileErr(req, res) {
+  let categories = await categoryCollection.find();
+  let errortype = req.params.errortype;
+  let msg;
+  if (errortype == "nullfield") {
+    msg = "Please Fillout the Filed";
+  } else if (errortype == "duplicate") {
+    msg = "Duplicate Category Found!!!!";
+  }
+  res.render("admins/addcategory", {
+    categories,
+    err: msg,
+  });
+}
+async function serchCategory(req, res) {
+  const searchData = req.body.search;
+  const categories = await categoryCollection.find({
+    categoryname: { $regex: "^" + searchData, $options: "i" },
+  });
+  res.render("admins/category", { categories, err: false });
 }
 module.exports = {
   adminHomeShowuser,
@@ -900,4 +940,7 @@ module.exports = {
   serchUser,
   searchProduct,
   recoverCategory,
+  addProductgetwhileError,
+  addCategoryWhileErr,
+  serchCategory,
 };

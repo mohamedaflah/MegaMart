@@ -1,0 +1,142 @@
+<%-include('./adminPartials/header.ejs') %>
+    <div class="home" style="display: flex;" style="min-height:100vh">
+        <%-include('./adminPartials/sidebar.ejs')%>
+            <div class="content_section">
+                <div class="overview_section">
+                    <div class="head_inp">
+                        <h5>Category</h5>
+                        <a href="/admin/logout">Logout</a>
+                    </div>
+                </div>
+                <div class="items_section" style="flex-direction: column;">
+                    <div class="admin_top_control">
+                        <button  id="mySizeChart">Add Category</button>
+                    </div>
+                    <div id="mySizeChartModal" class="ebcf_modal" style="transform: translateY(0);">
+                        <%if(err){%>
+                            <div style="position: absolute;top: 20%;left: 50%;transform: translateX(-50%);min-width: 250px;min-height: 26px;border: 1px solid rgb(203, 137, 137);display: flex;
+                            align-items: center;justify-content: space-between;font-size: 12px;padding: 0 5px;border-radius: 5px;">
+                                <%-err%>
+                                <a href="/admin/category/add-category/''">
+
+                                    <img src="/images/cross.png" style="width: 13px;height:13px" alt="">
+                                </a>
+                            </div>
+                       <% }%>
+                        <div class="control_section">
+                            <div class="cls" >
+                                <a href="/admin/category/">
+                                    <img src="/images/Closebtn.svg" alt="" id="clsbtn">
+                                </a>
+                            </div>
+                            <form action="/admin/category/add-category/" method="post">
+                                <input type="text" name="category" value="<%-categories.categoryname%>" placeholder="Add category" id="">
+                                <button type="submit">Add </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="table" id="tb">
+                        <div class="top_section">
+                            <p>Categories</p>
+                            <div class="filter">
+                                <a href="">Filtered by
+                                    <svg width="17" height="18" viewBox="0 0 17 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.1934 15.9636V8.44873" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M13.1934 5.7159V2.30005" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M8.41016 15.9635V12.5476" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M8.41016 9.81492V2.30005" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M3.62891 15.9636V8.44873" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M3.62891 5.7159V2.30005" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M2.26172 8.44873H4.9944" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M11.8281 8.44873H14.5608" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M7.04297 9.81519H9.77565" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </a>
+                                <a href="">Sorted by
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M14.6027 7.02075L10.1484 11.475C9.62236 12.0011 8.76156 12.0011 8.23552 11.475L3.78125 7.02075"
+                                            stroke="#898989" stroke-width="1.02476" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="table_content">
+                            <div class="table_datas head">CATEGORY NAME</div>
+                            <div class="table_datas head" style="width: 10%;">STOCK</div>
+                            <div class="table_datas head">SALES</div>
+                            <div class="table_datas head">ADDED DATE</div>
+                            <div class="table_datas head"></div>
+                        </div>
+                            <div class="table_content data_section">
+                                <div class="table_datas "><%-categories.categoryname%></div>
+                                <div class="table_datas " style="width: 10%;">
+                                    <%if(categories.stock){%>
+                                        <%-categories.stock%>
+                                    <%}else{%>
+                                        0
+                                    <%}%>
+                                </div>
+                                <div class="table_datas " >
+                                    <%if(categories.sales){%>
+                                        <%-categories.sales%>
+                                    <%}else{%>
+                                        0
+                                    <%}%>
+                                </div>
+                                <div class="table_datas ">
+                                    <% let d = new Date(categories.addedDate ) %>
+                                    <% let dayAr = ["Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday","Sunday"] %>
+                                    <%-d.getDate()%>/<%- d.getMonth()+1%>/<%-d.getFullYear()%> <%-dayAr[d.getDay()-1]%>
+                                </div>
+                                <div class="table_datas ">
+                                    <a href="/admin/category/edit-category/<%-categories.categoryId%>">
+                                        <img src="/images/predit.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                    </div>
+                    <div class="key_val" id="key-val">
+        
+                            <div class="detail">
+                                <div class="data">
+                                    <p>CATEGORY NAME</p>
+                                    <p>Sound & Music</p>
+                                </div>
+                                <div class="data">
+                                    <p>SALES</p>
+                                    <p>12</p>
+                                </div>
+                                <div class="data">
+                                    <p>ADDED DATE</p>
+                                    <p>
+                                       23/03/2023
+                                    </p>
+                                </div>
+                                <div class="data">
+                                    <p>ACTION</p>
+                                    <div class="actions" style=" width: 50%;
+                                    display: flex;
+                                    align-content: center;padding:0 10px">
+
+                                        <img src="/images/predit.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
+                                        <img src="/images/delp.svg" style="width: 30px;height: 30px;" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+    </div>

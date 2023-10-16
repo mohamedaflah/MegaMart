@@ -234,6 +234,9 @@ async function confirmPost(req, res) {
     });
   }
 }
+// function resendOTP(req,res){
+  
+// }
 function closeErr(req, res) {
   res.redirect("/signup");
 }
@@ -255,7 +258,9 @@ async function userAccount(req, res) {
   } else {
     cartCount = 0;
   }
-  res.render("users/Account", { profile: true, cartCount, id: userId });
+  const userData=await UserCollection.findOne({_id:new ObjectId(userId)})
+  const addressData=await addressCollection.findOne({userId:new ObjectId(userId)})
+  res.render("users/Account", { profile: true, cartCount, id: userId,userData,addressData });
 }
 function userLogout(req, res) {
   req.session.userAuth = false;
@@ -355,9 +360,13 @@ function FailedLogin(req, res) {
   res.send("failed");
 }
 async function detailProductGet(req, res) {
+  
   let proId = req.params.id;
   let mainImageas = req.params.image;
   console.log(proId);
+  if(req.session.userAuth){
+
+  }
   const userData = await UserCollection.findOne({
     email: req.session.userEmail,
   });
@@ -365,38 +374,13 @@ async function detailProductGet(req, res) {
   const cartData = await cartCollection.findOne({
     userId: new ObjectId(userId),
   });
-  var cartCount = 0;
+  
   if (cartData) {
     cartCount = cartData.products.length;
   } else {
     cartCount = 0;
   }
-  // let productData = await productsCollection.aggregate([
-  //   {
-  //     $lookup: {
-  //       from: "categories",
-  //       localField: "category",
-  //       foreignField: "_id",
-  //       as: "categoryInfo",
-  //     },
-  //   },
-  //   {
-  //     $unwind: "$categoryInfo",
-  //   },
-  //   {
-  //     $project: {
-  //       productName: 1,
-  //       category: "$categoryInfo.categoryname",
-  //       price: 1,
-  //       discount: 1,
-  //       image: 1,
-  //       brand: 1,
-  //       specification: 1,
-  //       currentStatus: 1,
-  //       deletionStatus: 1,
-  //     },
-  //   },
-  // ]);
+
   let productData = await productsCollection.aggregate([
     {
       $match: { _id: new ObjectId(proId) },
@@ -453,6 +437,9 @@ async function detailProductGet(req, res) {
       },
     },
   ]);
+  const catId=productData[0].categoryId;
+  const allProduct=await productsCollection.find({category:new ObjectId(catId)})
+  
   console.log(JSON.stringify(productData));
   res.render("users/productDetail", {
     profile: true,
@@ -460,6 +447,7 @@ async function detailProductGet(req, res) {
     mainImageas,
     cartCount,
     id: userId,
+    allProduct,
   });
 }
 async function addTocart(req, res) {
@@ -1521,6 +1509,7 @@ async function sortProducts(req, res) {
   }
 }
 
+
 module.exports = {
   userHome,
   singupGet,
@@ -1567,4 +1556,5 @@ module.exports = {
   getPaymentSuccess,
   cancelOrder,
   sortProducts,
+  // resendOTP,
 };
