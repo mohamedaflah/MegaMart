@@ -1,8 +1,8 @@
 const UserCollection = require("../model/collections/UserDb");
-const productsCollection = require("../model/collections/products");
+const productCollection = require("../model/collections/products");
 const cartCollection = require("../model/collections/cart");
 const { ObjectId } = require("bson");
-const CategoryDb=require('../model/collections/CategoryDb')
+const categoryCollection=require('../model/collections/CategoryDb')
 const {
   getCartCount,
 } = require("../helper/cart-helper");
@@ -520,7 +520,7 @@ async function detailProductGet(req, res) {
     cartCount = 0;
   }
 
-  let productData = await productsCollection.aggregate([
+  let productData = await productCollection.aggregate([
     {
       $match: { _id: new ObjectId(proId) },
     },
@@ -577,7 +577,7 @@ async function detailProductGet(req, res) {
     },
   ]);
   const catId = productData[0].categoryId;
-  const allProduct = await productsCollection.find({
+  const allProduct = await productCollection.find({
     category: new ObjectId(catId),
   });
 
@@ -595,14 +595,14 @@ async function detailProductGet(req, res) {
 // Searching Product in User
 async function searchProduct(req, res) {
   console.log(req.body.searchdata);
-  const productData = await productsCollection.find({
+  const productData = await productCollection.find({
     productName: { $regex: "^" + req.body.searchdata, $options: "i" },
   });
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
 
-  const categories = await CategoryDb.find();
+  const categories = await categoryCollection.find();
   if (req.session.userAuth && userStatus[0].status) {
     const userData = await UserCollection.find({
       email: req.session.userEmail,
@@ -641,7 +641,7 @@ async function filteredbyMinandMaxGet(req, res) {
   
     const { min, max } = req.params;
     console.log(`min in ${min}  max in ${max}`);
-    const productData = await productsCollection
+    const productData = await productCollection
       .find({
         $or: [
           { price: { $gt: min, $lt: max } },
@@ -656,7 +656,7 @@ async function filteredbyMinandMaxGet(req, res) {
       email: req.session.userEmail,
     });
   
-    const categories = await CategoryDb.find();
+    const categories = await categoryCollection.find();
     if (req.session.userAuth && userStatus[0].status) {
       const userData = await UserCollection.findOne({
         email: req.session.userEmail,
@@ -693,15 +693,15 @@ async function filteredbyMinandMaxGet(req, res) {
     });
     let productData;
     if (sortOrder == "latest") {
-      productData = await productsCollection.find().sort({ addedDate: -1 });
+      productData = await productCollection.find().sort({ addedDate: -1 });
     } else if (sortOrder == "oldest") {
-      productData = await productsCollection.find().sort({ addedDate: 1 });
+      productData = await productCollection.find().sort({ addedDate: 1 });
     } else if (sortOrder == "pricehightolow") {
-      productData = await productsCollection.find().sort({ price: -1 });
+      productData = await productCollection.find().sort({ price: -1 });
     } else if (sortOrder == "pricelowtohigh") {
-      productData = await productsCollection.find().sort({ price: 1 });
+      productData = await productCollection.find().sort({ price: 1 });
     }
-    const categories = await CategoryDb.find();
+    const categories = await categoryCollection.find();
     if (req.session.userAuth && userStatus[0].status) {
       const userData = await UserCollection.findOne({
         email: req.session.userEmail,

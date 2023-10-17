@@ -2382,8 +2382,12 @@ $sidBarWidth: 250px;
           color: #0e0e0e;
           text-decoration: none;
         }
-        a:nth-child(2) {
+        // a:nth-child(2) {
+        //   background: linear-gradient(90deg, #92fe9d 0%, #00c9ff 100%);
+        // }
+        .actived{
           background: linear-gradient(90deg, #92fe9d 0%, #00c9ff 100%);
+          
         }
       }
     }

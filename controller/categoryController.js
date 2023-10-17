@@ -3,7 +3,11 @@ const { ObjectId } = require("mongodb");
 const UserCollection = require("../model/collections/UserDb");
 const productsCollection = require("../model/collections/products");
 const CategoryDb=require('../model/collections/CategoryDb')
-
+const {
+  getCartCount,
+  getUserCartData,
+  getTotalAmount,
+} = require("../helper/cart-helper");
 // Display Categories in Admin side as Table
 async function ManageCategory(req, res) {
   let categories = await categoryCollection.find().sort({ addedDate: -1 });

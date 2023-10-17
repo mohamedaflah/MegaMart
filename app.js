@@ -15,7 +15,7 @@ app.use(
     saveUninitialized: true,
     cookie: {
       secure: false, // Set to true if using HTTPS
-      maxAge:  3 * 24 * 60 * 60 * 1000, // Session expiration time in milliseconds (1 hour in this example)
+      maxAge:  7 * 24 * 60 * 60 * 1000, // Session expiration time in milliseconds (1 week)
     },
   })
 ); 

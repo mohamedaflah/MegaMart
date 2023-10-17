@@ -1943,8 +1943,8 @@ button:hover {
   color: #0e0e0e;
   text-decoration: none;
 }
-.home .side_bar .links .tags a:nth-child(2),
-.home .side_bar .activeLink .tags a:nth-child(2) {
+.home .side_bar .links .tags .actived,
+.home .side_bar .activeLink .tags .actived {
   background: linear-gradient(90deg, #92fe9d 0%, #00c9ff 100%);
 }
 .home .side_bar .activeLink {
