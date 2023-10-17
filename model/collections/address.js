@@ -1,4 +1,5 @@
-require("../config");
+require("../../config/dbconfg");
+
 require("dotenv").config();
 const { ObjectId } = require("bson");
 const mongoose = require("mongoose");

@@ -1,0 +1,122 @@
+<%-include('../partials/header.ejs') %>
+    <div class="signup">
+        <div class="signup_section">
+            <div class="image_section">
+                <img src="/images/removedSign.png" alt="">
+            </div>
+            <div class="input_section">
+
+                <form   class="controlls" id="form" method="post" action="/users/account/updateprofile/<%-id%>" enctype="multipart/form-data">
+                    <div class="header_text">
+                        <h2>Update Profile</h2>
+                        <p>Enter your detail below</p>
+                    </div>
+                            <div class="input_box sp_">
+                                <div class="inp_l sp_input">
+                                    <input type="file" name="profile" id="name" value="<%-userData.name%>"   onchange="displayProfileImage('name','shoImg')">
+                                    <label for="name" title="click and update profile">
+                                        <%if(userData && userData.profileImage){%>
+                                            <img src="<%-userData.profileImage%>" alt="" id="shoImg">
+                                        <%}else{%>
+                                            <img src="/images/profile.jpg" alt="" id="shoImg">
+                                        <%}%>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="input_box">
+                                <div class="inp_l">
+                                    <input type="text" name="name" id="name" value="<%-userData.name%>" required >
+                                    <label for="name">Name</label>
+                                </div>
+                            </div>
+                            <div class="input_box">
+                                <div class="inp_l">
+                                    <input type="text" id="emailOrMobileInput" name="email_or_Phone" value="<%-userData.email%>"  required>
+                                    <label for="emailOrMobileInput">Enter Your Email Address</label>
+                                </div>
+                            </div>
+                        
+                            <div class="input_box" style="display: flex;align-items: center;justify-content: center;">
+                                <button type="submit">Update</button>
+                            </div>
+                            <div class="input_box" style="display: flex;align-items: center;justify-content: center;">
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- <script>
+        $(document).ready(function () {
+            $("#form").on("submit", function (event) {
+                event.preventDefault();
+                let name1 = $('#name').val()
+                let email1 = $('#emailOrMobileInput').val()
+                let password1 = $("#pass").val()
+    
+                // Send a POST request to the server
+                $.ajax({
+                    url: 'localhost:5001/signup',
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({ name: name1, email_or_Phone: email1, password: password1 }),
+                    success: function (data) {
+                        // Check if the server response indicates success and redirects accordingly
+                        if (data.success) {
+                            // Redirect to the /mail/confirm route
+                            window.location.href = 'localhost:5001/mail/confirm';
+                        } else {
+                            // Handle any error messages from the server
+                            alert(data.error);
+                        }
+                    },
+                    error: function (error) {
+                        // Handle AJAX request error
+                        console.error("Error:", error);
+                    }
+                });
+            });
+        });
+    </script> -->
+
+    <!-- <script>
+        $(document).ready(function(){
+            $('#form').submit(function(e){
+                e.preventDefault();
+                let name1 = $('#name').val()
+                let email1 = $('#emailOrMobileInput').val()
+                let password1 = $("#pass").val()
+
+                $.ajax({
+                    type:'POST',
+                    url:'/signup',
+                    data:{name:name1,email_or_Phone:email1,password:password1},
+                    success:function(response){
+                        $('#name').val('')
+                        $('#emailOrMobileInput').val('')
+                        $('#pass').val('')
+                    }
+                })
+            })
+        })
+    </script> -->
+
+    <!-- <script>
+        $(document).ready(() => {
+            $('#form').submit(() => { // Added '$' before ('#form').submit(...)
+                let name1 = $('#name').val()
+                let email1 = $('#emailOrMobileInput').val()
+                let password1 = $("#pass").val()
+                let data = {
+                    name: name1,
+                    email_or_Phone: email1,
+                    password: password1
+                }
+                $.post("/signup", data, (data, status) => {
+                    console.log('status is ' + status)
+                })
+            })
+        })
+    </script> -->
+    
+    <%-include('../partials/footer.ejs') %>
+

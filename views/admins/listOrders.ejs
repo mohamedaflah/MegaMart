@@ -13,10 +13,10 @@
                         <div class="top_section">
                             <p>Orders</p>
                             <div class="filter">
-                                <a href="">Filtered by
+                                <!-- <a href="">Filtered by
                                     <img src="/images/filter.svg" alt="">
-                                </a>
-                                <a href="">Sorted by
+                                </a> -->
+                                <a onclick="sortOrders('ordersort')">Sorted by
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -26,6 +26,19 @@
                                     </svg>
                                 </a>
                             </div>
+                        </div>
+                        <div class="filterArea" id="filterpop" >
+                            <a href="/admin/products/filter-product/outofstock/">Out of Stock</a>
+                            <a href="/admin//products/filter-product/instock/">In Stock</a>
+                            <a href="/admin/products/">All</a>
+                        </div>
+                        <div class="sorted" id="ordersort">
+                            <a href="/admin/products/orders/orders/bylatest">Latest</a>
+                            <a href="/admin/products/orders/orders/byoldest">Oldest</a>
+                            <!-- <a href="javascript:void(0);" onclick="sortByName()">
+                                Name
+                                <img src="/images/sort.svg" style="transform: rotate(-90deg);" alt="">
+                            </a> -->
                         </div>
                         <div class="table_content">
                             <div class="table_datas head">ORDER ID</div>
@@ -173,3 +186,8 @@
                 </div>
             </div>
     </div>
+<script>
+    function sortOrders(sortPop){
+        document.getElementById(sortPop).classList.toggle("active")
+    }
+</script>

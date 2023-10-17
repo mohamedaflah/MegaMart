@@ -9,31 +9,39 @@ const {
   adminErrClose,
   blockUser,
   unBlockUser,
-  manageProducts,
   adminLogout,
   overView,
+  filterUser,
+  serchUser,
+
+} = require("../controller/adminController");
+const {
   ManageCategory,
   addCategory,
-  addProduct,
   editCategoryGet,
   editCategoryPost,
   unListCategory,
+  recoverCategory,
+  addCategoryWhileErr,
+  serchCategory,
+  filteringandSortingcategory,
+} = require("../controller/categoryController");
+const {
+  manageProducts,
+  addProduct,
   getEditProduct,
   postEditProduct,
   deleteProduct,
   recoverProduct,
-  listAllOrders,
+  addProductgetwhileError,
+  filtereProduct,
+  searchProduct,
+} = require("../controller/productController");
+
+const {  listAllOrders,
   getOrderDetails,
   changeOrderStatus,
-  filterUser,
-  filtereProduct,
-  serchUser,
-  searchProduct,
-  recoverCategory,
-  addProductgetwhileError,
-  addCategoryWhileErr,
-  serchCategory,
-} = require("../controller/adminController");
+  filterOrders,}=require('../controller/ordersController')
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
 router.post("/login", adminLoginPost);
@@ -66,14 +74,14 @@ const uploadFields = [
 router.post("/products/add-products", upload.fields(uploadFields), addProduct);
 
 router.get("/products/add-products/:errortype", addProductgetwhileError);
-router.get('/category/add-category/:errortype',addCategoryWhileErr)
+router.get("/category/add-category/:errortype", addCategoryWhileErr);
 
 router.get("/category", admiLoginVerify, ManageCategory);
 router.post("/category/add-category", addCategory);
 router.get("/category/edit-category/:id", admiLoginVerify, editCategoryGet);
 router.post("/category/edit-category/:id", editCategoryPost);
-router.get("/category/unlist-category/:id",unListCategory);
-router.get('/category/recover-category/:id',recoverCategory)
+router.get("/category/unlist-category/:id", unListCategory);
+router.get("/category/recover-category/:id", recoverCategory);
 router.get("/products/edit-product/:id", getEditProduct);
 
 router.post(
@@ -89,13 +97,21 @@ router.get(
   admiLoginVerify,
   getOrderDetails
 );
-router.post('/products/orders/list-orders/orders/changin-status/:orderId/:userId',changeOrderStatus)
-router.get('/user/filter/:filterorder/',filterUser)
-router.get('/products/filter-product/:filtereorder/',filtereProduct)
-router.post('/user/search/searchuser',serchUser)
-router.post('/products/serach/searchproduct/',searchProduct)
-router.post('/category/serach/searchcategory/',serchCategory)
+router.post(
+  "/products/orders/list-orders/orders/changin-status/:orderId/:userId",
+  changeOrderStatus
+);
+router.get("/user/filter/:filterorder/", filterUser);
+router.get("/products/filter-product/:filtereorder/", filtereProduct);
+router.post("/user/search/searchuser", serchUser);
+router.post("/products/serach/searchproduct/", searchProduct);
+router.post("/category/serach/searchcategory/", serchCategory);
 // router.get('*',(req,res)=>{
 //   res.send('hel')
 // })
+router.get(
+  "/category/filter-category/:filterOrder/",
+  filteringandSortingcategory
+);
+router.get("/products/orders/orders/:filterorder/", filterOrders);
 module.exports = { router };

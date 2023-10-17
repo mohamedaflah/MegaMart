@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+require("../../config/dbconfg");
 require('dotenv').config()
 const { ObjectId } = mongoose.Schema.Types;
 
