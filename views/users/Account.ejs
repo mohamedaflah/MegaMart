@@ -100,21 +100,24 @@
                 <div class="shippingAddresses">
                     <div class="head">
                         <h2>shipping address</h2>
-                        <a href="/users/account/address/add-address/<%-id%>">Add Address</a>
+                        <%if(addressData){%>
+                            <a href="/users/account/addAddress/<%-id%>">Add Address</a>
+                       <% }%>
                     </div>
-                    <%if(!addressData){%>
-                          <div class="ship_section">
-                            Address not added
+                    <%if(!addressData || addressData.addresses.length<=0){%>
+                          <div class="ship_section" style="display: flex;align-items: center;justify-content: center;">
+                            <h2>Address not Added</h2>
+                            <a href="/users/account/addAddress/<%-id%>" style="background-color: #db4444;padding: 5px 10px;color:#ffff;font-size: 12px;border-radius: 4px;text-decoration: none;">Add Address</a>
                           </div>
                     <%}else{%>
                    
                     <%addressData.addresses.forEach((data)=>{%>
                         <div class="ship_section">
                             <div class="ico">
-                                <a href="/users/product/cart/checkout/place-order/edit-address/<%-id%>/<%-data._id%>">
+                                <a href="/users/account/editAddress/<%-id%>/<%-data._id%>">
                                     <img src="/images/editsv.svg" style="width: 20px ;height:20px"  alt="">
                                 </a>
-                                <a href="/users/product/cart/checkout/place-order/delete-address/<%-id%>/<%-data._id%>">
+                                <a href="/users/account/deleteAddress/<%-id%>/<%-data._id%>">
                                     <img src="/images/bin.svg" style="width: 20px ;height:20px" alt="">
                                 </a>
                             </div>

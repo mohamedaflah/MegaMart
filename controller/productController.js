@@ -2,10 +2,8 @@ const UserCollection = require("../model/collections/UserDb");
 const productCollection = require("../model/collections/products");
 const cartCollection = require("../model/collections/cart");
 const { ObjectId } = require("bson");
-const categoryCollection=require('../model/collections/CategoryDb')
-const {
-  getCartCount,
-} = require("../helper/cart-helper");
+const categoryCollection = require("../model/collections/CategoryDb");
+const { getCartCount } = require("../helper/cart-helper");
 async function manageProducts(req, res) {
   try {
     // add Product and Listing Product Section in Admin
@@ -448,7 +446,7 @@ async function filtereProduct(req, res) {
 }
 
 // Search Product for Admin
-async function searchProduct(req, res) {
+async function searchProductForAdmin(req, res) {
   const searchTerm = req.body.search;
   let combined = await productCollection.aggregate([
     {
@@ -601,7 +599,7 @@ async function searchProduct(req, res) {
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
-
+  const brands = productCollection.find({}, { brand: true, _id: false });
   const categories = await categoryCollection.find();
   if (req.session.userAuth && userStatus[0].status) {
     const userData = await UserCollection.find({
@@ -609,7 +607,8 @@ async function searchProduct(req, res) {
     });
     const userId = userData[0]._id;
     var cartCount = await getCartCount(userId);
-    console.log("data of a cart " + cartCount);
+    // console.log("data of a cart " + cartCount);
+
     res.render("users/index", {
       profile: true,
       productData,
@@ -617,6 +616,7 @@ async function searchProduct(req, res) {
       id: userStatus[0]._id,
       err: false,
       categories,
+      brands,
     });
     // return;
   } else {
@@ -626,6 +626,7 @@ async function searchProduct(req, res) {
       id: false,
       err: false,
       categories,
+      brands,
     });
   }
 }
@@ -637,102 +638,142 @@ async function filteredbyMinandMaxPrice(req, res) {
 }
 
 async function filteredbyMinandMaxGet(req, res) {
-    console.log("reached");
-  
-    const { min, max } = req.params;
-    console.log(`min in ${min}  max in ${max}`);
-    const productData = await productCollection
-      .find({
-        $or: [
-          { price: { $gt: min, $lt: max } },
-          { discount: { $gt: min, $lt: max } },
-        ],
-      })
-      .exec();
-  
-    console.log(min + " " + max);
-    console.log(JSON.stringify(productData) + "product data");
-    const userStatus = await UserCollection.find({
-      email: req.session.userEmail,
-    });
-  
-    const categories = await categoryCollection.find();
-    if (req.session.userAuth && userStatus[0].status) {
-      const userData = await UserCollection.findOne({
-        email: req.session.userEmail,
-      });
-      const userId = userData._id;
-      var cartCount = await getCartCount(userId);
-      console.log("data of a cart " + cartCount);
-  
-      res.render("users/filterbyprice", {
-        profile: true,
-        productData,
-        cartCount,
-        id: userStatus[0]._id,
-        err: false,
-        categories,
-      });
-      // return;
-    } else {
-      res.render("users/filterbyprice", {
-        profile: false,
-        productData,
-        id: false,
-        err: false,
-        categories,
-      });
-    }
-  }
+  console.log("reached");
 
-  // Sort Products
-  async function sortProducts(req, res) {
-    let sortOrder = req.params.sortorder;
-    const userStatus = await UserCollection.find({
+  const { min, max } = req.params;
+  console.log(`min in ${min}  max in ${max}`);
+  const productData = await productCollection
+    .find({
+      $or: [
+        { price: { $gt: min, $lt: max } },
+        { discount: { $gt: min, $lt: max } },
+      ],
+    })
+    .exec();
+
+  console.log(min + " " + max);
+  console.log(JSON.stringify(productData) + "product data");
+  const userStatus = await UserCollection.find({
+    email: req.session.userEmail,
+  });
+
+  const categories = await categoryCollection.find();
+  if (req.session.userAuth && userStatus[0].status) {
+    const userData = await UserCollection.findOne({
       email: req.session.userEmail,
     });
-    let productData;
-    if (sortOrder == "latest") {
-      productData = await productCollection.find().sort({ addedDate: -1 });
-    } else if (sortOrder == "oldest") {
-      productData = await productCollection.find().sort({ addedDate: 1 });
-    } else if (sortOrder == "pricehightolow") {
-      productData = await productCollection.find().sort({ price: -1 });
-    } else if (sortOrder == "pricelowtohigh") {
-      productData = await productCollection.find().sort({ price: 1 });
-    }
-    const categories = await categoryCollection.find();
-    if (req.session.userAuth && userStatus[0].status) {
-      const userData = await UserCollection.findOne({
-        email: req.session.userEmail,
-      });
-      const userId = userData._id;
-      var cartCount = await getCartCount(userId);
-      res.render("users/sort", {
-        profile: true,
-        productData,
-        cartCount,
-        id: userStatus[0]._id,
-        err: false,
-        categories,
-      });
-      // return;
-    } else {
-      res.render("users/sort", {
-        profile: false,
-        productData,
-        id: false,
-        err: false,
-        categories,
-      });
-    }
+    const userId = userData._id;
+    var cartCount = await getCartCount(userId);
+    console.log("data of a cart " + cartCount);
+
+    res.render("users/filterbyprice", {
+      profile: true,
+      productData,
+      cartCount,
+      id: userStatus[0]._id,
+      err: false,
+      categories,
+    });
+    // return;
+  } else {
+    res.render("users/filterbyprice", {
+      profile: false,
+      productData,
+      id: false,
+      err: false,
+      categories,
+    });
   }
+}
+
+// Sort Products
+async function sortProducts(req, res) {
+  let sortOrder = req.params.sortorder;
+  const userStatus = await UserCollection.find({
+    email: req.session.userEmail,
+  });
+  let productData;
+  if (sortOrder == "latest") {
+    productData = await productCollection.find().sort({ addedDate: -1 });
+  } else if (sortOrder == "oldest") {
+    productData = await productCollection.find().sort({ addedDate: 1 });
+  } else if (sortOrder == "pricehightolow") {
+    productData = await productCollection.find().sort({ price: -1 });
+  } else if (sortOrder == "pricelowtohigh") {
+    productData = await productCollection.find().sort({ price: 1 });
+  }
+  const categories = await categoryCollection.find();
+  if (req.session.userAuth && userStatus[0].status) {
+    const userData = await UserCollection.findOne({
+      email: req.session.userEmail,
+    });
+    const userId = userData._id;
+    var cartCount = await getCartCount(userId);
+    res.render("users/sort", {
+      profile: true,
+      productData,
+      cartCount,
+      id: userStatus[0]._id,
+      err: false,
+      categories,
+    });
+    // return;
+  } else {
+    res.render("users/sort", {
+      profile: false,
+      productData,
+      id: false,
+      err: false,
+      categories,
+    });
+  }
+}
+async function filterProductwithBrand(req, res) {
+  const brand = req.query.brand;
+  const productData = await productCollection.find({
+    brand: brand,
+  });
+  const userStatus = await UserCollection.find({
+    email: req.session.userEmail,
+  });
+  const brands =await productCollection.distinct('brand');
+  const categories = await categoryCollection.find();
+  if (req.session.userAuth && userStatus[0].status) {
+    const userData = await UserCollection.find({
+      email: req.session.userEmail,
+    });
+    const userId = userData[0]._id;
+    var cartCount = await getCartCount(userId);
+    // console.log("data of a cart " + cartCount);
+
+    res.render("users/index", {
+      profile: true,
+      productData,
+      cartCount,
+      id: userStatus[0]._id,
+      err: false,
+      categories,
+      brands,
+    });
+    // return;
+  } else {
+    res.render("users/index", {
+      profile: false,
+      productData,
+      id: false,
+      err: false,
+      categories,
+      brands,
+    });
+  }
+}
 const usersProduct = {
   detailProductGet,
   searchProduct,
   filteredbyMinandMaxPrice,
   filteredbyMinandMaxGet,
   sortProducts,
+  filterProductwithBrand,
 };
 // Users controlling End
 module.exports = {
@@ -744,6 +785,6 @@ module.exports = {
   recoverProduct,
   addProductgetwhileError,
   filtereProduct,
-  searchProduct,
+  searchProductForAdmin,
   usersProduct,
 };

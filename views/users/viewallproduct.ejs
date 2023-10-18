@@ -1,16 +1,14 @@
 <%-include('../partials/header.ejs') %>
 <div class="home">
+    
     <form class="filter1" id="filter" method="post" action="/users/product/filteredby/minandmax/">
         <div class="control">
             
             <input type="number" name="min" placeholder="minimun price">
             <input type="number" name="max" placeholder="maximum price">
-            <button type="submit">apply</button>
         </div>
-        <div class="control forbrnd">
-            <%brands.forEach((data)=>{%>
-                <a href="/users/product/filteredbybrand?brand=<%= data %>"><%-data%></a>
-            <%})%>
+        <div class="control">
+            <button type="submit">filter</button>
         </div>
     </form>
     <div class="forsort">

@@ -3,42 +3,42 @@
         <%-include('../partials/profiletoggle.ejs')%>
         <div class="checkout">
             <div class="heading">
-                <h1>Update Your Address</h1>
+                <h1>Add new Address</h1>
             </div>
-            <form class="checkandAddress addadrs" action="/users/product/cart/checkout/place-order/edit-address/<%-id%>/<%-addressData[0].addresses[0]._id%>" method="post">
+            <form class="checkandAddress addadrs" action="/users/account/addAddress/<%-id%>" method="post">
                 <div class="checkoutform">
                     <div class="controller">
                         
                         <label for="">name</label>
-                        <input required type="text" name="name" value="<%-addressData[0].addresses[0].name%>">
+                        <input required type="text" name="name" >
                     </div>
                     <div class="controller">
                         <label for="">email</label>
-                        <input required type="email" name="email" value="<%-addressData[0].addresses[0].email%>">
+                        <input required type="email" name="email" >
                     </div>
                     <div class="controller">
                         <label for="">state</label>
-                        <input required type="text" name="state" value="<%-addressData[0].addresses[0].state%>">
+                        <input required type="text" name="state">
                     </div>
                     <div class="controller">
                         <label for="">district</label>
-                        <input required type="text" name="district" value="<%-addressData[0].addresses[0].district%>">
+                        <input required type="text" name="district">
                     </div>
                     <div class="controller">
                         <label for="">pincode</label>
-                        <input required type="text" name="pincode" value="<%-addressData[0].addresses[0].pincode%>">
+                        <input required type="text" name="pincode">
                     </div>
                     <div class="controller">
                         <label for="">street</label>
-                        <input required type="text" name="street" value="<%-addressData[0].addresses[0].street%>">
+                        <input required type="text" name="street">
                     </div>
                     <div class="controller">
                         <label for="">phone</label>
-                        <input required type="text" name="phone" value="<%-addressData[0].addresses[0].phone%>">
+                        <input required type="text" name="phone">
                     </div>
                     <div class="controller">
                         <label for="">Apartment, floor, etc. (optional)</label>
-                        <input required type="text" name="apartment" value="<%-addressData[0].addresses[0].apartmentOrBuilding%>">
+                        <input required type="text" name="apartment">
                     </div>
                     <div class="btn">
                     <button type="submit">Save</button>

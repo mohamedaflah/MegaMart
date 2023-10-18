@@ -31,6 +31,7 @@ async function userHome(req, res) {
 
   let productData = await productsCollection.find().sort({ addedDate: -1 });
   const categories = await CategoryDb.find();
+  const brands=await productsCollection.distinct('brand')
   console.log(categories);
   if (req.session.userAuth && userStatus[0].status) {
     const userData = await UserCollection.findOne({
@@ -38,8 +39,8 @@ async function userHome(req, res) {
     });
     const userId = userData._id;
     var cartCount = await getCartCount(userId);
-    console.log("data of a cart " + cartCount);
-
+    // console.log("data of a cart " + cartCount);
+    
     res.render("users/index", {
       profile: true,
       productData,
@@ -47,6 +48,7 @@ async function userHome(req, res) {
       id: userStatus[0]._id,
       err: false,
       categories,
+      brands,
     });
     // return;
   } else {
@@ -57,6 +59,8 @@ async function userHome(req, res) {
       id: false,
       err: false,
       categories,
+      brands
+      
     });
   }
 }
@@ -80,7 +84,7 @@ function MailVerificationFail(req, res) {
   res.send("Failed Login");
 }
 var codEmai;
-var userInformation;
+// var userInformation;
 async function singupPost(req, res) {
   if (!req.body.email_or_Phone || !req.body.password || !req.body.name) {
     return res.render("users/sigup", {
@@ -115,6 +119,7 @@ async function singupPost(req, res) {
             profile: false,
           });
         }
+        req.session.userFullDetail=req.body;
         const secret = speakeasy.generateSecret({ length: 6 });
         const code = speakeasy.totp({
           secret: secret.base32,
@@ -205,7 +210,8 @@ function confirm(req, res) {
 async function confirmPost(req, res) {
   if (req.body.verifyNum == codEmai) {
     req.session.userAuth = true;
-    console.log("in post confirm " + userInformation);
+    let userInformation=req.session.userFullDetail;
+    console.log("in post confirm " + JSON.stringify(req.session.userFullDetail));
     req.session.userEmail = userInformation.email_or_Phone;
     userInformation.password = bcrypt.hashSync(userInformation.password, 10);
     await new UserCollection({
@@ -325,7 +331,7 @@ async function userLoginPost(req, res) {
       // Passwords don't match
       return res.render("users/login", {
         profile: false,
-        err: "Incorrect password",
+        err: "Incorrect Email or Password",
         id: false,
       });
     }

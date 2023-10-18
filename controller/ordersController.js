@@ -390,7 +390,7 @@ async function checkOut(req, res) {
       userId: new ObjectId(userId),
     });
     console.log(useraddressIsExist + "        ext");
-    if (!useraddressIsExist) {
+    if (!useraddressIsExist || useraddressIsExist.addresses.length<=0) {
       res.redirect(`/users/product/checkout/address/${userId}`);
     } else {
       res.redirect(`/users/product/cart/checkout/place-order/${userId}`);

@@ -46,6 +46,11 @@ const {
   updateAddresGet,
   updateAddressPost,
   deleteUserAddress,
+  addAddressinProfileGet,
+  addAddressinProfilePost,
+  deleteUserAddressinProfile,
+  editAddressinProfileGet,
+  editAddressinProfilePost,
 } = userAddressHelper;
 // Address Controllers
 const {
@@ -66,6 +71,7 @@ const {
   filteredbyMinandMaxPrice,
   filteredbyMinandMaxGet,
   sortProducts,
+  filterProductwithBrand,
 } = userProductHelper;
 
 const { filteredbyCategory } = userCategoryHelper;
@@ -222,6 +228,7 @@ router.get(
   "/users/product/filteredby/minandmax/:min/:max/",
   filteredbyMinandMaxGet
 );
+router.get('/users/product/filteredbybrand',filterProductwithBrand)
 router.get(
   "/users/product/checkout/payment/success/:userId",
   verifySessionAuth,
@@ -254,4 +261,7 @@ router.post(
   upload.fields(uploadFields),
   updateProfilePost
 );
+router.route('/users/account/addAddress/:userId').get(addAddressinProfileGet).post(addAddressinProfilePost)
+router.get('/users/account/deleteAddress/:userId/:addressId',deleteUserAddressinProfile)
+router.route('/users/account/editAddress/:userId/:addressId').get(editAddressinProfileGet).post(editAddressinProfilePost)
 module.exports = { router };

@@ -1,5 +1,5 @@
 <%-include('./adminPartials/header.ejs') %>
-    <div class="home" style="display: flex;" style="min-height:100vh">
+    <div class="home" style="display: flex;" style="min-height:100vh;">
         <%-include('./adminPartials/sidebar.ejs')%>
             <div class="content_section">
                 <div class="overview_section">
@@ -93,9 +93,9 @@
                                 <div class="table_datas "><%-data.email %></div>
                                 <div class="table_datas ">
                                     <%if(data.profileImage){%>
-                                        <img src="<%-data.profileImage%>" alt="" style="width: 23px;height:23;border-radius: 50%;">
+                                        <img src="<%-data.profileImage%>" alt="" style="width: 23px;height:23px;border-radius: 50%;">
                                         <% }else{%>
-                                            <img src="/images/userprofile.svg" style="width: 23px;height:23" alt="">
+                                            <img src="/images/userprofile.svg" style="width: 23px;height:23px" alt="">
                                             <% } %>
                                 </div>
                                 <div class="table_datas ">

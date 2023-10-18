@@ -35,7 +35,7 @@ const {
   recoverProduct,
   addProductgetwhileError,
   filtereProduct,
-  searchProduct,
+  searchProductForAdmin,
 } = require("../controller/productController");
 
 const {  listAllOrders,
@@ -104,7 +104,7 @@ router.post(
 router.get("/user/filter/:filterorder/", filterUser);
 router.get("/products/filter-product/:filtereorder/", filtereProduct);
 router.post("/user/search/searchuser", serchUser);
-router.post("/products/serach/searchproduct/", searchProduct);
+router.post("/products/serach/searchproduct/", searchProductForAdmin);
 router.post("/category/serach/searchcategory/", serchCategory);
 // router.get('*',(req,res)=>{
 //   res.send('hel')

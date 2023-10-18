@@ -281,7 +281,115 @@ async function deleteUserAddress(req, res) {
     `http://localhost:5001/users/product/cart/checkout/place-order/${userId}`
   );
 }
+async function addAddressinProfileGet(req, res) {
+  let cartCount = await getCartCount(req.params.userId);
+  res.render("users/addAddressinProfile", {
+    profile: true,
+    id: req.params.userId,
+    cartCount,
+  });
+}
+async function addAddressinProfilePost(req, res) {
+  const { name, email, state, district, pincode, street, phone, apartment } =
+    req.body;
+  const userId = req.params.userId;
+  const addressExist = await addressCollection.findOne({
+    userId: new ObjectId(userId),
+  });
+  if (addressExist) {
+    await addressCollection.updateOne(
+      { userId: new ObjectId(userId) },
+      {
+        $push: {
+          addresses: {
+            name: name,
+            state: state,
+            district: district,
+            pincode: pincode,
+            street: street,
+            phone: phone,
+            apartmentOrBuilding: apartment,
+            email: email,
+            addedDate: Date.now(),
+          },
+        },
+      }
+    );
+  } else {
+    await new addressCollection({
+      userId: new ObjectId(userId),
+      addresses: [
+        {
+          name: name,
+          state: state,
+          district: district,
+          pincode: pincode,
+          street: street,
+          phone: phone,
+          apartmentOrBuilding: apartment,
+          email: email,
+          addedDate: Date.now(),
+        },
+      ],
+    }).save();
+  }
+  res.redirect(`http://localhost:5001/user/account/${userId}`);
+}
+async function deleteUserAddressinProfile(req, res) {
+  const addressId = req.params.addressId;
+  const userId = req.params.userId;
+  await addressCollection.updateOne(
+    { userId: new ObjectId(userId) },
+    {
+      $pull: {
+        addresses: { _id: new ObjectId(addressId) },
+      },
+    }
+  );
+  res.redirect(`http://localhost:5001/user/account/${userId}`);
+}
+async function editAddressinProfileGet(req, res) {
+  const userId = req.params.userId;
+  const addressId = req.params.addressId;
+  const addressData = await addressCollection.find(
+    { userId: new ObjectId(userId), "addresses._id": new ObjectId(addressId) },
+    { "addresses.$": true }
+  );
 
+  const cartCount = await getCartCount(userId);
+  res.render("users/editAddressinProfile", {
+    cartCount,
+    id: userId,
+    profile: true,
+    addressData,
+  });
+}
+async function editAddressinProfilePost(req, res) {
+  const { name, email, state, district, pincode, street, phone, apartment } =
+    req.body;
+  const userId = req.params.userId;
+  const addressId = req.params.addressId;
+  await addressCollection.updateOne(
+    {
+      userId: new ObjectId(userId),
+      "addresses._id": new ObjectId(addressId),
+    },
+    {
+      $set: {
+        "addresses.$.name": name,
+        "addresses.$.state": state,
+        "addresses.$.district": district,
+        "addresses.$.pincode": pincode,
+        "addresses.$.street": street,
+        "addresses.$.phone": phone,
+        "addresses.$.apartmentOrBuilding": apartment,
+        "addresses.$.email": email,
+        "addresses.$.addedDate": Date.now(),
+      },
+    }
+  );
+  res.redirect(`http://localhost:5001/user/account/${userId}`);
+}
 // for Users
 const forUserAddress = {
   addingAddressGet,
@@ -289,6 +397,11 @@ const forUserAddress = {
   updateAddresGet,
   updateAddressPost,
   deleteUserAddress,
+  addAddressinProfileGet,
+  addAddressinProfilePost,
+  deleteUserAddressinProfile,
+  editAddressinProfileGet,
+  editAddressinProfilePost,
 };
 //User Controll end
 module.exports = { postUserAddress, enterAddress, forUserAddress };
