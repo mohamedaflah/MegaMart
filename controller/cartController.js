@@ -169,6 +169,7 @@ async function increaseQuantity(req, res) {
   );
 
   res.redirect(`/users/product/cart/showcart/${userId}`);
+  // res.status(200).json({message:"su"})
 }
 
 // Quantity Decreasing while Decrease Button

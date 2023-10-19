@@ -125,5 +125,7 @@
   // document.querySelector(".controlls").addEventListener("submit", (e) => {
   //   e.preventDefault();
   // });
+
+  // custom api call
   
 })();

@@ -25,6 +25,11 @@
     <script src="https://unpkg.com/js-image-zoom@0.4.1/js-image-zoom.js" type="application/javascript"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script>
+            function gotoDetail(productId){
+                window.location.href=`http://localhost:5001/products/product-detail/${productId}/mainimage`
+            }
+        </script>
 </head>
 
 <body>
@@ -70,7 +75,7 @@
                     <img class="whish" src="/images/heart.svg" alt="">
                     <%if(profile){%>
                         <a href="/users/product/cart/showcart/<%-id%>" class="crt">
-                            <span><%-cartCount%></span>
+                            <span id="cartCnt"><%-cartCount%></span>
                             <img class="cart" src="/images/cart.svg" alt="">
                         </a>
                         <% }else{%>

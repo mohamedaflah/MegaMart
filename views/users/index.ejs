@@ -87,17 +87,17 @@
   
         <%productData.forEach((data)=>{%>
             <%if(!data.deletionStatus){%>
-                <a href="http://localhost:5001/products/product-detail/<%-data._id%>/mainimage" style="text-decoration: none;color:black">
-                    <div class="product_card">
+                
+                    <div class="product_card" onclick="gotoDetail('<%-data._id%>')">
                         <div class="image_section">
-                            <!-- <div class="move">
-                                <a href="/users/product/add-to-cart/<%-data._id%>">
-                                    <img src="/images/moveto.svg" alt="">
+                            <div class="move">
+                                <a    href="/users/product/add-to-cart/<%-data._id%>">
+                                    <img src="/images/spcrt.svg" alt="">
                                 </a>
                                 <a href="">
-                                    <img src="/images/movewish.svg" alt="">
+                                    <img src="/images/movewish.svg" alt="" class="whish">
                                 </a>
-                            </div> -->
+                            </div>
                             <img src="/product-images/<%-data.image[0].mainimage%>" alt="">
                         </div>
                         <div class="detail_section">
@@ -126,7 +126,7 @@
                         </div>
                     </div>
                     
-                </a>
+                
            <% }%>
        <% })%>
     </div>
@@ -137,6 +137,18 @@ filterBtn.addEventListener('click',()=>{
 
     filterdrop.classList.toggle("active")
 })
+
+//function addToCart(productId) {
+//    const current = document.getElementById("cartCnt");
+//    const currentCount = parseInt(current.textContent); // Parse the current count as an integer.
+//
+//    fetch(`/users/product/add-to-cart/${productId}`).then((response) => {
+//        if (response.ok) {
+//            current.textContent = currentCount + 1; // Increment the cart count.
+//        }
+//    });
+//}
+
     </script>
     <%-include('../partials/footer.ejs') %>
 </div>

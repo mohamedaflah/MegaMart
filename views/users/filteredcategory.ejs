@@ -28,45 +28,43 @@
   
         <%productData.forEach((data)=>{%>
             <%if(!data.deletionStatus){%>
-                <a href="http://localhost:5001/products/product-detail/<%-data._id%>/mainimage" style="text-decoration: none;color:black" >
-                    <div class="product_card">
-                        <div class="image_section">
-                            <!-- <div class="move">
-                                <a href="/users/product/add-to-cart/">
-                                    <img src="/images/moveto.svg" alt="">
-                                </a>
-                                <a href="">
-                                    <img src="/images/movewish.svg" alt="">
-                                </a>
-                            </div> -->
-                            <img src="/product-images/<%-data.image[0].mainimage%>" alt="">
+                <div class="product_card" onclick="gotoDetail('<%-data._id%>')">
+                    <div class="image_section">
+                        <div class="move">
+                            <a    href="/users/product/add-to-cart/<%-data._id%>">
+                                <img src="/images/spcrt.svg" alt="">
+                            </a>
+                            <a href="">
+                                <img src="/images/movewish.svg" alt="" class="whish">
+                            </a>
                         </div>
-                        <div class="detail_section">
-                            <p><%-data.productName%></p>
-                            <div class="price">
-                                <p class="discounted">
-                                    <%if(data.discount){%>
-                                        ₹<%-data.discount%>
-                                    <%}else{%>
-                                        ₹<%-data.price%>
-                                        <%}%>
-                                </p>
-                                <p class="mrp">
-                                    <%if(data.discount){%>
-                                        <%-data.price%>₹
-                                   <% }%>
-                                </p>
-                            </div>
-                            <div class="star_rating">
-                                <img src="/images/star.svg" alt="">
-                                <img src="/images/star.svg" alt="">
-                                <img src="/images/star.svg" alt="">
-                                <img src="/images/star.svg" alt="">
-                                <img src="/images/star.svg" alt="">
-                            </div>
+                        <img src="/product-images/<%-data.image[0].mainimage%>" alt="">
+                    </div>
+                    <div class="detail_section">
+                        <p><%-data.productName%></p>
+                        <div class="price">
+                            <p class="discounted">
+                                <%if(data.discount){%>
+                                    ₹<%-data.discount%>
+                                <%}else{%>
+                                    ₹<%-data.price%>
+                                    <%}%>
+                            </p>
+                            <p class="mrp">
+                                <%if(data.discount){%>
+                                    <%-data.price%>₹
+                               <% }%>
+                            </p>
+                        </div>
+                        <div class="star_rating">
+                            <img src="/images/star.svg" alt="">
+                            <img src="/images/star.svg" alt="">
+                            <img src="/images/star.svg" alt="">
+                            <img src="/images/star.svg" alt="">
+                            <img src="/images/star.svg" alt="">
                         </div>
                     </div>
-                </a>
+                </div>
            <% }%>
        <% })%>
     </div>

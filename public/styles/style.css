@@ -326,7 +326,7 @@ body {
   border-right: 1px solid black;
 }
 .home .profile_card .side_section .profile_with_img {
-  width: 90%;
+  min-width: 90%;
   background-color: #f5f5f5;
   height: 100px;
   border-radius: 5px;
@@ -344,8 +344,8 @@ body {
   overflow: hidden;
 }
 .home .profile_card .side_section .profile_with_img .img-s img {
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 100%;
 }
 .home .profile_card .side_section .profile_with_img .oth {
   height: 90px;
@@ -402,13 +402,13 @@ body {
   justify-content: space-between;
 }
 .home .profile_card .content_s .profile_card .basic_info a {
-  width: 100px;
+  width: 80px;
   height: 25px;
   background: #db4444;
   border-radius: 4px;
   display: flex;
   align-items: center;
-  font-size: 12px;
+  font-size: 11px;
   text-decoration: none;
   justify-content: center;
   color: #fff;
@@ -440,12 +440,17 @@ body {
   width: 100%;
   height: 323px;
   padding: 0 5px;
+  position: relative;
   overflow-y: auto;
 }
 .home .profile_card .content_s .profile_card .shippingAddresses .head {
   width: 100%;
   height: 40px;
   border-bottom: 1px solid #e9e5e5;
+  position: sticky;
+  top: 0;
+  left: 0;
+  background: #fff;
   display: flex;
   justify-content: space-between;
 }
@@ -831,6 +836,7 @@ body {
 .home .products_section .product_card {
   height: 250px;
   width: 200px;
+  cursor: pointer;
   color: #000;
   text-decoration: none;
   display: flex;
@@ -855,6 +861,27 @@ body {
   right: 3%;
   display: flex;
   flex-direction: column;
+}
+.home .products_section .product_card .image_section .move a {
+  width: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  border-radius: 50%;
+  transition: 0.4s ease;
+  padding: 2px;
+}
+.home .products_section .product_card .image_section .move a img {
+  width: 15px;
+  height: 15px;
+}
+.home .products_section .product_card .image_section .move a img.whish {
+  width: 14px;
+  height: 14px;
+}
+.home .products_section .product_card .image_section .move a:hover {
+  background: white;
 }
 .home .products_section .product_card .image_section img {
   width: 70%;
@@ -965,6 +992,33 @@ body {
 @media (max-width: 1364px) {
   .home .products_section .product_card {
     width: 195px;
+  }
+}
+@media (max-width: 441px) {
+  .home .products_section .product_card {
+    width: 120px;
+    height: 195px;
+  }
+  .home .products_section .product_card .image_section .move a img {
+    width: 10px;
+    height: 10px;
+  }
+  .home .products_section .product_card .image_section .move a img.whish {
+    width: 9px;
+    height: 9px;
+  }
+  .home .products_section .product_card .detail_section {
+    justify-content: space-between;
+  }
+  .home .products_section .product_card .detail_section p {
+    font-size: 8px;
+  }
+  .home .products_section .product_card .detail_section .price {
+    height: 15px;
+  }
+  .home .products_section .product_card .detail_section .star_rating img {
+    width: 12px;
+    height: 12px;
   }
 }
 @media (max-width: 1330px) {
@@ -1397,7 +1451,7 @@ body .signup_section .input_section .controlls .input_box .sp_input label {
 }
 body .signup_section .input_section .controlls .input_box .sp_input label img {
   width: 100%;
-  height: auto;
+  height: 100%;
 }
 body .signup_section .input_section .controlls .input_box button,
 body .signup_section .input_section .controlls .input_box #signup {

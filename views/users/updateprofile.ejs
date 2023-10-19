@@ -14,7 +14,7 @@
                     </div>
                             <div class="input_box sp_">
                                 <div class="inp_l sp_input">
-                                    <input type="file" name="profile" id="name" value="<%-userData.name%>"   onchange="displayProfileImage('name','shoImg')">
+                                    <input type="file" accept="image" name="profile" id="name" value="<%-userData.name%>"   onchange="displayProfileImage('name','shoImg')">
                                     <label for="name" title="click and update profile">
                                         <%if(userData && userData.profileImage){%>
                                             <img src="<%-userData.profileImage%>" alt="" id="shoImg">

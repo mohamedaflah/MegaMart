@@ -28,3 +28,33 @@ function displayProfileImage(inputDom,imgDom){
       img.src=''
   }
 }
+// async function changeQty(user_id, product_id, qty,changeType) {
+//   try {
+//     if(changeType=='increase'){
+//       const response = await fetch(`/users/product/cart/increaseqty/${user_id}/${product_id}`);
+//       if (response.ok) {
+//         const qtyDisplay = document.getElementById("qty_display");
+//         const currentQty = parseInt(qtyDisplay.textContent, 10) || 0;
+//         const newQty = currentQty + 1;
+//         qtyDisplay.textContent = newQty < 10 ? `0${newQty}` : newQty.toString();
+//       }
+//     }else if(changeType=='decrease'){
+//       let invisible=document.getElementById('visible')
+//       // if(Number(qty)<=1){
+//       //   invisible.style.visibility="hidden"
+//       //   return
+//       // }else{
+//       //   invisible.style.visibility="visible"
+//       // }
+//       const response=await fetch(`/users/product/cart/decreaseqty/${user_id}/${product_id}/`)
+//       if(response.ok){
+//         const qtyDisplay = document.getElementById("qty_display");
+//         const currentQty = parseInt(qtyDisplay.textContent, 10) || 0;
+//         const newQty = currentQty - 1;
+//         qtyDisplay.textContent = newQty < 10 ? `0${newQty}` : newQty.toString();
+//       }
+//     }
+//   } catch (error) {
+//     console.error('Error:', error);
+//   }
+// }

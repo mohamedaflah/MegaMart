@@ -599,7 +599,7 @@ async function searchProduct(req, res) {
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
-  const brands = productCollection.find({}, { brand: true, _id: false });
+  const brands =await productCollection.distinct('brand');
   const categories = await categoryCollection.find();
   if (req.session.userAuth && userStatus[0].status) {
     const userData = await UserCollection.find({
