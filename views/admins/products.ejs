@@ -6,7 +6,7 @@
                     <div class="head_inp">
                         <h5>Products</h5>
                         <div style="display: flex;gap: 20px;">
-                            <form class="inp" style="height: 30px;display: flex;align-items: center;justify-content: start;background: #29292c;border-radius: 4.099px;padding: 0 10px;" method="post" action="/admin/products/serach/searchproduct/">
+                            <form  class="inp" style="height: 30px;display: flex;align-items: center;justify-content: start;background: #29292c;border-radius: 4.099px;padding: 0 10px;" method="post" action="/admin/products/serach/searchproduct/">
                                 <input type="text" style="height: 100%;border: none;outline: none;background:transparent;font-size: 12px;" placeholder="Search Product" name="search">
                                 <button style="height: 100%;width: 20px;margin: 0;padding: 0;background: transparent;display: flex;align-items: center;justify-content: center;" type="submit">
 
@@ -26,7 +26,7 @@
                     </div>
                     <div class="add_product_section" id="adp">
                         <img src="/images/close.png" style="width:20px;height: 20px;position:absolute;top:5%;right:2%;cursor:pointer" alt="" id="clsbtn" onclick="closeProduct()">
-                        <form action="/admin/products/add-products" method="post" class="form_section" enctype="multipart/form-data">
+                        <form style="position: relative;" action="/admin/products/add-products" method="post" class="form_section" enctype="multipart/form-data" id="prodform" >
                             <div class="images">
                                 <div class="preview_imgs">
                                     <div class="secondary">
@@ -70,6 +70,13 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- <div style="position: absolute;top:20px;left: 50%;transform: translateX(-50%);display: flex;align-items: center;justify-content: space-between;padding: 0px 5px;min-width: 300px;border-radius: 5px;
+                                font-size: 12px;min-height: 25px;border: 1px solid rgb(205, 116, 116);">
+                                    Please Fillout All Field
+                                    <a href="/admin/products/add-products/''">
+                                        <img src="/images/cross.png" style="width: 13px;height:13px" alt="">
+                                    </a>
+                                </div> -->
                             <div class="inputs">
                                 <div class="all_inp">
                                     <div class="head">
@@ -359,6 +366,7 @@
                 img.src = "";
             }
         }
+
     </script>
     <!-- <script defer src="/javascript/validate.js"></script> -->
     

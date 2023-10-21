@@ -9,6 +9,8 @@ const {
   getTotalAmount,
 } = require("../helper/cart-helper");
 const { ObjectId } = require("bson");
+const { generateRazorpay } = require("../helper/razorpay");
+const { getOrderId } = require("../helper/orderhelper");
 
 // Address form Get
 async function enterAddress(req, res) {
@@ -37,7 +39,9 @@ async function enterAddress(req, res) {
 // Address form Post
 async function postUserAddress(req, res) {
   try {
+    console.log("reached_______________ and api called");
     const userId = req.params.userId;
+    console.log(JSON.stringify(req.body) + " this is the body of request");
     const {
       name,
       email,
@@ -49,15 +53,15 @@ async function postUserAddress(req, res) {
       apartment,
       payment_method,
     } = req.body;
-    // console.log("Name  " + name);
-    // console.log("Eamil  " + email);
-    // console.log("state  " + state);
-    // console.log("district  " + district);
-    // console.log("place  " + pincode);
-    // console.log("street  " + street);
-    // console.log("phone  " + phone);
-    // console.log("apartment  " + apartment);
-    console.log("payment  " + payment_method);
+    console.log("Name   ________" + name);
+    console.log("Eamil   ________" + email);
+    console.log("state   ________" + state);
+    console.log("district   ________" + district);
+    console.log("place   ________" + pincode);
+    console.log("street   ________" + street);
+    console.log("phone   ________" + phone);
+    console.log("apartment   ________" + apartment);
+    console.log("payment   ________" + payment_method);
     const userCartdata = await getUserCartData(userId);
     // const productIds = userCartdata.map(
     //   (cartItem) => cartItem.products.productId
@@ -125,7 +129,7 @@ async function postUserAddress(req, res) {
       paymentmode: payment_method,
       delverydate: Date.now(),
       status: "Pending",
-      // totalAmount:totalAmount,
+      totalAmount: totalAmount,
       address: {
         name: name,
         state: state,
@@ -166,8 +170,18 @@ async function postUserAddress(req, res) {
         }
       }
     });
+
     if (payment_method == "COD") {
-      res.redirect(`/users/product/checkout/payment/success/${userId}`);
+      // res.redirect(`/users/product/checkout/payment/success/${userId}`);
+      res.json({ status: "COD" });
+    } else {
+      let orderId = await getOrderId(userId);
+      generateRazorpay(orderId, totalAmount, userId).then((order) => {
+        res.json(order);
+      }).catch(err=>{
+        console.error('Razorpay Err ',err)
+        res.status(500).json({error:"Error generating Razorpay order"})
+      })
     }
   } catch (err) {
     console.log("error in post address" + err);

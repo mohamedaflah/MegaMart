@@ -85,6 +85,7 @@ async function addTocart(req, res) {
         //     $set: { "products.$.qty": updateQty },
         //   }
         // );
+        res.json({status:false})
         let data = await cartCollection.updateOne(
           {
             userId: new ObjectId(userId),
@@ -96,7 +97,8 @@ async function addTocart(req, res) {
         console.log("finded data " + data);
       }
     }
-    res.redirect("/");
+    // res.redirect("/");
+    res.json({status:true})
   } catch (err) {
     console.log("error in add to cart" + err);
   }
@@ -151,7 +153,7 @@ async function increaseQuantity(req, res) {
       return;
     }
   }
-
+  
   let data = await cartCollection.findOne({
     userId: new ObjectId(userId),
     "products.productId": new ObjectId(productId),

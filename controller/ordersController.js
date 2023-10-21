@@ -10,6 +10,8 @@ const {
   getUserCartData,
   getTotalAmount,
 } = require("../helper/cart-helper");
+const { generateRazorpay } = require("../helper/razorpay");
+const {getOrderId}=require('../helper/orderhelper')
 // Listing Orders is Admin Side
 async function listAllOrders(req, res) {
   // const orderDetail = await userDb.aggregate([
@@ -423,6 +425,8 @@ async function checkOut(req, res) {
   async function placeOrderPost(req, res) {
     try {
       const userId = req.params.userId;
+      const totalAmount=await getTotalAmount(userId)
+      console.log('api called__________');
       console.log(JSON.stringify(req.body) + "body of request");
       const addressdata = await addressCollection.findOne({
         userId: new ObjectId(userId),
@@ -438,6 +442,7 @@ async function checkOut(req, res) {
         paymentmode: req.body.payment_method,
         delverydate: Date.now(),
         status: "Pending",
+        totalAmount:totalAmount,
         address: addressdata.addresses[Number(req.body.address)],
         products: products,
       }).save();
@@ -462,7 +467,19 @@ async function checkOut(req, res) {
           }
         }
       });
-      res.redirect(`/users/product/checkout/payment/success/${userId}`);
+      if(req.body.payment_method=='COD'){
+        res.json({status:"COD"})
+      }else{
+        
+        let orderId=await getOrderId(userId)
+        generateRazorpay(orderId,totalAmount,userId).then((order)=>{
+          res.json(order)
+        }).catch(err=>{
+          console.log('Razorpay Error in Checkout ',err);
+          res.status(500).json({error:"Error in Generating Razopay Checkout"})
+        })
+      }
+      // res.redirect(`/users/product/checkout/payment/success/${userId}`);
     } catch (err) {
       console.log("error in checkout place order post" + err);
     }
@@ -513,6 +530,11 @@ async function checkOut(req, res) {
             __v: "$userOrders.__v",
           },
           __v: 1,
+        },
+      },
+      {
+        $sort: {
+          "userOrders.delverydate": -1, // Sort by delverydate in descending order (latest first)
         },
       },
       {

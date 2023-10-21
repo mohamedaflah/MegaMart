@@ -836,11 +836,28 @@ body {
 .home .products_section .product_card {
   height: 250px;
   width: 200px;
-  cursor: pointer;
+  position: relative;
   color: #000;
   text-decoration: none;
   display: flex;
   flex-direction: column;
+}
+.home .products_section .product_card .unavailable {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  z-index: 99;
+  padding: 2px 5px;
+  background: rgba(217, 47, 47, 0.316);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.home .products_section .product_card .unavailable p {
+  color: #2a2929;
+  font-size: 10px;
+  margin: 0;
 }
 .home .products_section .product_card .image_section {
   width: 100%;
@@ -881,13 +898,15 @@ body {
   height: 14px;
 }
 .home .products_section .product_card .image_section .move a:hover {
-  background: white;
+  background: #d2d0d0;
 }
 .home .products_section .product_card .image_section img {
   width: 70%;
   height: auto;
+  cursor: pointer;
 }
 .home .products_section .product_card .detail_section {
+  cursor: pointer;
   height: 30%;
   display: flex;
   position: relative;
@@ -994,7 +1013,7 @@ body {
     width: 195px;
   }
 }
-@media (max-width: 441px) {
+@media (max-width: 664px) {
   .home .products_section .product_card {
     width: 120px;
     height: 195px;
@@ -1358,6 +1377,20 @@ body .signup .checkout .checkoutbox .item_box .button {
 body .signup .checkout .checkoutbox .item_box .button button {
   margin: 0;
   font-size: 13px;
+}
+body .signup .checkout .checkoutbox .item_box .button button img {
+  width: 18px;
+  height: 18px;
+  margin-left: 5px;
+  animation: rotate 1s linear infinite;
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
 }
 body .signup_section {
   width: 85%;
@@ -1877,6 +1910,7 @@ button:hover {
   justify-content: center;
   color: #ffffff;
   border-radius: 3px;
+  cursor: pointer;
 }
 .home .product_detail_section .descriptions .contents .function_part .btns .whish {
   border-radius: 3px;

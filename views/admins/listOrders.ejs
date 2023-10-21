@@ -46,6 +46,7 @@
                             <div class="table_datas head">IMAGE</div>
                             <div class="table_datas head">USER ID</div>
                             <div class="table_datas head">STATUS</div>
+                            <div class="table_datas head">PAYMENT MODE</div>
                             <div class="table_datas head" style="width:15%">DATE</div>
                             <div class="table_datas head">DETAILS</div>
                             <!-- <div class="table_datas head"></div> -->
@@ -90,6 +91,9 @@
                                                 <%- order.status %>
                                             </div>
                                      <%}%>
+                                </div>
+                                <div class="table_datas ordertb" style="width:15%">
+                                    <%-order.paymentmode%>
                                 </div>
                                 <div class="table_datas ordertb" style="width:15%">
                                     <%let date=new Date(order.delverydate)%>

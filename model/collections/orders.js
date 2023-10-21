@@ -17,6 +17,9 @@ const schema = mongoose.Schema({
   status: {
     type: String,
   },
+  totalAmount:{
+    type:Number,
+  },
   address:{
     type:Object
   },

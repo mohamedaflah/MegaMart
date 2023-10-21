@@ -73,7 +73,11 @@
                         <%if( productData[0].stock<=0){%>
                             <a class="addtocart" style="cursor: not-allowed;background-color: #c79c9c;">Add to Cart</a>
                         <%}else{%>
-                            <a href="/users/product/add-to-cart/<%-productData[0]._id%>" class="addtocart">Add to Cart</a>
+                            <%if(exist){%>
+                                <a  href="http://localhost:5001/users/product/cart/showcart/<%-id%>" class="addtocart">Go to Cart</a>
+                                <%}else{%>
+                                 <a  onclick="addToCart('<%-productData[0]._id%>')" class="addtocart">Add to Cart</a>
+                            <%}%>
                         <%}%>
                         <a href="" class="whish"><img class="whish" src="/images/heart.svg" alt=""></a>
                     </div>

@@ -574,6 +574,23 @@ async function detailProductGet(req, res) {
       },
     },
   ]);
+  const productExist = await cartCollection.aggregate([
+    {
+      $match: { userId: new ObjectId(userId) },
+    },
+    {
+      $unwind: "$products",
+    },
+    {
+      $match: { "products.productId": new ObjectId(productData[0]._id) },
+    },
+  ]);
+  let exist;
+  if (productExist.length > 0) {
+    exist = true;
+  } else {
+    exist = false;
+  }
   const catId = productData[0].categoryId;
   const allProduct = await productCollection.find({
     category: new ObjectId(catId),
@@ -587,6 +604,7 @@ async function detailProductGet(req, res) {
     cartCount,
     id: userId,
     allProduct,
+    exist,
   });
 }
 
@@ -599,7 +617,7 @@ async function searchProduct(req, res) {
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
-  const brands =await productCollection.distinct('brand');
+  const brands = await productCollection.distinct("brand");
   const categories = await categoryCollection.find();
   if (req.session.userAuth && userStatus[0].status) {
     const userData = await UserCollection.find({
@@ -736,7 +754,7 @@ async function filterProductwithBrand(req, res) {
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
-  const brands =await productCollection.distinct('brand');
+  const brands = await productCollection.distinct("brand");
   const categories = await categoryCollection.find();
   if (req.session.userAuth && userStatus[0].status) {
     const userData = await UserCollection.find({

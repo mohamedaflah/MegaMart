@@ -7,6 +7,7 @@ const cartCollection=require('../model/collections/cart')
 const addressCollection=require('../model/collections/address')
 const bcrypt = require("bcrypt");
 const productsCollection = require("../model/collections/products");
+require('dotenv').config()
 const { ObjectId } = require("bson");
 const {
   getCartCount,
@@ -130,7 +131,7 @@ async function singupPost(req, res) {
         console.log("Code ", code);
         // console.log(req.body);
         const mailOptions = {
-          from: "mohamedaflah186@gmail.com",
+          from: process.env.USER_EMAIL,
           to: req.body.email_or_Phone,
           subject: "Megamart Confirmation Registration",
           html:
@@ -262,7 +263,10 @@ async function userAccount(req, res) {
   const userData = await UserCollection.findOne({ _id: new ObjectId(userId) });
   const addressData = await addressCollection.findOne({
     userId: new ObjectId(userId),
-  });
+  }).catch(err=>{
+    console.log(err+' err in address acc');
+  })
+  console.log(addressData+' this is in account');
   res.render("users/Account", {
     profile: true,
     cartCount,

@@ -961,7 +961,24 @@ $categoryWidth: 30%;
       width: 200px;
       // background-color: #22d29d;
       // margin: 1px;
-      cursor: pointer;
+      position: relative;
+      .unavailable{
+        position: absolute;
+        left: 10px;
+        top:10px;
+        z-index: 99;
+        padding: 2px 5px;
+        background: rgba(217, 47, 47, 0.316);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        p{
+          color: #2a2929;
+          font-size: 10px;
+          margin: 0;
+        }
+      }
       color: #000;
       text-decoration: none;
       display: flex;
@@ -1004,17 +1021,19 @@ $categoryWidth: 30%;
               height: 14px;
             }
             &:hover {
-              background: #ffff;
+              background: #d2d0d0;
             }
           }
         }
         img {
           width: 70%;
           height: auto;
+          cursor: pointer;
         }
       }
       .detail_section {
         // background-color: #ccc;
+        cursor: pointer;
         height: 30%;
         display: flex;
         position: relative;
@@ -1187,7 +1206,7 @@ $categoryWidth: 30%;
     }
   }
 }
-@media (max-width: 441px) {
+@media (max-width: 664px) {
   .home {
     .products_section {
       .product_card {
@@ -1671,6 +1690,20 @@ body {
             button {
               margin: 0;
               font-size: 13px;
+              img{
+                width: 18px;
+                height: 18px;
+                margin-left: 5px;
+                animation: rotate 1s linear infinite;
+              }
+              @keyframes rotate {
+                0% {
+                  transform: rotate(0deg);
+                }
+                100% {
+                  transform: rotate(-360deg);
+                }
+              }
             }
           }
         }
@@ -2280,6 +2313,7 @@ $sidBarWidth: 250px;
               overflow: hidden;
               a {
                 border: 1px solid rgb(196, 196, 196);
+                
                 border-top: none;
                 border-bottom: none;
                 text-decoration: none;
@@ -2308,6 +2342,7 @@ $sidBarWidth: 250px;
               justify-content: center;
               color: #ffffff;
               border-radius: 3px;
+              cursor: pointer;
             }
             .whish {
               // background-color: red;

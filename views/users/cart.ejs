@@ -38,11 +38,19 @@
                                     <% }%>
                                 </div>
                                 <div class="nav">
-                                    <a href="/users/product/cart/increaseqty/<%-id%>/<%-cartdata.products.productId%>/">
-                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M7.75732 7.36666L4.45732 10.6667L3.51465 9.72399L7.75732 5.48132L12 9.72399L11.0573 10.6667L7.75732 7.36666Z" fill="black"/>
-                                            </svg> 
-                                    </a>
+                                    <%if(cartdata.cartData.stock>cartdata.products.qty){%>
+                                        <a href="/users/product/cart/increaseqty/<%-id%>/<%-cartdata.products.productId%>/">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M7.75732 7.36666L4.45732 10.6667L3.51465 9.72399L7.75732 5.48132L12 9.72399L11.0573 10.6667L7.75732 7.36666Z" fill="black"/>
+                                                </svg> 
+                                        </a>
+                                        <%}else{%>
+                                            <a style="visibility: hidden;" href="/users/product/cart/increaseqty/<%-id%>/<%-cartdata.products.productId%>/">
+                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M7.75732 7.36666L4.45732 10.6667L3.51465 9.72399L7.75732 5.48132L12 9.72399L11.0573 10.6667L7.75732 7.36666Z" fill="black"/>
+                                                    </svg> 
+                                            </a>
+                                    <%}%>
                                     <%if(cartdata.products && cartdata.products.qty>=2 ){%>
                                         <a href="/users/product/cart/decreaseqty/<%-id%>/<%-cartdata.products.productId%>/">
                                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

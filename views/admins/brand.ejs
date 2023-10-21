@@ -1,0 +1,203 @@
+<%-include('./adminPartials/header.ejs') %>
+    <div class="home" style="display: flex;" style="min-height:100vh">
+        <%-include('./adminPartials/sidebar.ejs')%>
+            <div class="content_section">
+                <div class="overview_section">
+                    <div class="head_inp">
+                        <h5>Brands</h5>
+                        <div style="display: flex;gap: 20px;">
+                            <form class="inp" style="height: 30px;display: flex;align-items: center;justify-content: start;background: #29292c;border-radius: 4.099px;padding: 0 10px;" method="post" action="/admin/category/serach/searchcategory/">
+                                <input type="text" style="height: 100%;border: none;outline: none;background:transparent;font-size: 12px;" placeholder="Search Category" name="search">
+                                <button style="height: 100%;width: 20px;margin: 0;padding: 0;background: transparent;display: flex;align-items: center;justify-content: center;" type="submit">
+
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20 20L16.2223 16.2156M18.3158 11.1579C18.3158 13.0563 17.5617 14.8769 16.2193 16.2193C14.8769 17.5617 13.0563 18.3158 11.1579 18.3158C9.2595 18.3158 7.43886 17.5617 6.0965 16.2193C4.75413 14.8769 4 13.0563 4 11.1579C4 9.2595 4.75413 7.43886 6.0965 6.0965C7.43886 4.75413 9.2595 4 11.1579 4C13.0563 4 14.8769 4.75413 16.2193 6.0965C17.5617 7.43886 18.3158 9.2595 18.3158 11.1579V11.1579Z" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                                        </svg>
+                                        
+                                </button>
+                            </form>
+                            <a href="/admin/logout">Logout</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="items_section" style="flex-direction: column;">
+                    <div class="admin_top_control">
+                        <button  id="mySizeChart">Add Brand</button>
+                    </div>
+                    <div id="mySizeChartModal" class="ebcf_modal">
+                        <div class="control_section">
+                            <div class="cls" >
+                                <img src="/images/Closebtn.svg" alt="" id="clsbtn">
+                            </div>
+                            <form action="/admin/category/add-category" method="post">
+                                <input type="text" name="category" placeholder="add new Category" id="">
+                                <button type="submit">add</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="table" id="tb">
+                        <div class="top_section">
+                            <p>Brands</p>
+                            <div class="filter">
+                                <a onclick="opnecategoryFilter('categoryfilter')">Filtered by
+                                    <svg width="17" height="18" viewBox="0 0 17 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M13.1934 15.9636V8.44873" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M13.1934 5.7159V2.30005" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M8.41016 15.9635V12.5476" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M8.41016 9.81492V2.30005" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M3.62891 15.9636V8.44873" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M3.62891 5.7159V2.30005" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M2.26172 8.44873H4.9944" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M11.8281 8.44873H14.5608" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M7.04297 9.81519H9.77565" stroke="#898989" stroke-width="1.02476"
+                                            stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </a>
+                                <a onclick="openCategorysortPop('categorysort')">Sorted by
+                                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M14.6027 7.02075L10.1484 11.475C9.62236 12.0011 8.76156 12.0011 8.23552 11.475L3.78125 7.02075"
+                                            stroke="#898989" stroke-width="1.02476" stroke-miterlimit="10"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="filterArea" id="categoryfilter" >
+                            <a href="/admin/category/filter-category/listed/">Listed</a>
+                            <a href="/admin/category/filter-category/unlisted/">Unlisted</a>
+                            <a href="/admin/category/">All</a>
+                        </div>
+                        <div class="sorted" id="categorysort">
+                            <a href="/admin/category/filter-category/latest/">Latest</a>
+                            <a href="/admin/category/filter-category/oldest/">Oldest</a>
+                            <!-- <a href="javascript:void(0);" onclick="sortByName()">
+                                Name
+                                <img src="/images/sort.svg" style="transform: rotate(-90deg);" alt="">
+                            </a> -->
+                        </div>
+                        <div class="table_content">
+                            <div class="table_datas head">BRAND NAME</div>
+                            <div class="table_datas head" style="width: 10%;">PRODUCTS</div>
+                            <div class="table_datas head">SALES</div>
+                            <div class="table_datas head">ADDED DATE</div>
+                            <div class="table_datas head">BRAND LOGO</div>
+                            <div class="table_datas head"></div>
+                        </div>
+                     
+                            <div class="table_content data_section">
+                                <div class="table_datas ">Apple</div>
+                                <div class="table_datas " style="width: 10%;">
+                                        0
+
+                                </div>
+                                <div class="table_datas " >
+                                  
+                                        0
+                                    
+                                </div>
+                                <div class="table_datas ">
+                                    23/09/2023
+                                </div>
+                                <div class="table_datas ">
+                                    23/09/2023
+                                </div>
+                                <div class="table_datas ">
+                                   
+                                        <img src="/images/predit.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
+                                 
+                                   
+                                        
+                                            <img src="/images/delp.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
+                                  
+                                     
+                                </div>
+                            </div>
+                    </div>
+                    <div class="key_val" id="key-val">
+        
+                            <div class="detail">
+                                <div class="data">
+                                    <p>CATEGORY NAME</p>
+                                    <p>Sound & Music</p>
+                                </div>
+                                <div class="data">
+                                    <p>SALES</p>
+                                    <p>12</p>
+                                </div>
+                                <div class="data">
+                                    <p>ADDED DATE</p>
+                                    <p>
+                                       23/03/2023
+                                    </p>
+                                </div>
+                                <div class="data">
+                                    <p>ACTION</p>
+                                    <div class="actions" style=" width: 50%;
+                                    display: flex;
+                                    align-content: center;padding:0 10px">
+
+                                        <img src="/images/predit.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
+                                        <img src="/images/delp.svg" style="width: 30px;height: 30px;" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        <!-- <div class="detail">
+                            <div class="data">
+                                <p>Name</p>
+                                <p>Aflu</p>
+                            </div>
+                            <div class="data">
+                                <p>Email</p>
+                                <p>Aflu@gmail.com</p>
+                            </div>
+                            <div class="data">
+                                <p>Join Date</p>
+                                <p>23/05/2023</p>
+                            </div>
+                            <div class="data">
+                                <p>Status</p>
+                                <div class="status" id="blocked">
+                                    <div class="btn_block">
+                                        Blocked
+                                    </div>
+                                    <a href="">
+
+                                        <img src="/images/unblock.svg" style="width: 25px;height:25px" alt="">
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            
+    </div>
+    <script>
+        var addCatgorybutton=document.getElementById("mySizeChart")
+        var categoryPopup=document.getElementById("mySizeChartModal")
+        var closePopup=document.getElementById('clsbtn')
+        addCatgorybutton.addEventListener('click',()=>{
+            categoryPopup.classList.add("active")
+        })
+        closePopup.addEventListener('click',()=>{
+            categoryPopup.classList.remove("active")
+        })
+        function opnecategoryFilter(openpop){
+            document.getElementById(openpop).classList.toggle("active")
+        }
+        function openCategorysortPop(sortPop){
+            document.getElementById(sortPop).classList.toggle("active")
+        }
+    </script>

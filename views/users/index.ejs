@@ -88,19 +88,38 @@
         <%productData.forEach((data)=>{%>
             <%if(!data.deletionStatus){%>
                 
-                    <div class="product_card" onclick="gotoDetail('<%-data._id%>')">
+                <!-- <button style="z-index: 99;" >a</button> -->
+                    <div class="product_card" >
+                        <%if(data.stock<1){%>
+                            <div class="unavailable">
+                                <p>out of stock</p>
+                            </div>
+                        <%}%>
                         <div class="image_section">
                             <div class="move">
-                                <a    href="/users/product/add-to-cart/<%-data._id%>">
+                                <%if(data.stock<1){%>
+                                    <a style="z-index: 99;visibility: hidden;" onclick="addToCart('<%-data._id%>')">
+                                        <img src="/images/spcrt.svg" alt="">
+                                    </a>
+                               <% }else{%>
+
+                                <%if(profile){%>
+                                    <a style="z-index: 99;" onclick="addToCart('<%-data._id%>')">
+                                        <img src="/images/spcrt.svg" alt="">
+                                    </a>
+                               <% }else{%>
+                                <a   href="/users/product/add-to-cart/<%-data._id%>">
                                     <img src="/images/spcrt.svg" alt="">
                                 </a>
+                               <%}%>
+                               <%}%>
                                 <a href="">
                                     <img src="/images/movewish.svg" alt="" class="whish">
                                 </a>
                             </div>
-                            <img src="/product-images/<%-data.image[0].mainimage%>" alt="">
+                            <img src="/product-images/<%-data.image[0].mainimage%>" alt="" onclick="gotoDetail('<%-data._id%>')">
                         </div>
-                        <div class="detail_section">
+                        <div class="detail_section" onclick="gotoDetail('<%-data._id%>')">
                             <p><%-data.productName%></p>
                             <div class="price">
                                 <p class="discounted">

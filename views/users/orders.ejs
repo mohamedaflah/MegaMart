@@ -12,6 +12,7 @@
                     <div class="cols price">Price</div>
                     <div class="cols price">Quantity</div>
                     <div class="cols price">Subtotal</div>
+                    <div class="cols price">Payment mode</div>
                     <div class="cols price">Date</div>
                     <div class="cols price">Status</div>
                 </div>
@@ -46,12 +47,16 @@
                                    
                                 </div>
                                 <div class="cols price" style="justify-content: space-between;">
+                                    <%-value.paymentmode%>
+                                </div>
+                                <div class="cols price" style="justify-content: space-between;">
                                     <% let date=new Date(value.delverydate) %>
                                     <% let days=["Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday","Sunday"]%>
                                     <% let monthAr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
                                     <%-date.getDate()%> <%-monthAr[date.getMonth()]%> <%-date.getFullYear()%>
                                     <%-days[date.getDay()-1]%>
                                 </div>
+                                
                                 <div class="cols price" style="justify-content: space-between;">
                                     <%if(value.status == 'Pending'){%>
 

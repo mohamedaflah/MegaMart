@@ -41,7 +41,8 @@ const {
 const {  listAllOrders,
   getOrderDetails,
   changeOrderStatus,
-  filterOrders,}=require('../controller/ordersController')
+  filterOrders,}=require('../controller/ordersController');
+const { ManageBrands } = require("../controller/brandController");
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
 router.post("/login", adminLoginPost);
@@ -83,6 +84,8 @@ router.post("/category/edit-category/:id", editCategoryPost);
 router.get("/category/unlist-category/:id", unListCategory);
 router.get("/category/recover-category/:id", recoverCategory);
 router.get("/products/edit-product/:id", getEditProduct);
+
+router.get('/brand',admiLoginVerify,ManageBrands)
 
 router.post(
   "/products/edit-products/:id",
