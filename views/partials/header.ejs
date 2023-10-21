@@ -68,8 +68,8 @@
                         filter
                         <img src="/images/filter.svg" style="height: 15px;width: 15px;" alt="">
                     </div>
-                    <form class="search_box" method="post" action="/users/product/search-product/">
-                        <input type="search" placeholder="search product" name="searchdata">
+                    <form class="search_box"  id="searchboxforproduct">
+                        <input type="search" placeholder="search product" name="searchdata" oninput="searchProductInHome(event,'<%-profile%>')">
                         <input type="submit" value="" id="btn" style="display: none;">
                         <label for="btn" style="margin: 0;padding: 0;height: auto;">
                             <img src="/images/search.svg" alt="">

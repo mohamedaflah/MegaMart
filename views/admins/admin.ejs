@@ -6,8 +6,8 @@
                     <div class="head_inp">
                         <h5>Customers</h5>
                         <div style="display: flex;gap: 20px;">
-                            <form class="inp" style="height: 30px;display: flex;align-items: center;justify-content: start;background: #29292c;border-radius: 4.099px;padding: 0 10px;" method="post" action="/admin/user/search/searchuser/">
-                                <input type="text" style="height: 100%;border: none;outline: none;background:transparent;font-size: 12px;" placeholder="Search User" name="search">
+                            <form class="inp" style="height: 30px;display: flex;align-items: center;justify-content: start;background: #29292c;border-radius: 4.099px;padding: 0 10px;">
+                                <input type="text" style="height: 100%;border: none;outline: none;background:transparent;font-size: 12px;" placeholder="Search User" name="search" oninput="searchUser(event)">
                                 <button style="height: 100%;width: 20px;margin: 0;padding: 0;background: transparent;display: flex;align-items: center;justify-content: center;">
 
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -21,7 +21,7 @@
                     </div>
                 </div>
                 <div class="items_section">
-                    <div class="table" id="tb">
+                    <div class="table usertable" id="tb">
                         <div class="top_section">
                             <p>Customers</p>
                             <div class="filter">
@@ -238,4 +238,66 @@
             
             sortpopup.classList.toggle("active")
         })
+        function searchUser(event){
+            console.log(event.target.value)
+            let searvValue={
+                search:event.target.value
+            }
+            fetch('/admin/user/search/searchuser/',{
+                method:'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify(searvValue)
+            }).then((response)=>response.json()).then((res)=>{
+                const usersData=res.usersData;
+                let rows=[]
+                if(usersData.length>=1){
+                    usersData.forEach((user) => {
+                        const row = `
+                            <div class="table_content data_section">
+                                <div class="table_datas">${user.name}</div>
+                                <div class="table_datas">${user.email}</div>
+                                <div class="table_datas">
+                                    ${
+                                        user.profileImage
+                                            ? `<img src="${user.profileImage}" alt="" style="width: 23px; height: 23px; border-radius: 50%;">`
+                                            : `<img src="/images/userprofile.svg" style="width: 23px; height: 23px;" alt="">`
+                                    }
+                                </div>
+                                <div class="table_datas">
+                                    ${
+                                        (() => {
+                                            const d = new Date(user.joinDate);
+                                            const dayAr = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+                                            const monthAr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                                            return `${d.getDate()} ${monthAr[d.getMonth()]} ${d.getFullYear()} ${dayAr[d.getDay() - 1]}`;
+                                        })()
+                                    }
+                                </div>
+                                <div class="table_datas">
+                                    ${
+                                        user.status
+                                            ? `<div class="active">Active</div>`
+                                            : `<div class="blocked">Blocked</div>`
+                                    }
+                                </div>
+                                <div class="table_datas">
+                                    ${
+                                        user.status
+                                            ? `<a href="/admin/userblock/${user._id}" title="Block User"><img src="/images/block.svg" style="width: 30px; height: 30px;" alt=""></a>`
+                                            : `<a href="/admin/userunblock/${user._id}" title="Unblock User"><img src="/images/unblock.svg" style="width: 30px; height: 30px;" alt=""></a>`
+                                    }
+                                </div>
+                            </div>
+                        `;
+                        rows.push(row);
+                    });
+                    const rowHtml=rows.join('')
+                 document.querySelector(".usertable").innerHTML=rowHtml    
+                }else{
+                    document.querySelector(".usertable").innerHTML='<h2 style="color:white;text-align:center">Search Data Not Found</h2>'
+                }
+        })
+    }
     </script>

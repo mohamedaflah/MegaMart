@@ -493,7 +493,8 @@ async function searchProductForAdmin(req, res) {
     },
   ]);
   const categories = await categoryCollection.find();
-  res.render("admins/products", { categories, productData: combined });
+  // res.render("admins/products", { categories, productData: combined });
+  res.json({categories:categories,productData:combined})
 }
 
 // Users Controlling Start
@@ -627,25 +628,27 @@ async function searchProduct(req, res) {
     var cartCount = await getCartCount(userId);
     // console.log("data of a cart " + cartCount);
 
-    res.render("users/index", {
-      profile: true,
-      productData,
-      cartCount,
-      id: userStatus[0]._id,
-      err: false,
-      categories,
-      brands,
-    });
+    // res.render("users/index", {
+    //   profile: true,
+    //   productData,
+    //   cartCount,
+    //   id: userStatus[0]._id,
+    //   err: false,
+    //   categories,
+    //   brands,
+    // });
     // return;
+    res.json({productData:productData})
   } else {
-    res.render("users/index", {
-      profile: false,
-      productData,
-      id: false,
-      err: false,
-      categories,
-      brands,
-    });
+    res.json({productData:productData})
+    // res.render("users/index", {
+    //   profile: false,
+    //   productData,
+    //   id: false,
+    //   err: false,
+    //   categories,
+    //   brands,
+    // });
   }
 }
 

@@ -101,7 +101,8 @@ async function serchUser(req, res) {
   const usersData = await userDb.find({
     name: { $regex: "^" + searchData, $options: "i" },
   });
-  res.render("admins/admin", { usersData });
+  // res.render("admins/admin", { usersData });
+  res.json({usersData})
   // const productData = await productsCollection.find({
   //   productName: { $regex: "^" + req.body.searchdata, $options: "i" },
   // });
