@@ -6,7 +6,7 @@
                     <div class="head_inp">
                         <h5>Products</h5>
                         <div style="display: flex;gap: 20px;">
-                            <form  class="inp" style="height: 30px;display: flex;align-items: center;justify-content: start;background: #29292c;border-radius: 4.099px;padding: 0 10px;" >
+                            <form  class="inp" style="height: 30px;display: flex;align-items: center;justify-content: start;background: #29292c;border-radius: 4.099px;padding: 0 10px;">
                                 <input type="text" style="height: 100%;border: none;outline: none;background:transparent;font-size: 12px;" placeholder="Search Product" name="search" oninput="searchProducts(event)">
                                 <button style="height: 100%;width: 20px;margin: 0;padding: 0;background: transparent;display: flex;align-items: center;justify-content: center;" type="submit">
 
@@ -26,7 +26,7 @@
                     </div>
                     <div class="add_product_section" id="adp">
                         <img src="/images/close.png" style="width:20px;height: 20px;position:absolute;top:5%;right:2%;cursor:pointer" alt="" id="clsbtn" onclick="closeProduct()">
-                        <form style="position: relative;" action="/admin/products/add-products" method="post" class="form_section" enctype="multipart/form-data" id="prodform" >
+                        <form style="position: relative;"  class="form_section" enctype="multipart/form-data" id="prodform" >
                             <div class="images">
                                 <div class="preview_imgs">
                                     <div class="secondary">
@@ -70,13 +70,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div style="position: absolute;top:20px;left: 50%;transform: translateX(-50%);display: flex;align-items: center;justify-content: space-between;padding: 0px 5px;min-width: 300px;border-radius: 5px;
-                                font-size: 12px;min-height: 25px;border: 1px solid rgb(205, 116, 116);">
-                                    Please Fillout All Field
-                                    <a href="/admin/products/add-products/''">
+                            <div style="position: absolute;top:20px;left: 50%;transform: translateX(-50%);display: flex;align-items: center;justify-content: space-between;padding: 0px 5px;min-width: 300px;border-radius: 5px;
+                                font-size: 14px;min-height: 25px;border: 1px solid rgb(205, 116, 116);visibility: hidden;" id="errcontainer">
+                                    <span id="displayError"></span>
+                                    <a style="cursor: pointer;" id="closeErrBox" onclick="closeProductsErr()">
                                         <img src="/images/cross.png" style="width: 13px;height:13px" alt="">
                                     </a>
-                                </div> -->
+                                </div>
                             <div class="inputs">
                                 <div class="all_inp">
                                     <div class="head">
@@ -84,37 +84,37 @@
                                     </div>
                                     <div class="control_section">
                                         <p for="">product name</p>
-                                        <input type="text"  name="productname" >
+                                        <input type="text"  name="productname" id="productname">
                                     </div>
                                     <div class="control_section " id="sp">
                                         <div class="p">
 
                                             <p for="">Price</p>
-                                            <input type="number" name="price" >
+                                            <input type="number" name="price" id="price">
                                         </div>
                                         <div class="dsp">
 
                                             <p for="">Discountedprice</p>
-                                            <input type="number" name="discount">
+                                            <input type="number" name="discount" id="discount">
                                         </div>
                                     </div>
                                     <div class="control_section " id="sp">
                                         <div class="p" style="width: 100%;">
 
                                             <p for="">Brand</p>
-                                            <input type="text" name="brand" >
+                                            <input type="text" name="brand" id="brand">
                                         </div>
                                     </div>
                                     <div class="control_section " id="sp">
                                         <div class="p">
 
                                             <p for="">Stock</p>
-                                            <input type="number" name="stock" >
+                                            <input type="number" name="stock" id="stock">
                                         </div>
                                         <div class="dsp">
 
                                             <p for="">Category</p>
-                                            <select name="category" id="">
+                                            <select name="category" id="category">
                                                     <%categories.forEach((value)=>{%>
                                                         <%if(value.categorystatus){%>
 
@@ -127,16 +127,16 @@
                                     <div class="control_section " id="sp">
                                         <div class="p" id="spc">
                                             <p for="" style="position: absolute;top:0;left:0">Specifications</p>
-                                            <input type="text" name="spec1">
-                                            <input type="text" name="spec2">
-                                            <input type="text" name="spec3" placeholder="optional">
-                                            <input type="text" name="spec4" placeholder="optional">
+                                            <input type="text" name="spec1" id="spec1">
+                                            <input type="text" name="spec2" id="spec2">
+                                            <input type="text" name="spec3" id="spec3" placeholder="optional">
+                                            <input type="text" name="spec4" id="spec4" placeholder="optional">
                                         </div>
                         
                                     </div>
                                     <div class="control_section">
                                         <p for="">Description</p>
-                                        <textarea name="description" id="" ></textarea>
+                                        <textarea name="description" id="description" ></textarea>
                                     </div>
                                     <div class="control_section end">
                                         <button type="submit">submit</button>
@@ -207,7 +207,11 @@
                                    <%}%>
                                 </div>
                                 <div class="table_datas ">
-                                    <%if(!value.deletionStatus && value.stock>0){%>
+                                    <%if(value.deletionStatus){%>
+                                        <div class="blocked" style="width: 85px;background: rgb(194, 10, 10);">
+                                            Deleted
+                                        </div>
+                                    <%}else if(value.stock>0){%>
                                         <div class="active" style="width: 85px;">
                                             In Stock
                                         </div>
@@ -345,91 +349,13 @@
             popup.classList.remove('active')
         })
         document.getElementById("plus").addEventListener('click',addSpecificationField)
-        function previewImage(inputId, imgId,label) {
-            const input = document.getElementById(inputId);
-            const img = document.getElementById(imgId);
-            const labeltext=document.getElementById(label)
-            // Check if a file was selected
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                
-                // Set up a function to run when the image is loaded
-                reader.onload = function (e) {
-                    img.src = e.target.result;
-                    labeltext.style.display='none'
-                };
-                
-                // Read the selected file as a data URL and load it into the img tag
-                reader.readAsDataURL(input.files[0]);
-            } else {
-                // If no file was selected or the browser doesn't support FileReader, clear the image
-                img.src = "";
-            }
-        }
-        function searchProducts(event){
-            console.log(event.target.value)
-            const formBody={search:event.target.value}
-            fetch('/admin/products/serach/searchproduct/',{
-                method:"POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body:JSON.stringify(formBody)
-            }).then((response)=>response.json()).then((res)=>{
-                let productData=res.productData;
-                console.log(res.categories)
-                console.log(res.productData)
-                const rows=[]
-                if(productData.length>=1){
-                    productData.forEach((value)=>{
-                         const row = `
-                        <div class="table_content data_section">
-                            <div class="table_datas">${value.productName}</div>
-                            <div class="table_datas" style="width: 10%;">${value.price}</div>
-                            <div class="table_datas">
-                                <img src="/product-images/${value.image[0].mainimage}" style="width: 33px;height: auto" alt="">
-                            </div>
-                            <div class="table_datas">
-                                ${value.category}
-                            </div>
-                            <div class="table_datas" style="padding-left: 5px;">
-                                ${value.stock}
-                            </div>
-                            <div class="table_datas">
-                                ${value.deletionStatus || value.stock<=0 ? 
-                                    `<div class="blocked" style="width: 85px;">out of stock</div>` :
-                                    `<div class="active" style="width: 85px;">In Stock</div>`
-                                }
-                            </div>
-                            <div class="table_datas">
-                                <a href="/admin/products/edit-product/${value._id}" style="text-decoration: none;" title="Edit product">
-                                    <img src="/images/predit.svg" style="width: auto; height: 30px; margin-right: 10px;" alt="">
-                                </a>
-                                ${value.deletionStatus ? 
-                                    `<a href="/admin/products/recover-product/${value._id}" title="Recover product">
-                                        <img src="/images/recover.svg" style="width: 30px; height: 30px;" alt="">
-                                    </a>` :
-                                    `<a href="/admin/products/delete-product/${value._id}" title="delete product">
-                                        <img src="/images/delp.svg" style="width: 30px; height: 30px;" alt="">
-                                    </a>`
-                                }
-                            </div>
-                        </div>
-                    `;
-                    rows.push(row)
-                    const rowsHTML = rows.join('');
-    
-                    document.getElementById('tb').innerHTML = rowsHTML;
-                    document.getElementById('tb').style.height ='auto';
-                    
-                })
-            }else{
-                    document.getElementById('tb').innerHTML='<h2 style="color:white;text-align:center">Search Data Not Found</h2>'  
-                }
-            })
-        }
 
+
+        
+        //function addProductSubmit(){
+//
+        //}
     </script>
     <!-- <script defer src="/javascript/validate.js"></script> -->
     
-    
+    <%-include('./adminPartials/footer.ejs')%>

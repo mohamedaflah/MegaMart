@@ -686,6 +686,7 @@ $categoryWidth: 30%;
         height: 60px;
         // background: #92fe9d;
         display: flex;
+        position: relative;
         justify-content: space-between;
         padding: 0;
         align-items: center;
@@ -736,6 +737,14 @@ $categoryWidth: 30%;
         .cols:nth-child(1) {
           width: 40%;
         }
+        // .shipping_img{
+        //   background-color: red;
+        //   position: absolute;
+        //   bottom: 0;
+        //   right: 0;
+        //   height: 25px;
+        //   width: 100%;
+        // }
       }
     }
     .returnandupdate {
@@ -2248,8 +2257,8 @@ $sidBarWidth: 250px;
             align-items: center;
             justify-content: center;
             img {
-              height: auto;
-              width: 70%;
+              height: 70%;
+              width: auto;
             }
           }
         }
@@ -2895,8 +2904,8 @@ $sidBarWidth: 250px;
                   overflow: hidden;
                   img {
                     position: absolute;
-                    height: auto;
-                    width: 70%;
+                    height: 70%;
+                    width: auto;
                     left: 50%;
                     top: 50%;
                     transform: translate(-50%, -50%);

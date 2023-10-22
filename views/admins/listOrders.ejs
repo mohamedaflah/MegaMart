@@ -42,12 +42,12 @@
                         </div>
                         <div class="table_content">
                             <div class="table_datas head">ORDER ID</div>
-                            <div class="table_datas head" style="width: 10%;">PRODUCT</div>
-                            <div class="table_datas head">IMAGE</div>
+                            <div class="table_datas head" style="width: 15%;">PRODUCT</div>
+                            <!-- <div class="table_datas head">IMAGE</div> -->
                             <div class="table_datas head">USER ID</div>
                             <div class="table_datas head">STATUS</div>
                             <div class="table_datas head">PAYMENT MODE</div>
-                            <div class="table_datas head" style="width:15%">DATE</div>
+                            <div class="table_datas head" style="width:10%">DATE</div>
                             <div class="table_datas head">DETAILS</div>
                             <!-- <div class="table_datas head"></div> -->
                         </div>
@@ -56,16 +56,16 @@
                             <% const product = order.products.productDetails; %>
                             <div class="table_content data_section">
                                 <div class="table_datas ordertb">#<%- order._id %></div>
-                                <div class="table_datas ordertb" style="width: 10%;">
+                                <div class="table_datas ordertb" style="width: 15%;">
                                     <% if (product) { %>
                                         <%- product.productName %>
                                     <% } %>
                                 </div>
-                                <div class="table_datas ordertb">
+                                <!-- <div class="table_datas ordertb">
                                     <% if (product && product.image && product.image[0]) { %>
                                         <img src="/product-images/<%- product.image[0].mainimage %>" style="width: 33px; height: auto;" alt="">
                                     <% } %>
-                                </div>
+                                </div> -->
                                 <div class="table_datas ordertb">
                                     #<%- '234fsd234' %>
                                 </div>
@@ -95,7 +95,7 @@
                                 <div class="table_datas ordertb" style="width:15%">
                                     <%-order.paymentmode%>
                                 </div>
-                                <div class="table_datas ordertb" style="width:15%">
+                                <div class="table_datas ordertb" style="width:10%">
                                     <%let date=new Date(order.delverydate)%>
                                     <%let days=["Sunday","Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday"]%>
                                     <% let monthAr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>

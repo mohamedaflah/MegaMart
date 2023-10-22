@@ -84,9 +84,29 @@ async function addProduct(req, res) {
       !brand ||
       !stock ||
       !category ||
+      !spec1 ||
       !description
     ) {
-      return res.redirect(`/admin/products/add-products/nullfield`);
+      // return res.redirect(`/admin/products/add-products/nullfield`);
+      return res.json({ err: "Must be Enter Data in All Field" });
+    }
+    if (price <= discount) {
+      return res.json({ err: "Discount Amount Must be Lessthan Price" });
+    }
+    if (
+      !req ||
+      !req.files["main"] ||
+      !req.files["main"][0] ||
+      !req.files["image1"] ||
+      !req.files["image1"][0] ||
+      !req.files["image2"] ||
+      !req.files["image2"][0] ||
+      !req.files["image3"] ||
+      !req.files["image3"][0] ||
+      !req.files["image4"] ||
+      !req.files["image4"][0]
+    ) {
+      return res.json({ err: "Please Click and Upload Image" });
     }
     const main = req.files["main"][0];
     const img2 = req.files["image1"][0];
@@ -124,9 +144,11 @@ async function addProduct(req, res) {
       { categoryname: category },
       { $inc: { stock: 1 } }
     );
-    res.redirect("/admin/products");
+    // res.redirect("/admin/products");
+    res.json({ status: true });
   } catch (err) {
-    console.log("error found" + err);
+    console.log("error found in product add" + err);
+    res.json({ err: "Submition Failed Crashed" });
   }
 }
 
@@ -494,7 +516,7 @@ async function searchProductForAdmin(req, res) {
   ]);
   const categories = await categoryCollection.find();
   // res.render("admins/products", { categories, productData: combined });
-  res.json({categories:categories,productData:combined})
+  res.json({ categories: categories, productData: combined });
 }
 
 // Users Controlling Start
@@ -612,9 +634,11 @@ async function detailProductGet(req, res) {
 // Searching Product in User
 async function searchProduct(req, res) {
   console.log(req.body.searchdata);
-  const productData = await productCollection.find({
-    productName: { $regex: "^" + req.body.searchdata, $options: "i" },
-  }).sort({addedDate:-1});
+  const productData = await productCollection
+    .find({
+      productName: { $regex: "^" + req.body.searchdata, $options: "i" },
+    })
+    .sort({ addedDate: -1 });
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
@@ -638,9 +662,9 @@ async function searchProduct(req, res) {
     //   brands,
     // });
     // return;
-    res.json({productData:productData})
+    res.json({ productData: productData });
   } else {
-    res.json({productData:productData})
+    res.json({ productData: productData });
     // res.render("users/index", {
     //   profile: false,
     //   productData,
