@@ -23,7 +23,7 @@ function generateRazorpay(orderId, totalAmount, userId) {
     };
     razorpay.orders.create(options,(err,order)=>{
         if(err){
-            console.log('error in razorpay generating '+err);
+            console.log('error in razorpay generating '+JSON.stringify(err));
             reject(err)
         }else{
             resolve(order)

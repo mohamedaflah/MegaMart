@@ -296,7 +296,7 @@
                     const rowHtml=rows.join('')
                  document.querySelector(".usertable").innerHTML=rowHtml    
                 }else{
-                    document.querySelector(".usertable").innerHTML='<h2 style="color:white;text-align:center">Search Data Not Found</h2>'
+                    document.querySelector(".usertable").innerHTML=`<h2 style="color:white;text-align:center">Search Data Not Found "${event.target.value}"</h2>`
                 }
         })
     }

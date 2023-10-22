@@ -503,8 +503,8 @@ async function detailProductGet(req, res) {
   let proId = req.params.id;
   let mainImageas = req.params.image;
   console.log(proId);
-  if (req.session.userAuth) {
-  }
+  // if (req.session.userAuth) {
+  // }
   const userData = await UserCollection.findOne({
     email: req.session.userEmail,
   });
@@ -614,7 +614,7 @@ async function searchProduct(req, res) {
   console.log(req.body.searchdata);
   const productData = await productCollection.find({
     productName: { $regex: "^" + req.body.searchdata, $options: "i" },
-  });
+  }).sort({addedDate:-1});
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });

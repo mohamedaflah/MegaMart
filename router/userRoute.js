@@ -35,6 +35,7 @@ const {
   getPaymentSuccess,
   updateProfile,
   updateProfilePost,
+  suggestUniqueUsername,
   // resendOTP,
 } = require("../controller/userController");
 const { checkOut, placeOrder, placeOrderPost, userOrders, cancelOrder } =
@@ -191,6 +192,7 @@ router
   .get(forgotPasswordPasswordEnter)
   .post(forgotPasswordPasswordEnterPost);
 router.get("/users/product/cart/checkout/:userId", verifySessionAuth, checkOut);
+router.post("/users/signup/suggestunique",suggestUniqueUsername)
 router
   .route("/users/product/checkout/address/:userId")
   .get(enterAddress)

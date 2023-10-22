@@ -3,18 +3,22 @@ const transporter = require("../auth/nodmaile");
 const EmailCheck = require("../auth/isValidEmail");
 const MobileCheck = require("../auth/isValidMobile");
 const UserCollection = require("../model/collections/UserDb");
-const cartCollection=require('../model/collections/cart')
-const addressCollection=require('../model/collections/address')
+const cartCollection = require("../model/collections/cart");
+const addressCollection = require("../model/collections/address");
 const bcrypt = require("bcrypt");
 const productsCollection = require("../model/collections/products");
-require('dotenv').config()
+const OtpCollection = require("../model/collections/otp");
+const changeStream = require("../model/otpStream");
+require("dotenv").config();
 const { ObjectId } = require("bson");
-const {
-  getCartCount,
-} = require("../helper/cart-helper");
+const { getCartCount } = require("../helper/cart-helper");
 const CategoryDb = require("../model/collections/CategoryDb");
 const isValidMail = require("../auth/isValidEmail");
+const { generateUniqueUsername } = require("../helper/generteUniquename");
 
+changeStream.on("otpDeleted", (documentId) => {
+  console.log(`OTP document deleted with ID: ${documentId}`);
+});
 async function userHome(req, res) {
   // let userStatus=await UserCollection.find({email:req.session.userEmail})
   // console.log(typeof req.session.userEmail+'email ');
@@ -32,7 +36,7 @@ async function userHome(req, res) {
 
   let productData = await productsCollection.find().sort({ addedDate: -1 });
   const categories = await CategoryDb.find();
-  const brands=await productsCollection.distinct('brand')
+  const brands = await productsCollection.distinct("brand");
   console.log(categories);
   if (req.session.userAuth && userStatus[0].status) {
     const userData = await UserCollection.findOne({
@@ -41,7 +45,7 @@ async function userHome(req, res) {
     const userId = userData._id;
     var cartCount = await getCartCount(userId);
     // console.log("data of a cart " + cartCount);
-    
+
     res.render("users/index", {
       profile: true,
       productData,
@@ -60,8 +64,7 @@ async function userHome(req, res) {
       id: false,
       err: false,
       categories,
-      brands
-      
+      brands,
     });
   }
 }
@@ -87,12 +90,7 @@ function MailVerificationFail(req, res) {
 var codEmai;
 // var userInformation;
 async function singupPost(req, res) {
-  if (!req.body.email_or_Phone || !req.body.password || !req.body.name) {
-    return res.render("users/sigup", {
-      err: "Must be Enter Values in All Field",
-      profile: false,
-    });
-  }
+  console.log("api called");
   if (EmailCheck(req.body.email_or_Phone)) {
     try {
       let dupEmail = await UserCollection.find({
@@ -102,34 +100,68 @@ async function singupPost(req, res) {
       console.log(dupEmail + ">> THis is the email");
       console.log(dupUsername + "<><><>< THis is the userkjsadklfj");
       if (dupEmail.length > 0) {
-        res.render("users/sigup", {
-          err: "Email is Already Exist",
-          profile: false,
-        });
+        // res.render("users/sigup", {
+        //   err: "Email is Already Exist",
+        //   profile: false,
+        // });
+        res.json({ err: "Email is Already Exist" });
       } else if (dupUsername.length > 0) {
-        res.render("users/sigup", {
-          err: "Username is Already Exist Enter Unique",
-          profile: false,
-        });
+        // res.render("users/sigup", {
+        //   err: "Username is Already Exist Enter Unique",
+        //   profile: false,
+        // });
+        res.json({ err: "Username is Already Exist Enter Unique" });
       } else {
         const password = req.body.password;
         const passwordCondition = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         if (!password.match(passwordCondition)) {
-          return res.render("users/sigup", {
-            err: "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one special character, and one number.",
-            profile: false,
+          // return res.render("users/sigup", {
+          //   err: "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number.",
+          //   profile: false,
+          // });
+          return res.json({
+            err: "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number.",
           });
         }
-        req.session.userFullDetail=req.body;
+        req.session.userFullDetail = req.body;
         const secret = speakeasy.generateSecret({ length: 6 });
         const code = speakeasy.totp({
           secret: secret.base32,
           encoding: "base32",
         });
+        let existStatus = await OtpCollection.findOne({
+          useremail: req.body.email_or_Phone,
+        });
+        if (existStatus) {
+          await OtpCollection.updateOne(
+            { useremail: req.body.email_or_Phone },
+            {
+              $set: {
+                otpnum: code,
+                userEmail: req.body.email_or_Phone,
+              },
+            },
+            { upsert: true }
+          );
+        } else {
+          await new OtpCollection({
+            otpnum: code,
+            useremail: req.body.email_or_Phone,
+          })
+            .save()
+            .then(() => {
+              console.log("otp inserted");
+            });
+        }
+        console.log("Secret ", secret.base32);
+        let otp = await OtpCollection.findOne({
+          useremail: req.body.email_or_Phone,
+        });
         console.log("Secret ", secret.base32);
         codEmai = code;
         console.log("Code ", code);
         // console.log(req.body);
+        // res.json({load:true})
         const mailOptions = {
           from: process.env.USER_EMAIL,
           to: req.body.email_or_Phone,
@@ -146,13 +178,14 @@ async function singupPost(req, res) {
           if (error) {
             console.error("Error sending email:", error);
             res.status(500).json({
-              error: "An error occurred while sending the confirmation email.",
+              err: "An error occurred while sending the confirmation email.",
             });
           } else {
             console.log("Email sent:", info.response);
             console.log("code in 201_________" + codEmai);
             userInformation = req.body;
-            res.status(201).redirect("/mail/confirm");
+            // res.status(201).redirect("/mail/confirm");
+            res.status(200).json({ status: true });
           }
         });
       }
@@ -160,13 +193,14 @@ async function singupPost(req, res) {
       // res.json({message:"Success"}).status(201)
     } catch (err) {
       console.log("error is :" + err);
-      res.json({ error: "failed" }).status(500);
+      res.json({ err: "failed" }).status(500);
     }
   } else {
-    res.render("users/sigup", {
-      err: "Must be Enter Only Email Incuding '@'",
-      profile: false,
-    });
+    // res.render("users/sigup", {
+    //   err: "Must be Enter Only Email Incuding '@'",
+    //   profile: false,
+    // });
+    res.json({ err: "Must be Enter Only Email Incuding '@'" });
   }
   // else if (MobileCheck(req.body.email_or_Phone)) {
   //   try {
@@ -205,35 +239,47 @@ function confirm(req, res) {
       id: false,
     });
   } else {
-    res.redirect("/");
+    res.redirect("/signup");
   }
 }
 async function confirmPost(req, res) {
-  if (req.body.verifyNum == codEmai) {
-    req.session.userAuth = true;
-    let userInformation=req.session.userFullDetail;
-    console.log("in post confirm " + JSON.stringify(req.session.userFullDetail));
-    req.session.userEmail = userInformation.email_or_Phone;
-    userInformation.password = bcrypt.hashSync(userInformation.password, 10);
-    await new UserCollection({
-      name: userInformation.name,
-      email: userInformation.email_or_Phone,
-      password: userInformation.password,
-      joinDate: Date.now(),
-    })
-      .save()
-      .then((dat, err) => {
-        console.log("inserted");
-        req.session.userId = dat._id;
-      });
-    res.redirect("/");
-  } else {
-    res.render("users/otp", {
-      err: "Verification Failed and Pleas Try Agin!!...",
-      profile: false,
-      cartCount: 0,
-      id: false,
+  try {
+    let otp = await OtpCollection.findOne({
+      useremail: req.session.userFullDetail.email_or_Phone,
     });
+    console.log("Otp in " + otp);
+    if (req.body.verifyNum == Number(otp.otpnum)) {
+      req.session.userAuth = true;
+      let userInformation = req.session.userFullDetail;
+      console.log(
+        "in post confirm " + JSON.stringify(req.session.userFullDetail)
+      );
+      req.session.userEmail = userInformation.email_or_Phone;
+      userInformation.password = bcrypt.hashSync(userInformation.password, 10);
+      await new UserCollection({
+        name: userInformation.name,
+        email: userInformation.email_or_Phone,
+        password: userInformation.password,
+        joinDate: Date.now(),
+      })
+        .save()
+        .then((dat, err) => {
+          console.log("inserted");
+          req.session.userId = dat._id;
+        });
+      res.json({status:true});
+    } else {
+      // res.render("users/otp", {
+      //   err: "Verification Failed and Pleas Try Agin!!...",
+      //   profile: false,
+      //   cartCount: 0,
+      //   id: false,
+      // });
+      res.json({err:"Verification Failed and Pleas Try Agin!!..."})
+    }
+  } catch (err) {
+    res.json({err:"Failed anc Crashed"})
+    console.log("Error Otp post " + err);
   }
 }
 // function resendOTP(req,res){
@@ -261,12 +307,14 @@ async function userAccount(req, res) {
     cartCount = 0;
   }
   const userData = await UserCollection.findOne({ _id: new ObjectId(userId) });
-  const addressData = await addressCollection.findOne({
-    userId: new ObjectId(userId),
-  }).catch(err=>{
-    console.log(err+' err in address acc');
-  })
-  console.log(addressData+' this is in account');
+  const addressData = await addressCollection
+    .findOne({
+      userId: new ObjectId(userId),
+    })
+    .catch((err) => {
+      console.log(err + " err in address acc");
+    });
+  console.log(addressData + " this is in account");
   res.render("users/Account", {
     profile: true,
     cartCount,
@@ -364,13 +412,13 @@ async function userLoginPost(req, res) {
   }
 }
 function FailedLogin(req, res) {
-  // res.render("users/failedlogin", {
-  //   profile: false,
-  //   err: "Login Failed",
-  //   cartCount: 0,
-  //   id: false,
-  // });
-  res.send("failed");
+  res.render("users/failedlogin", {
+    profile: false,
+    err: "Login Failed",
+    cartCount: 0,
+    id: false,
+  });
+  // res.send("failed");
 }
 
 function forgotPassword(req, res) {
@@ -539,7 +587,18 @@ async function updateProfilePost(req, res) {
   );
   res.redirect(`http://localhost:5001/user/account/${req.params.userId}`);
 }
-
+async function suggestUniqueUsername(req,res){
+  const name=req.body.name
+  const usernames=[]
+  for(let i=1;i<=5;i++){
+   let suggestions=generateUniqueUsername(name)
+   let exist=await UserCollection.findOne({name:suggestions})
+   if(!exist){
+    usernames.push(suggestions)
+   }
+  }
+  res.json({suggestions:usernames})
+}
 module.exports = {
   userHome,
   singupGet,
@@ -566,4 +625,5 @@ module.exports = {
   // resendOTP,
   updateProfile,
   updateProfilePost,
+  suggestUniqueUsername
 };

@@ -73,11 +73,7 @@
                         <%if( productData[0].stock<=0){%>
                             <a class="addtocart" style="cursor: not-allowed;background-color: #c79c9c;">Add to Cart</a>
                         <%}else{%>
-                            <%if(exist){%>
-                                <a  href="http://localhost:5001/users/product/cart/showcart/<%-id%>" class="addtocart">Go to Cart</a>
-                                <%}else{%>
-                                 <a  onclick="addToCart('<%-productData[0]._id%>')" class="addtocart">Add to Cart</a>
-                            <%}%>
+                            <a href="/users/product/add-to-cart/<%-productData[0]._id%>" class="addtocart">Add to Cart</a>
                         <%}%>
                         <a href="" class="whish"><img class="whish" src="/images/heart.svg" alt=""></a>
                     </div>
@@ -145,4 +141,12 @@
         offset:{vertical:0,horizontal:210}
     }
     new ImageZoom(document.getElementById('img-container'),options)
+
+     //function detailImage(productId,imagetoChange,imgdisplay){
+    //  const ImgTags=document.getElementById(imgdisplay)
+    //  fetch(`/products/product-detail/${productId}/${imagetoChange}`).
+    //  then((response)=>response.json()).then((res)=>{
+    //    imgdisplay.src=`/product-images/${res.mainImageas}`;
+    //  })
+    //}
 </script>

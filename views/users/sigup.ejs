@@ -1,24 +1,31 @@
 <%-include('../partials/header.ejs') %>
     <div class="signup">
+        <div class="loading">
+            <img src="/images/loading.png"  alt="">
+        </div>
         <div class="signup_section">
             <div class="image_section">
                 <img src="/images/removedSign.png" alt="">
             </div>
             <div class="input_section">
 
-                <form   class="controlls" id="form" method="post" action="/signup">
+                <form   class="controlls" id="form"  onsubmit="signupSubmit(event)">
                     <div class="header_text">
                         <h2>Create An Account</h2>
                         <p>Enter your detail below</p>
                     </div>
-                    <%if(err){%>
-                        <p id="err"><%-err%><a href="/errorMessage/close"><img src="/images/cross.png"
+                        <p id="err" style="visibility: hidden;">
+                            <span id="displayErr"></span>
+                            <a id="errclose" style="cursor: pointer;"><img src="/images/cross.png"
                                         style="width: 13px;height:13px" alt=""></a></p>
-                        <% } %>
+
                             <div class="input_box">
                                 <div class="inp_l">
-                                    <input type="text" name="name" id="name" autofocus >
+                                    <input list="uniques" name="name" id="name" autofocus autocomplete="off" oninput="getUnique(event)">
                                     <label for="name">Name</label>
+                                     <datalist id="uniques" style="background-color: red;">
+                                       
+                                     </datalist>
                                 </div>
                             </div>
                             <div class="input_box">
@@ -51,78 +58,65 @@
         </div>
     </div>
     </div>
-    <!-- <script>
-        $(document).ready(function () {
-            $("#form").on("submit", function (event) {
-                event.preventDefault();
-                let name1 = $('#name').val()
-                let email1 = $('#emailOrMobileInput').val()
-                let password1 = $("#pass").val()
-    
-                // Send a POST request to the server
-                $.ajax({
-                    url: 'localhost:5001/signup',
-                    method: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({ name: name1, email_or_Phone: email1, password: password1 }),
-                    success: function (data) {
-                        // Check if the server response indicates success and redirects accordingly
-                        if (data.success) {
-                            // Redirect to the /mail/confirm route
-                            window.location.href = 'localhost:5001/mail/confirm';
-                        } else {
-                            // Handle any error messages from the server
-                            alert(data.error);
-                        }
-                    },
-                    error: function (error) {
-                        // Handle AJAX request error
-                        console.error("Error:", error);
-                    }
-                });
-            });
-        });
-    </script> -->
-
-    <!-- <script>
-        $(document).ready(function(){
-            $('#form').submit(function(e){
-                e.preventDefault();
-                let name1 = $('#name').val()
-                let email1 = $('#emailOrMobileInput').val()
-                let password1 = $("#pass").val()
-
-                $.ajax({
-                    type:'POST',
-                    url:'/signup',
-                    data:{name:name1,email_or_Phone:email1,password:password1},
-                    success:function(response){
-                        $('#name').val('')
-                        $('#emailOrMobileInput').val('')
-                        $('#pass').val('')
-                    }
-                })
-            })
-        })
-    </script> -->
-
-    <!-- <script>
-        $(document).ready(() => {
-            $('#form').submit(() => { // Added '$' before ('#form').submit(...)
-                let name1 = $('#name').val()
-                let email1 = $('#emailOrMobileInput').val()
-                let password1 = $("#pass").val()
-                let data = {
-                    name: name1,
-                    email_or_Phone: email1,
-                    password: password1
+    <script>
+        let errMsg=document.getElementById("err")
+        let closeErr=document.getElementById("errclose")
+        let displayErr=document.getElementById("displayErr")
+        function signupSubmit(event){
+            event.preventDefault()
+            const name=document.getElementById("name")
+            const email=document.getElementById("emailOrMobileInput")
+            const pass=document.getElementById("pass")
+            const formDetail={
+                name:name.value,
+                email_or_Phone:email.value,
+                password:pass.value
+            }
+            //alert(JSON.stringify(formDetail))
+            if(!name.value || !email.value || !pass.value){
+                displayErr.innerHTML=`Must enter values in all fields`
+                errMsg.style.visibility = "visible";
+                return;
+            }
+            fetch('/signup',{
+                method:"POST",
+                headers:{'Content-Type': 'application/json'},
+                body:JSON.stringify(formDetail)
+            }).then((response)=>response.json()).then((res)=>{
+                    document.querySelector('.loading').style.display='flex'
+                    if(res.status){
+                        location.href=`/mail/confirm`
+                    }else if(res.err){    
+                    document.querySelector('.loading').style.display='none'
+                    errMsg.style.visibility='visible'
+                    displayErr.textContent=res.err
                 }
-                $.post("/signup", data, (data, status) => {
-                    console.log('status is ' + status)
-                })
             })
+        }
+        closeErr.addEventListener('click',()=>{
+            errMsg.style.visibility='hidden'
         })
-    </script> -->
+        function getUnique(event){
+            let body={
+                name:event.target.value
+            }
+            fetch("/users/signup/suggestunique",{
+                method:'POST',
+                headers:{'Content-Type': 'application/json'},
+                body:JSON.stringify(body)
+            }).then((response)=>response.json()).
+            then((res)=>{
+                let suggestions=res.suggestions;
+                let optons=[];
+                suggestions.forEach((value)=>{
+                    let option=`<option value="${value}"> ✅ ${value}</option>`
+                        optons.push(option)
+                })
+                let joined=optons.join('')
+                document.getElementById("uniques").innerHTML=joined
+            })
+        }
+    </script>
     
     <%-include('../partials/footer.ejs') %>
 
