@@ -19,6 +19,9 @@ app.use(
     },
   })
 ); 
+
+
+
 const router = require("./router/userRoute");
 const adminRoute = require("./router/adminRoute");
 app.use(passport.initialize());

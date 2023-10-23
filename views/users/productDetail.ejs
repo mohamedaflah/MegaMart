@@ -2,24 +2,39 @@
 <div class="home">
     <%-include('../partials/profiletoggle.ejs')%>
     <div class="product_detail_section">
-        <div class="preview_images">
+        <div class="preview_images" id="prev">
             <div class="imgs">
                 <div class="secondaries">
-                    <a href="/products/product-detail/<%-productData[0]._id%>/image1" class="prviewImg preview1">
-                        <img src="/product-images/<%-productData[0].image[0].image1%>" alt="">
+                    <a style="cursor: pointer;" class="prviewImg preview1" 
+                    href="/products/product-detail/<%-productData[0]._id%>/image1"
+                    <!-- onclick="showPreviewImg('<%-productData[0]._id%>','image1','toDisplay5')" -->
+                    
+                        <img src="/product-images/<%-productData[0].image[0].image1%>" alt="" id="toDisplay1">
                     </a>
-                    <a href="/products/product-detail/<%-productData[0]._id%>/image2" class="prviewImg preview2">
-                        <img src="/product-images/<%-productData[0].image[0].image2%>" alt="">
+                    <a style="cursor: pointer;" class="prviewImg preview2" 
+                    href="/products/product-detail/<%-productData[0]._id%>/image2"
+                     <!-- onclick="showPreviewImg('<%-productData[0]._id%>','image2','toDisplay5')" -->
+                     
+                        <img src="/product-images/<%-productData[0].image[0].image2%>" alt="" id="toDisplay2">
                     </a>
-                    <a href="/products/product-detail/<%-productData[0]._id%>/image3" class="prviewImg preview3">
-                        <img src="/product-images/<%-productData[0].image[0].image3%>" alt="">
+                    <a style="cursor: pointer;" class="prviewImg preview3" 
+                    href="/products/product-detail/<%-productData[0]._id%>/image3"
+                     <!-- onclick="showPreviewImg('<%-productData[0]._id%>','image3','toDisplay5')" -->
+                     
+                        <img src="/product-images/<%-productData[0].image[0].image3%>" alt="" id="toDisplay3">
                     </a>
-                    <a href="/products/product-detail/<%-productData[0]._id%>/image4" class="prviewImg preview4">
-                        <img src="/product-images/<%-productData[0].image[0].image4%>" alt="">
+                    <a style="cursor: pointer;" class="prviewImg preview4"
+                     href="/products/product-detail/<%-productData[0]._id%>/image4"
+                     <!-- onclick="showPreviewImg('<%-productData[0]._id%>','image4','toDisplay5')" -->
+                     
+                        <img src="/product-images/<%-productData[0].image[0].image4%>" alt="" id="toDisplay4">
                     </a>
                 </div>
-                <a href="/products/product-detail/<%-productData[0]._id%>/mainimage" class="main" id="img-container">
-                    <img src="/product-images/<%-productData[0].image[0][mainImageas]%>" alt="">
+                <a style="cursor: pointer;" class="main" id="img-container"
+                 href="/products/product-detail/<%-productData[0]._id%>/mainimage"
+                <!-- onclick="showPreviewImg('<%-productData[0]._id%>','mainimage','toDisplay5')" -->
+                
+                    <img src="/product-images/<%-productData[0].image[0][mainImageas]%>" alt="" id="toDisplay5">
                 </a>
             </div>
         </div>
@@ -72,9 +87,11 @@
                         </div> -->
                         <%if( productData[0].stock<=0){%>
                             <a class="addtocart" style="cursor: not-allowed;background-color: #c79c9c;">Add to Cart</a>
-                        <%}else{%>
-                            <a href="/users/product/add-to-cart/<%-productData[0]._id%>" class="addtocart">Add to Cart</a>
-                        <%}%>
+                        <%}else if(exist){%>
+                            <a  onclick="location.href=`http://localhost:5001/users/product/cart/showcart/<%-id%>`" class="addtocart">Go to Cart</a>
+                            <%}else{%>
+                                <a  onclick="addToCart('<%-productData[0]._id%>')" class="addtocart">Add to Cart</a>
+                         <%} %>
                         <a href="" class="whish"><img class="whish" src="/images/heart.svg" alt=""></a>
                     </div>
                 </div>
@@ -141,12 +158,11 @@
         offset:{vertical:0,horizontal:210}
     }
     new ImageZoom(document.getElementById('img-container'),options)
-
      //function detailImage(productId,imagetoChange,imgdisplay){
     //  const ImgTags=document.getElementById(imgdisplay)
     //  fetch(`/products/product-detail/${productId}/${imagetoChange}`).
     //  then((response)=>response.json()).then((res)=>{
     //    imgdisplay.src=`/product-images/${res.mainImageas}`;
-    //  })
+    //  })   
     //}
 </script>

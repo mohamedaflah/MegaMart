@@ -88,6 +88,15 @@
                             </div>
                             
                         </div>
+                        <!-- <div class="priceandimg select">
+                            <div class="radio">
+                                <div class="btn">
+                                    <input type="radio" name="payment_method" value="Wallet" id="">
+                                </div>
+                                <p>With Wallet Amount</p>
+                            </div>
+                            
+                        </div> -->
                         <div class="priceandimg select button" style="justify-content: space-between;">
                             <button type="submit" id="placeorderbtn">Place Order 
                                 <!-- <img src="/images/loading.png"  alt=""> -->
@@ -102,74 +111,5 @@
         </div>
     </div>
     </div>    
-    <script>
-        function checkoutformSubmit(event, userId) {
-            //let placeorderbtn=document.getElementById("placeorderbtn")
-            //placeorderbtn.disabled=true;
-            //placeorderbtn.innerHTML=`Processing...<img src="/images/loading.png"  alt="">`
-            //setTimeout(()=>{
-            //    placeorderbtn.disabled=false
-            //    placeorderbtn.innerHTML=`Place Order`
-            //},2000)
-            const checkoutformwithoutAddress = document.getElementById("forCheckout");
-            const address = document.querySelector('input[name="address"]:checked');
-            const payment_method = document.querySelector('input[name="payment_method"]:checked');
-            event.preventDefault();
-        
-            if (!window.razorpayWindowClosed) {
-                let checkoutFormdata = {
-                    address: address.value,
-                    payment_method: payment_method.value
-                };
-        
-                fetch(`/users/product/cart/checkout/place-order/${userId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(checkoutFormdata)
-                }).then((response) => response.json()).then((res) => {
-                    if (res.status === 'COD') {
-                        location.href = `/users/product/checkout/payment/success/${userId}`;
-                    } else {
-                        razorpayPayment(res, userId);
-                    }
-                });
-            } else {
-                // Handle the case when the Razorpay window was closed
-                alert('Payment window was closed. Please try again.');
-                // Optionally, you can reset the flag
-                window.razorpayWindowClosed = false;
-            }
-        }
-        
-        function razorpayPayment(order,userId){
-            let options={
-                key:'rzp_test_2kq1q9uS7VLUsv',
-                amount:order.amount,
-                currency:'INR',
-                order_id:order.order_id,
-                handler:(response)=>{
-                    console.log(response)
-                    if(response.razorpay_payment_id){
-                        window.location.href=`http://localhost:5001/users/product/checkout/payment/success/${userId}`
-                    }
-                },
-                theme: {
-                    color: "#de3641",
-                    image: 'https://png.pngtree.com/element_our/md/20180620/md_5b29c1dab1cf4.jpg', // URL of your logo
-                },
-            }
-            const rzp=new Razorpay(options);
-            rzp.on('payment.window.beforeclose', function () {
-                // Handle the Razorpay window closing event
-                // You can prevent form submission here
-                // For example, by setting a flag or showing an alert
-                // In this example, we'll set a flag to indicate the window was closed
-                window.razorpayWindowClosed = true;
-            });
-            rzp.open()
-        }
-    </script>
     <%-include('../partials/footer.ejs') %>
 

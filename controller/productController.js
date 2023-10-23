@@ -208,6 +208,7 @@ async function postEditProduct(req, res) {
         },
       }
     );
+    // await categoryCollection.updateOne({_id:new ObjectId(categoryId)},{$inc:{stock:1}})
     if (req.files && req.files["main"] && req.files["main"][0]) {
       await productCollection.updateOne(
         { _id: new ObjectId(proId) },
@@ -633,10 +634,12 @@ async function detailProductGet(req, res) {
 
 // Searching Product in User
 async function searchProduct(req, res) {
-  console.log(req.body.searchdata);
   const productData = await productCollection
     .find({
-      productName: { $regex: "^" + req.body.searchdata, $options: "i" },
+      $or: [
+        { productName: { $regex: "^" + req.body.searchdata, $options: "i" } },
+        { brand: { $regex: "^" + req.body.searchdata, $options: "i" } },
+      ],
     })
     .sort({ addedDate: -1 });
   const userStatus = await UserCollection.find({
@@ -812,6 +815,80 @@ async function filterProductwithBrand(req, res) {
     });
   }
 }
+async function detailProductForFetch(req, res) {
+  console.log("detail api called");
+
+  let proId = req.params.id;
+  let mainImageas = req.params.image;
+  let productData = await productCollection.aggregate([
+    {
+      $match: { _id: new ObjectId(proId) },
+    },
+    {
+      $lookup: {
+        from: "categories",
+        localField: "category",
+        foreignField: "_id",
+        as: "categoryInfo",
+      },
+    },
+    {
+      $unwind: "$categoryInfo",
+    },
+    {
+      $project: {
+        productName: 1,
+        category: "$categoryInfo.categoryname",
+        categoryId: "$categoryInfo._id",
+        _id: true,
+        price: true,
+        discount: true,
+        brand: true,
+        description: true,
+        image: {
+          $map: {
+            input: "$image",
+            as: "img",
+            in: {
+              mainimage: "$$img.mainimage",
+              image1: "$$img.image1",
+              image2: "$$img.image2",
+              image3: "$$img.image3",
+              image4: "$$img.image4",
+            },
+          },
+        },
+        specification: {
+          $map: {
+            input: "$specification",
+            as: "spec",
+            in: {
+              spec1: "$$spec.spec1",
+              spec2: "$$spec.spec2",
+              spec3: "$$spec.spec3",
+              spec4: "$$spec.spec4",
+            },
+          },
+        },
+        currentStatus: true,
+        deletionStatus: true,
+        stock: true,
+      },
+    },
+  ]);
+
+  // console.log(JSON.stringify(productData));
+  //   res.render("users/productDetail", {
+  //     profile: true,
+  //     productData,
+  //     mainImageas,
+  //     cartCount,
+  //     id: userId,
+  //     allProduct,
+  //     exist,
+  //   });
+  res.json({ productData, mainImageas });
+}
 const usersProduct = {
   detailProductGet,
   searchProduct,
@@ -819,6 +896,7 @@ const usersProduct = {
   filteredbyMinandMaxGet,
   sortProducts,
   filterProductwithBrand,
+  detailProductForFetch,
 };
 // Users controlling End
 module.exports = {

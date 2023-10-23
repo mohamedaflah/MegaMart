@@ -15,6 +15,7 @@ const { getCartCount } = require("../helper/cart-helper");
 const CategoryDb = require("../model/collections/CategoryDb");
 const isValidMail = require("../auth/isValidEmail");
 const { generateUniqueUsername } = require("../helper/generteUniquename");
+const walletCollection = require("../model/collections/wallet");
 
 changeStream.on("otpDeleted", (documentId) => {
   console.log(`OTP document deleted with ID: ${documentId}`);
@@ -69,15 +70,23 @@ async function userHome(req, res) {
   }
 }
 function singupGet(req, res) {
-  // if (req.session.userAuth) {
-  // res.redirect("/");
-  // } else {
-  res.render("users/sigup", {
-    err: false,
-    profile: false,
-    cartCount: 0,
-    id: false,
-  });
+  
+    if(req.query && req.query.err){
+      // return res.json({err:req.query.err})
+      res.render("users/sigup", {
+        err: req.query.err,
+        profile: false,
+        cartCount: 0,
+        id: false,
+      });
+    }else{
+      res.render("users/sigup", {
+        err: false,
+        profile: false,
+        cartCount: 0,
+        id: false,
+      });
+    }
   // }
 }
 function AfterMailSuccessfull(req, res) {
@@ -90,6 +99,9 @@ function MailVerificationFail(req, res) {
 var codEmai;
 // var userInformation;
 async function singupPost(req, res) {
+  if(req.query && req.query.err){
+    return res.json({err:req.query.err})
+  }
   console.log("api called");
   if (EmailCheck(req.body.email_or_Phone)) {
     try {
@@ -278,7 +290,7 @@ async function confirmPost(req, res) {
       res.json({err:"Verification Failed and Pleas Try Agin!!..."})
     }
   } catch (err) {
-    res.json({err:"Failed anc Crashed"})
+    res.json({err:"Failed and Crashed"})
     console.log("Error Otp post " + err);
   }
 }
@@ -297,6 +309,13 @@ function sessionsetWhileSignupWithGoogle(req, res) {
 }
 async function userAccount(req, res) {
   const userId = req.params.id;
+  const wallet=await walletCollection.find({userId:new ObjectId(userId)})
+  let totalAmt=0
+  wallet.map((value)=>{
+    totalAmt+=Number(value.amount)
+  })
+  console.log(wallet+' this is the wallet');
+  console.log('totalAmount of Wallet '+totalAmt);
   const cartData = await cartCollection.findOne({
     userId: new ObjectId(userId),
   });
@@ -321,6 +340,7 @@ async function userAccount(req, res) {
     id: userId,
     userData,
     addressData,
+    totalAmt,
   });
 }
 function userLogout(req, res) {
@@ -550,6 +570,7 @@ async function forgotPasswordPasswordEnterPost(req, res) {
 async function getPaymentSuccess(req, res) {
   try {
     const userId = req.params.userId;
+    
     const cartCount = await getCartCount(userId);
     res.render("users/paymentsuccess", {
       profile: true,

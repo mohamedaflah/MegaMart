@@ -84,6 +84,11 @@ body {
   width: 13px;
   height: 13px;
 }
+.main_nav .nav_bar .all_items .icons .crt.whish span {
+  background-color: #db4444;
+  right: 0.5px;
+  top: 0.5px;
+}
 .main_nav .nav_bar .all_items .icons .menu {
   display: none;
 }
@@ -1167,7 +1172,7 @@ body .signup .prfile {
   top: 0;
   right: 5%;
   width: 200px;
-  height: 180px;
+  min-height: 190px;
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.313);
   display: flex;
@@ -1201,7 +1206,7 @@ body .signup .prfile .lnk a span {
   margin: 5px;
 }
 body .signup .active {
-  display: block;
+  display: flex;
 }
 body .signup .checkout {
   width: 90%;
@@ -1764,7 +1769,7 @@ button:hover {
   top: 0;
   right: 5%;
   width: 200px;
-  height: 180px;
+  min-height: 190px;
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.685);
   display: flex;

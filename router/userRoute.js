@@ -73,6 +73,7 @@ const {
   filteredbyMinandMaxGet,
   sortProducts,
   filterProductwithBrand,
+  detailProductForFetch
 } = userProductHelper;
 
 const { filteredbyCategory } = userCategoryHelper;
@@ -91,7 +92,7 @@ router.get(
   sesionVerification,
   detailProductGet
 );
-
+router.get('/product/detail/:id/:image',detailProductForFetch)
 router.get(
   "/auth/google/signup",
   (req, res, next) => {
@@ -116,12 +117,21 @@ router.get("/auth/google/callback", (req, res, next) => {
     if (!user) {
       // Handle authentication failure
       console.error("Authentication failed:", info.message);
-      return res.render("users/sigup", {
-        err: "Signup Failed",
-        profile: false,
-        cartCount: 0,
-        id: false,
-      }); // Redirect to a failure page
+
+      return res.redirect("/signup?err=Email%20Already%20Exists");
+      // return res.render("users/sigup", {
+      //   err: "Email Alread Exist",
+      //   profile: false,
+      //   cartCount: 0,
+      //   id: false,
+      // }); // Redirect to a failure page
+
+      // fetch('/signup',{
+      //   method:"POST",
+      //   headers:{"Content-type":"application/json"},
+      //   body:
+      // })
+      // return res.json({err:"Email Already Exist"})
     }
 
     // Manually set a session variable with user data
@@ -165,7 +175,7 @@ router.post("/mail/confirm", confirmPost);
 // router.get('/main/confirm/resendotp/',resendOTP)
 router.get("/errorMessage/close", closeErr);
 router.get("/otp/close", otpClose);
-router.get("/user/account/:id", userAccount);
+router.get("/user/account/:id", sesionVerification,userAccount);
 router.get("/user/accounts/logout", userLogout);
 router.get("/user/login", userLoginGet);
 router.post("/user/login", userLoginPost);

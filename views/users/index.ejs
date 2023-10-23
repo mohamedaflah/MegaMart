@@ -105,7 +105,7 @@
 
                                 <%if(profile){%>
                                     <a style="z-index: 99;" onclick="addToCart('<%-data._id%>')">
-                                        <img src="/images/spcrt.svg" alt="">
+                                        <img src="/images/spcrt.svg" alt="" id="changeImg">
                                     </a>
                                <% }else{%>
                                 <a   href="/users/product/add-to-cart/<%-data._id%>">
@@ -113,9 +113,15 @@
                                 </a>
                                <%}%>
                                <%}%>
-                                <a href="">
-                                    <img src="/images/movewish.svg" alt="" class="whish">
-                                </a>
+                                <%if(profile){%>
+                                    <a href="">
+                                        <img src="/images/movewish.svg" alt="" class="whish" onclick="addToWhishList('<%-data._id%>')">
+                                    </a>
+                                <%}else{%>
+                                    <a href="">
+                                        <img src="/images/movewish.svg" alt="" class="whish">
+                                    </a>
+                                <%}%>
                             </div>
                             <img src="/product-images/<%-data.image[0].mainimage%>" alt="" onclick="gotoDetail('<%-data._id%>')">
                         </div>

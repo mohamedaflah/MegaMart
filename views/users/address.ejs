@@ -96,78 +96,23 @@
     </div>
     </div>    
     <script>
-        //name,
-        //email,
-        //state,
-        //district,
-        //pincode,
-        //street,
-        //phone,
-        //apartment,
-        //payment_method,
-        function checkoutWithAddress(event, userId) {
-            const checkoutFormForAddress = document.getElementById("checkoutform1");
-            const name=document.getElementById("name")
-            const email=document.getElementById("email")
-            const state=document.getElementById("state")
-            const district=document.getElementById("district")
-            const pincode=document.getElementById("pincode")
-            const street=document.getElementById("street")
-            const phone=document.getElementById("phone")
-            const apartment=document.getElementById("apar")
-            const selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked')
-            event.preventDefault();
-            //let val = document.getElementById("name");
-            let formData = {
-                name:name.value,
-                email:email.value,
-                state:state.value,
-                district:district.value,
-                pincode:pincode.value,
-                street:street.value,
-                phone:phone.value,
-                apartment:apartment.value,
-                payment_method:selectedPaymentMethod.value
-            };
-            
-            fetch(`http://localhost:5001/users/product/checkout/address/${userId}`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-            },
-              body: JSON.stringify(formData), // Use formData, not new FormData(checkoutFormForAddress)
-            })
-              .then((response) => response.json())
-              .then((res) => {
-                
-                console.log(res.status + ' -______- status');
-                if (res.status === 'COD') {
-                  location.href = `/users/product/checkout/payment/success/${userId}`;
-                }else{
-                    razorpayPayment(res,userId)
-                }
-              })
-              //.catch((err)=>{
-              //  alert('error is'+err)
-              //});
-          }
-          function razorpayPayment(order,userId){
-            
-            let options={
-                key:'rzp_test_2kq1q9uS7VLUsv',
-                amount:order.amount,
-                currency:'INR',
-                order_id:order.order_id,
-                handler:(response)=>{
-                    console.log(response)
-                    if(response.razorpay_payment_id){
-                        window.location.href=`http://localhost:5001/users/product/checkout/payment/success/${userId}`
-                    }
-                }
-            } 
-            const rzp=new Razorpay(options);
-            rzp.open()
-          }
+          //function razorpayPayment(order,userId){
+          //  
+          //  let options={
+          //      key:'rzp_test_4DklPLkGmokBbK',
+          //      amount:order.amount,
+          //      currency:'INR',
+          //      order_id:order.order_id,
+          //      handler:(response)=>{
+          //          console.log(response)
+          //          if(response.razorpay_payment_id){
+          //              window.location.href=`http://localhost:5001/users/product/checkout/payment/success/${userId}`
+          //          }
+          //      }
+          //  } 
+          //  const rzp=new Razorpay(options);
+          //  rzp.open()
+          //}
       </script>
       
     <%-include('../partials/footer.ejs') %>

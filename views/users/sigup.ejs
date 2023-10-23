@@ -14,6 +14,12 @@
                         <h2>Create An Account</h2>
                         <p>Enter your detail below</p>
                     </div>
+                    <%if(err){%>
+                        <p id="err" style="visibility: visible;">
+                            <span id="displayErr"><%-err%></span>
+                            <a id="errclose" style="cursor: pointer;"><img src="/images/cross.png"
+                                        style="width: 13px;height:13px" alt=""></a></p>
+                    <%}%>
                         <p id="err" style="visibility: hidden;">
                             <span id="displayErr"></span>
                             <a id="errclose" style="cursor: pointer;"><img src="/images/cross.png"
@@ -83,13 +89,14 @@
                 headers:{'Content-Type': 'application/json'},
                 body:JSON.stringify(formDetail)
             }).then((response)=>response.json()).then((res)=>{
-                    document.querySelector('.loading').style.display='flex'
+                
                     if(res.status){
                         location.href=`/mail/confirm`
                     }else if(res.err){    
                     document.querySelector('.loading').style.display='none'
                     errMsg.style.visibility='visible'
                     displayErr.textContent=res.err
+                    return
                 }
             })
         }

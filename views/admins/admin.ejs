@@ -100,9 +100,9 @@
                                 </div>
                                 <div class="table_datas ">
                                     <% let d = new Date(data.joinDate) %>
-                                    <% let dayAr = ["Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday","Sunday"] %>
+                                    <% let dayAr = ["Sunday","Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday"] %>
                                     <% let monthAr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
-                                    <%-d.getDate()%> <%- monthAr[d.getMonth()+1]%> <%-d.getFullYear()%> <%-dayAr[d.getDay()-1]%>
+                                    <%-d.getDate()%> <%- monthAr[d.getMonth()+1]%> <%-d.getFullYear()%> <%-dayAr[d.getDay()]%>
                                 </div>
                                 <div class="table_datas ">
                                     <%if(data.status){%>

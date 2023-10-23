@@ -90,6 +90,15 @@ $themeColor: rgb(173, 74, 74);
             height: 13px;
           }
         }
+        .crt.whish{
+          // background-color: rebeccapurple;
+          span{
+            background-color:#db4444;
+            right: .5px;
+            top: .5px;
+            // padding: 1px;
+          }
+        }
         .menu {
           display: none;
         }
@@ -1440,7 +1449,7 @@ body {
       top: 0;
       right: 5%;
       width: 200px;
-      height: 180px;
+      min-height: 190px;
       border-radius: 4px;
       background: rgba(0, 0, 0, 0.313);
       display: flex;
@@ -1479,7 +1488,7 @@ body {
       }
     }
     .active {
-      display: block;
+      display: flex;
     }
     .checkout {
       width: 90%;
@@ -2183,7 +2192,7 @@ $sidBarWidth: 250px;
     top: 0;
     right: 5%;
     width: 200px;
-    height: 180px;
+    min-height: 190px;
     border-radius: 4px;
     background: rgba(0, 0, 0, 0.685);
     display: flex;

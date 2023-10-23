@@ -11,7 +11,8 @@ const {
   getTotalAmount,
 } = require("../helper/cart-helper");
 const { generateRazorpay } = require("../helper/razorpay");
-const {getOrderId}=require('../helper/orderhelper')
+const {getOrderId}=require('../helper/orderhelper');
+const { addAmountIntoWallet } = require("./walletController");
 // Listing Orders is Admin Side
 async function listAllOrders(req, res) {
   // const orderDetail = await userDb.aggregate([
@@ -470,7 +471,6 @@ async function checkOut(req, res) {
       if(req.body.payment_method=='COD'){
         res.json({status:"COD"})
       }else{
-        
         let orderId=await getOrderId(userId)
         generateRazorpay(orderId,totalAmount,userId).then((order)=>{
           res.json(order)
@@ -577,6 +577,7 @@ async function checkOut(req, res) {
       const userId = req.params.userId;
       const orderId = req.params.orderId;
       const productId = req.params.productId;
+      const paymentMode=await orderCollection.findOne({_id:new ObjectId(orderId),userId:new ObjectId(userId)})
       await orderCollection.updateOne(
         { _id: new ObjectId(orderId), userId: new ObjectId(userId) },
         {
@@ -587,9 +588,18 @@ async function checkOut(req, res) {
         { _id: new ObjectId(productId) },
         { $inc: { qty: quantity } }
       );
-      res.redirect(
-        `http://localhost:5001/users/product/orders/trackorders/${userId}`
-      );
+      console.log(paymentMode+'<<<<<<<<<????????saldfkaslkdfjlaksdfjlk');
+      if(paymentMode.paymentmode=='Bank'){
+        addAmountIntoWallet(userId,orderId).then(()=>{
+          res.redirect(
+            `http://localhost:5001/users/product/orders/trackorders/${userId}`
+          );
+        })
+      }else{
+        res.redirect(
+          `http://localhost:5001/users/product/orders/trackorders/${userId}`
+        );
+      }
     } catch (err) {
       console.log("Error during cancel order" + err);
     }
