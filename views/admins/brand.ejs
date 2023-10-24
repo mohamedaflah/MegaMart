@@ -29,8 +29,13 @@
                             <div class="cls" >
                                 <img src="/images/Closebtn.svg" alt="" id="clsbtn">
                             </div>
-                            <form action="/admin/category/add-category" method="post">
-                                <input type="text" name="category" placeholder="add new Category" id="">
+                            <form onsubmit="addBrands()">
+                                <input type="text" name="brand" placeholder="add new Category" id="">
+                                <label for="logo" class="logodiv">
+                                    <p>Upload Logo</p>
+                                    <img src="" alt="">
+                                </label>
+                                <input type="file" name="logo" id="logo" style="display: none;">
                                 <button type="submit">add</button>
                             </form>
                         </div>

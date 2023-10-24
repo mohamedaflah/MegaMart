@@ -2,6 +2,7 @@ const productsCollection = require("../model/collections/products");
 const cartCollection = require("../model/collections/cart");
 const orderCollection = require("../model/collections/orders");
 const addressCollection = require("../model/collections/address");
+
 // const CategoryDb=require('../model/collections/CategoryDb')
 const {
   getCartCount,
@@ -11,6 +12,7 @@ const {
 const { ObjectId } = require("bson");
 const { generateRazorpay } = require("../helper/razorpay");
 const { getOrderId } = require("../helper/orderhelper");
+const { getWhishLIstCount } = require("../helper/whish-helper");
 
 // Address form Get
 async function enterAddress(req, res) {
@@ -25,12 +27,14 @@ async function enterAddress(req, res) {
   //   cartCount = cartData.products.length;
   // }
   const cartCount = await getCartCount(userId);
+  const whishCount=await getWhishLIstCount(userId)
   const totalAmount = await getTotalAmount(userId);
 
   res.render("users/address", {
     profile: true,
     id: userId,
     cartCount,
+    whishCount,
     userCartdata,
     totalAmount,
   });
@@ -53,16 +57,6 @@ async function postUserAddress(req, res) {
       apartment,
       payment_method,
     } = req.body;
-    console.log("Name   ________" + name);
-    console.log("Eamil   ________" + email);
-    console.log("state   ________" + state);
-    console.log("district   ________" + district);
-    console.log("place   ________" + pincode);
-    console.log("street   ________" + street);
-    console.log("phone   ________" + phone);
-    console.log("apartment   ________" + apartment);
-    console.log("payment   ________" + payment_method);
-    const userCartdata = await getUserCartData(userId);
     // const productIds = userCartdata.map(
     //   (cartItem) => cartItem.products.productId
     // );
@@ -194,7 +188,8 @@ async function postUserAddress(req, res) {
 async function addingAddressGet(req, res) {
   const userId = req.params.userId;
   const cartCount = await getCartCount(userId);
-  res.render("users/addAddress", { id: userId, profile: true, cartCount });
+  const whishCount=await getWhishLIstCount(userId)
+  res.render("users/addAddress", { id: userId, profile: true, cartCount,whishCount });
 }
 
 // Add Address Post page
@@ -241,8 +236,10 @@ async function updateAddresGet(req, res) {
   // );
   // console.log(JSON.stringify(data)+' {{{{{{{{{{{{{{{{{{{{{data ')
   const cartCount = await getCartCount(userId);
+  const whishCount=await getWhishLIstCount(userId)
   res.render("users/editAddress", {
     cartCount,
+    whishCount,
     id: userId,
     profile: true,
     addressData,
@@ -297,10 +294,12 @@ async function deleteUserAddress(req, res) {
 }
 async function addAddressinProfileGet(req, res) {
   let cartCount = await getCartCount(req.params.userId);
+  let whishCount=await getWhishLIstCount(req.params.userId)
   res.render("users/addAddressinProfile", {
     profile: true,
     id: req.params.userId,
     cartCount,
+    whishCount
   });
 }
 async function addAddressinProfilePost(req, res) {

@@ -8,6 +8,7 @@ const {
   getUserCartData,
   getTotalAmount,
 } = require("../helper/cart-helper");
+const { getWhishLIstCount } = require("../helper/whish-helper");
 // Display Categories in Admin side as Table
 async function ManageCategory(req, res) {
   let categories = await categoryCollection.find().sort({ addedDate: -1 });
@@ -187,6 +188,7 @@ async function addCategoryWhileErr(req, res) {
       });
       const userId = userData._id;
       var cartCount = await getCartCount(userId);
+      let whishCount=await getWhishLIstCount(userId)
       console.log("data of a cart " + cartCount);
   
       res.render("users/filteredcategory", {
@@ -196,6 +198,7 @@ async function addCategoryWhileErr(req, res) {
         id: userStatus[0]._id,
         err: false,
         categories,
+        whishCount,
       });
       // return;
     } else {

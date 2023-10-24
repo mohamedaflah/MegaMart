@@ -13,6 +13,7 @@ const {
 const { generateRazorpay } = require("../helper/razorpay");
 const {getOrderId}=require('../helper/orderhelper');
 const { addAmountIntoWallet } = require("./walletController");
+const { getWhishLIstCount } = require("../helper/whish-helper");
 // Listing Orders is Admin Side
 async function listAllOrders(req, res) {
   // const orderDetail = await userDb.aggregate([
@@ -408,6 +409,7 @@ async function checkOut(req, res) {
       userId: new ObjectId(userId),
     });
     const cartData = await getUserCartData(userId);
+    const whishCount=await getWhishLIstCount(userId)
     const totalAmount = await getTotalAmount(userId);
     // console.log(JSON.stringify(addressData) + "address data");
     console.log(JSON.stringify(cartData));
@@ -416,6 +418,7 @@ async function checkOut(req, res) {
       cartCount,
       id: userId,
       addressData,
+      whishCount,
       cartData,
       totalAmount,
     });
@@ -487,6 +490,7 @@ async function checkOut(req, res) {
   async function userOrders(req, res) {
     const userId = req.params.userId;
     const cartCount = await getCartCount(userId);
+    const whishCount=await getWhishLIstCount(userId)
     const userDetail = await UserCollection.findOne({
       _id: new ObjectId(userId),
     });
@@ -565,6 +569,7 @@ async function checkOut(req, res) {
     res.render("users/orders", {
       profile: true,
       cartCount,
+      whishCount,
       id: userId,
       orderDetail,
       qty,

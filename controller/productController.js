@@ -4,6 +4,7 @@ const cartCollection = require("../model/collections/cart");
 const { ObjectId } = require("bson");
 const categoryCollection = require("../model/collections/CategoryDb");
 const { getCartCount } = require("../helper/cart-helper");
+const { getWhishLIstCount } = require("../helper/whish-helper");
 async function manageProducts(req, res) {
   try {
     // add Product and Listing Product Section in Admin
@@ -532,15 +533,11 @@ async function detailProductGet(req, res) {
     email: req.session.userEmail,
   });
   const userId = userData._id;
+  const whishCount=await getWhishLIstCount(userId)
   const cartData = await cartCollection.findOne({
     userId: new ObjectId(userId),
   });
-
-  if (cartData) {
-    cartCount = cartData.products.length;
-  } else {
-    cartCount = 0;
-  }
+  let cartCount=await getCartCount(userId)
 
   let productData = await productCollection.aggregate([
     {
@@ -626,6 +623,7 @@ async function detailProductGet(req, res) {
     productData,
     mainImageas,
     cartCount,
+    whishCount,
     id: userId,
     allProduct,
     exist,
@@ -653,29 +651,11 @@ async function searchProduct(req, res) {
     });
     const userId = userData[0]._id;
     var cartCount = await getCartCount(userId);
-    // console.log("data of a cart " + cartCount);
 
-    // res.render("users/index", {
-    //   profile: true,
-    //   productData,
-    //   cartCount,
-    //   id: userStatus[0]._id,
-    //   err: false,
-    //   categories,
-    //   brands,
-    // });
-    // return;
     res.json({ productData: productData });
   } else {
     res.json({ productData: productData });
-    // res.render("users/index", {
-    //   profile: false,
-    //   productData,
-    //   id: false,
-    //   err: false,
-    //   categories,
-    //   brands,
-    // });
+
   }
 }
 

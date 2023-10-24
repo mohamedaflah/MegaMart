@@ -82,6 +82,7 @@ const { verifySessionAuth } = require("../middleware/verifySession");
 const { checkingUserStatus } = require("../middleware/statusVerify");
 const { sesionVerification } = require("../middleware/functionalityVerify");
 const { usersProduct } = require("../controller/productController");
+const { getWhishListPage, addToWhishList,removeProductInwhish, movetoCartinWhishList } = require("../controller/whishlistController");
 require("../auth/passportAuth");
 require("../auth/LoginwithGoogle");
 router.get("/", userHome);
@@ -185,6 +186,10 @@ router.get(
   "/users/product/cart/increaseqty/:userId/:productId/",
   increaseQuantity
 );
+router.get('/users/product/whishlist/:id',sesionVerification,getWhishListPage)
+router.get('/users/product/whishlist/add-to-whishlist/:productId/:userId',sesionVerification,addToWhishList)
+router.get('/users/product/whishlist/remove-product-whish/:productId/:userId',removeProductInwhish)
+router.get('/users/product/whishlist/move-product-cart/:productId/:userId',movetoCartinWhishList)
 router.get(
   "/users/product/cart/decreaseqty/:userId/:productId/",
   decreaseQuantity
@@ -276,4 +281,5 @@ router.post(
 router.route('/users/account/addAddress/:userId').get(addAddressinProfileGet).post(addAddressinProfilePost)
 router.get('/users/account/deleteAddress/:userId/:addressId',deleteUserAddressinProfile)
 router.route('/users/account/editAddress/:userId/:addressId').get(editAddressinProfileGet).post(editAddressinProfilePost)
+
 module.exports = { router };

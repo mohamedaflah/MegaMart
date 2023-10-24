@@ -86,8 +86,8 @@ body {
 }
 .main_nav .nav_bar .all_items .icons .crt.whish span {
   background-color: #db4444;
-  right: 0.5px;
   top: 0.5px;
+  padding: 2px;
 }
 .main_nav .nav_bar .all_items .icons .menu {
   display: none;
@@ -911,6 +911,33 @@ body {
   height: auto;
   cursor: pointer;
 }
+.home .products_section .product_card .image_section.whish {
+  position: relative;
+  height: 75%;
+  display: flex;
+  align-items: end;
+  overflow: hidden;
+}
+.home .products_section .product_card .image_section.whish .prodImg {
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+}
+.home .products_section .product_card .image_section.whish button {
+  background: #000;
+  width: 100%;
+  border-radius: 0;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  justify-content: center;
+}
+.home .products_section .product_card .image_section.whish button img {
+  width: 18px;
+  height: 18px;
+}
 .home .products_section .product_card .detail_section {
   cursor: pointer;
   height: 30%;
@@ -1714,6 +1741,34 @@ button:hover {
 .home {
   position: relative;
 }
+.home .wish_header {
+  width: 90%;
+  margin: auto;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 5px;
+}
+.home .wish_header .w_box {
+  height: 80%;
+  width: 150px;
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  justify-content: start;
+  font-size: 14px;
+}
+.home .wish_header .w_btn {
+  height: 80%;
+  width: 155px;
+  font-size: 13px;
+  background: transparent;
+  padding: 0;
+  color: #000;
+  border: 1px solid black;
+  margin: 0;
+}
 .home .forsort {
   width: 300px;
   position: absolute;
@@ -2100,9 +2155,10 @@ button:hover {
   margin: 10px;
   color: #0e0e0e;
   text-decoration: none;
+  transition: 0.4s ease;
 }
-.home .side_bar .links .tags .actived,
-.home .side_bar .activeLink .tags .actived {
+.home .side_bar .links .tags a:hover,
+.home .side_bar .activeLink .tags a:hover {
   background: linear-gradient(90deg, #92fe9d 0%, #00c9ff 100%);
 }
 .home .side_bar .activeLink {
@@ -2309,30 +2365,54 @@ button:hover {
 }
 .home .content_section .items_section .ebcf_modal .control_section {
   background: #22d29d;
+  height: 200px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: end;
   padding: 10px;
   border-radius: 5px;
   flex-direction: column;
+  position: relative;
 }
 .home .content_section .items_section .ebcf_modal .control_section .cls {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: center;
   margin-bottom: 10px;
 }
 .home .content_section .items_section .ebcf_modal .control_section .cls img {
   width: 18px;
   height: 18px;
+  position: absolute;
+  top: 10px;
+  right: 10px;
   cursor: pointer;
 }
 .home .content_section .items_section .ebcf_modal .control_section form {
   display: flex;
   gap: 18px;
+  align-items: end;
+  justify-content: center;
+}
+.home .content_section .items_section .ebcf_modal .control_section form .logodiv {
+  position: absolute;
+  left: 50%;
+  top: 15px;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 100px;
+  display: flex;
   align-items: center;
   justify-content: center;
+  background-color: rgb(252, 252, 252);
+  cursor: pointer;
+  border-radius: 3px;
+}
+.home .content_section .items_section .ebcf_modal .control_section form .logodiv p {
+  font-size: 10px;
+  font-weight: 400;
+  margin: 0;
 }
 .home .content_section .items_section .ebcf_modal .control_section form input,
 .home .content_section .items_section .ebcf_modal .control_section form button {

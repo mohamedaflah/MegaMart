@@ -8,6 +8,7 @@ const {
   getUserCartData,
   getTotalAmount,
 } = require("../helper/cart-helper");
+const { getWhishLIstCount } = require("../helper/whish-helper");
 
 
 // Addto Cart Functionality
@@ -112,6 +113,7 @@ async function getCartPage(req, res) {
     });
     const userId = userData._id;
     const cartCount = await getCartCount(userId);
+    const whishCount=await getWhishLIstCount(userId)
     let userCartdata = await getUserCartData(userId);
     // let totalAmount = 0;
     let totalAmount = await getTotalAmount(userId);
@@ -125,6 +127,7 @@ async function getCartPage(req, res) {
         userCartdata,
         totalAmount,
         empty: false,
+        whishCount,
       });
     } else {
       res.render("users/cart", {
@@ -134,6 +137,7 @@ async function getCartPage(req, res) {
         userCartdata,
         totalAmount,
         empty: true,
+        whishCount
       });
     }
   } catch (err) {

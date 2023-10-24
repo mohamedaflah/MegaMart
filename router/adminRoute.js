@@ -13,7 +13,6 @@ const {
   overView,
   filterUser,
   serchUser,
-
 } = require("../controller/adminController");
 const {
   ManageCategory,
@@ -38,11 +37,13 @@ const {
   searchProductForAdmin,
 } = require("../controller/productController");
 
-const {  listAllOrders,
+const {
+  listAllOrders,
   getOrderDetails,
   changeOrderStatus,
-  filterOrders,}=require('../controller/ordersController');
-const { ManageBrands } = require("../controller/brandController");
+  filterOrders,
+} = require("../controller/ordersController");
+const { ManageBrands, addBrand } = require("../controller/brandController");
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
 router.post("/login", adminLoginPost);
@@ -77,6 +78,21 @@ router.post("/products/add-products", upload.fields(uploadFields), addProduct);
 router.get("/products/add-products/:errortype", addProductgetwhileError);
 router.get("/category/add-category/:errortype", addCategoryWhileErr);
 
+const brandStorage=multer.diskStorage({
+  destination:(req,file,callback)=>{
+    callback(null,"./public/brand-logos");
+  },
+  filename:(req,file,callback)=>{
+    const randomeString = crypto.randomBytes(3).toString("hex");
+    const timestamp = Date.now();
+    const uniqueFile = `${timestamp}-${randomeString}`;
+    cb(null, uniqueFile + ".png");
+  }
+})
+const brandUpload=multer({storage:brandStorage})
+const uploadFieldForBrand = [{ name: "logo" }];
+
+router.post("/products/add-brand",brandUpload.fields(uploadFieldForBrand),addBrand);
 router.get("/category", admiLoginVerify, ManageCategory);
 router.post("/category/add-category", addCategory);
 router.get("/category/edit-category/:id", admiLoginVerify, editCategoryGet);
@@ -85,7 +101,7 @@ router.get("/category/unlist-category/:id", unListCategory);
 router.get("/category/recover-category/:id", recoverCategory);
 router.get("/products/edit-product/:id", getEditProduct);
 
-router.get('/brand',admiLoginVerify,ManageBrands)
+router.get("/brand", admiLoginVerify, ManageBrands);
 
 router.post(
   "/products/edit-products/:id",

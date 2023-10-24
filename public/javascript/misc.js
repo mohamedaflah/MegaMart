@@ -1,5 +1,8 @@
-async function addToCart(id) {
-  document.getElementById("changeImg").src='/images/sp3.svg'
+async function addToCart(event, id, inComing) {
+  event.stopPropagation();
+  if (inComing == "home") {
+    document.getElementById("changeImg").src = "/images/sp3.svg";
+  }
   // /users/product/add-to-cart/<%-data._id%>
   const response = await fetch(`/users/product/add-to-cart/${id}`).then(
     (re) => {
@@ -26,6 +29,7 @@ function showPreviewImg(productId, todisplayimage, appendingImgtag) {
 function checkoutWithAddress(event, userId) {
   const checkoutFormForAddress = document.getElementById("checkoutform1");
   const name = document.getElementById("name");
+
   const email = document.getElementById("email");
   const state = document.getElementById("state");
   const district = document.getElementById("district");
@@ -139,3 +143,68 @@ function razorpayPayment(order, userId) {
   });
   rzp.open();
 }
+
+async function addToWhishList(productId, userId) {
+  // alert('sd')
+  // /users/product/whishlist/add-to-whishlist/:productId/:userId
+  let response = await fetch(
+    `/users/product/whishlist/add-to-whishlist/${productId}/${userId}`
+  );
+  let res = await response.json();
+  console.log(res + "  sre");
+  if (res.status) {
+    let ct = document.getElementById("whish");
+    let current = ct.textContent;
+    ct.textContent = Number(current) + 1;
+  }
+}
+function removeItemFromWhish(event, productId, userId, noneBox, operation) {
+  try{
+    event.stopPropagation();
+    const invisibleBox = document.getElementById(noneBox);
+    const whishCountinWhish=document.getElementById("whiCountinWHish")
+    if (operation == "remove") {
+      fetch(
+        `/users/product/whishlist/remove-product-whish/${productId}/${userId}`
+      )
+        .then((response) => response.json())
+        .then((res) => {
+          if (res.status) {
+            invisibleBox.style.display = "none";
+            let ct = document.getElementById("whish");
+            let current = ct.textContent;
+            ct.textContent = Number(current) - 1;
+            let whiShCurr=Number(whishCountinWhish.textContent)
+            whishCountinWhish.textContent=whiShCurr-1
+          } else {
+            alert("err");
+          }
+        });
+    } else {
+      fetch(`/users/product/whishlist/move-product-cart/${productId}/${userId}`)
+        .then((response) => response.json())
+        .then((res) => {
+          if(res.status){
+            invisibleBox.style.display='none'
+            let ct = document.getElementById("whish");
+            let current = ct.textContent;
+            ct.textContent = Number(current) - 1;
+            let whiShCurr=Number(whishCountinWhish.textContent)
+            whishCountinWhish.textContent=whiShCurr-1
+            if(!res.productExistStatus){
+              let cart = document.getElementById("cartCnt");
+              let cartCntCurrent = cart.textContent;
+              cart.textContent = Number(cartCntCurrent) + 1;
+            }
+          }else{
+            alert('erlk')
+          }
+        });
+    }
+
+  }catch(err){
+
+  }
+}
+
+

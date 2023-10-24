@@ -76,9 +76,9 @@
                         </label>
                     </form>
                     <%if(profile){%>
-                        <a href=""  class="crt whish">
+                        <a href="/users/product/whishlist/<%-id%>"  class="crt whish">
                             <img class="whish" src="/images/heart.svg" alt="">
-                            <span id="cartCnt">10</span>
+                            <span id="whish"><%-whishCount%></span>
                         </a>
                         <a href="/users/product/cart/showcart/<%-id%>" class="crt">
                             <img class="cart" src="/images/cart.svg" alt="">

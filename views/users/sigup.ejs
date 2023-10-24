@@ -79,7 +79,7 @@
                 password:pass.value
             }
             //alert(JSON.stringify(formDetail))
-            if(!name.value || !email.value || !pass.value){
+            if(!name.value.trim() || !email.value.trim() || !pass.value.trim()){
                 displayErr.innerHTML=`Must enter values in all fields`
                 errMsg.style.visibility = "visible";
                 return;

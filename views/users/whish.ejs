@@ -1,31 +1,61 @@
 <%-include('../partials/header.ejs') %>
-<div class="home">
-    <div class="products_section" id="prod_section">
-                    <div class="product_card" >
-                        <div class="image_section">
-                            <img src="/images/redrm.png">
-                        </div>
-                        <div class="detail_section" >
-                            <p><%-data.productName%></p>
-                            <div class="price">
-                                <p class="discounted">
-                                    10
-                                </p>
-                                <p class="mrp">
-                                    10
-                                </p>
-                            </div>
-                            <div class="star_rating">
-                                <img src="/images/star.svg" alt="">
-                                <img src="/images/star.svg" alt="">
-                                <img src="/images/star.svg" alt="">
-                                <img src="/images/star.svg" alt="">
-                                <img src="/images/star.svg" alt="">
-                            </div>
-                        </div>
-                    </div>
-                    
-                
+<div class="home"  style="padding-top: 30px;">
+    <div class="wish_header">
+        <div class="w_box">
+            Whishlist (<span id="whiCountinWHish"><%-whishCount%></span>)
+        </div>
+        <button class="w_btn">
+            Move All to Cart
+        </button>
     </div>
-    <%-include('../partials/footer.ejs') %>
-</div>
+    <div class="products_section" id="prod_section">
+        <%userWhish.forEach((whishData,index)=>{%>
+            <div class="product_card" onclick="gotoDetail('<%-whishData.whishListData._id%>')" id="none<%-index%>">
+                <%if(whishData.whishListData.stock<1){%>
+                    <div class="unavailable" style="width: 70px;">
+                        <p style="color:aliceblue">out of stock</p>
+                    </div>
+                <%}%>
+                <div class="image_section whish">
+                    <div class="move" onclick="removeItemFromWhish(event,'<%-whishData.whishListData._id%>','<%-id%>','none<%-index%>','remove')">
+                        <img src="/images/delforwhish.svg" alt="">
+                    </div>
+                    <img class="prodImg" src="/product-images/<%-whishData.whishListData.image[0].mainimage%>">
+                    <%if(whishData.whishListData.stock>1){%>
+
+                        <button onclick="removeItemFromWhish(event,'<%-whishData.whishListData._id%>','<%-id%>','none<%-index%>','add')">
+                            <img src="/images/whitecart.svg" alt="" onclick="">
+                            Add to Cart</button>
+                            <%}else{%>
+                                <button disabled style="background: rgb(119, 119, 119);">
+                                    <img src="/images/whitecart.svg" alt="">
+                                    Add to Cart</button>
+                    <%}%>
+                </div>
+                <div class="detail_section" >
+                    <p>
+                        <%-whishData.whishListData.productName%>
+                    </p>
+                    <div class="price">
+                        <p class="discounted">
+                            <%if(whishData.whishListData.discount){%>
+                                ₹<%-whishData.whishListData.discount%>
+                            <%}else{%>
+                                ₹<%-whishData.whishListData.price%>
+                                <%}%>
+                        </p>
+                        <p class="mrp">
+                            <%if(whishData.whishListData.discount){%>
+                                <%-whishData.whishListData.price%>₹
+                           <% }%>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        <%})%>
+        
+               
+                                   
+                </div>
+            </div>
+            <%-include('../partials/footer.ejs') %> 

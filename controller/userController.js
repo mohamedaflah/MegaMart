@@ -16,6 +16,8 @@ const CategoryDb = require("../model/collections/CategoryDb");
 const isValidMail = require("../auth/isValidEmail");
 const { generateUniqueUsername } = require("../helper/generteUniquename");
 const walletCollection = require("../model/collections/wallet");
+const {getWhishLIstCount} = require("../helper/whish-helper");
+
 
 changeStream.on("otpDeleted", (documentId) => {
   console.log(`OTP document deleted with ID: ${documentId}`);
@@ -31,6 +33,7 @@ async function userHome(req, res) {
       profile: false,
       err: "Your Permission Denied by Admin",
       cartCount: false,
+      whishCount:false,
       id: false,
     });
   }
@@ -45,12 +48,14 @@ async function userHome(req, res) {
     });
     const userId = userData._id;
     var cartCount = await getCartCount(userId);
+    var whishListCount=await getWhishLIstCount(userId)
     // console.log("data of a cart " + cartCount);
 
     res.render("users/index", {
       profile: true,
       productData,
       cartCount,
+      whishCount:whishListCount,
       id: userStatus[0]._id,
       err: false,
       categories,
@@ -77,6 +82,7 @@ function singupGet(req, res) {
         err: req.query.err,
         profile: false,
         cartCount: 0,
+        whishCount:0,
         id: false,
       });
     }else{
@@ -84,6 +90,7 @@ function singupGet(req, res) {
         err: false,
         profile: false,
         cartCount: 0,
+        whishCount:0,
         id: false,
       });
     }
@@ -244,12 +251,18 @@ async function singupPost(req, res) {
 }
 function confirm(req, res) {
   if (!req.session.userAuth) {
+    let milliSecond=50000;
     res.render("users/otp", {
       err: false,
       profile: false,
       cartCount: 0,
+      whishCount:0,
       id: false,
     });
+    setTimeout(async()=>{
+      await OtpCollection.deleteOne({useremail:req.session.userFullDetail.email_or_Phone})
+      console.log('Otp Deleted');
+    },milliSecond)
   } else {
     res.redirect("/signup");
   }
@@ -319,12 +332,8 @@ async function userAccount(req, res) {
   const cartData = await cartCollection.findOne({
     userId: new ObjectId(userId),
   });
-  var cartCount = 0;
-  if (cartData) {
-    cartCount = cartData.products.length;
-  } else {
-    cartCount = 0;
-  }
+  var cartCount =await getCartCount(userId)
+  let whishCount=await getWhishLIstCount(userId)
   const userData = await UserCollection.findOne({ _id: new ObjectId(userId) });
   const addressData = await addressCollection
     .findOne({
@@ -337,6 +346,7 @@ async function userAccount(req, res) {
   res.render("users/Account", {
     profile: true,
     cartCount,
+    whishCount,
     id: userId,
     userData,
     addressData,
@@ -353,6 +363,7 @@ function userLoginGet(req, res) {
     profile: false,
     err: false,
     cartCount: 0,
+    whishCount:0,
     id: false,
   });
 }
@@ -384,6 +395,7 @@ async function userLoginPost(req, res) {
         profile: false,
         err: "User not found",
         cartCount: false,
+        whishCount:false,
         id: false,
       });
     }
@@ -436,6 +448,7 @@ function FailedLogin(req, res) {
     profile: false,
     err: "Login Failed",
     cartCount: 0,
+    whishCount:0,
     id: false,
   });
   // res.send("failed");
@@ -509,6 +522,7 @@ async function forgotPassConfirm(req, res) {
     err: false,
     profile: false,
     id: false,
+    whishCount:false,
     cartCount: false,
   });
 }
@@ -524,6 +538,7 @@ function forgotPassConfirmPost(req, res) {
       profile: false,
       id: false,
       cartCount: false,
+      whishCount:false,
     });
   }
 }
@@ -532,6 +547,7 @@ function forgotPasswordPasswordEnter(req, res) {
     profile: false,
     id: false,
     cartCount: 0,
+    whishCount:0,
     err: false,
   });
 }
@@ -545,6 +561,7 @@ async function forgotPasswordPasswordEnterPost(req, res) {
         profile: false,
         id: false,
         cartCount: 0,
+        whishCount:0,
         err: "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter and one number.",
       });
     }
@@ -562,6 +579,7 @@ async function forgotPasswordPasswordEnterPost(req, res) {
       profile: false,
       id: false,
       cartCount: 0,
+      whishCount:0,
       err: "Password Not Same",
     });
   }
@@ -572,9 +590,11 @@ async function getPaymentSuccess(req, res) {
     const userId = req.params.userId;
     
     const cartCount = await getCartCount(userId);
+    const whishCount=await getWhishLIstCount(userId)
     res.render("users/paymentsuccess", {
       profile: true,
       cartCount,
+      whishCount,
       id: userId,
     });
   } catch (err) {
@@ -585,6 +605,7 @@ async function getPaymentSuccess(req, res) {
 async function updateProfile(req, res) {
   const userId = req.params.userId;
   const cartCount = await getCartCount(userId);
+  const whishCount=await getWhishLIstCount(userId)
   const userData = await UserCollection.findOne({ _id: new ObjectId(userId) });
   res.render("users/updateprofile", {
     err: false,
@@ -592,6 +613,7 @@ async function updateProfile(req, res) {
     cartCount,
     id: userId,
     userData,
+    whishCount,
   });
 }
 async function updateProfilePost(req, res) {

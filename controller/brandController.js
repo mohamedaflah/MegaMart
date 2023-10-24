@@ -3,4 +3,7 @@
 function ManageBrands(req,res){
     res.render('admins/brand')
 }
-module.exports={ManageBrands}
+function addBrand(req,res){
+
+}
+module.exports={ManageBrands,addBrand}

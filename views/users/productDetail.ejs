@@ -90,7 +90,7 @@
                         <%}else if(exist){%>
                             <a  onclick="location.href=`http://localhost:5001/users/product/cart/showcart/<%-id%>`" class="addtocart">Go to Cart</a>
                             <%}else{%>
-                                <a  onclick="addToCart('<%-productData[0]._id%>')" class="addtocart">Add to Cart</a>
+                                <a  onclick="addToCart(event,'<%-productData[0]._id%>','detail')" class="addtocart">Add to Cart</a>
                          <%} %>
                         <a href="" class="whish"><img class="whish" src="/images/heart.svg" alt=""></a>
                     </div>

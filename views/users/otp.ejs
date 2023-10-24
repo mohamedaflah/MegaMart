@@ -22,31 +22,16 @@
             <!-- <div>Expires In: <span id="date">10s</span> </div> -->
             
             <!-- Button to verify OTP -->
-            <button type="submit" id="verifyEmailOTP">VERIFY &amp; PROCEED</button>
+            <button  style="width: 110px;font-size: 12px;display: none;" id="resendBtn">resend OTP</button>
+            <button type="submit" id="verifyEmailOTP" style="font-size: 12px;">VERIFY &amp; PROCEED</button>
         </form>
       </div>
 </div>
 <script>
-    //let count = 60;
-    //let time = setInterval(() => {
-    //    count--;
-    //
-    //    if (count <= 9) {
-    //        document.getElementById("date").textContent = `0${count}s`;
-    //    } else {
-    //        document.getElementById("date").textContent = count + 's';
-    //    }
-    //
-    //    if (count === 0) {
-    //        clearInterval(time);
-    //        document.getElementById('otpstatus').innerHTML = `<span style="color:red;">OTP Expired
-    //            <a href="" style="text-decoration:underline;color:#42414d;">Resend Otp</a>
-    //        </span>`;
-    //    }
-    //}, 1000);
     let formValue=document.getElementById('emailverificationCode')
     const ErrDiv=document.getElementById('err')
     const showErr=document.getElementById("showErr")
+    const resnedBtn=document.getElementById("resendBtn")
     function otpFormSubmit(event){
 
         event.preventDefault()
@@ -70,6 +55,12 @@
             }
         })
     }
+    let milliSecond=50000
+    setTimeout(async()=>{
+        ErrDiv.style.visibility = 'visible';
+        showErr.textContent = 'Otp Expired';
+        resnedBtn.style.display='inline-block'
+      },milliSecond)
     function errClose(){
         document.getElementById("err").style.visibility='hidden'
     }
