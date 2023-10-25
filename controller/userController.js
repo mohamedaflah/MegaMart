@@ -369,78 +369,51 @@ function userLoginGet(req, res) {
 }
 async function userLoginPost(req, res) {
   try {
-    const { email_or_Phone, password } = req.body;
+    console.log('api called login');
+    const { email_or_Phone, password } = req.body.formData;
+    console.log(JSON.stringify(req.body.formData));
     if (!email_or_Phone || !password) {
-      return res.render("users/login", {
-        profile: false,
-        err: "Please Fillout All Field",
-        cartCount: false,
-        id: false,
-      });
+      return res.json({err:"Please Fillout All Field"})
     }
-    // if(EmailCheck(req.body.email_or_Phone)){
-    //   return res.render("users/login", {
-    //     profile: false,
-    //     err: "Enter Valid Email Including '@'",
-    //     cartCount: false,
-    //     id: false,
-    //   });
-    // }
+    if(!EmailCheck(email_or_Phone)){
+      return res.json({err:"Enter Valid Email Including '@'"})
+    }
     // Check if the user exists based on email
     const userData = await UserCollection.findOne({ email: email_or_Phone });
 
     if (!userData) {
       // User not found
-      return res.render("users/login", {
-        profile: false,
-        err: "User not found",
-        cartCount: false,
-        whishCount:false,
-        id: false,
-      });
+      return res.json({err:"User not Found"})
     }
-    // else if (!userData.status) {
-    //   return res.render("users/login", {
-    //     profile: false,
-    //     err: "Your Permission Denied by Admin",
-    //     cartCount: false,
-    //     id: false,
-    //   });
-    // }
 
     // Compare passwords
     const passwordMatch = await bcrypt.compare(password, userData.password);
 
     if (!passwordMatch) {
-      // Passwords don't match
-      return res.render("users/login", {
-        profile: false,
-        err: "Incorrect Email or Password",
-        id: false,
-      });
+
+      return res.json({err:"Incorrect Email or Password"})
     }
 
     // Login successful
     req.session.userAuth = true;
-    req.session.userEmail = req.body.email_or_Phone;
+    req.session.userEmail = email_or_Phone;
     const userStatus = await UserCollection.find({
       email: req.session.userEmail,
     });
     if (userStatus[0].status) {
-      return res.redirect("/");
+      return res.json({status:true});
     } else {
-      res.render("users/login", {
-        profile: false,
-        err: "Your Access has been denied by admin",
-        id: false,
-      });
+
+
+      return res.json({err:"Your Access has been Denied by admin"})
     }
   } catch (err) {
     console.error("Error during login:", err);
-    res.render("users/login", {
-      profile: false,
-      err: "Login failed. Please try again later.",
-    });
+    // res.render("users/login", {
+    //   profile: false,
+    //   err: "Login failed. Please try again later.",
+    // });
+    return res.json({err:"Login Failed "})
   }
 }
 function FailedLogin(req, res) {

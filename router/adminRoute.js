@@ -44,6 +44,7 @@ const {
   filterOrders,
 } = require("../controller/ordersController");
 const { ManageBrands, addBrand } = require("../controller/brandController");
+const { showAllCouponInAdmin, addCouponPost } = require("../controller/cuponController");
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
 router.post("/login", adminLoginPost);
@@ -133,4 +134,6 @@ router.get(
   filteringandSortingcategory
 );
 router.get("/products/orders/orders/:filterorder/", filterOrders);
+router.get("/products/cupons/allcupons",admiLoginVerify,showAllCouponInAdmin)
+router.post('/products/coupons/add-coupon',addCouponPost)
 module.exports = { router };

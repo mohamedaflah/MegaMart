@@ -186,7 +186,9 @@ async function postEditProduct(req, res) {
       description,
     } = req.body;
     console.log("category is a ++++++++++" + category);
+    // let previousCategoryId=await productCollection.findOne({_id:new ObjectId(proId)})
     let categoryId = await categoryCollection.find({ categoryname: category });
+    await categoryCollection.updateOne({_id:new ObjectId(categoryId[0]._id)},{$inc:{stock:1}})
     await productCollection.updateOne(
       { _id: new ObjectId(proId) },
       {

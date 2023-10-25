@@ -36,6 +36,7 @@
                 
                     <img src="/product-images/<%-productData[0].image[0][mainImageas]%>" alt="" id="toDisplay5">
                 </a>
+                
             </div>
         </div>
         <div class="descriptions">
@@ -154,7 +155,8 @@
 <script>
     let options={
         width:300,
-        zoomWidth:300,
+        zoomWidth:500,
+        zoomHeigth:500,
         offset:{vertical:0,horizontal:210}
     }
     new ImageZoom(document.getElementById('img-container'),options)

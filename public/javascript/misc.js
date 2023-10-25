@@ -1,3 +1,5 @@
+
+
 async function addToCart(event, id, inComing) {
   event.stopPropagation();
   if (inComing == "home") {
@@ -23,7 +25,17 @@ function showPreviewImg(productId, todisplayimage, appendingImgtag) {
       let productData = res.productData;
       let image = res.mainImageas;
       displayImageTag.src = `/product-images/${productData[0].image[0][image]}`;
+      displayImageTag.setAttribute(
+        "src",
+        `/product-images/${productData[0].image[0][image]}`
+      );
     });
+  let options = {
+    width: 300,
+    zoomWidth: 300,
+    offset: { vertical: 0, horizontal: 210 },
+  };
+  new ImageZoom(document.getElementById("img-container"), options);
 }
 
 function checkoutWithAddress(event, userId) {
@@ -159,10 +171,10 @@ async function addToWhishList(productId, userId) {
   }
 }
 function removeItemFromWhish(event, productId, userId, noneBox, operation) {
-  try{
+  try {
     event.stopPropagation();
     const invisibleBox = document.getElementById(noneBox);
-    const whishCountinWhish=document.getElementById("whiCountinWHish")
+    const whishCountinWhish = document.getElementById("whiCountinWHish");
     if (operation == "remove") {
       fetch(
         `/users/product/whishlist/remove-product-whish/${productId}/${userId}`
@@ -174,8 +186,8 @@ function removeItemFromWhish(event, productId, userId, noneBox, operation) {
             let ct = document.getElementById("whish");
             let current = ct.textContent;
             ct.textContent = Number(current) - 1;
-            let whiShCurr=Number(whishCountinWhish.textContent)
-            whishCountinWhish.textContent=whiShCurr-1
+            let whiShCurr = Number(whishCountinWhish.textContent);
+            whishCountinWhish.textContent = whiShCurr - 1;
           } else {
             alert("err");
           }
@@ -184,27 +196,59 @@ function removeItemFromWhish(event, productId, userId, noneBox, operation) {
       fetch(`/users/product/whishlist/move-product-cart/${productId}/${userId}`)
         .then((response) => response.json())
         .then((res) => {
-          if(res.status){
-            invisibleBox.style.display='none'
+          if (res.status) {
+            invisibleBox.style.display = "none";
             let ct = document.getElementById("whish");
             let current = ct.textContent;
             ct.textContent = Number(current) - 1;
-            let whiShCurr=Number(whishCountinWhish.textContent)
-            whishCountinWhish.textContent=whiShCurr-1
-            if(!res.productExistStatus){
+            let whiShCurr = Number(whishCountinWhish.textContent);
+            whishCountinWhish.textContent = whiShCurr - 1;
+            if (!res.productExistStatus) {
               let cart = document.getElementById("cartCnt");
               let cartCntCurrent = cart.textContent;
               cart.textContent = Number(cartCntCurrent) + 1;
             }
-          }else{
-            alert('erlk')
+          } else {
+            alert("erlk");
           }
         });
     }
+  } catch (err) {}
+}
+// show errors
+function loginFormSubmit(e) {
+  try{
+    e.preventDefault();
+    let errDivForLog = document.getElementById("errLog");
+    let errShowing = document.getElementById("showLoginErr");
+    let email = document.getElementById("emailOrMobileInputforLogin").value;
+    let pass = document.getElementById("passlog").value;
+  
+    let formData = {
+      email_or_Phone: email,
+      password: pass,
+    };
+    axios
+      .post(`http://localhost:5001/user/login`, {
+        formData,
+      })
+      .then((response) => {
+        if (response.data.err) {
+          errDivForLog.style.visibility = "visible";
+          errShowing.textContent = response.data.err;
+          setTimeout(() => {
+            errDivForLog.style.visibility='hidden';
+          }, 3000);
+        }
+        if (response.data.status) {
+          window.location.href = "/";
+        }
+      });
 
   }catch(err){
-
+    alert(err)
   }
 }
-
-
+function loginErrClose() {
+  document.getElementById("errLog").style.visibility = "hidden";
+}
