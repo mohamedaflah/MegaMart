@@ -8,11 +8,12 @@ const schema = mongoose.Schema({
   },
   couponcode: {
     type: String,
+    unique: true,
   },
   addedDate: {
     type: Date,
   },
-  expiryDate: {
+  statusChangeDate: {
     type: Date,
   },
   createdAt: {
@@ -35,7 +36,14 @@ const schema = mongoose.Schema({
       },
     },
   ],
+  status: {
+    type: String,
+    enum: ["active", "expired"],
+    default: "active",
+  },
+  minOrderAmt:{
+    type:Number
+  }
 });
 
-// module.exports = mongoose.model("Cart", schema);
 module.exports = mongoose.model(process.env.COUPON_COLLECTION, schema);

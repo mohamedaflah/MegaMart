@@ -48,7 +48,13 @@
                                     <img src="/product-images/<%-data.cartData.image[0].mainimage%>" width="40px" height="auto" alt="">
                                 </div>
                                 <div class="name"><%-data.cartData.productName%></div>
-                                <div class="price">₹<%-data.cartData.discount*data.products.qty%></div>
+                                <div class="price">₹
+                                    <%if(data.cartData.discount){%>
+                                        <%-data.cartData.discount*data.products.qty%>
+                                        <%}else{%>
+                                            <%-data.cartData.price*data.products.qty%>
+                                    <%}%>
+                                </div>
                             </div>
                       <%  })%>
                         <div class="priceandimg sub">

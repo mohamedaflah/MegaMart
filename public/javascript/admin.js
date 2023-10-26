@@ -152,3 +152,4 @@ function searchProducts(event) {
     });
 }
 
+

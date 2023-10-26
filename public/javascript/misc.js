@@ -1,5 +1,3 @@
-
-
 async function addToCart(event, id, inComing) {
   event.stopPropagation();
   if (inComing == "home") {
@@ -217,13 +215,13 @@ function removeItemFromWhish(event, productId, userId, noneBox, operation) {
 }
 // show errors
 function loginFormSubmit(e) {
-  try{
+  try {
     e.preventDefault();
     let errDivForLog = document.getElementById("errLog");
     let errShowing = document.getElementById("showLoginErr");
     let email = document.getElementById("emailOrMobileInputforLogin").value;
     let pass = document.getElementById("passlog").value;
-  
+
     let formData = {
       email_or_Phone: email,
       password: pass,
@@ -237,18 +235,51 @@ function loginFormSubmit(e) {
           errDivForLog.style.visibility = "visible";
           errShowing.textContent = response.data.err;
           setTimeout(() => {
-            errDivForLog.style.visibility='hidden';
+            errDivForLog.style.visibility = "hidden";
           }, 3000);
         }
         if (response.data.status) {
           window.location.href = "/";
         }
       });
-
-  }catch(err){
-    alert(err)
+  } catch (err) {
+    alert(err);
   }
 }
 function loginErrClose() {
   document.getElementById("errLog").style.visibility = "hidden";
+}
+
+function openCoupon() {
+  document.querySelector(".coupon_see").classList.add("active");
+}
+function cuponClose() {
+  document.querySelector(".coupon_see").classList.remove("active");
+}
+
+function applyCoupon(event,userId) {
+  event.preventDefault()
+  let couponcode = document.getElementById("couponcode");
+  const formBody = {
+    couponcode: couponcode.value,
+  };
+  fetch(`/users/coupon/applycoupon/?id=${userId}`, {
+    method: "POST",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify(formBody),
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      if(res.err){
+        alert(res.err)
+      }
+      if(res.status){
+        let total=document.getElementById("aftertotal")
+        let current=Number(total.textContent)
+        let discount=Number(res.discount)
+        confirm(current+'    '+discount)
+        total.textContent=current-discount
+        // alert('deducted ')
+      }
+    });
 }

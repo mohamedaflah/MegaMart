@@ -390,6 +390,7 @@ async function filterOrders(req, res) {
 //User Checkout Section
 async function checkOut(req, res) {
     const userId = req.params.userId;
+  
     let useraddressIsExist = await addressCollection.findOne({
       userId: new ObjectId(userId),
     });

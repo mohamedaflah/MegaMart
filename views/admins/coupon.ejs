@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="header andcontrol">
                                     <label for="couponcode">Coupon code</label>
-                                    <input type="text" name="couponcode" placeholder="Enter Coupon Name"
+                                    <input type="text" name="couponcode" placeholder="Enter Coupon Name" oninput="checkAlreadyExist(event)"
                                         id="couponcode">
                                     <span style="color:red;margin: 0;visibility: hidden;" id="codeerr">Please fill
                                         coupon code</span>
@@ -59,7 +59,7 @@
                                 <div class="header andcontrol">
                                     <label for="expiry">Expiry Date</label>
                                     <%let date=new Date()%>
-                                        <input type="date" name="expiry" id="expiry"
+                                        <input type="date" name="expiry" id="expiry" oninput="checkLatestDate(event)"
                                             min="<%- date.getFullYear() %>-<%- date.getMonth() %>-<%- date.getDate() %>">
                                         <span style="color:red;margin: 0;visibility: hidden;" id="dateerr">Please select
                                             date</span>
@@ -74,7 +74,7 @@
                                 <div class="header andcontrol">
                                     <label for="limit">Usage Limit</label>
                                     <input type="number" name="limit" id="limit" placeholder="Enter Limit">
-                                    <span style="color:red;margin: 0;visibility: hidden;" id="limiterr">Please usage
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="limiterr">Please usage fill
                                         limit</span>
                                 </div>
                                 <div class="header andcontrol">
@@ -166,7 +166,7 @@
                                     <%-value.couponcode%>
                                 </div>
                                 <div class="table_datas ">
-                                    4
+                                    <%-value.users.length%>
                                 </div>
                                 <div class="table_datas ">
                                     <% let d = new Date(value.addedDate) %>
@@ -175,13 +175,21 @@
                                     <%-d.getDate()%> <%- monthAr[d.getMonth()+1]%> <%-d.getFullYear()%> <%-dayAr[d.getDay()]%>
                                 </div>
                                 <div class="table_datas ">
-                                    <% let d1 = new Date(value.expiryDate) %>
+                                    <% let d1 = new Date(value.statusChangeDate) %>
                                     <% let dayAr1 = ["Sunday","Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday"] %>
                                     <% let monthAr1=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
-                                    <%-d1.getDate()%> <%- monthAr1[d.getMonth()+1]%> <%-d1.getFullYear()%> <%-dayAr1[d.getDay()]%>
+                                    <%-d1.getDate()%> <%- monthAr1[d1.getMonth()+1]%> <%-d1.getFullYear()%> <%-dayAr1[d1.getDay()]%>
                                 </div>
                                 <div class="table_datas " style="width: 10%;">
-                                    Active
+                                    <%if(value.status=='active'){%>
+                                        <span style="background: #2cf454d7;padding: 3px 7px;border-radius: 4px;text-transform: capitalize;font-size: 12px;">
+                                            active
+                                        </span>
+                                    <%}else if(value.status=='expired'){%>
+                                        <span style="background: #f55d30;padding: 3px 7px;border-radius: 4px;text-transform: capitalize;font-size: 12px;">
+                                            expired
+                                        </span>
+                                    <%}%>
                                 </div>
                                 <!-- <div class="table_datas " style="width: 10%;">
                                        
@@ -362,7 +370,36 @@
             })
 
         }
-        function validateForm() {
 
+        function checkAlreadyExist(event){
+            let formData={
+                couponcode:event.target.value
+            }
+            fetch(`/admin/product/coupon/existstatus`,{
+                method:"POST",
+                headers:{"Content-type":"application/json"},
+                body:JSON.stringify(formData)
+            }).then((response)=>response.json()).then((res)=>{
+                if(res.err)
+                {
+
+                    document.getElementById("codeerr").style.visibility='visible'
+                    document.getElementById("codeerr").textContent=res.err
+                }else{
+                    document.getElementById("codeerr").style.visibility='hidden'
+                }
+            })
+        }
+        function checkLatestDate(e){
+            console.log(e.target.value)
+            let input=new Date(e.target.value)
+            let lates=new Date()
+            if(input<lates){
+                console.log('old')
+                document.getElementById("dateerr").style.visibility='visible'
+                document.getElementById("dateerr").textContent='Please select lates date'
+            }else{
+                document.getElementById("dateerr").style.visibility='hidden'
+            }
         }
     </script>

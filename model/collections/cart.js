@@ -7,6 +7,10 @@ const schema = mongoose.Schema({
     type: ObjectId,
     required: true,
   },
+  getDiscount:{
+    type:Number,
+    default:0
+  },
   products: [
     {
       productId: {

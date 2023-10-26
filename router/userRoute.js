@@ -75,7 +75,7 @@ const {
   filterProductwithBrand,
   detailProductForFetch
 } = userProductHelper;
-
+const {applyCoupon}=require('../controller/cuponController').forUserCoupon
 const { filteredbyCategory } = userCategoryHelper;
 
 const { verifySessionAuth } = require("../middleware/verifySession");
@@ -235,6 +235,9 @@ router.get(
   verifySessionAuth,
   userOrders
 );
+
+router.post('/users/coupon/applycoupon/',applyCoupon)
+
 router.post("/users/product/search-product/", searchProduct);
 router.get(
   "/users/product/categories/categoriesby/:categoryId",

@@ -244,7 +244,7 @@ mainSection.push(card)
             const datas=mainSection.join('')
              document.getElementById('prod_section').innerHTML=datas
             }else{
-            document.getElementById('prod_section').innerHTML=`<h3>Search Data Not Found</h3>`
+            document.getElementById('prod_section').innerHTML=`<h3>Search Data Not Found "${e.target.value}"</h3>`
         }
 
     })

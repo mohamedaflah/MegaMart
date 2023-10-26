@@ -45,6 +45,7 @@ async function postUserAddress(req, res) {
   try {
     console.log("reached_______________ and api called");
     const userId = req.params.userId;
+    let userCartdata = await getUserCartData(userId);
     console.log(JSON.stringify(req.body) + " this is the body of request");
     const {
       name,

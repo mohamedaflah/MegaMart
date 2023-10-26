@@ -182,6 +182,127 @@ body {
   position: relative;
   height: 100vh;
 }
+.home .coupon_see {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.478);
+  display: flex;
+  z-index: 99;
+  align-items: center;
+  justify-content: center;
+  display: none;
+}
+.home .coupon_see .alls {
+  width: 520px;
+  height: 650px;
+  padding: 5px;
+  background: ghostwhite;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+}
+.home .coupon_see .alls img {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+.home .coupon_see .alls .cls {
+  width: 100%;
+  min-height: 25px;
+  display: flex;
+  justify-content: end;
+}
+.home .coupon_see .alls .cls img {
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+  margin-top: 6px;
+  cursor: pointer;
+}
+.home .coupon_see .alls .coupon_bx {
+  width: 90%;
+  min-height: 90px;
+  box-shadow: 0 0 4px rgba(40, 44, 63, 0.08);
+  display: flex;
+  flex-wrap: wrap;
+  background: rgba(255, 255, 255, 0.498);
+  justify-content: center;
+  transition: display 1s ease;
+  z-index: 99;
+}
+.home .coupon_see .alls .coupon_bx .discount {
+  width: 100px;
+  height: 70px;
+  border-bottom: 1px solid #d9dadd;
+  border-right: 1px solid #d9dadd;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: url("/images/pink.png");
+  background-size: cover;
+  justify-content: center;
+  background-position: center;
+}
+.home .coupon_see .alls .coupon_bx .discount .sv {
+  font-weight: 900;
+  font-size: 18px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #14cda8;
+  text-transform: uppercase;
+}
+.home .coupon_see .alls .coupon_bx .discount .amt {
+  font-weight: 900;
+  font-size: 18px;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  color: #14cda8;
+}
+.home .coupon_see .alls .coupon_bx .detail {
+  height: 70px;
+  width: 350px;
+  border-bottom: #d9dadd 1px solid;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  padding-left: 5px;
+}
+.home .coupon_see .alls .coupon_bx .detail .pr {
+  font-weight: 100;
+  color: rgb(96, 95, 95);
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  margin: 3px 0;
+}
+.home .coupon_see .alls .coupon_bx .detail .prc {
+  font-weight: 500;
+  color: #000;
+}
+.home .coupon_see .alls .coupon_bx .expr {
+  width: 450px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+}
+.home .coupon_see .alls .coupon_bx .expr .pr {
+  font-weight: 500;
+  font-family: sans-serif;
+}
+.home .coupon_see .alls .coupon_bx .expr .prc {
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  font-weight: 900;
+  color: rgb(69, 66, 66);
+}
+.home .coupon_see.active {
+  display: flex;
+}
 .home .err_section {
   width: 90%;
   height: 600px;
@@ -376,6 +497,7 @@ body {
 .home .profile_card .side_section .navigations .acc_manage {
   width: 100%;
   min-height: 80px;
+  margin-top: 5px;
 }
 .home .profile_card .side_section .navigations .acc_manage .links {
   display: flex;
@@ -387,6 +509,7 @@ body {
 .home .profile_card .side_section .navigations .acc_manage .links a {
   color: black;
   text-decoration: none;
+  margin: 5px 0;
 }
 .home .profile_card .content_s {
   width: 70%;

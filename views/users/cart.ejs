@@ -83,14 +83,14 @@
                     </div>
                 <%})%>
             </div>
-            <div class="returnandupdate" >
+            <div class="returnandupdate" style="visibility: hidden;">
                 <a  id="return" style="font-size: 12px;width: 140px;">See All Coupons</a>
                 <!-- <a href="">Update cart</a> -->
             </div>
             <div class="place-order">
                 
-                    <form action="" class="sp cupon_apply">
-                        <input type="text" placeholder="Apply Coupon">
+                    <form  class="sp cupon_apply" onsubmit="applyCoupon(event,'<%-id%>','<%-totalAmount%>')">
+                        <input type="text" placeholder="Apply Coupon" name="couponcode" id="couponcode">
                         <button type="submit">apply Coupon</button>
                     </form>
                 
@@ -101,9 +101,10 @@
                     <div class="midtxt">
                         <div class="txt"><span>Subtotal</span> <span>₹<%-totalAmount%></span></div>
                         <div class="txt"><span>Shipping</span> <span>Free</span></div>
-                        <div class="txt"><span>Total</span> <span>₹<%-totalAmount%></span></div>
+                        <%let totalamount=totalAmount%>
+                        <div class="txt"><span>Total</span> <span >₹<span id="aftertotal"><%-totalamount%></span></span></div>
                         <div class="txt">
-                            <a href="/users/product/cart/checkout/<%-id%>">Process to Checkout</a>
+                            <a href="/users/product/cart/checkout/<%-id%>?">Process to Checkout</a>
                         </div>
                     </div>
                 </div>

@@ -17,7 +17,7 @@ const isValidMail = require("../auth/isValidEmail");
 const { generateUniqueUsername } = require("../helper/generteUniquename");
 const walletCollection = require("../model/collections/wallet");
 const {getWhishLIstCount} = require("../helper/whish-helper");
-
+const couponCollection=require("../model/collections/cupon")
 
 changeStream.on("otpDeleted", (documentId) => {
   console.log(`OTP document deleted with ID: ${documentId}`);
@@ -323,6 +323,7 @@ function sessionsetWhileSignupWithGoogle(req, res) {
 async function userAccount(req, res) {
   const userId = req.params.id;
   const wallet=await walletCollection.find({userId:new ObjectId(userId)})
+  const coupons=await couponCollection.find().sort({addedDate:-1})
   let totalAmt=0
   wallet.map((value)=>{
     totalAmt+=Number(value.amount)
@@ -351,6 +352,7 @@ async function userAccount(req, res) {
     userData,
     addressData,
     totalAmt,
+    coupons,
   });
 }
 function userLogout(req, res) {

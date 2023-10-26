@@ -234,6 +234,133 @@ $categoryWidth: 30%;
 
 .home {
   position: relative;
+  .coupon_see{
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.478);
+    display: flex;
+    z-index: 99;
+    align-items: center;
+    justify-content: center;
+    display: none;
+    .alls{
+      width: 520px;
+      height: 650px;
+      padding: 5px;
+      background: ghostwhite;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      position: relative;
+      img{
+        width: 80px;
+        height: 80px;
+        position: absolute;
+        top:0;
+        right: 0;
+        // z-index: -1;
+      }
+      .cls{
+        width: 100%;
+        min-height: 25px;
+        display: flex;
+        justify-content: end;
+        // background: red; 
+        // align-items: center;
+        img{
+          width: 10px;
+          height: 10px;
+          margin-right: 6px;
+          margin-top: 6px;
+          cursor: pointer;
+        }
+      }
+      .coupon_bx{
+        width: 90%;
+        min-height: 90px;
+        // border:1px solid #000;
+        box-shadow: 0 0 4px rgba(40,44,63,0.08);
+        display: flex;
+        flex-wrap: wrap;
+        background: rgba(255, 255, 255, 0.498);
+        justify-content: center;
+        transition:display 1s ease;
+        z-index: 99;
+        .discount{
+          width: 100px;
+          height: 70px;
+          border-bottom: 1px solid #d9dadd;
+          border-right:1px solid #d9dadd ;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          background: url('/images/pink.png');
+          background-size: cover;
+          justify-content: center;
+          background-position: center;
+          .sv{
+            font-weight: 900;
+            font-size: 18px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            color: #14cda8;
+            text-transform: uppercase;
+          }
+          .amt{
+            font-weight: 900;
+            font-size: 18px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            color: #14cda8;
+          }
+        }
+        .detail{
+          height: 70px;
+          width: 350px;
+          border-bottom: #d9dadd 1px solid;
+          display: flex;
+          flex-direction: column;
+          align-items: start;
+          justify-content: center;
+          padding-left: 5px;
+          .pr{
+            font-weight: 100;
+            // font-size: 12px;
+            color: rgb(96, 95, 95);
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            margin: 3px 0;
+          }
+          .prc{
+            font-weight: 500;
+            color: #000;
+          }
+        }
+        .expr{
+          width: 450px;
+          height: 30px;
+          // border: 1px solid yellow;
+          display: flex;
+          align-items: center;
+          padding: 0 5px;
+          .pr{
+            font-weight: 500;
+            font-family: sans-serif;
+          }
+          .prc{
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            font-weight: 900;
+            color: rgb(69, 66, 66);
+          }
+        }
+      }
+    }
+  }
+  .coupon_see.active{
+    display: flex;
+  }
   .err_section {
     width: 90%;
     height: 600px;
@@ -441,7 +568,8 @@ $categoryWidth: 30%;
         .acc_manage {
           width: 100%;
           min-height: 80px;
-          // background: khaki;
+          // background: red;
+          margin-top: 5px;
           .links {
             // width: 100%;
             // background-color: red;
@@ -454,6 +582,7 @@ $categoryWidth: 30%;
             a {
               color: black;
               text-decoration: none;
+              margin: 5px 0;
             }
           }
         }
