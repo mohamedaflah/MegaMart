@@ -19,7 +19,7 @@
             
             <!-- Field to display entered OTP -->
             <input type="text" id="emailverificationCode" placeholder="Enter verification code" name="verifyNum" readonly style="visibility: hidden;">
-            <!-- <div>Expires In: <span id="date">10s</span> </div> -->
+            <!-- <div>Expires In: <span id="date"></span>s </div> -->
             
             <!-- Button to verify OTP -->
             <button  style="width: 110px;font-size: 12px;display: none;" id="resendBtn">resend OTP</button>
@@ -28,41 +28,57 @@
       </div>
 </div>
 <script>
-    let formValue=document.getElementById('emailverificationCode')
-    const ErrDiv=document.getElementById('err')
-    const showErr=document.getElementById("showErr")
-    const resnedBtn=document.getElementById("resendBtn")
-    function otpFormSubmit(event){
-
-        event.preventDefault()
-        let formData={
-            verifyNum:formValue.value
-        }
-        fetch('/mail/confirm/',{
-            method:"POST",
-            headers:{'Content-Type': 'application/json'},
-            body:JSON.stringify(formData)
-        }).then((response)=>response.json()).then((res)=>{
-            if(res.status){
-                location.href='/'
-            }
-            if(res.err){
-                ErrDiv.style.visibility = 'visible';
-                showErr.textContent = res.err;
-                setTimeout(()=>{
-                    ErrDiv.style.visibility='hidden'
-                },3000)
-            }
+    let formValue = document.getElementById('emailverificationCode');
+    const ErrDiv = document.getElementById('err');
+    const showErr = document.getElementById('showErr');
+    const resnedBtn = document.getElementById('resendBtn');
+    let count = sessionStorage.getItem("count")||60;
+    
+    function otpFormSubmit(event) {
+        event.preventDefault();
+        let formData = {
+            verifyNum: formValue.value
+        };
+        fetch('/mail/confirm/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
         })
+            .then((response) => response.json())
+            .then((res) => {
+                if (res.status) {
+                    location.href = '/';
+                }
+                if (res.err) {
+                    ErrDiv.style.visibility = 'visible';
+                    showErr.textContent = res.err;
+                    setTimeout(() => {
+                        ErrDiv.style.visibility = 'hidden';
+                    }, 3000);
+                }
+            });
     }
-    let milliSecond=50000
-    setTimeout(async()=>{
+    
+    <!-- let s = setInterval(() => {
+        document.getElementById('date').textContent = count;
+        if (count === 0) {
+            clearInterval(s);
+        }
+        count--;
+
+        sessionStorage.setItem("count",count)
+    }, 900); -->
+    
+    let milliSecond = 50000;
+    setTimeout(() => {
         ErrDiv.style.visibility = 'visible';
         showErr.textContent = 'Otp Expired';
-        resnedBtn.style.display='inline-block'
-      },milliSecond)
-    function errClose(){
-        document.getElementById("err").style.visibility='hidden'
+        resnedBtn.style.display = 'inline-block';
+    }, milliSecond);
+    
+    function errClose() {
+        document.getElementById('err').style.visibility = 'hidden';
     }
+    
 </script>
 <%-include('../partials/footer.ejs') %>

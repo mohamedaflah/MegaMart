@@ -8,25 +8,28 @@
                 <img src="/images/close.png" alt="" onclick="cuponClose()">
             </div>
             <%coupons.forEach((data)=>{%>
-                <div class="coupon_bx">
-                    
-                    <div class="discount">
-                        <span class="sv">Save</span>
-                        <span class="amt">Rs.<%-data.discount%></span>
+                <%if(data.status=='active'){%>
+                    <div class="coupon_bx">
+                        
+                        <div class="discount">
+                            <span class="sv">Save</span>
+                            <span class="amt">Rs.<%-data.discount%></span>
+                        </div>
+                        <div class="detail">
+                            <span class="pr">On minimum purchase of <span class="prc">Rs.<%-data.minOrderAmt%></span> </span>
+                            <span class="pr">Code <span class="prc"> <%-data.couponcode%></span> </span>
+                        </div>
+                        <div class="expr">
+                            <span class="pr">Expiry <span class="prc">
+                                <% let monthAr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
+                                <%let date=new Date(data.statusChangeDate)%>
+                                 <%-monthAr[date.getMonth()]%> <%-date.getDate()%> <%-date.getFullYear()%>
+                                </span> </span>
+                            <!-- <span class="pr">Code <span class="prc">DLS899</span> </span> -->
+                        </div>
                     </div>
-                    <div class="detail">
-                        <span class="pr">On minimum purchase of <span class="prc">Rs.<%-data.minOrderAmt%></span> </span>
-                        <span class="pr">Code <span class="prc"> <%-data.couponcode%></span> </span>
-                    </div>
-                    <div class="expr">
-                        <span class="pr">Expiry <span class="prc">
-                            <% let monthAr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
-                            <%let date=new Date(data.statusChangeDate)%>
-                             <%-monthAr[date.getMonth()]%> <%-date.getDate()%> <%-date.getFullYear()%>
-                            </span> </span>
-                        <!-- <span class="pr">Code <span class="prc">DLS899</span> </span> -->
-                    </div>
-                </div>
+
+               <% }%>
             <%})%>
            
         </div>

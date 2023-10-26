@@ -129,8 +129,8 @@ async function applyCoupon(req, res) {
   if (!coupondata) {
     return res.json({ err: "Coupon not matching" });
   }
-  console.log(coupondata.minOrderAmt+'min order amt');
-  console.log(userOrderAmt +' user  order amt');
+  console.log(coupondata.minOrderAmt + "min order amt");
+  console.log(userOrderAmt + " user  order amt");
   if (userOrderAmt >= coupondata.minOrderAmt) {
     const discountAmount = coupondata.discount;
     await cartCollection
@@ -141,7 +141,7 @@ async function applyCoupon(req, res) {
       .then(() => {
         console.log("cart updated");
       });
-    let userdata=await couponCollection.aggregate([
+    let userdata = await couponCollection.aggregate([
       {
         $match: {
           "users.userId": new ObjectId(userId),
@@ -162,7 +162,12 @@ async function applyCoupon(req, res) {
         },
       },
     ]);
-    if(userdata.length<=0){
+    console.log(JSON.stringify(userdata)+'    data of   user  ');
+    // if (userdata[0].count > coupondata.usageLimit) {
+    //   return res.json({ err: "User limit exceeded" });
+    // }
+    console.log(JSON.stringify(userdata));
+    if (userdata.length <= 0) {
       await couponCollection.updateOne(
         { couponcode: couponcode },
         {
@@ -174,7 +179,10 @@ async function applyCoupon(req, res) {
           },
         }
       );
-    }else{
+    } else {
+      if(userdata[0].count<=coupondata.usageLimit){
+        return res.json({err:"Maximum attempt reached"})
+      }
       await couponCollection.updateOne(
         { couponcode: couponcode, "users.userId": userId },
         {
@@ -182,7 +190,7 @@ async function applyCoupon(req, res) {
         }
       );
     }
-    res.json({status:true,discount:discountAmount})
+    res.json({ status: true, discount: discountAmount });
   } else {
     return res.json({
       err: "Minimum Purcahse amount is" + coupondata.minOrderAmt,

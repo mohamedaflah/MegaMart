@@ -259,10 +259,10 @@ function confirm(req, res) {
       whishCount:0,
       id: false,
     });
-    setTimeout(async()=>{
-      await OtpCollection.deleteOne({useremail:req.session.userFullDetail.email_or_Phone})
-      console.log('Otp Deleted');
-    },milliSecond)
+    // setTimeout(async()=>{
+    //   await OtpCollection.deleteOne({useremail:req.session.userFullDetail.email_or_Phone})
+    //   console.log('Otp Deleted');
+    // },milliSecond)
   } else {
     res.redirect("/signup");
   }

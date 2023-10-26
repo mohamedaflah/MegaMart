@@ -4,16 +4,6 @@
   menubar.addEventListener("click", () => {
     link.classList.toggle("active");
   });
-  // let addCatButton = document.querySelector("#mySizeChart");
-  // let categoryPart = document.querySelector(".ebcf_modal");
-  // addCatButton.addEventListener("click", () => {
-  //   alert('cliec')
-  //   categoryPart.classList.add("active");
-  // });
-  // document.querySelector("#clsbtn").addEventListener("click", () => {
-  //   categoryPart.classList.remove('active')
-  // });
-
   document.addEventListener("DOMContentLoaded", function () {
     var otpInputs = document.querySelectorAll(".otp-input");
     var emailOtpInputs = document.querySelectorAll(".email-otp-input");

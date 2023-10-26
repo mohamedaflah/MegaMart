@@ -774,6 +774,7 @@ async function filterProductwithBrand(req, res) {
     });
     const userId = userData[0]._id;
     var cartCount = await getCartCount(userId);
+    var whishCount=await getWhishLIstCount(userId)
     // console.log("data of a cart " + cartCount);
 
     res.render("users/index", {
@@ -783,6 +784,7 @@ async function filterProductwithBrand(req, res) {
       id: userStatus[0]._id,
       err: false,
       categories,
+      whishCount,
       brands,
     });
     // return;

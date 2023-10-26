@@ -1,7 +1,7 @@
 const cron = require("node-cron");
 const couponCollection = require("../model/collections/cupon");
 async function updateCouponStatus() {
-  cron.schedule("0 0 * * *", async () => {
+  // cron.schedule("0 0 * * *", async () => {
     try {
       console.log('called crondlsfak');
       const currentDate = new Date();
@@ -14,6 +14,6 @@ async function updateCouponStatus() {
     } catch (err) {
       console.log("error in updating coupon" + err);
     }
-  });
+  // });
 }
 module.exports={updateCouponStatus}

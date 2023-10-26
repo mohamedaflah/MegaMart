@@ -277,8 +277,11 @@ function applyCoupon(event,userId) {
         let total=document.getElementById("aftertotal")
         let current=Number(total.textContent)
         let discount=Number(res.discount)
-        confirm(current+'    '+discount)
+        // confirm(current+'    '+discount)
         total.textContent=current-discount
+        total.style.color='red'
+        alert("Coupon Apply Succefull")
+        document.getElementById("couponBoxInput").style.visibility='hidden'
         // alert('deducted ')
       }
     });
