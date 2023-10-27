@@ -83,6 +83,7 @@ const { checkingUserStatus } = require("../middleware/statusVerify");
 const { sesionVerification } = require("../middleware/functionalityVerify");
 const { usersProduct } = require("../controller/productController");
 const { getWhishListPage, addToWhishList,removeProductInwhish, movetoCartinWhishList } = require("../controller/whishlistController");
+const {getReturnedProduct, returnProduct, seeAllreturns}=require("../controller/returnsController")
 require("../auth/passportAuth");
 require("../auth/LoginwithGoogle");
 router.get("/", userHome);
@@ -230,11 +231,27 @@ router.get(
   "/users/product/cart/checkout/place-order/delete-address/:userId/:addressId",
   deleteUserAddress
 );
+
 router.get(
   "/users/product/orders/trackorders/:userId",
   verifySessionAuth,
   userOrders
 );
+
+const storageForReturn = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "./public/return-images/");
+  },
+  filename: function (req, file, cb) {
+    const randomeString = crypto.randomBytes(3).toString("hex");
+    const timestamp = Date.now();
+    const uniqueFile = `${timestamp}-${randomeString}`;
+    cb(null, uniqueFile + ".png");
+  },
+});
+const uploadForreturn = multer({ storage: storageForReturn });
+// const uploadFieldsForreturn = [{ name: "files", maxCount: 1 }];
+router.post("/users/product/orders/returnproduct/:productId/:userId",uploadForreturn.single("file"),returnProduct)
 
 router.post('/users/coupon/applycoupon/',applyCoupon)
 
@@ -285,4 +302,6 @@ router.route('/users/account/addAddress/:userId').get(addAddressinProfileGet).po
 router.get('/users/account/deleteAddress/:userId/:addressId',deleteUserAddressinProfile)
 router.route('/users/account/editAddress/:userId/:addressId').get(editAddressinProfileGet).post(editAddressinProfilePost)
 
+router.get('/users/products/return/getreturnitem',getReturnedProduct)
+router.get('/users/products/returns/seeallreturns/:userId',sesionVerification,seeAllreturns)
 module.exports = { router };

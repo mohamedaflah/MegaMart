@@ -42,6 +42,7 @@ const {
   getOrderDetails,
   changeOrderStatus,
   filterOrders,
+  filterSpecificOrder,
 } = require("../controller/ordersController");
 const { ManageBrands, addBrand } = require("../controller/brandController");
 const { showAllCouponInAdmin, addCouponPost, checkCouponisExist } = require("../controller/cuponController");
@@ -134,6 +135,7 @@ router.get(
   filteringandSortingcategory
 );
 router.get("/products/orders/orders/:filterorder/", filterOrders);
+// router.post('/products/orders/filterorder',filterSpecificOrder)
 router.get("/products/cupons/allcupons",admiLoginVerify,showAllCouponInAdmin)
 router.post('/products/coupons/add-coupon',addCouponPost)
 router.post('/product/coupon/existstatus',checkCouponisExist)

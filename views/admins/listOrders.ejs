@@ -13,9 +13,16 @@
                         <div class="top_section">
                             <p>Orders</p>
                             <div class="filter">
-                                <!-- <a href="">Filtered by
+                                <a>
+                                    <select name="filter" id="drop" style="border: none;background: transparent;" onchange="this.form.submit()">
+                                        <option value="Pending" onclick="location.href=`/admin/products/orders/orders/Pending`">Pending</option>
+                                        <option value="Confirmed" onclick="location.href=`/admin/products/orders/orders/Confirmed`">Confirmed</option>
+                                        <option value="Delivered" onclick="location.href=`/admin/products/orders/orders/Delivered`">Delivered</option>
+                                        <option value="Shipped" onclick="location.href=`/admin/products/orders/orders/Shipped`">Shipped</option>
+                                        <option value="Shipped" onclick="location.href=`http://localhost:5001/admin/products/orders/list-orders/`">All</option>
+                                    </select>
                                     <img src="/images/filter.svg" alt="">
-                                </a> -->
+                                </a>
                                 <a onclick="sortOrders('ordersort')">Sorted by
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -29,7 +36,7 @@
                         </div>
                         <div class="filterArea" id="filterpop" >
                             <a href="/admin/products/filter-product/outofstock/">Out of Stock</a>
-                            <a href="/admin//products/filter-product/instock/">In Stock</a>
+                            <a href="/admin/products/filter-product/instock/">In Stock</a>
                             <a href="/admin/products/">All</a>
                         </div>
                         <div class="sorted" id="ordersort">
@@ -194,4 +201,25 @@
     function sortOrders(sortPop){
         document.getElementById(sortPop).classList.toggle("active")
     }
+    //
+    //function filterForm(type) {
+    //    let select = document.querySelector("#drop");
+    //    let value = select.options[select.selectedIndex].value;
+    //    fetch(`/admin/products/orders/orders/${type}`, {
+    //      method: "POST",
+    //      headers: { "Content-type": "application/json" },
+    //      body: JSON.stringify(formBody),
+    //    })
+    //      .then((res) => {
+    //        return res.json();
+    //      })
+    //      .then((response) => {
+    //        if (response.err) {
+    //          alert(response.err);
+    //        }
+    //        if (response.status) {
+    //          console.log(response.orderDetail);
+    //        }
+    //      });
+    //  }
 </script>

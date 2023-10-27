@@ -18,11 +18,14 @@ const { generateUniqueUsername } = require("../helper/generteUniquename");
 const walletCollection = require("../model/collections/wallet");
 const {getWhishLIstCount} = require("../helper/whish-helper");
 const couponCollection=require("../model/collections/cupon")
-
+const adminCollection=require('../model/collections/adminDb')
 changeStream.on("otpDeleted", (documentId) => {
   console.log(`OTP document deleted with ID: ${documentId}`);
 });
 async function userHome(req, res) {
+  if(req.session.adminAuth){
+    return res.redirect('/admin/')
+  }
   // let userStatus=await UserCollection.find({email:req.session.userEmail})
   // console.log(typeof req.session.userEmail+'email ');
   const userStatus = await UserCollection.find({
@@ -361,6 +364,9 @@ function userLogout(req, res) {
 }
 
 function userLoginGet(req, res) {
+  if(req.session.adminAuth){
+    return res.redirect('/admin/')
+  }
   res.render("users/login", {
     profile: false,
     err: false,
@@ -383,6 +389,19 @@ async function userLoginPost(req, res) {
     // Check if the user exists based on email
     const userData = await UserCollection.findOne({ email: email_or_Phone });
 
+    // admin login 
+    const adminData=await adminCollection.findOne({email:email_or_Phone})
+    if(adminData){
+      const adminPassCompare=await bcrypt.compare(password,adminData.password)
+      if(adminPassCompare){
+        req.session.adminAuth = true;
+        return res.json({admin:true})
+      }
+    }
+    // admin ⏏
+
+
+    
     if (!userData) {
       // User not found
       return res.json({err:"User not Found"})

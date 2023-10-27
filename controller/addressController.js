@@ -364,6 +364,7 @@ async function deleteUserAddressinProfile(req, res) {
 }
 async function editAddressinProfileGet(req, res) {
   const userId = req.params.userId;
+  const whishCount=await getWhishLIstCount(userId)
   const addressId = req.params.addressId;
   const addressData = await addressCollection.find(
     { userId: new ObjectId(userId), "addresses._id": new ObjectId(addressId) },
@@ -375,6 +376,7 @@ async function editAddressinProfileGet(req, res) {
     cartCount,
     id: userId,
     profile: true,
+    whishCount,
     addressData,
   });
 }

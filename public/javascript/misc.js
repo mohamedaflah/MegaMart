@@ -117,6 +117,8 @@ function checkoutformSubmit(event, userId) {
       .then((res) => {
         if (res.status === "COD") {
           location.href = `/users/product/checkout/payment/success/${userId}`;
+        } else if (res.status == "Wallet") {
+          location.href = `/users/product/checkout/payment/success/${userId}`;
         } else {
           razorpayPayment(res, userId);
         }
@@ -238,6 +240,9 @@ function loginFormSubmit(e) {
             errDivForLog.style.visibility = "hidden";
           }, 3000);
         }
+        if (response.data.admin) {
+          window.location.href = "/admin/";
+        }
         if (response.data.status) {
           window.location.href = "/";
         }
@@ -257,8 +262,8 @@ function cuponClose() {
   document.querySelector(".coupon_see").classList.remove("active");
 }
 
-function applyCoupon(event,userId) {
-  event.preventDefault()
+function applyCoupon(event, userId) {
+  event.preventDefault();
   let couponcode = document.getElementById("couponcode");
   const formBody = {
     couponcode: couponcode.value,
@@ -270,19 +275,131 @@ function applyCoupon(event,userId) {
   })
     .then((response) => response.json())
     .then((res) => {
-      if(res.err){
-        alert(res.err)
+      if (res.err) {
+        alert(res.err);
       }
-      if(res.status){
-        let total=document.getElementById("aftertotal")
-        let current=Number(total.textContent)
-        let discount=Number(res.discount)
+      if (res.status) {
+        let total = document.getElementById("aftertotal");
+        let current = Number(total.textContent);
+        let discount = Number(res.discount);
         // confirm(current+'    '+discount)
-        total.textContent=current-discount
-        total.style.color='red'
-        alert("Coupon Apply Succefull")
-        document.getElementById("couponBoxInput").style.visibility='hidden'
+        total.textContent = current - discount;
+        total.style.color = "red";
+        alert("Coupon Apply Succefull");
+        document.getElementById("couponBoxInput").style.visibility = "hidden";
         // alert('deducted ')
       }
     });
+}
+
+function openReturn(productId,orderId) {
+  confirm("are you sure to return")
+  sessionStorage.setItem("productId", productId);
+  sessionStorage.setItem("orderId",orderId)
+  document.getElementById("returpop").style.display = "flex";
+
+  // Scroll the page to the center vertically
+  const windowHeight = window.innerHeight;
+  const element = document.getElementById("returpop"); // The element you want to center on
+
+  if (element) {
+    const elementHeight = element.clientHeight;
+    const scrollToY = element.offsetTop - (windowHeight - elementHeight) / 2;
+
+    window.scrollTo({
+      top: scrollToY,
+      behavior: "smooth", // You can use 'auto' for an instant scroll
+    });
+  }
+  fetch(`/users/products/return/getreturnitem/?id=${productId}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then((res) => {
+      let img = document.getElementById("productimgdisplay");
+      img.setAttribute(
+        "src",
+        `/product-images/${res.product.image[0].mainimage}`
+      );
+      img.src = `/product-images/${res.product.image[0].mainimage}`;
+    });
+}
+
+function returnclose() {
+  document.getElementById("returpop").style.display = "none";
+  // document.getElementById("")
+}
+function showReturnImage(inputId, imageId) {
+  let input = document.getElementById(inputId);
+  let image = document.getElementById(imageId);
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      // image.setAttribute('src',e.target.result)
+      image.src = e.target.result;
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// document.getElementById("returnForm").addEventListener("submit",()=>{
+//   alert('hle')
+// })
+let fm = document.getElementById("returnForm");
+function returnForm(event, userId) {
+  event.preventDefault();
+  let fm = document.getElementById("returnForm");
+  let productId = sessionStorage.getItem("productId");
+  let orderId=sessionStorage.getItem('orderId')
+  // alert(productId);
+  let reason = document.getElementById("reson");
+  let Reason = reason.options[reason.selectedIndex].value;
+  if (Reason == "other") {
+    Reason = document.getElementById("tex").value;
+  }
+  let fil = document.getElementById("wrng");
+
+  if (fil.files && fil.files.length > 0) {
+    // Extract the details of the selected file
+    const selectedFile = fil.files[0];
+
+    // Create a new FormData object from the form element
+    let formDt = new FormData();
+
+    // Append the selected file to the FormData object with the correct field name
+    formDt.append("file", selectedFile);
+    formDt.append("reason", Reason);
+
+    // alert("Selected reason: " + Reason);
+    // alert("Selected file name: " + selectedFile.name);
+    // alert("Selected file size: " + selectedFile.size + " bytes");
+    // alert("Selected file type: " + selectedFile.type);
+    // alert(JSON.stringify(selectedFile));
+    fetch(`/users/product/orders/returnproduct/${productId}/${userId}/?orderId=${orderId}`, {
+      method: "POST",
+      body: formDt,
+    })
+      .then((respons) => respons.json())
+      .then((res) => {
+        if (res.status) {
+          location.href = `http://localhost:5001/users/product/orders/trackorders/${userId}`;
+        }
+        if (res.err) {
+          alert(res.err);
+        }
+      });
+  } else {
+    alert("Please upload the wrong image");
+  }
+}
+
+
+function displayTxt() {
+  let Reason = document.getElementById("reson");
+  if (Reason.value == "other") {
+    document.getElementById("txtarea").classList.add("active");
+  }
+  if (Reason.value !== "other") {
+    document.getElementById("txtarea").classList.remove("active");
+  }
 }

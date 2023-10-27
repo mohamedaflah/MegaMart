@@ -1,4 +1,3 @@
-
 const UserCollection = require("../model/collections/UserDb");
 const productsCollection = require("../model/collections/products");
 const cartCollection = require("../model/collections/cart");
@@ -11,9 +10,11 @@ const {
   getTotalAmount,
 } = require("../helper/cart-helper");
 const { generateRazorpay } = require("../helper/razorpay");
-const {getOrderId}=require('../helper/orderhelper');
+const { getOrderId } = require("../helper/orderhelper");
 const { addAmountIntoWallet } = require("./walletController");
 const { getWhishLIstCount } = require("../helper/whish-helper");
+const { getWalletAmountofUser } = require("../auth/walet-helper");
+const walletCollection = require("../model/collections/wallet");
 // Listing Orders is Admin Side
 async function listAllOrders(req, res) {
   // const orderDetail = await userDb.aggregate([
@@ -279,109 +280,85 @@ async function changeOrderStatus(req, res) {
 // Filter Orders for Admin
 async function filterOrders(req, res) {
   const filterorder = req.params.filterorder;
-  let orderDetail;
-  if (filterorder == "bylatest") {
-    orderDetail = await orderCollection.aggregate([
-      {
-        $lookup: {
-          from: "users", // Use the name of your Users collection here
-          localField: "userId",
-          foreignField: "_id",
-          as: "user",
+
+  const commonAggregation = [
+    {
+      $lookup: {
+        from: "users",
+        localField: "userId",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    {
+      $unwind: "$user",
+    },
+    {
+      $unwind: "$products",
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "products.productId",
+        foreignField: "_id",
+        as: "product",
+      },
+    },
+    {
+      $unwind: "$product",
+    },
+    {
+      $project: {
+        _id: 1,
+        userId: 1,
+        paymentmode: 1,
+        delverydate: 1,
+        status: 1,
+        address: 1,
+        user: 1,
+        products: {
+          productId: "$product._id",
+          qty: "$products.qty",
+          productDetails: "$product",
         },
       },
-      {
-        $unwind: "$user",
-      },
-      {
-        $unwind: "$products",
-      },
-      {
-        $lookup: {
-          from: "products", // Use the name of your Products collection here
-          localField: "products.productId",
-          foreignField: "_id",
-          as: "product",
-        },
-      },
-      {
-        $unwind: "$product",
-      },
-      {
-        $project: {
-          _id: 1,
-          userId: 1,
-          paymentmode: 1,
-          delverydate: 1,
-          status: 1,
-          address: 1,
-          user: 1, // This will contain all user details
-          products: {
-            productId: "$product._id",
-            qty: "$products.qty",
-            productDetails: "$product", // This will contain all product details
-          },
-        },
-      },
-      {
-        $sort: {
-          delverydate: -1, // Sort by delivery date in descending order (latest first)
-        },
-      },
-    ]);
-  } else if (filterorder == "byoldest") {
-    orderDetail = await orderCollection.aggregate([
-      {
-        $lookup: {
-          from: "users", // Use the name of your Users collection here
-          localField: "userId",
-          foreignField: "_id",
-          as: "user",
-        },
-      },
-      {
-        $unwind: "$user",
-      },
-      {
-        $unwind: "$products",
-      },
-      {
-        $lookup: {
-          from: "products", // Use the name of your Products collection here
-          localField: "products.productId",
-          foreignField: "_id",
-          as: "product",
-        },
-      },
-      {
-        $unwind: "$product",
-      },
-      {
-        $project: {
-          _id: 1,
-          userId: 1,
-          paymentmode: 1,
-          delverydate: 1,
-          status: 1,
-          address: 1,
-          user: 1, // This will contain all user details
-          products: {
-            productId: "$product._id",
-            qty: "$products.qty",
-            productDetails: "$product", // This will contain all product details
-          },
-        },
-      },
-      {
-        $sort: {
-          delverydate: 1, // Sort by delivery date in descending order (latest first)
-        },
-      },
-    ]);
+    },
+  ];
+
+  const sort = {
+    $sort: {
+      delverydate: 1,
+    },
+  };
+
+  const matchStatus = {
+    $match: {
+      status: filterorder,
+    },
+  };
+
+  let aggregationPipeline;
+
+  switch (filterorder) {
+    case "bylatest":
+      aggregationPipeline = [...commonAggregation, sort];
+      break;
+    case "byoldest":
+      aggregationPipeline = [...commonAggregation, { ...sort, "$sort": { delverydate: -1 } }];
+      break;
+    case "Pending":
+    case "Confirmed":
+    case "Delivered":
+    case "Shipped":
+      aggregationPipeline = [...commonAggregation, matchStatus, sort];
+      break;
+    default:
+      aggregationPipeline = commonAggregation;
   }
+
+  const orderDetail = await orderCollection.aggregate(aggregationPipeline);
   res.render("admins/listOrders", { orderDetail });
 }
-
 
 
 
@@ -389,242 +366,262 @@ async function filterOrders(req, res) {
 
 //User Checkout Section
 async function checkOut(req, res) {
-    const userId = req.params.userId;
-  
-    let useraddressIsExist = await addressCollection.findOne({
-      userId: new ObjectId(userId),
-    });
-    console.log(useraddressIsExist + "        ext");
-    if (!useraddressIsExist || useraddressIsExist.addresses.length<=0) {
-      res.redirect(`/users/product/checkout/address/${userId}`);
-    } else {
-      res.redirect(`/users/product/cart/checkout/place-order/${userId}`);
-    }
-  }
+  const userId = req.params.userId;
 
-  // user Place order Get page
-  async function placeOrder(req, res) {
+  let useraddressIsExist = await addressCollection.findOne({
+    userId: new ObjectId(userId),
+  });
+  console.log(useraddressIsExist + "        ext");
+  if (!useraddressIsExist || useraddressIsExist.addresses.length <= 0) {
+    res.redirect(`/users/product/checkout/address/${userId}`);
+  } else {
+    res.redirect(`/users/product/cart/checkout/place-order/${userId}`);
+  }
+}
+
+// user Place order Get page
+async function placeOrder(req, res) {
+  const userId = req.params.userId;
+  const cartCount = await getCartCount(userId);
+  const walletAmount = await getWalletAmountofUser(userId);
+  const addressData = await addressCollection.findOne({
+    userId: new ObjectId(userId),
+  });
+  const cartData = await getUserCartData(userId);
+  const whishCount = await getWhishLIstCount(userId);
+  const totalAmount = await getTotalAmount(userId);
+  let walletStatus;
+  if (walletAmount >= totalAmount) {
+    walletStatus = true;
+  } else {
+    walletStatus = false;
+  }
+  console.log(walletAmount+' amount of wallet');
+  console.log(totalAmount+' amount of total');
+  // console.log(JSON.stringify(addressData) + "address data");
+  console.log(JSON.stringify(cartData));
+  res.render("users/place-order", {
+    profile: true,
+    cartCount,
+    id: userId,
+    addressData,
+    whishCount,
+    cartData,
+    walletStatus,
+    totalAmount,
+  });
+}
+
+// user place order Post Section
+async function placeOrderPost(req, res) {
+  try {
     const userId = req.params.userId;
-    const cartCount = await getCartCount(userId);
-    const addressData = await addressCollection.findOne({
-      userId: new ObjectId(userId),
-    });
-    const cartData = await getUserCartData(userId);
-    const whishCount=await getWhishLIstCount(userId)
     const totalAmount = await getTotalAmount(userId);
-    // console.log(JSON.stringify(addressData) + "address data");
-    console.log(JSON.stringify(cartData));
-    res.render("users/place-order", {
-      profile: true,
-      cartCount,
-      id: userId,
-      addressData,
-      whishCount,
-      cartData,
-      totalAmount,
-    });
-  }
-  
-
-  // user place order Post Section
-  async function placeOrderPost(req, res) {
-    try {
-      const userId = req.params.userId;
-      const totalAmount=await getTotalAmount(userId)
-      console.log('api called__________');
-      console.log(JSON.stringify(req.body) + "body of request");
-      const addressdata = await addressCollection.findOne({
-        userId: new ObjectId(userId),
-      });
-      // addressdata = addressdata.addresses[Number(req.body.address)];
-      const userCartdata = await getUserCartData(userId);
-      const products = userCartdata.map((cartItem) => ({
-        productId: cartItem.products.productId,
-        qty: cartItem.products.qty,
-      }));
-      await new orderCollection({
-        userId: new ObjectId(userId),
-        paymentmode: req.body.payment_method,
-        delverydate: Date.now(),
-        status: "Pending",
-        totalAmount:totalAmount,
-        address: addressdata.addresses[Number(req.body.address)],
-        products: products,
-      }).save();
-      // qty=[]
-      // console.log(qty + "(((((((9");
-      await cartCollection.deleteOne({ userId: new ObjectId(userId) });
-      products.forEach(async (product) => {
-        const currentData = await productsCollection.findOne({
-          _id: new ObjectId(product.productId),
-        });
-        if (currentData && currentData.stock) {
-          const minusdata = currentData.stock - product.qty;
-          if (minusdata >= 0) {
-            await productsCollection.updateOne(
-              { _id: new ObjectId(product.productId) },
-              {
-                $inc: {
-                  stock: -product.qty,
-                },
-              }
-            );
-          }
-        }
-      });
-      if(req.body.payment_method=='COD'){
-        res.json({status:"COD"})
-      }else{
-        let orderId=await getOrderId(userId)
-        generateRazorpay(orderId,totalAmount,userId).then((order)=>{
-          res.json(order)
-        }).catch(err=>{
-          console.log('Razorpay Error in Checkout ',err);
-          res.status(500).json({error:"Error in Generating Razopay Checkout"})
-        })
-      }
-      // res.redirect(`/users/product/checkout/payment/success/${userId}`);
-    } catch (err) {
-      console.log("error in checkout place order post" + err);
-    }
-  }
-  async function userOrders(req, res) {
-    const userId = req.params.userId;
-    const cartCount = await getCartCount(userId);
-    const whishCount=await getWhishLIstCount(userId)
-    const userDetail = await UserCollection.findOne({
-      _id: new ObjectId(userId),
-    });
-    const orderDetail = await UserCollection.aggregate([
-      {
-        $match: { _id: new ObjectId(userId) },
-      },
-      {
-        $lookup: {
-          from: "orders",
-          localField: "_id",
-          foreignField: "userId",
-          as: "userOrders",
-        },
-      },
-      {
-        $unwind: "$userOrders",
-      },
-      {
-        $lookup: {
-          from: "products",
-          localField: "userOrders.products.productId",
-          foreignField: "_id",
-          as: "userOrders.products.productDetails",
-        },
-      },
-      {
-        $unwind: "$userOrders.products.productDetails",
-      },
-      {
-        $project: {
-          _id: 1,
-          userOrders: {
-            _id: "$userOrders._id",
-            userId: "$userOrders.userId",
-            paymentmode: "$userOrders.paymentmode",
-            delverydate: "$userOrders.delverydate",
-            status: "$userOrders.status",
-            address: "$userOrders.address",
-            products: "$userOrders.products.productDetails", // Reshape here
-            __v: "$userOrders.__v",
-          },
-          __v: 1,
-        },
-      },
-      {
-        $sort: {
-          "userOrders.delverydate": -1, // Sort by delverydate in descending order (latest first)
-        },
-      },
-      {
-        $group: {
-          _id: "$_id",
-          userAddress: { $first: "$userAddress" },
-          userOrders: { $push: "$userOrders" },
-        },
-      },
-    ]);
-  
-    let orderqtys = await orderCollection.find({
+    console.log("api called__________");
+    console.log(JSON.stringify(req.body) + "body of request");
+    const addressdata = await addressCollection.findOne({
       userId: new ObjectId(userId),
     });
-    console.log(JSON.stringify(orderqtys) + "   orders is _>");
-    let qty = [];
-    orderqtys.forEach((value) => {
-      value.products.forEach((qt) => {
-        qty.push(qt.qty);
+    // addressdata = addressdata.addresses[Number(req.body.address)];
+    const userCartdata = await getUserCartData(userId);
+    const products = userCartdata.map((cartItem) => ({
+      productId: cartItem.products.productId,
+      qty: cartItem.products.qty,
+    }));
+    await new orderCollection({
+      userId: new ObjectId(userId),
+      paymentmode: req.body.payment_method,
+      delverydate: Date.now(),
+      status: "Pending",
+      totalAmount: totalAmount,
+      address: addressdata.addresses[Number(req.body.address)],
+      products: products,
+    }).save();
+    // qty=[]
+    // console.log(qty + "(((((((9");
+    await cartCollection.deleteOne({ userId: new ObjectId(userId) });
+    products.forEach(async (product) => {
+      const currentData = await productsCollection.findOne({
+        _id: new ObjectId(product.productId),
       });
-    });
-    console.log(qty + "<----->       p");
-    console.log(JSON.stringify(orderqtys) + "order s");
-    console.log(JSON.stringify(orderqtys) + "     oreder quantities ");
-    console.log(JSON.stringify(orderDetail) + "details of orders");
-    // console.log(req.session.qty + " <-in order1111111111112222222    ");
-  
-    res.render("users/orders", {
-      profile: true,
-      cartCount,
-      whishCount,
-      id: userId,
-      orderDetail,
-      qty,
-    });
-  }
-
-  async function cancelOrder(req, res) {
-    try {
-      const quantity = Number(req.params.qty);
-      const userId = req.params.userId;
-      const orderId = req.params.orderId;
-      const productId = req.params.productId;
-      const paymentMode=await orderCollection.findOne({_id:new ObjectId(orderId),userId:new ObjectId(userId)})
-      await orderCollection.updateOne(
-        { _id: new ObjectId(orderId), userId: new ObjectId(userId) },
-        {
-          $set: { status: "Canceled" },
-        }
-      );
-      await productsCollection.updateOne(
-        { _id: new ObjectId(productId) },
-        { $inc: { qty: quantity } }
-      );
-      console.log(paymentMode+'<<<<<<<<<????????saldfkaslkdfjlaksdfjlk');
-      if(paymentMode.paymentmode=='Bank'){
-        addAmountIntoWallet(userId,orderId).then(()=>{
-          res.redirect(
-            `http://localhost:5001/users/product/orders/trackorders/${userId}`
+      if (currentData && currentData.stock) {
+        const minusdata = currentData.stock - product.qty;
+        if (minusdata >= 0) {
+          await productsCollection.updateOne(
+            { _id: new ObjectId(product.productId) },
+            {
+              $inc: {
+                stock: -product.qty,
+              },
+            }
           );
+        }
+      }
+    });
+    if (req.body.payment_method == "COD") {
+      res.json({ status: "COD" });
+    } else if(req.body.payment_method=="Wallet"){
+      await walletCollection.updateOne({userId:new ObjectId(userId)},{$inc:{amount:-totalAmount}})
+      res.json({status:"Wallet"})
+    }else{
+      let orderId = await getOrderId(userId);
+      generateRazorpay(orderId, totalAmount, userId)
+        .then((order) => {
+          res.json(order);
         })
-      }else{
+        .catch((err) => {
+          console.log("Razorpay Error in Checkout ", err);
+          res
+            .status(500)
+            .json({ error: "Error in Generating Razopay Checkout" });
+        });
+
+    }
+    // res.redirect(`/users/product/checkout/payment/success/${userId}`);
+  } catch (err) {
+    console.log("error in checkout place order post" + err);
+  }
+}
+async function userOrders(req, res) {
+  const userId = req.params.userId;
+  const cartCount = await getCartCount(userId);
+  const whishCount = await getWhishLIstCount(userId);
+  const userDetail = await UserCollection.findOne({
+    _id: new ObjectId(userId),
+  });
+  const orderDetail = await UserCollection.aggregate([
+    {
+      $match: { _id: new ObjectId(userId) },
+    },
+    {
+      $lookup: {
+        from: "orders",
+        localField: "_id",
+        foreignField: "userId",
+        as: "userOrders",
+      },
+    },
+    {
+      $unwind: "$userOrders",
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "userOrders.products.productId",
+        foreignField: "_id",
+        as: "userOrders.products.productDetails",
+      },
+    },
+    {
+      $unwind: "$userOrders.products.productDetails",
+    },
+    {
+      $project: {
+        _id: 1,
+        userOrders: {
+          _id: "$userOrders._id",
+          userId: "$userOrders.userId",
+          paymentmode: "$userOrders.paymentmode",
+          delverydate: "$userOrders.delverydate",
+          status: "$userOrders.status",
+          address: "$userOrders.address",
+          products: "$userOrders.products.productDetails", // Reshape here
+          __v: "$userOrders.__v",
+        },
+        __v: 1,
+      },
+    },
+    {
+      $sort: {
+        "userOrders.delverydate": -1, // Sort by delverydate in descending order (latest first)
+      },
+    },
+    {
+      $group: {
+        _id: "$_id",
+        userAddress: { $first: "$userAddress" },
+        userOrders: { $push: "$userOrders" },
+      },
+    },
+  ]);
+
+  let orderqtys = await orderCollection.find({
+    userId: new ObjectId(userId),
+  });
+  console.log(JSON.stringify(orderqtys) + "   orders is _>");
+  let qty = [];
+  orderqtys.forEach((value) => {
+    value.products.forEach((qt) => {
+      qty.push(qt.qty);
+    });
+  });
+  console.log(qty + "<----->       p");
+  console.log(JSON.stringify(orderqtys) + "order s");
+  console.log(JSON.stringify(orderqtys) + "     oreder quantities ");
+  console.log(JSON.stringify(orderDetail) + "details of orders");
+  // console.log(req.session.qty + " <-in order1111111111112222222    ");
+
+  res.render("users/orders", {
+    profile: true,
+    cartCount,
+    whishCount,
+    id: userId,
+    orderDetail,
+    qty,
+  });
+}
+
+async function cancelOrder(req, res) {
+  try {
+    const quantity = Number(req.params.qty);
+    const userId = req.params.userId;
+    const orderId = req.params.orderId;
+    const productId = req.params.productId;
+    const paymentMode = await orderCollection.findOne({
+      _id: new ObjectId(orderId),
+      userId: new ObjectId(userId),
+    });
+    await orderCollection.updateOne(
+      { _id: new ObjectId(orderId), userId: new ObjectId(userId) },
+      {
+        $set: { status: "Canceled" },
+      }
+    );
+    await productsCollection.updateOne(
+      { _id: new ObjectId(productId) },
+      { $inc: { qty: quantity } }
+    );
+    console.log(paymentMode + "<<<<<<<<<????????saldfkaslkdfjlaksdfjlk");
+    if (paymentMode.paymentmode == "Bank") {
+      addAmountIntoWallet(userId, orderId).then(() => {
         res.redirect(
           `http://localhost:5001/users/product/orders/trackorders/${userId}`
         );
-      }
-    } catch (err) {
-      console.log("Error during cancel order" + err);
+      });
+    } else {
+      res.redirect(
+        `http://localhost:5001/users/product/orders/trackorders/${userId}`
+      );
     }
+  } catch (err) {
+    console.log("Error during cancel order" + err);
   }
-const forUser={
-    checkOut,
-    placeOrder,
-    placeOrderPost,
-    userOrders,
-    cancelOrder
 }
+const forUser = {
+  checkOut,
+  placeOrder,
+  placeOrderPost,
+  userOrders,
+  cancelOrder,
+};
 
 // user contor end
-
 
 module.exports = {
   listAllOrders,
   getOrderDetails,
   changeOrderStatus,
   filterOrders,
-  forUser
+  forUser,
+  // filterSpecificOrder
 };

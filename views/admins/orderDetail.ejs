@@ -63,17 +63,52 @@
                                 <div class="order_center">
                                     <form class="order_hd" method="post" action="/admin/products/orders/list-orders/orders/changin-status/<%-orderDetail[0]._id%>/<%-orderDetail[0].userId%>">
                                         <span>Order Summary</span>
-                                        
-                                            <select name="status" id="" onchange="this.form.submit()">
-                                                <%let status=["Pending","Confirmed","Shipped","Delivered","Canceled"]%>
-                                                <option value="<%-orderDetail[0].status %>" selected><%-orderDetail[0].status %></option>
-                                                <%status.forEach((status)=>{%>
-                                                    <%if(status!=orderDetail[0].status){%>
-                                                        <option value="<%-status %>"><%-status %></option>
-                                                    <%}%>
-                                               <% })%>
-                                                <!-- <option value="Canceled">shipped</option> -->
-                                            </select>
+                                            <%if(orderDetail[0].status=="Pending"){%>
+                                                <select name="status" id="" onchange="this.form.submit()">
+                                                    <%let status=["Confirmed","Shipped","Delivered","Canceled"]%>
+                                                    <option value="<%-orderDetail[0].status %>" selected><%-orderDetail[0].status %></option>
+                                                    <%status.forEach((status)=>{%>
+                                                        <%if(status!=orderDetail[0].status){%>
+                                                            <option value="<%-status %>"><%-status %></option>
+                                                        <%}%>
+                                                   <% })%>
+                                                    <!-- <option value="Canceled">shipped</option> -->
+                                                </select>
+                                                <%}else if(orderDetail[0].status=="Confirmed"){%>
+                                                    <select name="status" id="" onchange="this.form.submit()">
+                                                        <%let status=["Shipped","Delivered","Canceled"]%>
+                                                        <option value="<%-orderDetail[0].status %>" selected><%-orderDetail[0].status %></option>
+                                                        <%status.forEach((status)=>{%>
+                                                            <%if(status!=orderDetail[0].status){%>
+                                                                <option value="<%-status %>"><%-status %></option>
+                                                            <%}%>
+                                                       <% })%>
+                                                        <!-- <option value="Canceled">shipped</option> -->
+                                                    </select>
+                                                    <%}else if(orderDetail[0].status=="Shipped"){%>
+                                                        <select name="status" id="" onchange="this.form.submit()">
+                                                            <%let status=["Delivered","Canceled"]%>
+                                                            <option value="<%-orderDetail[0].status %>" selected><%-orderDetail[0].status %></option>
+                                                            <%status.forEach((status)=>{%>
+                                                                <%if(status!=orderDetail[0].status){%>
+                                                                    <option value="<%-status %>"><%-status %></option>
+                                                                <%}%>
+                                                           <% })%>
+                                                            <!-- <option value="Canceled">shipped</option> -->
+                                                        </select>
+                                                        
+                                                        <%}else if(orderDetail[0].status=="Delivered"){%>
+                                                            <select name="status" id="" onchange="this.form.submit()">
+                                                                <%let status=["Canceled"]%>
+                                                                <option value="<%-orderDetail[0].status %>" selected><%-orderDetail[0].status %></option>
+                                                                <%status.forEach((status)=>{%>
+                                                                    <%if(status!=orderDetail[0].status){%>
+                                                                        <option value="<%-status %>"><%-status %></option>
+                                                                    <%}%>
+                                                               <% })%>
+                                                                <!-- <option value="Canceled">shipped</option> -->
+                                                            </select>
+                                            <%}%>
                                         
                                     </form>
                                     <div class="order_hd">
