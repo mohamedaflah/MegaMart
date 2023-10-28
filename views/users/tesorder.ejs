@@ -1,0 +1,154 @@
+<%-include('../partials/header.ejs') %>
+<div class="home" style="min-height: 100vh;">
+    <%-include('../partials/profiletoggle.ejs')%>
+    <div class="cart_secttion">
+        <div class="return_pop" id="returpop">
+            <form class="retur_form" id="returnForm" onsubmit="returnForm(event,'<%-id%>')" enctype="multipart/form-data">
+                <div class="product_img forclose">
+                    <img src="/images/close.png"  alt="" onclick="returnclose()">
+                </div>
+                <div class="product_img">
+                    <div class="forreason">
+                        <select name="reason" id="reson" onchange="displayTxt()">
+                            <option value="Defective or Damaged Product">Defective or Damaged Product</option>
+                            <option value="Wrong Product Shipped">Wrong Product Shipped</option>
+                            <option value="Quality Concerns">Quality Concerns</option>
+                            <option value="Change of Mind">Change of Mind</option>
+                            <option value="Missing Parts or Accessories">Missing Parts or Accessories</option>
+                            <option value="Health and Allergen Concerns">Health and Allergen Concerns</option>
+                            <option value="other">other</option>
+                        </select>
+                    </div>
+                    <div class="forimg">
+                        <img  alt="" id="productimgdisplay">
+                    </div>
+                </div>
+                <div class="product_img">
+                    <div class="forreason">
+                        <input type="file" name="file" id="wrng" onchange="showReturnImage('wrng','showwrng')">
+                        <label for="wrng">Click and upload product image</label>
+                        
+                    </div>
+                    <div class="forimg">
+                        <img src="" alt="" id="showwrng">
+                    </div>
+                </div>
+                <div class="product_img fortexar" id="txtarea">
+                    <label for="tex">Describe your actual reason</label>
+                       <textarea name="" id="tex">
+                        </textarea>
+                    
+                </div>
+                <div class="product_img" style="border: none;">
+                    <div class="forreason" style="border: none;">
+                        <button type="submit">Send request</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="brudCrump">
+            <span>Home</span><span>/</span><span>Orders</span>
+        </div>
+        <%orderDetail[0].userOrders.forEach((value)=>{%>
+            <%if(value.products.length>=1){%>
+
+                <div class="table fororder">
+                    <div class="row" style="justify-content: space-between;">
+                        <% let date=new Date(value.delverydate) %>
+                        <% let days=["Sunday","Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday"]%>
+                        <% let monthAr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
+                       
+                     <span>
+                         <span style="font-weight: 500;">Order Date</span>: <%-date.getDate()%> <%-monthAr[date.getMonth()]%> <%-date.getFullYear()%>
+                          <%-days[date.getDay()]%>
+                     </span> 
+                     <span>
+                         <span style="font-weight: 500;">Payment mod</span>: <%-value.paymentmode%>
+                     </span> 
+                     <%if(value.status == 'Pending'){%>
+    
+                        <span style="background: rgba(255, 54, 8, 0.635);padding:2px 10px;border-radius: 10px;font-size: 12px;color:#ffff">
+                            <%-value.status%>
+                        </span>
+                    <%}else if(value.status == 'Confirmed'){%>
+                        <span style="background: rgba(245, 216, 1, 0.635);padding:2px 10px;border-radius: 10px;font-size: 12px;color:#ffff">
+                            <%-value.status%>
+                        </span>
+                    <%}else if(value.status == 'Shipped'){%>
+                            <span style="background: rgba(153, 255, 19, 0.635);padding:2px 10px;border-radius: 10px;font-size: 12px;color:#ffff">
+                                <%-value.status%>
+                            </span>
+                     <%}else if(value.status == 'Delivered'){%>
+                                <span style="background: rgba(6, 245, 2, 0.636);padding:2px 10px;border-radius: 10px;font-size: 12px;color:#ffff">
+                                    <%-value.status%>
+                                </span>
+                    <%}else if(value.status=='Canceled'){%>
+                                <span style="background: rgba(223, 156, 12, 0.636);padding:2px 10px;border-radius: 10px;font-size: 12px;color:#ffff">
+                                        <%-value.status%>
+                                </span>
+                    <%}%>
+                   <%if(value.status!=="Delivered"){%>
+                    <%if(value.status!=="Canceled"){%>
+                        <a href="/users/products/orders/cancelorder/<%-value._id%>/<%-value.userId%>/" title="Cancel Order" onclick="return confirm('sure to change')">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="9" fill="#DB4444"/>
+                                <path d="M9 15L12 12M15 9L11.9994 12M11.9994 12L9 9M12 12L15 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg> 
+                        </a>
+                    <%}%>
+                   <%}%>
+                     
+                    </div>
+                    <div class="row">
+                        <div class="cols product">products</div>
+                        <div class="cols price">Price</div>
+                        <div class="cols price">Quantity</div>
+                        <div class="cols price">Subtotal</div>
+                        <div class="cols price"></div>
+                    </div>
+                    <%i=0%>                       
+                    <%let products1 = value.products%>
+                        <%products1.forEach((product,index)=>{%>
+                                <div class="row">
+                                    <div class="cols product">
+                                        <img src="/product-images/<%-product.image[0].mainimage%>" style="width:50px;height:auto" alt="">
+                                        <span style="margin-left: 20px;"><%-product.productName %></span>
+                                    </div>
+                                    <div class="cols price">
+                                        <%if(product && product.discount){%>
+                                            ₹<%-product.discount%>
+                                            <%}else{%>
+                                                ₹<%-product.price%>
+                                       <% }%>
+                                    </div>
+                                    <div class="cols price">
+                                        
+                                        <%-product.qty%>
+                                        <!-- 2 -->
+                                    </div>
+                                    <div class="cols price" style="justify-content: space-between;">
+    
+                                       <%if(product && product.discount){%>
+                                        ₹<%-product.discount*product.qty%>
+                                        <%}else{%>
+                                            ₹<%-product.price*product.qty%>
+                                       <%}%> 
+                           
+                                    </div> 
+    
+                                    <div class="cols price" style="justify-content: end;">
+                                        <a title="return product" onclick="openReturn('<%-product._id%>','<%-value._id%>')" style="margin-right: 10px;">
+                                            <img src="/images/return.svg" style="width: 18px;height: 18px;" alt="">
+                                        </a>
+                                    </div> 
+    
+                                </div>
+                                <%i++%>
+                            <%})%>
+    
+                </div>
+            <%}%>
+        <%})%>
+    </div>
+    <%-include('../partials/footer.ejs') %>
+</div>

@@ -1,8 +1,9 @@
 const { ObjectId } = require("mongodb");
-require('dotenv').config()
+require("dotenv").config();
 const productCollection = require("../model/collections/products");
 const returnCollection = require("../model/collections/returns");
 const orderCollection = require("../model/collections/orders");
+const walletCollection = require("../model/collections/wallet");
 const { getCartCount } = require("../helper/cart-helper");
 const { getWhishLIstCount } = require("../helper/whish-helper");
 async function getReturnedProduct(req, res) {
@@ -39,7 +40,8 @@ async function returnProduct(req, res) {
       { _id: new ObjectId(productId) },
       { $inc: { stock: 1 } }
     );
-
+    const productPrice=await productCollection.findOne({_id:new ObjectId(productId)})
+    await walletCollection.updateOne({userId:new ObjectId(userId)},{$inc:{amount:productPrice.price}})
     const filename = `/profile-images/${req.file.filename}`;
 
     await new returnCollection({
@@ -57,21 +59,21 @@ async function returnProduct(req, res) {
   }
 }
 async function seeAllreturns(req, res) {
-  console.log('api called');
+  console.log("api called");
   const userId = req.params.userId;
   const cartCount = await getCartCount(userId);
   const whishCount = await getWhishLIstCount(userId);
   const returns = await returnCollection.aggregate([
     {
       $lookup: {
-        from: 'products', // Name of the product collection
-        localField: 'productId',
-        foreignField: '_id',
-        as: 'productInfo',
+        from: "products", // Name of the product collection
+        localField: "productId",
+        foreignField: "_id",
+        as: "productInfo",
       },
     },
     {
-      $unwind: '$productInfo',
+      $unwind: "$productInfo",
     },
     {
       $project: {
@@ -80,15 +82,25 @@ async function seeAllreturns(req, res) {
         reason: 1, // Include other fields from the Return collection
         image: 1,
         returnedDate: 1,
-        productName: '$productInfo.name', // Include fields from the Product collection
+        productName: "$productInfo.name", // Include fields from the Product collection
         // Add more fields from the Product collection as needed
       },
     },
     // Add further aggregation stages as needed
-  ])
+  ]);
 
-  let allReturnData=await orderCollection.find()
-  res.json({returns})
+  let allReturnData = await orderCollection.find();
+  let obj = [];
+  for (let i = 0; i < allReturnData.length; i++) {
+    // if()
+    let productData = await productCollection.findOne({
+      _id: new ObjectId(allReturnData[i]),
+    });
+    if (productData) {
+      obj.push(productData);
+    }
+  }
+  res.json({ obj });
   // res.render("users/showReturns", {
   //   profile: true,
   //   id: userId,

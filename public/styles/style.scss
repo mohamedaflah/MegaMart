@@ -834,6 +834,51 @@ $categoryWidth: 30%;
         align-items: center;
         box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.05);
         border-radius: 4px;
+        .track_box {
+          // background: red;
+          height: 30px;
+          width: 300px;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          // justify-content: space-around;
+          .slidImg{
+            // background-color: rebeccapurple;
+            width: 100%;
+            position: relative;
+            height: 20px;
+            img{
+              width: auto;
+              height: 25px;
+              position: absolute;
+              left: 5px;
+            }
+          }
+          .trac_bar{
+            height: 8px;
+            margin: 0;
+            width: 100%;
+            background: #e5e4e4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px;
+            span{
+              height: 10px;
+              width: 10px;
+              background: white;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              padding: 0;
+              border-radius: 50%;
+              // img{
+              //   width: 100%;
+              //   height: 100%;
+              // }
+            }
+          }
+        }
         .cols {
           height: 100%;
           width: 20%;
@@ -889,6 +934,12 @@ $categoryWidth: 30%;
         // }
       }
     }
+    .table.fororder {
+      background-color: #f5f5f5;
+      padding: 2px;
+      border-radius: 4px;
+    }
+
     .returnandupdate {
       height: 40px;
       width: 100%;
@@ -2366,7 +2417,7 @@ $sidBarWidth: 250px;
             justify-content: center;
           }
         }
-        .forreason.fortext{
+        .forreason.fortext {
           width: 100%;
           height: 50px;
           border: none;
@@ -2386,19 +2437,19 @@ $sidBarWidth: 250px;
           }
         }
       }
-      .product_img.fortexar{
+      .product_img.fortexar {
         // background-color: red;
         display: flex;
         align-items: start;
         justify-content: center;
-        border-bottom:none ;
+        border-bottom: none;
         flex-direction: column;
         display: none;
-        label{
+        label {
           font-size: 12px;
           font-weight: 300;
         }
-        textarea{
+        textarea {
           width: 100%;
           height: 80px;
           resize: none;
@@ -2409,7 +2460,7 @@ $sidBarWidth: 250px;
           border-radius: 2px;
         }
       }
-      .product_img.fortexar.active{
+      .product_img.fortexar.active {
         display: flex;
       }
       .product_img.forclose {
@@ -2423,7 +2474,6 @@ $sidBarWidth: 250px;
         img {
           width: 12px;
           height: 12px;
-
         }
       }
     }

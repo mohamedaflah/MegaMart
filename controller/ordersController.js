@@ -10,7 +10,10 @@ const {
   getTotalAmount,
 } = require("../helper/cart-helper");
 const { generateRazorpay } = require("../helper/razorpay");
-const { getOrderId } = require("../helper/orderhelper");
+const {
+  getOrderId,
+  getOrderProductByOrderId,
+} = require("../helper/orderhelper");
 const { addAmountIntoWallet } = require("./walletController");
 const { getWhishLIstCount } = require("../helper/whish-helper");
 const { getWalletAmountofUser } = require("../auth/walet-helper");
@@ -344,7 +347,10 @@ async function filterOrders(req, res) {
       aggregationPipeline = [...commonAggregation, sort];
       break;
     case "byoldest":
-      aggregationPipeline = [...commonAggregation, { ...sort, "$sort": { delverydate: -1 } }];
+      aggregationPipeline = [
+        ...commonAggregation,
+        { ...sort, $sort: { delverydate: -1 } },
+      ];
       break;
     case "Pending":
     case "Confirmed":
@@ -359,8 +365,6 @@ async function filterOrders(req, res) {
   const orderDetail = await orderCollection.aggregate(aggregationPipeline);
   res.render("admins/listOrders", { orderDetail });
 }
-
-
 
 // For users  Start */
 
@@ -396,8 +400,8 @@ async function placeOrder(req, res) {
   } else {
     walletStatus = false;
   }
-  console.log(walletAmount+' amount of wallet');
-  console.log(totalAmount+' amount of total');
+  console.log(walletAmount + " amount of wallet");
+  console.log(totalAmount + " amount of total");
   // console.log(JSON.stringify(addressData) + "address data");
   console.log(JSON.stringify(cartData));
   res.render("users/place-order", {
@@ -460,10 +464,13 @@ async function placeOrderPost(req, res) {
     });
     if (req.body.payment_method == "COD") {
       res.json({ status: "COD" });
-    } else if(req.body.payment_method=="Wallet"){
-      await walletCollection.updateOne({userId:new ObjectId(userId)},{$inc:{amount:-totalAmount}})
-      res.json({status:"Wallet"})
-    }else{
+    } else if (req.body.payment_method == "Wallet") {
+      await walletCollection.updateOne(
+        { userId: new ObjectId(userId) },
+        { $inc: { amount: -totalAmount } }
+      );
+      res.json({ status: "Wallet" });
+    } else {
       let orderId = await getOrderId(userId);
       generateRazorpay(orderId, totalAmount, userId)
         .then((order) => {
@@ -475,7 +482,6 @@ async function placeOrderPost(req, res) {
             .status(500)
             .json({ error: "Error in Generating Razopay Checkout" });
         });
-
     }
     // res.redirect(`/users/product/checkout/payment/success/${userId}`);
   } catch (err) {
@@ -544,39 +550,121 @@ async function userOrders(req, res) {
       },
     },
   ]);
+  const anotherOrder = await UserCollection.aggregate([
+    {
+      $match: { _id: new ObjectId(userId) },
+    },
+    {
+      $lookup: {
+        from: "orders",
+        localField: "_id",
+        foreignField: "userId",
+        as: "userOrders",
+      },
+    },
+    {
+      $unwind: "$userOrders",
+    },
+    {
+      $lookup: {
+        from: "products",
+        localField: "userOrders.products.productId",
+        foreignField: "_id",
+        as: "userOrders.products.productDetails",
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        userOrders: {
+          _id: "$userOrders._id",
+          userId: "$userOrders.userId",
+          paymentmode: "$userOrders.paymentmode",
+          delverydate: "$userOrders.delverydate",
+          status: "$userOrders.status",
+          address: "$userOrders.address",
+          products: "$userOrders.products.productDetails", // Reshape here
+          __v: "$userOrders.__v",
+        },
+        __v: 1,
+      },
+    },
+    {
+      $sort: {
+        "userOrders.delverydate": -1, // Sort by delverydate in descending order (latest first)
+      },
+    },
+    {
+      $group: {
+        _id: "$_id",
+        userAddress: { $first: "$userAddress" },
+        userOrders: { $push: "$userOrders" },
+      },
+    },
+  ]);
 
+  for (const order of anotherOrder) {
+    for (const userOrder of order.userOrders) {
+      for (const product of userOrder.products) {
+        const orderId = userOrder._id;
+        const productQty = await getOrderProductByOrderId(orderId, product._id);
+        product.qty = productQty;
+        console.log(productQty + " this is the qty of product");
+      }
+    }
+  }
+  console.log(`
+
+  
+  ${JSON.stringify(anotherOrder)}
+
+  `);
   let orderqtys = await orderCollection.find({
     userId: new ObjectId(userId),
   });
-  console.log(JSON.stringify(orderqtys) + "   orders is _>");
+  // console.log(JSON.stringify(orderqtys) + "   orders is _>");
   let qty = [];
   orderqtys.forEach((value) => {
     value.products.forEach((qt) => {
       qty.push(qt.qty);
     });
   });
-  console.log(qty + "<----->       p");
-  console.log(JSON.stringify(orderqtys) + "order s");
-  console.log(JSON.stringify(orderqtys) + "     oreder quantities ");
-  console.log(JSON.stringify(orderDetail) + "details of orders");
+  // console.log(qty + "<----->       p");
+  // console.log(JSON.stringify(orderqtys) + "order s");
+  // console.log(JSON.stringify(orderqtys) + "     oreder quantities ");
+  // console.log(JSON.stringify(orderDetail) + "details of orders");
   // console.log(req.session.qty + " <-in order1111111111112222222    ");
 
-  res.render("users/orders", {
+  // res.render("users/orders", {
+  //   profile: true,
+  //   cartCount,
+  //   whishCount,
+  //   id: userId,
+  //   orderDetail,
+  //   qty,
+  // });
+
+  res.render("users/tesorder", {
     profile: true,
     cartCount,
     whishCount,
     id: userId,
-    orderDetail,
+    orderDetail: anotherOrder,
     qty,
   });
 }
 
 async function cancelOrder(req, res) {
   try {
-    const quantity = Number(req.params.qty);
     const userId = req.params.userId;
     const orderId = req.params.orderId;
-    const productId = req.params.productId;
+    const orderData = await orderCollection.findOne({
+      _id: new ObjectId(orderId),
+      userId: new ObjectId(userId),
+    });
+    // const productIdsandQty=orderData.products.map((data)=>{
+
+    // })
     const paymentMode = await orderCollection.findOne({
       _id: new ObjectId(orderId),
       userId: new ObjectId(userId),
@@ -587,10 +675,13 @@ async function cancelOrder(req, res) {
         $set: { status: "Canceled" },
       }
     );
-    await productsCollection.updateOne(
-      { _id: new ObjectId(productId) },
-      { $inc: { qty: quantity } }
-    );
+    orderData.products.map(async (data) => {
+      console.log(data + " each data sadlk");
+      await productsCollection.updateOne(
+        { _id: data.productId },
+        { $inc: { stock: data.qty } }
+      );
+    });
     console.log(paymentMode + "<<<<<<<<<????????saldfkaslkdfjlaksdfjlk");
     if (paymentMode.paymentmode == "Bank") {
       addAmountIntoWallet(userId, orderId).then(() => {

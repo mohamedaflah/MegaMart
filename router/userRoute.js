@@ -272,7 +272,7 @@ router.get(
   getPaymentSuccess
 );
 router.get(
-  "/users/products/orders/cancelorder/:orderId/:userId/:productId/:qty",
+  "/users/products/orders/cancelorder/:orderId/:userId/",
   cancelOrder
 );
 // router.get('*',(req,res)=>{
