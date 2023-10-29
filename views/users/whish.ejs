@@ -21,15 +21,15 @@
                         <img src="/images/delforwhish.svg" alt="">
                     </div>
                     <img class="prodImg" src="/product-images/<%-whishData.whishListData.image[0].mainimage%>">
-                    <%if(whishData.whishListData.stock>1){%>
+                    <%if(whishData.whishListData.stock>=1){%>
 
                         <button onclick="removeItemFromWhish(event,'<%-whishData.whishListData._id%>','<%-id%>','none<%-index%>','add')">
                             <img src="/images/whitecart.svg" alt="" onclick="">
-                            Add to Cart</button>
+                            Move to cart</button>
                             <%}else{%>
                                 <button disabled style="background: rgb(119, 119, 119);">
                                     <img src="/images/whitecart.svg" alt="">
-                                    Add to Cart</button>
+                                    Move to cart</button>
                     <%}%>
                 </div>
                 <div class="detail_section" >

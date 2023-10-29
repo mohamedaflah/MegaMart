@@ -74,7 +74,7 @@ async function unBlockUser(req, res) {
 
 function adminLogout(req, res) {
   req.session.adminAuth = false;
-  res.redirect("/admin/login");
+  res.redirect("/user/login");
 }
 function overView(req, res) {
   res.render("admins/overview");
@@ -97,7 +97,7 @@ async function filterUser(req, res) {
   res.render("admins/filteruser", { usersData });
 }
 async function serchUser(req, res) {
-  const searchData = req.body.search;
+  const searchData = req.body.search.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const usersData = await userDb.find({
     name: { $regex: "^" + searchData, $options: "i" },
   });

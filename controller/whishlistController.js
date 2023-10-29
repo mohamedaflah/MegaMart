@@ -145,7 +145,7 @@ async function movetoCartinWhishList(req, res) {
     }
   }else{
     await new cartCollection({
-      userId: new ObjectId(userId._id),
+      userId: new ObjectId(userId),
       products: [
         {
           productId: new ObjectId(productId),

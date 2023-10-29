@@ -17,11 +17,15 @@ const schema = mongoose.Schema({
   status: {
     type: String,
   },
-  totalAmount:{
-    type:Number,
+  totalAmount: {
+    type: Number,
   },
-  address:{
-    type:Object
+  address: {
+    type: Object,
+  },
+  isEmpty: {
+    type:Boolean,
+    default:false
   },
   products: [
     {

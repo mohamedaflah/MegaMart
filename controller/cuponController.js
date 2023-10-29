@@ -20,6 +20,9 @@ async function addCouponPost(req, res) {
   if (couponExistStatus) {
     return res.json({ existerr: "Coupon code already exists!!", exist: true });
   }
+  if(Number(discount)<=0){
+    return res.json({ existerr: "Only enter positive values", exist: true });
+  }
   await new couponCollection({
     couponname: couponname,
     couponcode: couponcode,

@@ -1,0 +1,49 @@
+<%-include('../partials/header.ejs') %>
+<div class="home" style="min-height: 100vh;">
+    <%-include('../partials/profiletoggle.ejs')%>
+    <div class="cart_secttion">
+        <div class="brudCrump">
+            <span>Home</span><span>/</span><span>Cart</span>
+        </div>
+            <div class="table">
+                <div class="row">
+                    <div class="cols product">Product</div>
+                    <div class="cols price">Price</div>
+                    <div class="cols price">Order date</div>
+                    <div class="cols price">return date</div>
+                    <div class="cols price">number of day</div>
+
+
+                </div>
+                    <div class="row">
+                        <div class="cols product">
+                            <img src="/images/redrm.png" style="width:50px;height:auto" alt="">
+                            <span style="margin-left: 20px;">remote</span>
+                        </div>
+                        <div class="cols price">
+                            <!-- <if(cartdata.cartData && cartdata.cartData.discount){%> -->
+                                <!-- ₹<-cartdata.cartData.discount%> -->
+                                <!-- < }else{%> -->
+                                    <!-- ₹<-cartdata.cartData.price%> -->
+                           <!-- <}%> -->
+                           5000
+                        </div>
+                        <div class="cols price">
+                            <!-- <if(cartdata.cartData && cartdata.cartData.discount){%> -->
+                                <!-- ₹<-cartdata.cartData.discount%> -->
+                                <!-- < }else{%> -->
+                                    <!-- ₹<-cartdata.cartData.price%> -->
+                           <!-- <}%> -->
+                           23/02/2020
+                        </div>
+                        <div class="cols price" style="justify-content: space-between;">₹
+                           24/02/2020
+                        </div>
+                        <div class="cols price" style="justify-content: space-between;">₹
+                           5
+                        </div>
+                    </div>
+            </div>
+    </div>
+    <%-include('../partials/footer.ejs') %>
+</div>

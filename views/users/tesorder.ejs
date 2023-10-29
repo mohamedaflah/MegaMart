@@ -137,9 +137,11 @@
                                     </div> 
     
                                     <div class="cols price" style="justify-content: end;">
-                                        <a title="return product" onclick="openReturn('<%-product._id%>','<%-value._id%>')" style="margin-right: 10px;">
-                                            <img src="/images/return.svg" style="width: 18px;height: 18px;" alt="">
-                                        </a>
+                                        <%if(value.status=="Delivered"){%>
+                                            <a title="return product" onclick="openReturn('<%-product._id%>','<%-value._id%>')" style="margin-right: 10px;">
+                                                <img src="/images/return.svg" style="width: 18px;height: 18px;" alt="">
+                                            </a>
+                                       <% }%>
                                     </div> 
     
                                 </div>

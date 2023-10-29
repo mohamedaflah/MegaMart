@@ -403,3 +403,4 @@ function displayTxt() {
     document.getElementById("txtarea").classList.remove("active");
   }
 }
+

@@ -94,6 +94,9 @@ async function addProduct(req, res) {
     if (price <= discount) {
       return res.json({ err: "Discount Amount Must be Lessthan Price" });
     }
+    if(price<=0){
+      return res.json({ err: "Muste enter positive values" });
+    }
     if (
       !req ||
       !req.files["main"] ||

@@ -98,16 +98,13 @@
                                                         </select>
                                                         
                                                         <%}else if(orderDetail[0].status=="Delivered"){%>
-                                                            <select name="status" id="" onchange="this.form.submit()">
-                                                                <%let status=["Canceled"]%>
-                                                                <option value="<%-orderDetail[0].status %>" selected><%-orderDetail[0].status %></option>
-                                                                <%status.forEach((status)=>{%>
-                                                                    <%if(status!=orderDetail[0].status){%>
-                                                                        <option value="<%-status %>"><%-status %></option>
-                                                                    <%}%>
-                                                               <% })%>
-                                                                <!-- <option value="Canceled">shipped</option> -->
-                                                            </select>
+                                                            <span>
+                                                                Delivered
+                                                            </span>
+                                                            <%}else if(orderDetail[0].status=="Canceled"){%>
+                                                                <span>
+                                                                    Canceled
+                                                                </span>
                                             <%}%>
                                         
                                     </form>
@@ -157,3 +154,4 @@
 
             </div>
     </div>
+    <%-include('./adminPartials/footer.ejs')%>

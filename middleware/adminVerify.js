@@ -2,7 +2,7 @@ function admiLoginVerify(req,res,next){
     if(req.session.adminAuth){
         next()
     }else{
-        res.redirect('/admin/login')
+        res.redirect('/user/login')
     }
 }
 

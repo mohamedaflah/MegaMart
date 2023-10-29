@@ -28,21 +28,53 @@ async function returnProduct(req, res) {
     console.log(productId + "  this is the produt id ");
     console.log(userId + "  this is the user id ");
     console.log(orderId + "  this is the order -- id ");
-    await orderCollection
-      .updateOne(
-        { _id: new ObjectId(orderId) },
-        { $pull: { products: { productId: new ObjectId(productId) } } }
-      )
-      .then(() => {
-        console.log("order collection inserted");
-      });
+    const productData = await orderCollection.findOne(
+      {
+        _id: new ObjectId(orderId),
+        userId: new ObjectId(userId),
+        "products.productId": new ObjectId(productId),
+      },
+      {
+        "products.$": 1,
+      }
+    );
+    console.log(JSON.stringify(productData),'   data of produt ')
     await productCollection.updateOne(
       { _id: new ObjectId(productId) },
       { $inc: { stock: 1 } }
     );
-    const productPrice=await productCollection.findOne({_id:new ObjectId(productId)})
-    await walletCollection.updateOne({userId:new ObjectId(userId)},{$inc:{amount:productPrice.price}})
-    const filename = `/profile-images/${req.file.filename}`;
+    await orderCollection
+    .updateOne(
+      { _id: new ObjectId(orderId) },
+      { $pull: { products: { productId: new ObjectId(productId) } } }
+    )
+    .then(() => {
+      console.log("order collection updated");
+    });
+    const orderData = await orderCollection.findOne({
+      _id: new ObjectId(orderId),
+      userId: new ObjectId(userId),
+    });
+    if (orderData.products.length <= 0) {
+      await orderCollection.updateOne(
+        { _id: new ObjectId(orderId), userId: new ObjectId(userId) },
+        { $set: { isEmpty: true } }
+      );
+    }
+    const productPrice = await productCollection.findOne({
+      _id: new ObjectId(productId),
+    });
+    let actualPrice;
+    if(productPrice.discount){
+      actualPrice=productPrice.discount
+    }else{
+      actualPrice=productPrice.price
+    }
+    await walletCollection.updateOne(
+      { userId: new ObjectId(userId) },
+      { $inc: { amount: actualPrice } }
+    );
+    const filename = `/return-images/${req.file.filename}`;
 
     await new returnCollection({
       userId: new ObjectId(userId),
@@ -50,6 +82,7 @@ async function returnProduct(req, res) {
       image: filename,
       reason: req.body.reason,
       returnedDate: Date.now(),
+      orderDate: orderData.delverydate,
     }).save();
 
     res.json({ status: true });

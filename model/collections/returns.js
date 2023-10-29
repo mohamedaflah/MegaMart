@@ -18,6 +18,9 @@ const schema = mongoose.Schema({
   },
   returnedDate:{
     type:Date,
+  },
+  orderDate:{
+    type:Date
   }
 });
 

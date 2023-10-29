@@ -139,18 +139,12 @@ async function listAllOrders(req, res) {
       $unwind: "$user",
     },
     {
-      $unwind: "$products",
-    },
-    {
       $lookup: {
         from: "products", // Use the name of your Products collection here
         localField: "products.productId",
         foreignField: "_id",
         as: "product",
       },
-    },
-    {
-      $unwind: "$product",
     },
     {
       $project: {
@@ -160,6 +154,7 @@ async function listAllOrders(req, res) {
         delverydate: 1,
         status: 1,
         address: 1,
+        isEmpty:1,
         user: 1, // This will contain all user details
         products: {
           productId: "$product._id",
@@ -221,6 +216,7 @@ async function getOrderDetails(req, res) {
         paymentmode: 1,
         delverydate: 1,
         status: 1,
+        isEmpty:1,
         address: 1,
         user: 1, // This will contain all user details
         products: {
@@ -319,6 +315,7 @@ async function filterOrders(req, res) {
         status: 1,
         address: 1,
         user: 1,
+        isEmpty:1,
         products: {
           productId: "$product._id",
           qty: "$products.qty",

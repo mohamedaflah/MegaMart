@@ -156,6 +156,7 @@
                             <div class="table_datas head">ADDED DATE</div>
                             <div class="table_datas head">EXPIRY DATE</div>
                             <div class="table_datas head" style="width: 10%;">STATUS</div>
+                            <div class="table_datas head" style="width: 10%;">ACTIONS</div>
                             <!-- <div class="table_datas head" style="width: 10%;"></div> -->
                         </div>
 
@@ -190,6 +191,14 @@
                                             expired
                                         </span>
                                     <%}%>
+                                </div>
+                                <div class="table_datas " style="width: 10%;display: flex;">
+                                   <div style="width: 100px;">
+                                    <img src="/images/couponedit.svg" alt="" onclick="editCoupon('<%-value._id%>')">
+                                   </div>
+                                   <div style="width: 100px;">
+                                    <img src="/images/trsh.svg" alt="">
+                                   </div>
                                 </div>
                                 <!-- <div class="table_datas " style="width: 10%;">
                                        
@@ -297,12 +306,12 @@
             let minerr = document.getElementById("minerr")
 
             const formBody = {
-                couponname: couponname.value,
-                couponcode: couponcode.value,
-                expiry: expiry.value,
-                discount: discount.value,
-                usagelimit: usagelimit.value,
-                minorderAmt: minorderAmt.value
+                couponname: couponname.value.trim(),
+                couponcode: couponcode.value.trim(),
+                expiry: expiry.value.trim(),
+                discount: discount.value.trim(),
+                usagelimit: usagelimit.value.trim(),
+                minorderAmt: minorderAmt.value.trim()
             }
             namerr.style.visibility = "hidden";
             codeerr.style.visibility = "hidden";
@@ -332,7 +341,6 @@
                 discounterr.style.visibility = "visible";
                 hasError = true;
             }
-
             if (!formBody.usagelimit) {
                 limiterr.style.visibility = "visible";
                 hasError = true;
@@ -403,3 +411,4 @@
             }
         }
     </script>
+    <%-include('./adminPartials/footer.ejs')%>
