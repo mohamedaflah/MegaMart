@@ -152,4 +152,127 @@ function searchProducts(event) {
     });
 }
 
+function searchUser(event) {
+  console.log(event.target.value);
+  let searvValue = {
+    search: event.target.value,
+  };
+  fetch("/admin/user/search/searchuser/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(searvValue),
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      const usersData = res.usersData;
+      let rows = [];
+      if (usersData.length >= 1) {
+        usersData.forEach((user) => {
+          const row = `
+                    <div class="table_content data_section">
+                        <div class="table_datas">${user.name}</div>
+                        <div class="table_datas">${user.email}</div>
+                        <div class="table_datas">
+                            ${
+                              user.profileImage
+                                ? `<img src="${user.profileImage}" alt="" style="width: 23px; height: 23px; border-radius: 50%;">`
+                                : `<img src="/images/userprofile.svg" style="width: 23px; height: 23px;" alt="">`
+                            }
+                        </div>
+                        <div class="table_datas">
+                            ${(() => {
+                              const d = new Date(user.joinDate);
+                              const dayAr = [
+                                "Monday",
+                                "Tuesday",
+                                "Wednesday",
+                                "Thursday",
+                                "Friday",
+                                "Saturday",
+                                "Sunday",
+                              ];
+                              const monthAr = [
+                                "Jan",
+                                "Feb",
+                                "Mar",
+                                "Apr",
+                                "May",
+                                "Jun",
+                                "Jul",
+                                "Aug",
+                                "Sep",
+                                "Oct",
+                                "Nov",
+                                "Dec",
+                              ];
+                              return `${d.getDate()} ${
+                                monthAr[d.getMonth()]
+                              } ${d.getFullYear()} ${dayAr[d.getDay() - 1]}`;
+                            })()}
+                        </div>
+                        <div class="table_datas">
+                            ${
+                              user.status
+                                ? `<div class="active">Active</div>`
+                                : `<div class="blocked">Blocked</div>`
+                            }
+                        </div>
+                        <div class="table_datas">
+                            ${
+                              user.status
+                                ? `<a href="/admin/userblock/${user._id}" title="Block User"><img src="/images/block.svg" style="width: 30px; height: 30px;" alt=""></a>`
+                                : `<a href="/admin/userunblock/${user._id}" title="Unblock User"><img src="/images/unblock.svg" style="width: 30px; height: 30px;" alt=""></a>`
+                            }
+                        </div>
+                    </div>
+                `;
+          rows.push(row);
+        });
+        const rowHtml = rows.join("");
+        document.querySelector(".usertable").innerHTML = rowHtml;
+      } else {
+        document.querySelector(
+          ".usertable"
+        ).innerHTML = `<h2 style="color:white;text-align:center">Search Data Not Found "${event.target.value}"</h2>`;
+      }
+    });
+}
 
+// (function(){
+//   let blockBtn=document.querySelector("#blockBtn")
+//   let unblockBtn=document.querySelector("#unblockBtn")
+//   let blockImg=document.querySelector("#blockImg")
+//   let unBlockImg=document.querySelector("#unBlockImg")
+
+//   blockBtn.addEventListener("click",()=>{
+
+//   })
+// })
+function editCoupon(couponId) {
+  window.localStorage.setItem("couponId", couponId);
+  document.getElementById("editModal").classList.add("active");
+  fetch(`/admin/products/cupons/getEditdata/${couponId}`)
+    .then((response) => response.json())
+    .then((res) => {
+      // alert(JSON.stringify(data.couponData))
+      const data = res.couponData;
+      document.querySelector("#editcopounname").value = data.couponname;
+      document.querySelector("#editcouponcode").value = data.couponcode;
+      let date = new Date(data.statusChangeDate);
+      document.querySelector("#editexpiry").value = formatDate(date);
+      document.querySelector("#editcoupondiscount").value = data.discount;
+      document.querySelector("#editlimit").value = data.usageLimit;
+      document.querySelector("#minorderamt").value = data.minOrderAmt;
+    });
+}
+function formatDate(date) {
+  const yyyy = date.getFullYear();
+  const mm = (date.getMonth() + 1).toString().padStart(2, "0"); // Month is zero-based
+  const dd = date.getDate().toString().padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+}
+function removeEditModal() {
+  document.getElementById("editModal").classList.remove("active");
+}

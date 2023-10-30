@@ -292,10 +292,10 @@ function applyCoupon(event, userId) {
     });
 }
 
-function openReturn(productId,orderId) {
-  confirm("are you sure to return")
+function openReturn(productId, orderId) {
+  confirm("are you sure to return");
   sessionStorage.setItem("productId", productId);
-  sessionStorage.setItem("orderId",orderId)
+  sessionStorage.setItem("orderId", orderId);
   document.getElementById("returpop").style.display = "flex";
 
   // Scroll the page to the center vertically
@@ -350,7 +350,7 @@ function returnForm(event, userId) {
   event.preventDefault();
   let fm = document.getElementById("returnForm");
   let productId = sessionStorage.getItem("productId");
-  let orderId=sessionStorage.getItem('orderId')
+  let orderId = sessionStorage.getItem("orderId");
   // alert(productId);
   let reason = document.getElementById("reson");
   let Reason = reason.options[reason.selectedIndex].value;
@@ -375,10 +375,13 @@ function returnForm(event, userId) {
     // alert("Selected file size: " + selectedFile.size + " bytes");
     // alert("Selected file type: " + selectedFile.type);
     // alert(JSON.stringify(selectedFile));
-    fetch(`/users/product/orders/returnproduct/${productId}/${userId}/?orderId=${orderId}`, {
-      method: "POST",
-      body: formDt,
-    })
+    fetch(
+      `/users/product/orders/returnproduct/${productId}/${userId}/?orderId=${orderId}`,
+      {
+        method: "POST",
+        body: formDt,
+      }
+    )
       .then((respons) => respons.json())
       .then((res) => {
         if (res.status) {
@@ -393,7 +396,6 @@ function returnForm(event, userId) {
   }
 }
 
-
 function displayTxt() {
   let Reason = document.getElementById("reson");
   if (Reason.value == "other") {
@@ -404,3 +406,22 @@ function displayTxt() {
   }
 }
 
+function copyLink(link) {
+  let copyMessage = document.getElementById("copymsg");
+  let changinImg = document.getElementById("changeCopyImage");
+  navigator.clipboard.writeText(link);
+  copyMessage.style.display = "block";
+  changinImg.setAttribute("src", "/images/copytick.svg");
+  changinImg.src = "/images/copytick.svg";
+  setTimeout(() => {
+    copyMessage.style.display = "none";
+    changinImg.setAttribute("src", "/images/copy.svg");
+    changinImg.src = "/images/copy.svg";
+  }, 2000);
+}
+function openSharing(){
+  document.querySelector(".referal_share").classList.add("active")
+}
+function inviteBoxClose(){
+  document.querySelector(".referal_share").classList.remove("active")
+}

@@ -98,6 +98,71 @@
                             </form>
                         </div>
                     </div>
+                    <div id="editModal" class="ebcf_modal">
+                        <div class="control_section cuponControl">
+                            <div class="cls">
+                                <img src="/images/Closebtn.svg" alt="" onclick="removeEditModal()">
+                            </div>
+                            <form class="cupon_form" id="editFormforEdit" >
+                                <div class="header">
+                                    <h3>Update coupon</h3>
+                                </div>
+                                <div class="header andcontrol">
+                                    <label for="couponname">Coupon name</label>
+                                    <input type="text" name="couponname" placeholder="Enter Coupon Name"
+                                        id="editcopounname">
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="namerr">Please fill coupon
+                                        name</span>
+                                </div>
+                                <div class="header andcontrol">
+                                    <label for="couponcode">Coupon code</label>
+                                    <input type="text" name="couponcode" placeholder="Enter Coupon Name" 
+                                        id="editcouponcode">
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="codeerr">Please fill
+                                        coupon code</span>
+                                </div>
+                                <div class="header andcontrol">
+                                    <label for="expiry">Expiry Date</label>
+                                    <%let date1=new Date()%>
+                                        <input type="date" name="expiry" id="editexpiry" 
+                                            >
+                                        <span style="color:red;margin: 0;visibility: hidden;" id="dateerr">Please select
+                                            date</span>
+                                </div>
+                                <div class="header andcontrol">
+                                    <label for="coupondiscount">Discount Amount₹</label>
+                                    <input type="number" name="discount" id="editcoupondiscount"
+                                        placeholder="Enter Discount Amount">
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="discounterr">Please fill
+                                        discount amount</span>
+                                </div>
+                                <div class="header andcontrol">
+                                    <label for="limit">Usage Limit</label>
+                                    <input type="number" name="limit" id="editlimit" placeholder="Enter Limit">
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="limiterr">Please usage fill
+                                        limit</span>
+                                </div>
+                                <div class="header andcontrol">
+                                    <label for="limit">Minimun Order Amount</label>
+                                    <input type="number" name="orderamt" id="minorderamt"
+                                        placeholder="Enter Minimun Amount">
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="minerr">Please fill
+                                        minimum order amount</span>
+                                </div>
+                                <div class="header andcontrol btns">
+                                    <button type="submit">Add</button>
+                                    <button type="reset">Reset</button>
+                                </div>
+                                <!-- 
+                                <label for="logo" class="logodiv">
+                                    <p>Upload Logo</p>
+                                    <img src="" alt="">
+                                </label>
+                                <input type="file" name="logo" id="logo" style="display: none;">
+                                <button type="submit">add</button> -->
+                            </form>
+                        </div>
+                    </div>
                     <div class="table" id="tb" style="margin-top: 5px;">
                         <div class="top_section">
                             <p>Cuopon</p>
@@ -410,5 +475,33 @@
                 document.getElementById("dateerr").style.visibility='hidden'
             }
         }
+        document.getElementById("editFormforEdit").addEventListener('submit',(e)=>{
+            e.preventDefault()
+            const couponname=document.querySelector("#editcopounname").value
+            const couponcode=document.querySelector("#editcouponcode").value
+            const expiry=document.querySelector("#editexpiry").value
+            const discount=document.querySelector("#editcoupondiscount")
+            const limit=document.querySelector("#editlimit").value 
+            const minorderAmt=document.querySelector("#minorderamt").value
+            alert(localStorage.getItem("couponId"))
+            const couponId=localStorage.getItem("couponId")
+            const formBody = {
+                couponname: couponname.trim(),
+                couponcode: couponcode.trim(),
+                expiry: expiry,
+                discount: discount,
+                usagelimit: limit,
+                minorderAmt: minorderAmt
+            }
+            fetch(`/admin/products/coupons/editCoupon/${couponId}`,{
+                method:"POST",
+                headers:{"Content-type":"application/json"},
+                body:JSON.stringify(formBody)
+            }).then((response)=>response.json()).then(res=>{
+                if(res.status){
+                    location.href='http://localhost:5001/admin/products/cupons/allcupons'
+                }
+            })
+        })
     </script>
     <%-include('./adminPartials/footer.ejs')%>

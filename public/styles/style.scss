@@ -234,6 +234,80 @@ $categoryWidth: 30%;
 
 .home {
   position: relative;
+  .referal_share{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    // background-color: #00000020;
+    backdrop-filter: blur(1.3px);
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+    .sharing_box{
+      width: 500px;
+      min-height: 200px;
+      border-radius: 4px;
+      background:#f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      .cls{
+        width: 15px;
+        height: 15px;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+      .copymessage{
+        position: absolute;
+        right: 5%;
+        top: 20%;
+        padding: 2px;
+        font-size: 10px;
+        background: #2b2a33;
+        color: #fff;
+        border-radius:2px ;
+        display: none;
+      }
+      .link_cpy{
+        width: 90%;
+        border-radius: 5px;
+        height: 45px;
+        display: flex;
+        justify-content: space-between;
+        .link{
+          height: 100%;
+          width: 87%;
+          box-shadow:0px 1px 13px 0px rgba(0, 0, 0, 0.05) ;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          span{
+            font-size: 12px;
+            color: rgb(58, 58, 208);
+          }
+        }
+        .cpy{
+          box-shadow:0px 1px 13px 0px rgba(0, 0, 0, 0.05) ;
+          height: 100%;
+          width: 10%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .referal_share.active{
+    display: flex;
+  }
   .coupon_see {
     position: absolute;
     left: 0;

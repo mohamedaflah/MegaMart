@@ -45,7 +45,7 @@ const {
   filterSpecificOrder,
 } = require("../controller/ordersController");
 const { ManageBrands, addBrand } = require("../controller/brandController");
-const { showAllCouponInAdmin, addCouponPost, checkCouponisExist } = require("../controller/cuponController");
+const { showAllCouponInAdmin, addCouponPost, checkCouponisExist, getEditCouponData, editCouponPost } = require("../controller/cuponController");
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
 router.post("/login", adminLoginPost);
@@ -137,6 +137,8 @@ router.get(
 router.get("/products/orders/orders/:filterorder/", filterOrders);
 // router.post('/products/orders/filterorder',filterSpecificOrder)
 router.get("/products/cupons/allcupons",admiLoginVerify,showAllCouponInAdmin)
+router.get('/products/cupons/getEditdata/:couponId',getEditCouponData)
+router.post('/products/coupons/editCoupon/:couponId',editCouponPost)
 router.post('/products/coupons/add-coupon',addCouponPost)
 router.post('/product/coupon/existstatus',checkCouponisExist)
 module.exports = { router };

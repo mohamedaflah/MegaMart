@@ -6,6 +6,7 @@ const orderCollection = require("../model/collections/orders");
 const walletCollection = require("../model/collections/wallet");
 const { getCartCount } = require("../helper/cart-helper");
 const { getWhishLIstCount } = require("../helper/whish-helper");
+const {getAllreturnedProductByUseId}=require('../helper/returnHelper')
 async function getReturnedProduct(req, res) {
   const producId = req.query.id;
   const product = await productCollection.findOne({
@@ -38,19 +39,19 @@ async function returnProduct(req, res) {
         "products.$": 1,
       }
     );
-    console.log(JSON.stringify(productData),'   data of produt ')
+    console.log(JSON.stringify(productData), "   data of produt ");
     await productCollection.updateOne(
       { _id: new ObjectId(productId) },
       { $inc: { stock: 1 } }
     );
     await orderCollection
-    .updateOne(
-      { _id: new ObjectId(orderId) },
-      { $pull: { products: { productId: new ObjectId(productId) } } }
-    )
-    .then(() => {
-      console.log("order collection updated");
-    });
+      .updateOne(
+        { _id: new ObjectId(orderId) },
+        { $pull: { products: { productId: new ObjectId(productId) } } }
+      )
+      .then(() => {
+        console.log("order collection updated");
+      });
     const orderData = await orderCollection.findOne({
       _id: new ObjectId(orderId),
       userId: new ObjectId(userId),
@@ -65,10 +66,10 @@ async function returnProduct(req, res) {
       _id: new ObjectId(productId),
     });
     let actualPrice;
-    if(productPrice.discount){
-      actualPrice=productPrice.discount
-    }else{
-      actualPrice=productPrice.price
+    if (productPrice.discount) {
+      actualPrice = productPrice.discount;
+    } else {
+      actualPrice = productPrice.price;
     }
     await walletCollection.updateOne(
       { userId: new ObjectId(userId) },
@@ -96,49 +97,25 @@ async function seeAllreturns(req, res) {
   const userId = req.params.userId;
   const cartCount = await getCartCount(userId);
   const whishCount = await getWhishLIstCount(userId);
-  const returns = await returnCollection.aggregate([
-    {
-      $lookup: {
-        from: "products", // Name of the product collection
-        localField: "productId",
-        foreignField: "_id",
-        as: "productInfo",
-      },
-    },
-    {
-      $unwind: "$productInfo",
-    },
-    {
-      $project: {
-        _id: 1, // Include the return document's _id
-        productId: 1, // Include the productId
-        reason: 1, // Include other fields from the Return collection
-        image: 1,
-        returnedDate: 1,
-        productName: "$productInfo.name", // Include fields from the Product collection
-        // Add more fields from the Product collection as needed
-      },
-    },
-    // Add further aggregation stages as needed
-  ]);
+  // console.log(JSON.stringify(returns) + " all returns");
 
-  let allReturnData = await orderCollection.find();
-  let obj = [];
-  for (let i = 0; i < allReturnData.length; i++) {
-    // if()
-    let productData = await productCollection.findOne({
-      _id: new ObjectId(allReturnData[i]),
-    });
-    if (productData) {
-      obj.push(productData);
-    }
-  }
-  res.json({ obj });
-  // res.render("users/showReturns", {
-  //   profile: true,
-  //   id: userId,
-  //   cartCount,
-  //   whishCount,
-  // });
+  // let allReturnData = await orderCollection.find();
+  // let obj = [];
+  // for (let i = 0; i < allReturnData.length; i++) {
+  //   // if()
+  //   let productData = await productCollection.findOne({
+  //     _id: new ObjectId(allReturnData[i]),
+  //   });
+  // }
+  const allUserreturns=await getAllreturnedProductByUseId(userId)
+  console.log('after calling '+JSON.stringify(allUserreturns))
+  res.render("users/returns", {
+    profile: true,
+    id: userId,
+    cartCount,
+    whishCount,
+    allUserreturns,
+    
+  });
 }
 module.exports = { getReturnedProduct, returnProduct, seeAllreturns };

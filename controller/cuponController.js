@@ -20,7 +20,7 @@ async function addCouponPost(req, res) {
   if (couponExistStatus) {
     return res.json({ existerr: "Coupon code already exists!!", exist: true });
   }
-  if(Number(discount)<=0){
+  if (Number(discount) <= 0) {
     return res.json({ existerr: "Only enter positive values", exist: true });
   }
   await new couponCollection({
@@ -36,6 +36,43 @@ async function addCouponPost(req, res) {
   res.json({ status: true });
 }
 
+async function getEditCouponData(req, res) {
+  let cuponId = req.params.couponId;
+  const couponData = await couponCollection.findById(new ObjectId(cuponId));
+  res.json({ couponData });
+}
+async function editCouponPost(req, res) {
+  try{
+
+    const couponId = req.params.couponId;
+    let { couponname, couponcode, expiry, discount, usagelimit, minorderAmt } =
+      req.body;
+    let couponData=await couponCollection.findById(new ObjectId(couponId)) 
+    // if(couponname==couponData.couponname){
+    //   return res.json({err:"Coupon name already exist"})
+    // } 
+    // if(couponcode==couponData.couponname){
+
+    // }
+    expiry = new Date(expiry);
+    await couponCollection.updateOne(
+      { _id: new ObjectId(couponId) },
+      {
+        $set: {
+          couponname: couponname,
+          couponcode: couponcode,
+          statusChangeDate: expiry,
+          usageLimit: usagelimit,
+          minorderAmt: minorderAmt,
+        },
+      }
+    );
+    // res.redirect('http://localhost:5001/admin/products/cupons/allcupons')
+    res.json({status:true})
+  }catch(err){
+    console.log('error founded in update copon'+err);
+  }
+}
 async function checkCouponisExist(req, res) {
   // console.log("CALLED");
   const { couponcode } = req.body;
@@ -165,7 +202,7 @@ async function applyCoupon(req, res) {
         },
       },
     ]);
-    console.log(JSON.stringify(userdata)+'    data of   user  ');
+    console.log(JSON.stringify(userdata) + "    data of   user  ");
     // if (userdata[0].count > coupondata.usageLimit) {
     //   return res.json({ err: "User limit exceeded" });
     // }
@@ -183,8 +220,8 @@ async function applyCoupon(req, res) {
         }
       );
     } else {
-      if(userdata[0].count<=coupondata.usageLimit){
-        return res.json({err:"Maximum attempt reached"})
+      if (userdata[0].count <= coupondata.usageLimit) {
+        return res.json({ err: "Maximum attempt reached" });
       }
       await couponCollection.updateOne(
         { couponcode: couponcode, "users.userId": userId },
@@ -207,4 +244,6 @@ module.exports = {
   addCouponPost,
   checkCouponisExist,
   forUserCoupon,
+  getEditCouponData,
+  editCouponPost,
 };

@@ -3,7 +3,7 @@
     <%-include('../partials/profiletoggle.ejs')%>
     <div class="cart_secttion">
         <div class="brudCrump">
-            <span>Home</span><span>/</span><span>Cart</span>
+            <span>Home</span><span>/</span><span>My Account</span><span>/</span><span>My return</span>
         </div>
             <div class="table">
                 <div class="row">
@@ -15,34 +15,39 @@
 
 
                 </div>
+                <%allUserreturns.forEach((returnData)=>{%>
                     <div class="row">
+                        <% let product = returnData.product %>
                         <div class="cols product">
-                            <img src="/images/redrm.png" style="width:50px;height:auto" alt="">
-                            <span style="margin-left: 20px;">remote</span>
+                            <img src="/product-images/<%-product.image[0].mainimage%>" style="width:50px;height:auto" alt="">
+                            <span style="margin-left: 20px;"><%-product.productName%></span>
                         </div>
                         <div class="cols price">
-                            <!-- <if(cartdata.cartData && cartdata.cartData.discount){%> -->
-                                <!-- ₹<-cartdata.cartData.discount%> -->
-                                <!-- < }else{%> -->
-                                    <!-- ₹<-cartdata.cartData.price%> -->
-                           <!-- <}%> -->
-                           5000
+                           <%-product.price%>
                         </div>
                         <div class="cols price">
-                            <!-- <if(cartdata.cartData && cartdata.cartData.discount){%> -->
-                                <!-- ₹<-cartdata.cartData.discount%> -->
-                                <!-- < }else{%> -->
-                                    <!-- ₹<-cartdata.cartData.price%> -->
-                           <!-- <}%> -->
-                           23/02/2020
+                            <% let d = new Date(returnData.orderDate) %>
+                            <% let dayAr = ["Sunday","Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday"] %>
+                            <% let monthAr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
+                            <%=d.getDate()%> <%= monthAr[d.getMonth()+1]%> <%=d.getFullYear()%> <%=dayAr[d.getDay()]%>
                         </div>
-                        <div class="cols price" style="justify-content: space-between;">₹
-                           24/02/2020
+                        <div class="cols price" style="justify-content: space-between;">
+                            <% let d1 = new Date(returnData.returnedDate) %>
+                            <% let dayAr1 = ["Sunday","Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday"] %>
+                            <% let monthAr1=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
+                            <%=d1.getDate()%> <%= monthAr1[d1.getMonth()+1]%> <%=d1.getFullYear()%> <%=dayAr1[d1.getDay()]%>
                         </div>
-                        <div class="cols price" style="justify-content: space-between;">₹
-                           5
+                        <div class="cols price" style="justify-content: space-between;">
+                            <% const orderDate = new Date(returnData.orderDate);
+                            const returnedDate = new Date(returnData.returnedDate);
+                            const timeDifference = Math.abs(returnedDate - orderDate);
+                            const numberOfDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+                            %>
+                         <%= numberOfDays %>
                         </div>
                     </div>
+
+               <% })%>
             </div>
     </div>
     <%-include('../partials/footer.ejs') %>
