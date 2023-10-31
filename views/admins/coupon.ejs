@@ -111,42 +111,37 @@
                                     <label for="couponname">Coupon name</label>
                                     <input type="text" name="couponname" placeholder="Enter Coupon Name"
                                         id="editcopounname">
-                                    <span style="color:red;margin: 0;visibility: hidden;" id="namerr">Please fill coupon
-                                        name</span>
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="editnameerr"></span>
                                 </div>
                                 <div class="header andcontrol">
                                     <label for="couponcode">Coupon code</label>
                                     <input type="text" name="couponcode" placeholder="Enter Coupon Name" 
                                         id="editcouponcode">
-                                    <span style="color:red;margin: 0;visibility: hidden;" id="codeerr">Please fill
-                                        coupon code</span>
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="editcodeerr"></span>
                                 </div>
                                 <div class="header andcontrol">
                                     <label for="expiry">Expiry Date</label>
                                     <%let date1=new Date()%>
                                         <input type="date" name="expiry" id="editexpiry" 
-                                            >
-                                        <span style="color:red;margin: 0;visibility: hidden;" id="dateerr">Please select
-                                            date</span>
+                                        >
+                                        <span style="color:red;margin: 0;visibility: hidden;" id="editdateerr"></span>
                                 </div>
                                 <div class="header andcontrol">
                                     <label for="coupondiscount">Discount Amount₹</label>
                                     <input type="number" name="discount" id="editcoupondiscount"
                                         placeholder="Enter Discount Amount">
-                                    <span style="color:red;margin: 0;visibility: hidden;" id="discounterr">Please fill
-                                        discount amount</span>
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="editdiscounterr"></span>
                                 </div>
                                 <div class="header andcontrol">
                                     <label for="limit">Usage Limit</label>
                                     <input type="number" name="limit" id="editlimit" placeholder="Enter Limit">
-                                    <span style="color:red;margin: 0;visibility: hidden;" id="limiterr">Please usage fill
-                                        limit</span>
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="editlimiterr"></span>
                                 </div>
                                 <div class="header andcontrol">
                                     <label for="limit">Minimun Order Amount</label>
                                     <input type="number" name="orderamt" id="minorderamt"
                                         placeholder="Enter Minimun Amount">
-                                    <span style="color:red;margin: 0;visibility: hidden;" id="minerr">Please fill
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="editminerr">Please fill
                                         minimum order amount</span>
                                 </div>
                                 <div class="header andcontrol btns">
@@ -373,10 +368,10 @@
             const formBody = {
                 couponname: couponname.value.trim(),
                 couponcode: couponcode.value.trim(),
-                expiry: expiry.value.trim(),
-                discount: discount.value.trim(),
-                usagelimit: usagelimit.value.trim(),
-                minorderAmt: minorderAmt.value.trim()
+                expiry: expiry.value,
+                discount: discount.value,
+                usagelimit: usagelimit.value,
+                minorderAmt: minorderAmt.value
             }
             namerr.style.visibility = "hidden";
             codeerr.style.visibility = "hidden";
@@ -477,13 +472,16 @@
         }
         document.getElementById("editFormforEdit").addEventListener('submit',(e)=>{
             e.preventDefault()
+            if(validateEditForm()){
+                return
+            }
             const couponname=document.querySelector("#editcopounname").value
             const couponcode=document.querySelector("#editcouponcode").value
             const expiry=document.querySelector("#editexpiry").value
             const discount=document.querySelector("#editcoupondiscount")
             const limit=document.querySelector("#editlimit").value 
             const minorderAmt=document.querySelector("#minorderamt").value
-            alert(localStorage.getItem("couponId"))
+            
             const couponId=localStorage.getItem("couponId")
             const formBody = {
                 couponname: couponname.trim(),
@@ -503,5 +501,78 @@
                 }
             })
         })
+        function validateEditForm(){
+            const couponname=document.querySelector("#editcopounname").value
+            const couponcode=document.querySelector("#editcouponcode").value
+            const expiry=document.querySelector("#editexpiry").value
+            const discount=document.querySelector("#editcoupondiscount")
+            const limit=document.querySelector("#editlimit").value 
+            const minorderAmt=document.querySelector("#minorderamt").value
+
+            let namerr = document.getElementById("editnameerr")
+            let codeerr = document.getElementById("editcodeerr")
+            let dateerr = document.getElementById("editdateerr")
+            let discounterr = document.getElementById("editdiscounterr")
+            let limiterr = document.getElementById("editminerr")
+            let minerr = document.getElementById("minerr")
+
+            const formBody = {
+                couponname: couponname.trim(),
+                couponcode: couponcode.trim(),
+                expiry: expiry,
+                discount: discount,
+                usagelimit: limit,
+                minorderAmt: minorderAmt
+            }
+            namerr.style.visibility = "hidden";
+            codeerr.style.visibility = "hidden";
+            dateerr.style.visibility = "hidden";
+            discounterr.style.visibility = "hidden";
+            limiterr.style.visibility = "hidden";
+            minerr.style.visibility = "hidden";
+            let errtime = 3000
+            let hasError = false; // Flag to track if there are any errors
+
+            if (!formBody.couponname) {
+                namerr.style.visibility = "visible";
+                hasError = true;
+            }
+
+            if (!formBody.couponcode) {
+                codeerr.style.visibility = "visible";
+                hasError = true;
+            }
+
+            if (!formBody.expiry) {
+                dateerr.style.visibility = "visible";
+                hasError = true;
+            }
+
+            if (!formBody.discount) {
+                discounterr.style.visibility = "visible";
+                hasError = true;
+            }
+            if (!formBody.usagelimit) {
+                limiterr.style.visibility = "visible";
+                hasError = true;
+            }
+
+            if (!formBody.minorderAmt) {
+                minerr.style.visibility = "visible";
+                hasError = true;
+            }
+
+            if (hasError) {
+                setTimeout(() => {
+                    namerr.style.visibility = "hidden";
+                    codeerr.style.visibility = "hidden";
+                    dateerr.style.visibility = "hidden";
+                    discounterr.style.visibility = "hidden";
+                    limiterr.style.visibility = "hidden";
+                    minerr.style.visibility = "hidden";
+                }, 3000);
+                return;
+            }
+        }
     </script>
     <%-include('./adminPartials/footer.ejs')%>

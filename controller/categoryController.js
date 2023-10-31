@@ -75,23 +75,6 @@ async function recoverCategory(req, res) {
   res.redirect("/admin/category");
 }
 
-
-// Add Category in Error Page
-async function addCategoryWhileErr(req, res) {
-    let categories = await categoryCollection.find();
-    let errortype = req.params.errortype;
-    let msg;
-    if (errortype == "nullfield") {
-      msg = "Please Fillout the Filed";
-    } else if (errortype == "duplicate") {
-      msg = "Duplicate Category Found!!!!";
-    }
-    res.render("admins/addcategory", {
-      categories,
-      err: msg,
-    });
-  }
-
   // Searching Category
   async function serchCategory(req, res) {
     const searchData = req.body.search;
@@ -222,7 +205,6 @@ module.exports = {
   editCategoryPost,
   unListCategory,
   recoverCategory,
-  addCategoryWhileErr,
   serchCategory,
   filteringandSortingcategory,
   CategoryControllforUser,

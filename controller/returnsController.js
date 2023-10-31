@@ -118,4 +118,15 @@ async function seeAllreturns(req, res) {
     
   });
 }
-module.exports = { getReturnedProduct, returnProduct, seeAllreturns };
+
+
+// for admin start
+
+function showAllreturns(req,res){
+  
+  res.render('admins/returns')
+}
+
+// admin side end
+const admin={showAllreturns}
+module.exports = { getReturnedProduct, returnProduct, seeAllreturns,admin };

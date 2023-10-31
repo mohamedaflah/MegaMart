@@ -251,6 +251,7 @@ function searchUser(event) {
 //   })
 // })
 function editCoupon(couponId) {
+  window.scrollTo({ top: 0, behavior: "smooth" });
   window.localStorage.setItem("couponId", couponId);
   document.getElementById("editModal").classList.add("active");
   fetch(`/admin/products/cupons/getEditdata/${couponId}`)
@@ -276,3 +277,27 @@ function formatDate(date) {
 function removeEditModal() {
   document.getElementById("editModal").classList.remove("active");
 }
+// (function () {
+//   const ctx = document.getElementById("myChart");
+
+//   new Chart(ctx, {
+//     type: "bar",
+//     data: {
+//       labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+//       datasets: [
+//         {
+//           label: "of votes",
+//           data: [12, 9, 3, 2, 3],
+//           borderWidth: 2,
+//         },
+//       ],
+//     },
+//     options: {
+//       scales: {
+//         y: {
+//           beginAtZero: true,
+//         },
+//       },
+//     },
+//   });
+// });

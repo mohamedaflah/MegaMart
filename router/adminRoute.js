@@ -21,7 +21,6 @@ const {
   editCategoryPost,
   unListCategory,
   recoverCategory,
-  addCategoryWhileErr,
   serchCategory,
   filteringandSortingcategory,
 } = require("../controller/categoryController");
@@ -32,7 +31,6 @@ const {
   postEditProduct,
   deleteProduct,
   recoverProduct,
-  addProductgetwhileError,
   filtereProduct,
   searchProductForAdmin,
 } = require("../controller/productController");
@@ -46,6 +44,7 @@ const {
 } = require("../controller/ordersController");
 const { ManageBrands, addBrand } = require("../controller/brandController");
 const { showAllCouponInAdmin, addCouponPost, checkCouponisExist, getEditCouponData, editCouponPost } = require("../controller/cuponController");
+const { showAllreturns } = require("../controller/returnsController").admin;
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
 router.post("/login", adminLoginPost);
@@ -76,9 +75,6 @@ const uploadFields = [
 ];
 
 router.post("/products/add-products", upload.fields(uploadFields), addProduct);
-
-router.get("/products/add-products/:errortype", addProductgetwhileError);
-router.get("/category/add-category/:errortype", addCategoryWhileErr);
 
 const brandStorage=multer.diskStorage({
   destination:(req,file,callback)=>{
@@ -141,4 +137,5 @@ router.get('/products/cupons/getEditdata/:couponId',getEditCouponData)
 router.post('/products/coupons/editCoupon/:couponId',editCouponPost)
 router.post('/products/coupons/add-coupon',addCouponPost)
 router.post('/product/coupon/existstatus',checkCouponisExist)
+router.get("/product/returns/showallreturns",showAllreturns)
 module.exports = { router };

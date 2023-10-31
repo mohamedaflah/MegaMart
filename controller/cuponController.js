@@ -47,6 +47,9 @@ async function editCouponPost(req, res) {
     const couponId = req.params.couponId;
     let { couponname, couponcode, expiry, discount, usagelimit, minorderAmt } =
       req.body;
+      if(!couponname || !couponcode || !expiry || !discount || !usagelimit || !minorderAmt){
+        return res.json({err:"Fill all field"})
+      }
     let couponData=await couponCollection.findById(new ObjectId(couponId)) 
     // if(couponname==couponData.couponname){
     //   return res.json({err:"Coupon name already exist"})
@@ -55,6 +58,12 @@ async function editCouponPost(req, res) {
 
     // }
     expiry = new Date(expiry);
+    let status;
+    if(expiry>=new Date()){
+      status='active'
+    }else{
+      status='expired'
+    }
     await couponCollection.updateOne(
       { _id: new ObjectId(couponId) },
       {
@@ -63,6 +72,7 @@ async function editCouponPost(req, res) {
           couponcode: couponcode,
           statusChangeDate: expiry,
           usageLimit: usagelimit,
+          status:status,
           minorderAmt: minorderAmt,
         },
       }
@@ -71,6 +81,7 @@ async function editCouponPost(req, res) {
     res.json({status:true})
   }catch(err){
     console.log('error founded in update copon'+err);
+    res.json({err})
   }
 }
 async function checkCouponisExist(req, res) {
@@ -220,7 +231,7 @@ async function applyCoupon(req, res) {
         }
       );
     } else {
-      if (userdata[0].count <= coupondata.usageLimit) {
+      if (userdata[0].count > coupondata.usageLimit) {
         return res.json({ err: "Maximum attempt reached" });
       }
       await couponCollection.updateOne(

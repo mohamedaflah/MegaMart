@@ -16,15 +16,15 @@ const CategoryDb = require("../model/collections/CategoryDb");
 const isValidMail = require("../auth/isValidEmail");
 const { generateUniqueUsername } = require("../helper/generteUniquename");
 const walletCollection = require("../model/collections/wallet");
-const {getWhishLIstCount} = require("../helper/whish-helper");
-const couponCollection=require("../model/collections/cupon")
-const adminCollection=require('../model/collections/adminDb')
+const { getWhishLIstCount } = require("../helper/whish-helper");
+const couponCollection = require("../model/collections/cupon");
+const adminCollection = require("../model/collections/adminDb");
 changeStream.on("otpDeleted", (documentId) => {
   console.log(`OTP document deleted with ID: ${documentId}`);
 });
 async function userHome(req, res) {
-  if(req.session.adminAuth){
-    return res.redirect('/admin/')
+  if (req.session.adminAuth) {
+    return res.redirect("/admin/");
   }
   // let userStatus=await UserCollection.find({email:req.session.userEmail})
   // console.log(typeof req.session.userEmail+'email ');
@@ -36,7 +36,7 @@ async function userHome(req, res) {
       profile: false,
       err: "Your Permission Denied by Admin",
       cartCount: false,
-      whishCount:false,
+      whishCount: false,
       id: false,
     });
   }
@@ -51,14 +51,14 @@ async function userHome(req, res) {
     });
     const userId = userData._id;
     var cartCount = await getCartCount(userId);
-    var whishListCount=await getWhishLIstCount(userId)
+    var whishListCount = await getWhishLIstCount(userId);
     // console.log("data of a cart " + cartCount);
 
     res.render("users/index", {
       profile: true,
       productData,
       cartCount,
-      whishCount:whishListCount,
+      whishCount: whishListCount,
       id: userStatus[0]._id,
       err: false,
       categories,
@@ -78,25 +78,28 @@ async function userHome(req, res) {
   }
 }
 function singupGet(req, res) {
-  
-    if(req.query && req.query.err){
-      // return res.json({err:req.query.err})
-      res.render("users/sigup", {
-        err: req.query.err,
-        profile: false,
-        cartCount: 0,
-        whishCount:0,
-        id: false,
-      });
-    }else{
-      res.render("users/sigup", {
-        err: false,
-        profile: false,
-        cartCount: 0,
-        whishCount:0,
-        id: false,
-      });
-    }
+  if (req.query && req.query.id) {
+    req.session.userSignupwithreferal = true;
+    req.session.userreferalId = req.query.id;
+  }
+  if (req.query && req.query.err) {
+    // return res.json({err:req.query.err})
+    res.render("users/sigup", {
+      err: req.query.err,
+      profile: false,
+      cartCount: 0,
+      whishCount: 0,
+      id: false,
+    });
+  } else {
+    res.render("users/sigup", {
+      err: false,
+      profile: false,
+      cartCount: 0,
+      whishCount: 0,
+      id: false,
+    });
+  }
   // }
 }
 function AfterMailSuccessfull(req, res) {
@@ -109,8 +112,8 @@ function MailVerificationFail(req, res) {
 var codEmai;
 // var userInformation;
 async function singupPost(req, res) {
-  if(req.query && req.query.err){
-    return res.json({err:req.query.err})
+  if (req.query && req.query.err) {
+    return res.json({ err: req.query.err });
   }
   console.log("api called");
   if (EmailCheck(req.body.email_or_Phone)) {
@@ -254,12 +257,12 @@ async function singupPost(req, res) {
 }
 function confirm(req, res) {
   if (!req.session.userAuth) {
-    let milliSecond=50000;
+    let milliSecond = 50000;
     res.render("users/otp", {
       err: false,
       profile: false,
       cartCount: 0,
-      whishCount:0,
+      whishCount: 0,
       id: false,
     });
     // setTimeout(async()=>{
@@ -295,7 +298,17 @@ async function confirmPost(req, res) {
           console.log("inserted");
           req.session.userId = dat._id;
         });
-      res.json({status:true});
+      // req.session.userSignupwithreferal ;
+      // req.session.userreferalId 
+
+      if(req.session && req.session.userSignupwithreferal){
+        let wallerExist=await walletCollection.findOne({userId:new ObjectId(req.session.userreferalId)})
+        if(wallerExist){
+          await walletCollection.updateOne({userId:new ObjectId(req.session.userreferalId)},{$inc:{amount:200}})
+        }
+        
+      }
+      res.json({ status: true });
     } else {
       // res.render("users/otp", {
       //   err: "Verification Failed and Pleas Try Agin!!...",
@@ -303,10 +316,10 @@ async function confirmPost(req, res) {
       //   cartCount: 0,
       //   id: false,
       // });
-      res.json({err:"Verification Failed and Pleas Try Agin!!..."})
+      res.json({ err: "Verification Failed and Pleas Try Agin!!..." });
     }
   } catch (err) {
-    res.json({err:"Failed and Crashed"})
+    res.json({ err: "Failed and Crashed" });
     console.log("Error Otp post " + err);
   }
 }
@@ -325,19 +338,19 @@ function sessionsetWhileSignupWithGoogle(req, res) {
 }
 async function userAccount(req, res) {
   const userId = req.params.id;
-  const wallet=await walletCollection.find({userId:new ObjectId(userId)})
-  const coupons=await couponCollection.find().sort({addedDate:-1})
-  let totalAmt=0
-  wallet.map((value)=>{
-    totalAmt+=Number(value.amount)
-  })
-  console.log(wallet+' this is the wallet');
-  console.log('totalAmount of Wallet '+totalAmt);
+  const wallet = await walletCollection.find({ userId: new ObjectId(userId) });
+  const coupons = await couponCollection.find().sort({ addedDate: -1 });
+  let totalAmt = 0;
+  wallet.map((value) => {
+    totalAmt += Number(value.amount);
+  });
+  console.log(wallet + " this is the wallet");
+  console.log("totalAmount of Wallet " + totalAmt);
   const cartData = await cartCollection.findOne({
     userId: new ObjectId(userId),
   });
-  var cartCount =await getCartCount(userId)
-  let whishCount=await getWhishLIstCount(userId)
+  var cartCount = await getCartCount(userId);
+  let whishCount = await getWhishLIstCount(userId);
   const userData = await UserCollection.findOne({ _id: new ObjectId(userId) });
   const addressData = await addressCollection
     .findOne({
@@ -364,55 +377,55 @@ function userLogout(req, res) {
 }
 
 function userLoginGet(req, res) {
-  if(req.session.adminAuth){
-    return res.redirect('/admin/')
+  if (req.session.adminAuth) {
+    return res.redirect("/admin/");
   }
   res.render("users/login", {
     profile: false,
     err: false,
     cartCount: 0,
-    whishCount:0,
+    whishCount: 0,
     id: false,
   });
 }
 async function userLoginPost(req, res) {
   try {
-    console.log('api called login');
+    console.log("api called login");
     const { email_or_Phone, password } = req.body.formData;
     console.log(JSON.stringify(req.body.formData));
     if (!email_or_Phone || !password) {
-      return res.json({err:"Please Fillout All Field"})
+      return res.json({ err: "Please Fillout All Field" });
     }
-    if(!EmailCheck(email_or_Phone)){
-      return res.json({err:"Enter Valid Email Including '@'"})
+    if (!EmailCheck(email_or_Phone)) {
+      return res.json({ err: "Enter Valid Email Including '@'" });
     }
     // Check if the user exists based on email
     const userData = await UserCollection.findOne({ email: email_or_Phone });
 
-    // admin login 
-    const adminData=await adminCollection.findOne({email:email_or_Phone})
-    if(adminData){
-      const adminPassCompare=await bcrypt.compare(password,adminData.password)
-      if(adminPassCompare){
+    // admin login
+    const adminData = await adminCollection.findOne({ email: email_or_Phone });
+    if (adminData) {
+      const adminPassCompare = await bcrypt.compare(
+        password,
+        adminData.password
+      );
+      if (adminPassCompare) {
         req.session.adminAuth = true;
-        return res.json({admin:true})
+        return res.json({ admin: true });
       }
     }
     // admin ⏏
 
-
-    
     if (!userData) {
       // User not found
-      return res.json({err:"User not Found"})
+      return res.json({ err: "User not Found" });
     }
 
     // Compare passwords
     const passwordMatch = await bcrypt.compare(password, userData.password);
 
     if (!passwordMatch) {
-
-      return res.json({err:"Incorrect Email or Password"})
+      return res.json({ err: "Incorrect Email or Password" });
     }
 
     // Login successful
@@ -422,11 +435,9 @@ async function userLoginPost(req, res) {
       email: req.session.userEmail,
     });
     if (userStatus[0].status) {
-      return res.json({status:true});
+      return res.json({ status: true });
     } else {
-
-
-      return res.json({err:"Your Access has been Denied by admin"})
+      return res.json({ err: "Your Access has been Denied by admin" });
     }
   } catch (err) {
     console.error("Error during login:", err);
@@ -434,7 +445,7 @@ async function userLoginPost(req, res) {
     //   profile: false,
     //   err: "Login failed. Please try again later.",
     // });
-    return res.json({err:"Login Failed "})
+    return res.json({ err: "Login Failed " });
   }
 }
 function FailedLogin(req, res) {
@@ -442,7 +453,7 @@ function FailedLogin(req, res) {
     profile: false,
     err: "Login Failed",
     cartCount: 0,
-    whishCount:0,
+    whishCount: 0,
     id: false,
   });
   // res.send("failed");
@@ -516,7 +527,7 @@ async function forgotPassConfirm(req, res) {
     err: false,
     profile: false,
     id: false,
-    whishCount:false,
+    whishCount: false,
     cartCount: false,
   });
 }
@@ -532,7 +543,7 @@ function forgotPassConfirmPost(req, res) {
       profile: false,
       id: false,
       cartCount: false,
-      whishCount:false,
+      whishCount: false,
     });
   }
 }
@@ -541,7 +552,7 @@ function forgotPasswordPasswordEnter(req, res) {
     profile: false,
     id: false,
     cartCount: 0,
-    whishCount:0,
+    whishCount: 0,
     err: false,
   });
 }
@@ -555,7 +566,7 @@ async function forgotPasswordPasswordEnterPost(req, res) {
         profile: false,
         id: false,
         cartCount: 0,
-        whishCount:0,
+        whishCount: 0,
         err: "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter and one number.",
       });
     }
@@ -573,7 +584,7 @@ async function forgotPasswordPasswordEnterPost(req, res) {
       profile: false,
       id: false,
       cartCount: 0,
-      whishCount:0,
+      whishCount: 0,
       err: "Password Not Same",
     });
   }
@@ -582,9 +593,9 @@ async function forgotPasswordPasswordEnterPost(req, res) {
 async function getPaymentSuccess(req, res) {
   try {
     const userId = req.params.userId;
-    
+
     const cartCount = await getCartCount(userId);
-    const whishCount=await getWhishLIstCount(userId)
+    const whishCount = await getWhishLIstCount(userId);
     res.render("users/paymentsuccess", {
       profile: true,
       cartCount,
@@ -599,7 +610,7 @@ async function getPaymentSuccess(req, res) {
 async function updateProfile(req, res) {
   const userId = req.params.userId;
   const cartCount = await getCartCount(userId);
-  const whishCount=await getWhishLIstCount(userId)
+  const whishCount = await getWhishLIstCount(userId);
   const userData = await UserCollection.findOne({ _id: new ObjectId(userId) });
   res.render("users/updateprofile", {
     err: false,
@@ -624,17 +635,17 @@ async function updateProfilePost(req, res) {
   );
   res.redirect(`http://localhost:5001/user/account/${req.params.userId}`);
 }
-async function suggestUniqueUsername(req,res){
-  const name=req.body.name
-  const usernames=[]
-  for(let i=1;i<=5;i++){
-   let suggestions=generateUniqueUsername(name)
-   let exist=await UserCollection.findOne({name:suggestions})
-   if(!exist){
-    usernames.push(suggestions)
-   }
+async function suggestUniqueUsername(req, res) {
+  const name = req.body.name;
+  const usernames = [];
+  for (let i = 1; i <= 5; i++) {
+    let suggestions = generateUniqueUsername(name);
+    let exist = await UserCollection.findOne({ name: suggestions });
+    if (!exist) {
+      usernames.push(suggestions);
+    }
   }
-  res.json({suggestions:usernames})
+  res.json({ suggestions: usernames });
 }
 module.exports = {
   userHome,
@@ -662,5 +673,5 @@ module.exports = {
   // resendOTP,
   updateProfile,
   updateProfilePost,
-  suggestUniqueUsername
+  suggestUniqueUsername,
 };

@@ -4,42 +4,47 @@
             <div class="content_section">
                 <div class="overview_section">
                     <div class="head_inp">
-                        <h5>Category</h5>
-                        <a href="/admin/logout">Logout</a>
+                        <h5>Offers</h5>
+                        <div style="display: flex;gap: 20px;">
+                            <form class="inp" style="height: 30px;display: flex;align-items: center;justify-content: start;background: #29292c;border-radius: 4.099px;padding: 0 10px;" method="post" action="/admin/category/serach/searchcategory/">
+                                <input type="text" style="height: 100%;border: none;outline: none;background:transparent;font-size: 12px;" placeholder="Search Category" name="search">
+                                <button style="height: 100%;width: 20px;margin: 0;padding: 0;background: transparent;display: flex;align-items: center;justify-content: center;" type="submit">
+
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20 20L16.2223 16.2156M18.3158 11.1579C18.3158 13.0563 17.5617 14.8769 16.2193 16.2193C14.8769 17.5617 13.0563 18.3158 11.1579 18.3158C9.2595 18.3158 7.43886 17.5617 6.0965 16.2193C4.75413 14.8769 4 13.0563 4 11.1579C4 9.2595 4.75413 7.43886 6.0965 6.0965C7.43886 4.75413 9.2595 4 11.1579 4C13.0563 4 14.8769 4.75413 16.2193 6.0965C17.5617 7.43886 18.3158 9.2595 18.3158 11.1579V11.1579Z" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+                                        </svg>
+                                        
+                                </button>
+                            </form>
+                            <a href="/admin/logout">Logout</a>
+                        </div>
                     </div>
                 </div>
                 <div class="items_section" style="flex-direction: column;">
                     <div class="admin_top_control">
-                        <button  id="mySizeChart">Add Category</button>
+                        <button  id="mySizeChart">Add Brand</button>
                     </div>
-                    <div id="mySizeChartModal" class="ebcf_modal" style="transform: translateY(0);">
-                        <%if(err){%>
-                            <div style="position: absolute;top: 20%;left: 50%;transform: translateX(-50%);min-width: 250px;min-height: 26px;border: 1px solid rgb(203, 137, 137);display: flex;
-                            align-items: center;justify-content: space-between;font-size: 12px;padding: 0 5px;border-radius: 5px;">
-                                <%-err%>
-                                <a href="/admin/category/add-category/''">
-
-                                    <img src="/images/cross.png" style="width: 13px;height:13px" alt="">
-                                </a>
-                            </div>
-                       <% }%>
+                    <div id="mySizeChartModal" class="ebcf_modal">
                         <div class="control_section">
                             <div class="cls" >
-                                <a href="/admin/category/">
-                                    <img src="/images/Closebtn.svg" alt="" id="clsbtn">
-                                </a>
+                                <img src="/images/Closebtn.svg" alt="" id="clsbtn">
                             </div>
-                            <form action="/admin/category/add-category/" method="post">
-                                <input type="text" name="category" value="<%-categories.categoryname%>" placeholder="Add category" id="">
-                                <button type="submit">Add </button>
+                            <form onsubmit="addBrands()">
+                                <input type="text" name="brand" placeholder="add new Category" id="">
+                                <label for="logo" class="logodiv">
+                                    <p>Upload Logo</p>
+                                    <img src="" alt="">
+                                </label>
+                                <input type="file" name="logo" id="logo" style="display: none;">
+                                <button type="submit">add</button>
                             </form>
                         </div>
                     </div>
                     <div class="table" id="tb">
                         <div class="top_section">
-                            <p>Categories</p>
+                            <p>Brands</p>
                             <div class="filter">
-                                <a href="">Filtered by
+                                <a onclick="opnecategoryFilter('categoryfilter')">Filtered by
                                     <svg width="17" height="18" viewBox="0 0 17 18" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path d="M13.1934 15.9636V8.44873" stroke="#898989" stroke-width="1.02476"
@@ -62,7 +67,7 @@
                                             stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" />
                                     </svg>
                                 </a>
-                                <a href="">Sorted by
+                                <a onclick="openCategorysortPop('categorysort')">Sorted by
                                     <svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -73,38 +78,54 @@
                                 </a>
                             </div>
                         </div>
+                        <div class="filterArea" id="categoryfilter" >
+                            <a href="/admin/category/filter-category/listed/">Listed</a>
+                            <a href="/admin/category/filter-category/unlisted/">Unlisted</a>
+                            <a href="/admin/category/">All</a>
+                        </div>
+                        <div class="sorted" id="categorysort">
+                            <a href="/admin/category/filter-category/latest/">Latest</a>
+                            <a href="/admin/category/filter-category/oldest/">Oldest</a>
+                            <!-- <a href="javascript:void(0);" onclick="sortByName()">
+                                Name
+                                <img src="/images/sort.svg" style="transform: rotate(-90deg);" alt="">
+                            </a> -->
+                        </div>
                         <div class="table_content">
-                            <div class="table_datas head">CATEGORY NAME</div>
-                            <div class="table_datas head" style="width: 10%;">STOCK</div>
+                            <div class="table_datas head">BRAND NAME</div>
+                            <div class="table_datas head" style="width: 10%;">PRODUCTS</div>
                             <div class="table_datas head">SALES</div>
                             <div class="table_datas head">ADDED DATE</div>
+                            <div class="table_datas head">BRAND LOGO</div>
                             <div class="table_datas head"></div>
                         </div>
+                     
                             <div class="table_content data_section">
-                                <div class="table_datas "><%-categories.categoryname%></div>
+                                <div class="table_datas ">Apple</div>
                                 <div class="table_datas " style="width: 10%;">
-                                    <%if(categories.stock){%>
-                                        <%-categories.stock%>
-                                    <%}else{%>
                                         0
-                                    <%}%>
+
                                 </div>
                                 <div class="table_datas " >
-                                    <%if(categories.sales){%>
-                                        <%-categories.sales%>
-                                    <%}else{%>
+                                  
                                         0
-                                    <%}%>
+                                    
                                 </div>
                                 <div class="table_datas ">
-                                    <% let d = new Date(categories.addedDate ) %>
-                                    <% let dayAr = ["Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday","Sunday"] %>
-                                    <%-d.getDate()%>/<%- d.getMonth()+1%>/<%-d.getFullYear()%> <%-dayAr[d.getDay()-1]%>
+                                    23/09/2023
                                 </div>
                                 <div class="table_datas ">
-                                    <a href="/admin/category/edit-category/<%-categories.categoryId%>">
+                                    23/09/2023
+                                </div>
+                                <div class="table_datas ">
+                                   
                                         <img src="/images/predit.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
-                                    </a>
+                                 
+                                   
+                                        
+                                            <img src="/images/delp.svg" style="width: 30px;height: 30px;margin-right:10px" alt="">
+                                  
+                                     
                                 </div>
                             </div>
                     </div>
@@ -136,8 +157,52 @@
                                     </div>
                                 </div>
                             </div>
+                        <!-- <div class="detail">
+                            <div class="data">
+                                <p>Name</p>
+                                <p>Aflu</p>
+                            </div>
+                            <div class="data">
+                                <p>Email</p>
+                                <p>Aflu@gmail.com</p>
+                            </div>
+                            <div class="data">
+                                <p>Join Date</p>
+                                <p>23/05/2023</p>
+                            </div>
+                            <div class="data">
+                                <p>Status</p>
+                                <div class="status" id="blocked">
+                                    <div class="btn_block">
+                                        Blocked
+                                    </div>
+                                    <a href="">
+
+                                        <img src="/images/unblock.svg" style="width: 25px;height:25px" alt="">
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
+            
     </div>
-    <%-include('./adminPartials/footer.ejs')%>
+    <script>
+        var addCatgorybutton=document.getElementById("mySizeChart")
+        var categoryPopup=document.getElementById("mySizeChartModal")
+        var closePopup=document.getElementById('clsbtn')
+        addCatgorybutton.addEventListener('click',()=>{
+            categoryPopup.classList.add("active")
+        })
+        closePopup.addEventListener('click',()=>{
+            categoryPopup.classList.remove("active")
+        })
+        function opnecategoryFilter(openpop){
+            document.getElementById(openpop).classList.toggle("active")
+        }
+        function openCategorysortPop(sortPop){
+            document.getElementById(sortPop).classList.toggle("active")
+        }
+    </script>

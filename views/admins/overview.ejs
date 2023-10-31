@@ -8,7 +8,70 @@
                         <a href="/admin/logout">Logout</a>
                     </div>
                 </div>
-                <div class="items_section">
+                <div class="items_section" style="display: flex;justify-content: space-around;">
+                    <div class="chart" style="width: 500px;height: 500px;">
+
+                        <canvas id="myChart"  ></canvas>
+                    </div>
+                    <div class="chart" style="width: 500px;height: 500px;">
+
+                        <canvas id="chart2"  ></canvas>
+                    </div>
                 </div>
             </div>
     </div>
+    <script>
+        const ctx = document.getElementById("myChart").getContext("2d");
+
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+//                linear-gradient(90deg, #92FE9D 0%, #00C9FF 100%, #00C9FF 100%))
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [
+                    {
+                        label: "10 of votes",
+                        data: [12, 9, 3, 2, 3],
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                aspectRatio:1.8,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+        });
+        const ctx2=document.getElementById("chart2").getContext('2d')
+        new Chart(ctx2,{
+            type:"line",
+            data: {
+                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                datasets: [
+                    {
+                        label: "10 of votes",
+                        data: [12, 9, 3, 2, 3],
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                aspectRatio:1.8,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+        })
+    </script>
+    <style>
+        #myChart {
+          width: 200px;
+          height: 200px;
+        }
+      </style>
+    <%-include("./adminPartials/footer.ejs")%>

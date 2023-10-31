@@ -85,7 +85,7 @@
                             <div class="table_datas head">PROFILE</div>
                             <div class="table_datas head">JOIN DATE</div>
                             <div class="table_datas head">STATUS</div>
-                            <div class="table_datas head"></div>
+                            <div class="table_datas head" style="width: 10%;"></div>
                         </div>
                         <%usersData.forEach((data)=>{%>
                             <div class="table_content data_section">
@@ -115,7 +115,7 @@
                                     </span>
                                    <%}%>
                                 </div>
-                                <div class="table_datas ">
+                                <div class="table_datas " style="width: 10%;">
                                     <%if(data.status){%>
                                         <a href="/admin/userblock/<%- data._id %>"  title="Block User" id="blockBtn">
                                                 <img src="/images/block.svg" style="width: 30px;height:30px" alt="" id="blockImg">
@@ -128,24 +128,9 @@
                                 </div>
                             </div>
                             <% }) %>
-                                <!-- <div class="table_content data_section">
-                                    <div class="table_datas ">Aflu</div>
-                                    <div class="table_datas ">Aflu@gmail.com</div>
+                                <!-- <div class="table_content data_section pagination_btn">
                                     <div class="table_datas ">
-                                        <img src="/images/userprofile.svg" style="width: 23px;height:23" alt="">
-                                    </div>
-                                    <div class="table_datas ">
-                                        23/5/2023
-                                    </div>
-                                    <div class="table_datas ">
-                                        <div class="blocked">
-                                            Blocked
-                                        </div>
-                                    </div>
-                                    <div class="table_datas ">
-                                        <a href="">
-                                            <img src="/images/unblock.svg" style="width: 30px;height:30px" alt="">
-                                        </a>
+                                        
                                     </div>
                                 </div> -->
                     </div>

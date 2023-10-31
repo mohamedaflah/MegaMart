@@ -291,18 +291,7 @@ async function recoverProduct(req, res) {
   res.redirect("/admin/products");
 }
 
-// Product Adding Error Page
-async function addProductgetwhileError(req, res) {
-  const errortype = req.params.errortype;
-  let err;
-  if (errortype == "nullfield") {
-    err = "Please Fillout All Field";
-  } else {
-    err = false;
-  }
-  let categories = await categoryCollection.find();
-  res.render("admins/addproduct", { err, categories });
-}
+
 
 async function filtereProduct(req, res) {
   const filterorder = req.params.filtereorder;
@@ -893,7 +882,6 @@ module.exports = {
   postEditProduct,
   deleteProduct,
   recoverProduct,
-  addProductgetwhileError,
   filtereProduct,
   searchProductForAdmin,
   usersProduct,

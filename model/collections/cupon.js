@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema({
   couponname: {
     type: String,
+    unique:true,
   },
   couponcode: {
     type: String,
