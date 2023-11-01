@@ -19,6 +19,7 @@ const walletCollection = require("../model/collections/wallet");
 const { getWhishLIstCount } = require("../helper/whish-helper");
 const couponCollection = require("../model/collections/cupon");
 const adminCollection = require("../model/collections/adminDb");
+const referalDb = require("../model/collections/referalDb");
 changeStream.on("otpDeleted", (documentId) => {
   console.log(`OTP document deleted with ID: ${documentId}`);
 });
@@ -299,14 +300,39 @@ async function confirmPost(req, res) {
           req.session.userId = dat._id;
         });
       // req.session.userSignupwithreferal ;
-      // req.session.userreferalId 
+      // req.session.userreferalId
 
-      if(req.session && req.session.userSignupwithreferal){
-        let wallerExist=await walletCollection.findOne({userId:new ObjectId(req.session.userreferalId)})
-        if(wallerExist){
-          await walletCollection.updateOne({userId:new ObjectId(req.session.userreferalId)},{$inc:{amount:200}})
+      if (req.session && req.session.userSignupwithreferal) {
+        let wallerExist = await walletCollection.findOne({
+          userId: new ObjectId(req.session.userreferalId),
+        });
+        if (wallerExist) {
+          const offAmt = await referalDb.find();
+          const referalId = offAmt[0]._id;
+          await walletCollection.updateOne(
+            { userId: new ObjectId(req.session.userreferalId) },
+            { $inc: { amount: offAmt[0].offeramount } }
+          );
+          await referalDb.updateOne(
+            { _id: new ObjectId(referalId) },
+            {
+              $push: {
+                invitedUser: {
+                  userId: new ObjectId(req.query.userSignupwithreferal),
+                },
+              },
+            }
+          );
+          await referalDb.updateOne({
+            _id: new ObjectId(req.session.userId),
+          },{
+            $push:{
+              joinedUser:{
+                
+              }
+            }
+          });
         }
-        
       }
       res.json({ status: true });
     } else {

@@ -203,6 +203,7 @@ body {
   background: #f5f5f5;
   display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -252,6 +253,14 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+.home .referal_share .sharing_box .social_shares {
+  width: 90%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 .home .referal_share.active {
   display: flex;
@@ -3077,7 +3086,7 @@ button:hover {
   width: 80%;
   min-height: 300px;
   border-radius: 5.289px;
-  background: linear-gradient(153deg, #000 99.99%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(13deg, #000 99.99%, rgba(0, 0, 0, 0) 100%);
   -webkit-backdrop-filter: blur(20.0670871735px);
           backdrop-filter: blur(20.0670871735px);
   overflow: hidden;
@@ -3225,6 +3234,9 @@ button:hover {
 }
 .home .content_section .items_section .table .data_section {
   min-height: 58px;
+}
+.home .content_section .items_section .offertable {
+  height: 200px;
 }
 .home .content_section .items_section .key_val {
   background-color: rgb(18, 17, 19);

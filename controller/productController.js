@@ -678,13 +678,14 @@ async function filteredbyMinandMaxGet(req, res) {
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
-
+  
   const categories = await categoryCollection.find();
   if (req.session.userAuth && userStatus[0].status) {
     const userData = await UserCollection.findOne({
       email: req.session.userEmail,
     });
     const userId = userData._id;
+    const whishCount=await getWhishLIstCount(userId)
     var cartCount = await getCartCount(userId);
     console.log("data of a cart " + cartCount);
 
@@ -695,6 +696,7 @@ async function filteredbyMinandMaxGet(req, res) {
       id: userStatus[0]._id,
       err: false,
       categories,
+      whishCount
     });
     // return;
   } else {

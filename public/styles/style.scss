@@ -254,6 +254,7 @@ $categoryWidth: 30%;
       background:#f5f5f5;
       display: flex;
       align-items: center;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       position: relative;
@@ -302,6 +303,15 @@ $categoryWidth: 30%;
           justify-content: center;
           cursor: pointer;
         }
+      }
+      .social_shares{
+        width: 90%;
+        height: 50px;
+        // background-color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
       }
     }
   }
@@ -3682,7 +3692,7 @@ $sidBarWidth: 250px;
         width: 80%;
         min-height: 300px;
         border-radius: 5.289px;
-        background: linear-gradient(153deg, #000 99.99%, rgba(0, 0, 0, 0) 100%);
+        background: linear-gradient(13deg, #000 99.99%, rgba(0, 0, 0, 0) 100%);
         backdrop-filter: blur(20.067087173461914px);
         // margin-top: 1px;
         overflow: hidden;
@@ -3842,6 +3852,9 @@ $sidBarWidth: 250px;
         .data_section {
           min-height: 58px;
         }
+      }
+      .offertable{
+        height: 200px;
       }
       .key_val {
         background-color: rgb(18, 17, 19);

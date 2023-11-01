@@ -2,6 +2,7 @@ const router = require("express").Router();
 const multer = require("multer");
 const crypto = require("crypto");
 const { admiLoginVerify } = require("../middleware/adminVerify");
+
 const {
   adminHomeShowuser,
   adminLoginGet,
@@ -43,7 +44,19 @@ const {
   filterSpecificOrder,
 } = require("../controller/ordersController");
 const { ManageBrands, addBrand } = require("../controller/brandController");
-const { showAllCouponInAdmin, addCouponPost, checkCouponisExist, getEditCouponData, editCouponPost } = require("../controller/cuponController");
+const {
+  showAllCouponInAdmin,
+  addCouponPost,
+  checkCouponisExist,
+  getEditCouponData,
+  editCouponPost,
+} = require("../controller/cuponController");
+const {
+  showAllReferalOffer,
+  addreferalOffer,
+  editOfferGet,
+  editOfferPost,
+} = require("../controller/referalController");
 const { showAllreturns } = require("../controller/returnsController").admin;
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
@@ -76,21 +89,25 @@ const uploadFields = [
 
 router.post("/products/add-products", upload.fields(uploadFields), addProduct);
 
-const brandStorage=multer.diskStorage({
-  destination:(req,file,callback)=>{
-    callback(null,"./public/brand-logos");
+const brandStorage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, "./public/brand-logos");
   },
-  filename:(req,file,callback)=>{
+  filename: (req, file, callback) => {
     const randomeString = crypto.randomBytes(3).toString("hex");
     const timestamp = Date.now();
     const uniqueFile = `${timestamp}-${randomeString}`;
     cb(null, uniqueFile + ".png");
-  }
-})
-const brandUpload=multer({storage:brandStorage})
+  },
+});
+const brandUpload = multer({ storage: brandStorage });
 const uploadFieldForBrand = [{ name: "logo" }];
 
-router.post("/products/add-brand",brandUpload.fields(uploadFieldForBrand),addBrand);
+router.post(
+  "/products/add-brand",
+  brandUpload.fields(uploadFieldForBrand),
+  addBrand
+);
 router.get("/category", admiLoginVerify, ManageCategory);
 router.post("/category/add-category", addCategory);
 router.get("/category/edit-category/:id", admiLoginVerify, editCategoryGet);
@@ -132,10 +149,14 @@ router.get(
 );
 router.get("/products/orders/orders/:filterorder/", filterOrders);
 // router.post('/products/orders/filterorder',filterSpecificOrder)
-router.get("/products/cupons/allcupons",admiLoginVerify,showAllCouponInAdmin)
-router.get('/products/cupons/getEditdata/:couponId',getEditCouponData)
-router.post('/products/coupons/editCoupon/:couponId',editCouponPost)
-router.post('/products/coupons/add-coupon',addCouponPost)
-router.post('/product/coupon/existstatus',checkCouponisExist)
-router.get("/product/returns/showallreturns",showAllreturns)
+router.get("/products/cupons/allcupons", admiLoginVerify, showAllCouponInAdmin);
+router.get("/products/cupons/getEditdata/:couponId", getEditCouponData);
+router.post("/products/coupons/editCoupon/:couponId", editCouponPost);
+router.post("/products/coupons/add-coupon", addCouponPost);
+router.post("/product/coupon/existstatus", checkCouponisExist);
+router.get("/product/returns/showallreturns", admiLoginVerify, showAllreturns);
+router.get("/product/offers/seeOffers", admiLoginVerify, showAllReferalOffer);
+router.post("/product/offers/referaloffer/addoffer", addreferalOffer);
+router.get('/product/offers/referaloffer/getEditofferData/',editOfferGet)
+router.post('/product/offers/referaloffer/updateofferamt',editOfferPost)
 module.exports = { router };

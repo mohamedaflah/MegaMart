@@ -425,3 +425,11 @@ function openSharing(){
 function inviteBoxClose(){
   document.querySelector(".referal_share").classList.remove("active")
 }
+
+function shareOnWhatsapp(useId){
+  const referalLink=`http://localhost:5001/signup?id=${useId}`
+  const message="Check out this amazing invitation linkis"+referalLink
+  const whatsappUrl=`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`
+  window.open(whatsappUrl,'_blank')
+  // whatsapp-share-button
+}

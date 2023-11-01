@@ -3,20 +3,25 @@ require("dotenv").config();
 const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 const schema = mongoose.Schema({
-  joinedUser: [
-    {
-      type: ObjectId,
-    },
-  ],
   offeramount: {
     type: Number,
   },
   updatedDate: {
     type: Date,
   },
+  status: {
+    type: Boolean,
+  },
+  joinedUser: [
+    {userId:{
+      type: ObjectId,
+    }},
+  ],
   invitedUser: [
     {
-      type: ObjectId,
+      userId: {
+        type: ObjectId,
+      },
     },
   ],
 });

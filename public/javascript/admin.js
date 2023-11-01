@@ -301,3 +301,48 @@ function removeEditModal() {
 //     },
 //   });
 // });
+function getofferEditWindow(offerId) {
+  localStorage.setItem("offerId", offerId);
+  document.getElementById("offermodal").classList.add("active");
+  fetch(
+    `/admin/product/offers/referaloffer/getEditofferData/?offerId=${offerId}`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      const editData = data.editData;
+      document.getElementById("offerinput").value = editData.offeramount;
+    });
+  }
+  function updateOffAmt(e) {
+    e.preventDefault()
+    const offerId = localStorage.getItem("offerId");
+    const offeramount=document.getElementById("offerinput").value 
+    if(!offeramount.toString().trim()){
+      document.getElementById("erroShowing").textContent='Please fill input field'
+      return
+    }
+    
+    if(offeramount<=0){
+      document.getElementById("erroShowing").textContent='Enter only positive value'
+      return  
+    }
+    if(offeramount>=1000){
+      document.getElementById("erroShowing").textContent='Maxium offer amount is 1000'
+      return  
+    }
+    const formBody={offeramount}
+  fetch(
+    `/admin/product/offers/referaloffer/updateofferamt?offerId=${offerId}`,
+    {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body:JSON.stringify(formBody)
+    }
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status) {
+        location.href = "http://localhost:5001/admin/product/offers/seeOffers";
+      }
+    });
+}
