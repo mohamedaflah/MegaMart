@@ -24,8 +24,8 @@ const schema = mongoose.Schema({
     type: Object,
   },
   isEmpty: {
-    type:Boolean,
-    default:false
+    type: Boolean,
+    default: false,
   },
   products: [
     {
@@ -34,6 +34,9 @@ const schema = mongoose.Schema({
         required: true,
       },
       qty: {
+        type: Number,
+      },
+      price: {
         type: Number,
       },
     },

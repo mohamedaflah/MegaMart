@@ -57,6 +57,7 @@ const {
   editOfferGet,
   editOfferPost,
 } = require("../controller/referalController");
+const { showCategoryOffers, addOfferforCategory } = require("../controller/categoryOfferController");
 const { showAllreturns } = require("../controller/returnsController").admin;
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
@@ -159,4 +160,6 @@ router.get("/product/offers/seeOffers", admiLoginVerify, showAllReferalOffer);
 router.post("/product/offers/referaloffer/addoffer", addreferalOffer);
 router.get('/product/offers/referaloffer/getEditofferData/',editOfferGet)
 router.post('/product/offers/referaloffer/updateofferamt',editOfferPost)
+router.get("/product/offers/categoryoffer/",admiLoginVerify,showCategoryOffers)
+router.post("/product/offers/categoryoffer/add-category-offer",addOfferforCategory)
 module.exports = { router };

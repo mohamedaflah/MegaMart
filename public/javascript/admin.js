@@ -302,6 +302,7 @@ function removeEditModal() {
 //   });
 // });
 function getofferEditWindow(offerId) {
+  window.scrollTo({ top: 0, behavior: "smooth" });
   localStorage.setItem("offerId", offerId);
   document.getElementById("offermodal").classList.add("active");
   fetch(
@@ -312,31 +313,34 @@ function getofferEditWindow(offerId) {
       const editData = data.editData;
       document.getElementById("offerinput").value = editData.offeramount;
     });
+}
+function updateOffAmt(e) {
+  e.preventDefault();
+  const offerId = localStorage.getItem("offerId");
+  const offeramount = document.getElementById("offerinput").value;
+  if (!offeramount.toString().trim()) {
+    document.getElementById("erroShowing").textContent =
+      "Please fill input field";
+    return;
   }
-  function updateOffAmt(e) {
-    e.preventDefault()
-    const offerId = localStorage.getItem("offerId");
-    const offeramount=document.getElementById("offerinput").value 
-    if(!offeramount.toString().trim()){
-      document.getElementById("erroShowing").textContent='Please fill input field'
-      return
-    }
-    
-    if(offeramount<=0){
-      document.getElementById("erroShowing").textContent='Enter only positive value'
-      return  
-    }
-    if(offeramount>=1000){
-      document.getElementById("erroShowing").textContent='Maxium offer amount is 1000'
-      return  
-    }
-    const formBody={offeramount}
+
+  if (offeramount <= 0) {
+    document.getElementById("erroShowing").textContent =
+      "Enter only positive value";
+    return;
+  }
+  if (offeramount >= 1000) {
+    document.getElementById("erroShowing").textContent =
+      "Maxium offer amount is 1000";
+    return;
+  }
+  const formBody = { offeramount };
   fetch(
     `/admin/product/offers/referaloffer/updateofferamt?offerId=${offerId}`,
     {
       method: "POST",
       headers: { "Content-type": "application/json" },
-      body:JSON.stringify(formBody)
+      body: JSON.stringify(formBody),
     }
   )
     .then((response) => response.json())
@@ -345,4 +349,44 @@ function getofferEditWindow(offerId) {
         location.href = "http://localhost:5001/admin/product/offers/seeOffers";
       }
     });
+}
+function addCategoryOffer(event) {
+  event.preventDefault();
+  const offerCategorySelect = document.getElementById("offercategory");
+  const offercategory =
+    offerCategorySelect.options[offerCategorySelect.selectedIndex].value;
+  const offeramount = document.getElementById("categoryofferamount").value;
+  const expiry = document.getElementById("expiry").value;
+  if(new Date(expiry)<=new Date()){
+    document.getElementById("offerdateer").style.visibility='visible'
+    document.getElementById("offerdateer").textContent='Please select latest date and time'
+    return
+  }
+  const formBody = {
+    category: offercategory,
+    offeramount: offeramount,
+    expiry: expiry,
+  };
+  fetch("/admin/product/offers/categoryoffer/add-category-offer", {
+    method: "POST",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify(formBody),
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      if(res.status){
+        location.href=`http://localhost:5001/admin/product/offers/categoryoffer/`
+      }
+    });
+}
+function checkLatest(event) {
+  let inputDate = new Date(event.target.value);
+  let errorElement = document.getElementById("offerdateerr");
+
+  if (inputDate <= new Date()) {
+    errorElement.style.visibility = 'visible';
+    errorElement.textContent = 'Please select a future date and time';
+  } else {
+    errorElement.style.visibility = 'hidden';
+  }
 }

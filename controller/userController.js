@@ -323,15 +323,18 @@ async function confirmPost(req, res) {
               },
             }
           );
-          await referalDb.updateOne({
-            _id: new ObjectId(req.session.userId),
-          },{
-            $push:{
-              joinedUser:{
-                
-              }
+          await referalDb.updateOne(
+            {
+              _id: new ObjectId(referalId),
+            },
+            {
+              $push: {
+                joinedUser: {
+                  userId: new ObjectId(req.session.userId),
+                },
+              },
             }
-          });
+          );
         }
       }
       res.json({ status: true });

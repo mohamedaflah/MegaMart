@@ -3368,7 +3368,7 @@ $sidBarWidth: 250px;
               label {
                 font-weight: 400;
               }
-              input {
+              input,select {
                 width: 100%;
                 border-radius: 4px;
                 font-size: 12px;
@@ -3851,6 +3851,35 @@ $sidBarWidth: 250px;
         }
         .data_section {
           min-height: 58px;
+        }
+      }
+      .another_offer{
+        width: 80%;
+        margin: auto;
+        height: 60px;
+        margin-top: 5px;
+        // background: #000000;
+        border-radius: 4px;
+        display: flex;
+        justify-content: space-between;
+        .category_offer,.product_offer{
+          width: 30%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          border-radius: 4px;
+          justify-content: center;
+          gap: 10px;
+          background: #000;
+          span{
+            color: #fff;
+            // font-weight: 100;
+            font-size: 18px;
+          }
+          img{
+            width: 24px;
+            height: 24px;
+          }
         }
       }
       .offertable{

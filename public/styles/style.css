@@ -2836,7 +2836,7 @@ button:hover {
 .home .content_section .items_section .ebcf_modal .control_section.cuponControl .cupon_form .header.andcontrol label {
   font-weight: 400;
 }
-.home .content_section .items_section .ebcf_modal .control_section.cuponControl .cupon_form .header.andcontrol input {
+.home .content_section .items_section .ebcf_modal .control_section.cuponControl .cupon_form .header.andcontrol input, .home .content_section .items_section .ebcf_modal .control_section.cuponControl .cupon_form .header.andcontrol select {
   width: 100%;
   border-radius: 4px;
   font-size: 12px;
@@ -3234,6 +3234,33 @@ button:hover {
 }
 .home .content_section .items_section .table .data_section {
   min-height: 58px;
+}
+.home .content_section .items_section .another_offer {
+  width: 80%;
+  margin: auto;
+  height: 60px;
+  margin-top: 5px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+}
+.home .content_section .items_section .another_offer .category_offer, .home .content_section .items_section .another_offer .product_offer {
+  width: 30%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  justify-content: center;
+  gap: 10px;
+  background: #000;
+}
+.home .content_section .items_section .another_offer .category_offer span, .home .content_section .items_section .another_offer .product_offer span {
+  color: #fff;
+  font-size: 18px;
+}
+.home .content_section .items_section .another_offer .category_offer img, .home .content_section .items_section .another_offer .product_offer img {
+  width: 24px;
+  height: 24px;
 }
 .home .content_section .items_section .offertable {
   height: 200px;
