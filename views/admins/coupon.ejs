@@ -65,9 +65,9 @@
                                             date</span>
                                 </div>
                                 <div class="header andcontrol">
-                                    <label for="coupondiscount">Discount Amount₹</label>
+                                    <label for="coupondiscount">Discount Percentage %</label>
                                     <input type="number" name="discount" id="coupondiscount"
-                                        placeholder="Enter Discount Amount">
+                                        placeholder="Enter Discount in Percentage %">
                                     <span style="color:red;margin: 0;visibility: hidden;" id="discounterr">Please fill
                                         discount amount</span>
                                 </div>
@@ -127,7 +127,7 @@
                                         <span style="color:red;margin: 0;visibility: hidden;" id="editdateerr"></span>
                                 </div>
                                 <div class="header andcontrol">
-                                    <label for="coupondiscount">Discount Amount₹</label>
+                                    <label for="coupondiscount">Discount Percentage%</label>
                                     <input type="number" name="discount" id="editcoupondiscount"
                                         placeholder="Enter Discount Amount">
                                     <span style="color:red;margin: 0;visibility: hidden;" id="editdiscounterr"></span>
@@ -422,7 +422,13 @@
                 }, 3000);
                 return;
             }
-
+            if(formBody.discount<1 || formBody.discount>90){
+                discounterr.textContent='Coupon discount percentage between 1 and 90 %'
+                discounterr.style.visibility='visible'
+                return
+            }else{
+                discounterr.style.visibility='hidden'
+            }
             fetch('/admin/products/coupons/add-coupon', {
                 method: "POST",
                 headers: { "Content-type": "application/json" },
@@ -431,6 +437,10 @@
                 if(res.existerr){
                     codeerr.style.visibility='visible'
                     codeerr.textContent=res.existerr
+                }
+                if(res.percent){
+                    discounterr.style.visibility='visible'
+                    discounterr.textContent=res.existerr
                 }
                 if (res.status) {
                     location.href = 'http://localhost:5001/admin/products/cupons/allcupons'
@@ -481,7 +491,13 @@
             const discount=document.querySelector("#editcoupondiscount")
             const limit=document.querySelector("#editlimit").value 
             const minorderAmt=document.querySelector("#minorderamt").value
-            
+            if(discount.value<1 || discount.value>90){
+                document.getElementById("editdiscounterr").textContent='Coupon Percentage must be between 1 and 90%'
+                document.getElementById("editdiscounterr").style.visibility='visible'
+                return
+            }else{
+                document.getElementById("editdiscounterr").style.visibility='hidden'
+            }
             const couponId=localStorage.getItem("couponId")
             const formBody = {
                 couponname: couponname.trim(),

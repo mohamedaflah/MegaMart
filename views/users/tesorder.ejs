@@ -115,11 +115,7 @@
                                         <span style="margin-left: 20px;"><%-product.productName %></span>
                                     </div>
                                     <div class="cols price">
-                                        <%if(product && product.discount){%>
-                                            ₹<%-product.discount%>
-                                            <%}else{%>
-                                                ₹<%-product.price%>
-                                       <% }%>
+                                        ₹<%-product.finalprice%>
                                     </div>
                                     <div class="cols price">
                                         
@@ -127,13 +123,7 @@
                                         <!-- 2 -->
                                     </div>
                                     <div class="cols price" style="justify-content: space-between;">
-    
-                                       <%if(product && product.discount){%>
-                                        ₹<%-product.discount*product.qty%>
-                                        <%}else{%>
-                                            ₹<%-product.price*product.qty%>
-                                       <%}%> 
-                           
+                                       ₹<%-product.finalprice*product.qty%>
                                     </div> 
     
                                     <div class="cols price" style="justify-content: end;">

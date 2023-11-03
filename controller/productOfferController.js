@@ -34,6 +34,10 @@ async function addProductOffer(req, res) {
     if (!expiry) {
       return res.json({ err: "expiry not selected" });
     }
+    const existStatus=await productOffer.findOne({productId:new ObjectId(productoffer)})
+    if(existStatus){
+      return res.json({err:"This product have already offer you can update"})
+    }
     expiry = new Date(expiry);
     if (expiry <= new Date()) {
       return res.json({ err: "date must be latest" });

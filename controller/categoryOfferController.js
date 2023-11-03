@@ -35,11 +35,14 @@ async function addOfferforCategory(req, res) {
     if (offeramount >= 1000) {
       return res.json({ err: "Offer price must be less than 1000" });
     }
-
+    
     if (expiryDate <= new Date()) {
       return res.json({ err: "Expiry date must be in the future" });
     }
-
+    const offerExistStatus=await categoryOffer.findOne({categoryId:new ObjectId(category)})
+    if(offerExistStatus){
+      return res.json({err:"This category have already offer"})
+    }
     await new categoryOffer({
       categoryId: new ObjectId(category),
       addedDate: Date.now(),

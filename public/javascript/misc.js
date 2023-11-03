@@ -288,7 +288,8 @@ function applyCoupon(event, userId) {
         let current = Number(total.textContent);
         let discount = Number(res.discount);
         // confirm(current+'    '+discount)
-        total.textContent = current - discount;
+        let duductedAmount=current*(discount/100)
+        total.textContent = current - duductedAmount;
         total.style.color = "red";
         alert("Coupon Apply Succefull");
         document.getElementById("couponBoxInput").style.visibility = "hidden";

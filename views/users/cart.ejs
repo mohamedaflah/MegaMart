@@ -20,11 +20,13 @@
                             <span style="margin-left: 20px;"><%-cartdata.cartData.productName%></span>
                         </div>
                         <div class="cols price">
-                            <%if(cartdata.cartData && cartdata.cartData.discount){%>
+                            <%if(cartdata.cartData && cartdata.cartData.offer && cartdata.cartData.offer.offerprice){%>
+                                ₹<%-cartdata.cartData.price-(cartdata.cartData.price*cartdata.cartData.offer.offerprice)/100%>
+                            <%}else if(cartdata.cartData && cartdata.cartData.discount){%>
                                 ₹<%-cartdata.cartData.discount%>
-                                <% }else{%>
-                                    ₹<%-cartdata.cartData.price%>
-                           <%}%>
+                                <%}else{%>
+                                ₹<%-cartdata.cartData.price%>
+                             <%}%>
                         </div>
                         <div class="cols qty">
                             <div class="qty_button">
@@ -68,11 +70,14 @@
                             </div>
                         </div>
                         <div class="cols price" style="justify-content: space-between;">₹
-                            <%if(cartdata.cartData && cartdata.cartData.discount){%>
+                            <%if(cartdata && cartdata.cartData && cartdata.cartData.offer && cartdata.cartData.offer.offerprice){%>
+                                <%let price=cartdata.cartData.price-(cartdata.cartData.price*cartdata.cartData.offer.offerprice)/100%>
+                                <%-cartdata.products.qty*price%>
+                            <%}else if(cartdata.cartData && cartdata.cartData.discount){%>
                                 <%-cartdata.products.qty*cartdata.cartData.discount%>
-                                <% }else{%>
-                                    <%-cartdata.products.qty*cartdata.cartData.price%>
-                          <% }%>
+                           <%}else{%>
+                               <%-cartdata.products.qty*cartdata.cartData.price%>
+                           <%}%>
                             <a href="/users/product/cart/deleteitemfromcart/<%-id%>/<%-cartdata.products.productId%>/">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="12" cy="12" r="9" fill="#DB4444"/>

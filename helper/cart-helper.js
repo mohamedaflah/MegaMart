@@ -61,15 +61,19 @@ module.exports = {
     let totalAmount = 0;
 
     userCart.forEach((cardata) => {
-      if (cardata.cartData.discount) {
+      if (cardata && cardata.cartData.offer && cardata.cartData.offer.offerprice) {
+        let deductPrice = cardata.cartData.price - ((cardata.cartData.price * cardata.cartData.offer.offerprice) / 100);
+        totalAmount = totalAmount + deductPrice * cardata.products.qty;
+      } else if (cardata.cartData.discount) {
         totalAmount = totalAmount + cardata.cartData.discount * cardata.products.qty;
       } else {
         totalAmount = totalAmount + cardata.cartData.price * cardata.products.qty;
-      }
+      }      
     });
 
     console.log(Number(totalAmount-getDiscount)+'    sd havi');
-    return Number(totalAmount - getDiscount);
+    totalAmount=totalAmount-totalAmount*(getDiscount/100)
+    return Number(totalAmount);
     } catch (error) {
       console.error("Error in getTotalAmount:", error);
       return 0; // Handle the error gracefully, returning 0 or any other appropriate value.

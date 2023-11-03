@@ -46,7 +46,7 @@ async function postUserAddress(req, res) {
     console.log("reached_______________ and api called");
     const userId = req.params.userId;
     let userCartdata = await getUserCartData(userId);
-    console.log(JSON.stringify(req.body) + " this is the body of request");
+    console.log(JSON.stringify(userCartdata) + " this is the body of request");
     const {
       name,
       email,
@@ -77,6 +77,7 @@ async function postUserAddress(req, res) {
         price:price
       });
     });
+    console.log(JSON.stringify(products)+' products i')
     // console.log(userCartdata+' orders data')
     // console.log('            sadf'+JSON.stringify(products)+'this is the products')
     let totalAmount = await getTotalAmount(userId);

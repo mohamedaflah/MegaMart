@@ -586,6 +586,7 @@ async function detailProductGet(req, res) {
         currentStatus: true,
         deletionStatus: true,
         stock: true,
+        offer:true,
       },
     },
   ]);

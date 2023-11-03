@@ -39,15 +39,12 @@
                                         <select name="category" id="offerproduct"  style="color: black;height: 30px;" onchange="showCorrespondingPrice(this)">
                                             <option value="" disabled selected>Select a product</option>
                                             <%products.forEach((product)=>{%>
-                                                <%let price%>
-                                                <%if(product.discount){%>
-                                                    <%price=product.discount%>
-                                                    <%}else{%>
-                                                        <%price=product.price%>
+                                                <%if(!product.deletionStatus && product.stock>=1){%>
+
+                                                    <option value="<%-product._id%>" data-price="<%-product.price%>">
+                                                        <img src="/product-images/<%-product.image[0].mainimage%>" alt="" style="width: 15px;height: auto;">
+                                                        <%-product.productName%></option>
                                                 <%}%>
-                                                <option value="<%-product._id%>" data-price="<%-price%>">
-                                                    <img src="/product-images/<%-product.image[0].mainimage%>" alt="" style="width: 15px;height: auto;">
-                                                    <%-product.productName%></option>
                                             <%})%>
                                         </select>
                                     <span style="color:red;margin: 0;visibility: hidden;" id="offername">Please Select One product</span>

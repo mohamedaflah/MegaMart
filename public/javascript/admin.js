@@ -369,9 +369,9 @@ function addCategoryOffer(event) {
   }else{
     document.getElementById("offerpercent").style.visibility = "hidden";
   }
-  if (offeramount < 5 || offeramount > 90) {
+  if (offeramount < 1 || offeramount > 90) {
     document.getElementById("offerpercent").textContent =
-      "Must be enter percentage between 5 and 90";
+      "Must be enter percentage between 1 and 90";
     document.getElementById("offerpercent").style.visibility = "visible";
     return;
   } else {
@@ -399,6 +399,8 @@ function addCategoryOffer(event) {
     .then((res) => {
       if (res.status) {
         location.href = `http://localhost:5001/admin/product/offers/categoryoffer/`;
+      }else if(res.err){
+        alert(res.err)
       }
     });
 }
@@ -443,8 +445,8 @@ function addProdcutOffer(event) {
   } else {
     document.getElementById("productOffererr").style.visibility = "hidden";
   }
-  if(produtofferamount<5 || produtofferamount>90){
-    document.getElementById("productOffererr").textContent='Percentage must be between 5 and 90 %';
+  if(produtofferamount<1 || produtofferamount>90){
+    document.getElementById("productOffererr").textContent='Percentage must be between 1 and 90 %';
     document.getElementById("productOffererr").style.visibility = "visible";
     return
   }else{

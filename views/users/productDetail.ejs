@@ -41,13 +41,17 @@
         </div>
         <div class="descriptions">
             <div class="contents">
-                <div class="head_part">
+                <div class="head_part" style="position: relative;">
                 
                         <h1 style="display: flex;justify-content: space-between;"><%-productData[0].productName%> 
                             <%if( productData[0].stock<=0) {%>
-                                <span
-                                span style="font-size: 10px;padding: 5px;background: rgba(210, 210, 80, 0.536);
+                                <span style="font-size: 10px;padding: 5px;background: rgba(210, 210, 80, 0.536);
                                 display: flex;align-items: center;justify-content: center;border-radius: 10px;">Currently Unavailable</span>
+                            <%}else if(productData[0].offer && productData[0].offer.offerprice){%>
+                                    <span style="font-size: 14px;padding: 5px;background: #fe0606;position: absolute;top:5px;right: 0;
+                                    display: flex;align-items: center;justify-content: center;border-radius: 50%;width: 50px;height: 50px;font-weight: 600;color:white">
+                                    <span style="width: 25px;"><%-productData[0].offer.offerprice%>% Off</span>
+                                </span>
                             <%}%>
                         </h1>
                         <div class="ratings">
@@ -59,7 +63,7 @@
                         </div>
                         <div class="rate_and_desc">
                             <div class="price">
-                                <%if(productData[0].discount){%>
+                                <!-- <%if(productData[0].discount){%>
                                     <h3 class="discounted"><%-productData[0].discount%>₹</h3>
                                <% }%>
                                
@@ -69,7 +73,27 @@
                                <% }else{%>
                                 discounted
                               <% }%>
-                                "><%-productData[0].price%>₹</h3>
+                                "><%-productData[0].price%>₹</h3> -->
+
+
+                                <%if(productData[0].offer && productData[0].offer.offerprice){%>
+                                    <h3 class="discounted">
+                                        ₹<%-productData[0].price-((productData[0].price*productData[0].offer.offerprice)/100)%>
+                                    </h3>
+                                <%}else if(productData[0].discount){%>
+                                        <h3 class="discounted">
+                                            ₹<%-productData[0].discount%>
+                                    </h3>
+                                <%}%>
+                                <h3 class="
+                                  <%if(productData[0].offer && productData[0].offer.offerprice){%>
+                                    mrp
+                                <%}else if(productData[0].discount){%>
+                                    mrp
+                                <%}else{%>
+                                    discounted
+                                <%}%>
+                                ">₹<%-productData[0].price%></h3>
                             </div>
                             <p><%-productData[0].description%></p>
                             <ul>

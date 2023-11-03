@@ -79,6 +79,12 @@ async function userHome(req, res) {
   }
 }
 function singupGet(req, res) {
+  if(req.session.userAuth){
+    return res.redirect("/")
+  }
+  if(req.session.adminAuth){
+    return res.redirect('/admin/')
+  }
   if (req.query && req.query.id) {
     req.session.userSignupwithreferal = true;
     req.session.userreferalId = req.query.id;
@@ -409,6 +415,9 @@ function userLoginGet(req, res) {
   if (req.session.adminAuth) {
     return res.redirect("/admin/");
   }
+  if(req.session.userAuth){
+    return res.redirect('/')
+  }
   res.render("users/login", {
     profile: false,
     err: false,
@@ -660,7 +669,7 @@ async function updateProfilePost(req, res) {
   }
   await UserCollection.updateOne(
     { _id: new ObjectId(req.params.userId) },
-    { $set: { name: req.body.name, email: req.body.email_or_Phone } }
+    { $set: { name: req.body.name} }
   );
   res.redirect(`http://localhost:5001/user/account/${req.params.userId}`);
 }

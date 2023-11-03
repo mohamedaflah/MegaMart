@@ -591,6 +591,7 @@ async function userOrders(req, res) {
           delverydate: "$userOrders.delverydate",
           status: "$userOrders.status",
           address: "$userOrders.address",
+          totalAmount:"$userOrders.totalAmount",
           products: "$userOrders.products.productDetails", // Reshape here
           __v: "$userOrders.__v",
         },
@@ -616,7 +617,9 @@ async function userOrders(req, res) {
       for (const product of userOrder.products) {
         const orderId = userOrder._id;
         const productQty = await getOrderProductByOrderId(orderId, product._id);
-        product.qty = productQty;
+        product.qty = productQty.qty;
+        product.finalprice=productQty.price
+        // product.price=
         console.log(productQty + " this is the qty of product");
       }
     }

@@ -15,7 +15,7 @@ async function getOrderProductByOrderId(orderId, productId) {
     const productInOrder =await order.products.find(product => product.productId.toString() === productId.toString());
     console.log(productInOrder+'       product inorder')
     if (productInOrder) {
-      return productInOrder.qty;
+      return productInOrder;
     } else {
       return 0; // Product not found in order
     }
