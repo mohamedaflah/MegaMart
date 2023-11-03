@@ -1,6 +1,7 @@
 const { ObjectId } = require("bson");
 const CategoryDb = require("../model/collections/CategoryDb");
 const categoryOffer = require("../model/collections/categoryOffer");
+const products = require("../model/collections/products");
 
 async function showCategoryOffers(req, res) {
   let cateogories = await CategoryDb.find();
@@ -19,37 +20,58 @@ async function showCategoryOffers(req, res) {
     },
   ]);
   // console.log(JSON.stringify(joined));
-  res.render("admins/categoryoffer", { categories: cateogories,currentOffer });
+  res.render("admins/categoryoffer", { categories: cateogories, currentOffer });
 }
 async function addOfferforCategory(req, res) {
   try {
     console.log(req.body);
-    // category: offerCategorySelect,
-    // offeramount: offeramount,
-    // expiry: expiry,
-    let { category, offeramount, expiry } = req.body;
-    expiry = new Date(expiry);
+    const { category, offeramount, expiry } = req.body;
+    const expiryDate = new Date(expiry);
+
     if (offeramount <= 0) {
-      return res.json({ err: "offer amount only positive values" });
+      return res.json({ err: "Offer amount must be a positive value" });
     }
+
     if (offeramount >= 1000) {
-      return res.json({ err: "Offer price must be lesser 1000" });
+      return res.json({ err: "Offer price must be less than 1000" });
     }
-    if (expiry <= new Date()) {
-      return res.json({ err: "Must be select latest date" });
+
+    if (expiryDate <= new Date()) {
+      return res.json({ err: "Expiry date must be in the future" });
     }
-    let categoryId = await CategoryDb.findOne({ categoryname: category });
-    categoryId = categoryId._id;
+
     await new categoryOffer({
-      categoryId: new ObjectId(categoryId),
+      categoryId: new ObjectId(category),
       addedDate: Date.now(),
       offerAmt: offeramount,
-      expiryDate: expiry,
+      expiryDate: expiryDate,
     }).save();
+
+    const productInThisCategory = await products.find({ category: new ObjectId(category) });
+
+    const productUpdates = productInThisCategory.map(async (product) => {
+      if (!product.offer || (product.offer.offertype !== "product")) {
+        await products.updateOne(
+          { _id: new ObjectId(product._id) },
+          {
+            $set: {
+              "offer.offerprice": offeramount,
+              "offer.offerexpiryDate": expiryDate,
+              "offer.offertype": "category",
+            },
+          }
+        );
+        console.log("Updated product collection for product ID: " + product._id);
+      }
+    });
+
+    await Promise.all(productUpdates);
+
     res.json({ status: true });
   } catch (err) {
-    console.log("err ()()" + err);
-    res.status(500).json({ err: "err" });
+    console.log("Error: " + err);
+    res.status(500).json({ err: "Internal server error" });
   }
 }
+
 module.exports = { showCategoryOffers, addOfferforCategory };

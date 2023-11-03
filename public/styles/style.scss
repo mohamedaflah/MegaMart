@@ -1814,6 +1814,10 @@ body {
         .checkoutform,
         .checkoutbox {
           width: 50%;
+          // background-color: red;
+          max-height: 500px;
+          overflow-y: auto;
+          position: relative;
         }
         .place_order {
           // background-color: #f5f5f5;
@@ -2048,6 +2052,12 @@ body {
                 }
               }
             }
+          }
+          .bottom_part{
+            background-color: white;
+            position: sticky;
+            bottom: 0;
+            right: 0;
           }
         }
       }

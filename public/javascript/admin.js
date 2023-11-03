@@ -356,11 +356,34 @@ function addCategoryOffer(event) {
   const offercategory =
     offerCategorySelect.options[offerCategorySelect.selectedIndex].value;
   const offeramount = document.getElementById("categoryofferamount").value;
+
+  if (!offercategory) {
+    document.getElementById("catoffererr").style.visibility = "visible";
+    return;
+  } else {
+    document.getElementById("catoffererr").style.visibility = "hidden";
+  }
+  if (!offeramount) {
+    document.getElementById("offerpercent").style.visibility = "visible";
+    return;
+  }else{
+    document.getElementById("offerpercent").style.visibility = "hidden";
+  }
+  if (offeramount < 5 || offeramount > 90) {
+    document.getElementById("offerpercent").textContent =
+      "Must be enter percentage between 5 and 90";
+    document.getElementById("offerpercent").style.visibility = "visible";
+    return;
+  } else {
+    document.getElementById("offerpercent").style.visibility = "hidden";
+  }
+
   const expiry = document.getElementById("expiry").value;
-  if(new Date(expiry)<=new Date()){
-    document.getElementById("offerdateer").style.visibility='visible'
-    document.getElementById("offerdateer").textContent='Please select latest date and time'
-    return
+  if (new Date(expiry) <= new Date()) {
+    document.getElementById("offerdateer").style.visibility = "visible";
+    document.getElementById("offerdateer").textContent =
+      "Please select latest date and time";
+    return;
   }
   const formBody = {
     category: offercategory,
@@ -374,8 +397,8 @@ function addCategoryOffer(event) {
   })
     .then((response) => response.json())
     .then((res) => {
-      if(res.status){
-        location.href=`http://localhost:5001/admin/product/offers/categoryoffer/`
+      if (res.status) {
+        location.href = `http://localhost:5001/admin/product/offers/categoryoffer/`;
       }
     });
 }
@@ -384,9 +407,82 @@ function checkLatest(event) {
   let errorElement = document.getElementById("offerdateerr");
 
   if (inputDate <= new Date()) {
-    errorElement.style.visibility = 'visible';
-    errorElement.textContent = 'Please select a future date and time';
+    errorElement.style.visibility = "visible";
+    errorElement.textContent = "Please select a future date and time";
   } else {
-    errorElement.style.visibility = 'hidden';
+    errorElement.style.visibility = "hidden";
   }
+}
+function showCorrespondingPrice(selecttag) {
+  let selectOption = selecttag.options[selecttag.selectedIndex];
+
+  let price = selectOption.getAttribute("data-price");
+  document.getElementById(
+    "showPrice"
+  ).textContent = `Product Price is ₹${price}`;
+}
+function addProdcutOffer(event) {
+  event.preventDefault();
+  const offerProductSelect = document.getElementById("offerproduct");
+  const offerproduct =
+    offerProductSelect.options[offerProductSelect.selectedIndex].value;
+  const price =
+    offerProductSelect.options[offerProductSelect.selectedIndex].getAttribute(
+      "data-price"
+    );
+  if (!offerproduct) {
+    document.getElementById("offername").style.visibility = "visible";
+    return;
+  } else {
+    document.getElementById("offername").style.visibility = "hidden";
+  }
+  const produtofferamount = document.getElementById("produtofferamount").value;
+  if (!produtofferamount) {
+    document.getElementById("productOffererr").style.visibility = "visible";
+    return;
+  } else {
+    document.getElementById("productOffererr").style.visibility = "hidden";
+  }
+  if(produtofferamount<5 || produtofferamount>90){
+    document.getElementById("productOffererr").textContent='Percentage must be between 5 and 90 %';
+    document.getElementById("productOffererr").style.visibility = "visible";
+    return
+  }else{
+    document.getElementById("productOffererr").style.visibility = "hidden";
+  }
+  const expiry = document.getElementById("productOfferexpiry").value;
+  if (!expiry) {
+    document.getElementById("productOfferdateerr").style.visibility = "visible";
+    return;
+  } else {
+    document.getElementById("productOfferdateerr").style.visibility = "hidden";
+  }
+  if (new Date(expiry) <= new Date()) {
+    document.getElementById("productOfferdateerr").style.visibility = "visible";
+    document.getElementById("productOfferdateerr").textContent =
+      "Please select latest date and time";
+    return;
+  } else {
+    document.getElementById("productOfferdateerr").style.visibility = "hidden";
+  }
+  // alert(price);
+  const formBody = {
+    productoffer: offerproduct,
+    offeramount: produtofferamount,
+    expiry: expiry,
+  };
+  // alert(JSON.stringify(formBody));
+  fetch(`/admin/product/offers/productoffer/add-product-offer`, {
+    method: "POST",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify(formBody),
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.status) {
+        window.location.href = `http://localhost:5001/admin/product/offers/productoffer/`;
+      } else {
+        alert(res.err);
+      }
+    });
 }

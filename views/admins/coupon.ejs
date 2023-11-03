@@ -233,13 +233,13 @@
                                     <% let d = new Date(value.addedDate) %>
                                     <% let dayAr = ["Sunday","Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday"] %>
                                     <% let monthAr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
-                                    <%-d.getDate()%> <%- monthAr[d.getMonth()+1]%> <%-d.getFullYear()%> <%-dayAr[d.getDay()]%>
+                                    <%-d.getDate()%> <%- monthAr[d.getMonth()]%> <%-d.getFullYear()%> <%-dayAr[d.getDay()]%>
                                 </div>
                                 <div class="table_datas ">
                                     <% let d1 = new Date(value.statusChangeDate) %>
                                     <% let dayAr1 = ["Sunday","Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday"] %>
                                     <% let monthAr1=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]%>
-                                    <%-d1.getDate()%> <%- monthAr1[d1.getMonth()+1]%> <%-d1.getFullYear()%> <%-dayAr1[d1.getDay()]%>
+                                    <%-d1.getDate()%> <%- monthAr1[d1.getMonth()]%> <%-d1.getFullYear()%> <%-dayAr1[d1.getDay()]%>
                                 </div>
                                 <div class="table_datas " style="width: 10%;">
                                     <%if(value.status=='active'){%>

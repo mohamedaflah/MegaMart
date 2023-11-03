@@ -154,7 +154,7 @@ async function listAllOrders(req, res) {
         delverydate: 1,
         status: 1,
         address: 1,
-        isEmpty:1,
+        isEmpty: 1,
         user: 1, // This will contain all user details
         products: {
           productId: "$product._id",
@@ -216,7 +216,7 @@ async function getOrderDetails(req, res) {
         paymentmode: 1,
         delverydate: 1,
         status: 1,
-        isEmpty:1,
+        isEmpty: 1,
         address: 1,
         user: 1, // This will contain all user details
         products: {
@@ -315,7 +315,7 @@ async function filterOrders(req, res) {
         status: 1,
         address: 1,
         user: 1,
-        isEmpty:1,
+        isEmpty: 1,
         products: {
           productId: "$product._id",
           qty: "$products.qty",
@@ -425,10 +425,21 @@ async function placeOrderPost(req, res) {
     });
     // addressdata = addressdata.addresses[Number(req.body.address)];
     const userCartdata = await getUserCartData(userId);
-    const products = userCartdata.map((cartItem) => ({
-      productId: cartItem.products.productId,
-      qty: cartItem.products.qty,
-    }));
+    const products = userCartdata.map((cartItem) => {
+      let price;
+      if(cartItem.cartData && cartItem.cartData.offer && cartItem.cartData.offer.offerprice){
+        price=cartItem.cartData.price-(cartItem.cartData.price*(cartItem.cartData.offer.offerprice/100))
+      }else if(cartItem.cartData.discount){
+        price=cartItem.cartData.discount
+      }else{
+        price=cartItem.price
+      }
+      return({
+        productId: cartItem.products.productId,
+        qty: cartItem.products.qty,
+        price:price
+      });
+    });
     await new orderCollection({
       userId: new ObjectId(userId),
       paymentmode: req.body.payment_method,

@@ -57,7 +57,11 @@ const {
   editOfferGet,
   editOfferPost,
 } = require("../controller/referalController");
-const { showCategoryOffers, addOfferforCategory } = require("../controller/categoryOfferController");
+const {
+  showCategoryOffers,
+  addOfferforCategory,
+} = require("../controller/categoryOfferController");
+const { showProductOffer, addProductOffer } = require("../controller/productOfferController");
 const { showAllreturns } = require("../controller/returnsController").admin;
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
@@ -158,8 +162,17 @@ router.post("/product/coupon/existstatus", checkCouponisExist);
 router.get("/product/returns/showallreturns", admiLoginVerify, showAllreturns);
 router.get("/product/offers/seeOffers", admiLoginVerify, showAllReferalOffer);
 router.post("/product/offers/referaloffer/addoffer", addreferalOffer);
-router.get('/product/offers/referaloffer/getEditofferData/',editOfferGet)
-router.post('/product/offers/referaloffer/updateofferamt',editOfferPost)
-router.get("/product/offers/categoryoffer/",admiLoginVerify,showCategoryOffers)
-router.post("/product/offers/categoryoffer/add-category-offer",addOfferforCategory)
+router.get("/product/offers/referaloffer/getEditofferData/", editOfferGet);
+router.post("/product/offers/referaloffer/updateofferamt", editOfferPost);
+router.get(
+  "/product/offers/categoryoffer/",
+  admiLoginVerify,
+  showCategoryOffers
+);
+router.post(
+  "/product/offers/categoryoffer/add-category-offer",
+  addOfferforCategory
+);
+router.get("/product/offers/productoffer/", admiLoginVerify, showProductOffer);
+router.post("/product/offers/productoffer/add-product-offer",addProductOffer);
 module.exports = { router };

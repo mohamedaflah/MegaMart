@@ -62,10 +62,21 @@ async function postUserAddress(req, res) {
     //   (cartItem) => cartItem.products.productId
     // );
     // const quantities = userCartdata.map((cartItem) => cartItem.products.qty);
-    const products = userCartdata.map((cartItem) => ({
-      productId: cartItem.products.productId,
-      qty: cartItem.products.qty,
-    }));
+    const products = userCartdata.map((cartItem) => {
+      let price;
+      if(cartItem.cartData && cartItem.cartData.offer && cartItem.cartData.offer.offerprice){
+        price=cartItem.cartData.price-(cartItem.cartData.price*(cartItem.cartData.offer.offerprice/100))
+      }else if(cartItem.cartData.discount){
+        price=cartItem.cartData.discount
+      }else{
+        price=cartItem.price
+      }
+      return({
+        productId: cartItem.products.productId,
+        qty: cartItem.products.qty,
+        price:price
+      });
+    });
     // console.log(userCartdata+' orders data')
     // console.log('            sadf'+JSON.stringify(products)+'this is the products')
     let totalAmount = await getTotalAmount(userId);

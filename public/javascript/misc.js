@@ -1,7 +1,12 @@
-async function addToCart(event, id, inComing) {
+async function addToCart(event, id, inComing, userId) {
   event.stopPropagation();
   if (inComing == "home") {
     document.getElementById("changeImg").src = "/images/sp3.svg";
+  } else {
+    document.getElementById("cartTxt").textContent = "Go to Cart";
+    document.getElementById("cartTxt").onclick = () => {
+      location.href = `http://localhost:5001/users/product/cart/showcart/${userId}`;
+    };
   }
   // /users/product/add-to-cart/<%-data._id%>
   const response = await fetch(`/users/product/add-to-cart/${id}`).then(
@@ -419,17 +424,19 @@ function copyLink(link) {
     changinImg.src = "/images/copy.svg";
   }, 2000);
 }
-function openSharing(){
-  document.querySelector(".referal_share").classList.add("active")
+function openSharing() {
+  document.querySelector(".referal_share").classList.add("active");
 }
-function inviteBoxClose(){
-  document.querySelector(".referal_share").classList.remove("active")
+function inviteBoxClose() {
+  document.querySelector(".referal_share").classList.remove("active");
 }
 
-function shareOnWhatsapp(useId){
-  const referalLink=`http://localhost:5001/signup?id=${useId}`
-  const message="Check out this amazing invitation linkis"+referalLink
-  const whatsappUrl=`https://api.whatsapp.com/send?text=${encodeURIComponent(message)}`
-  window.open(whatsappUrl,'_blank')
+function shareOnWhatsapp(useId) {
+  const referalLink = `http://localhost:5001/signup?id=${useId}`;
+  const message = "Check out this amazing invitation linkis" + referalLink;
+  const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
+    message
+  )}`;
+  window.open(whatsappUrl, "_blank");
   // whatsapp-share-button
 }

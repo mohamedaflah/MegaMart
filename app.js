@@ -22,7 +22,7 @@ app.use(
 
 const router = require("./router/userRoute");
 const adminRoute = require("./router/adminRoute");
-const { updateCouponStatus } = require("./auth/cron");
+const { updateCouponStatus, updateProductOffer } = require("./auth/cron");
 app.use(passport.initialize());
 app.use(require("nocache")());
 app.use(express.static("public"));
@@ -37,4 +37,5 @@ const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`Server Currenty Runnig in http://localhost:${port}`);
   updateCouponStatus()
+  updateProductOffer()
 });

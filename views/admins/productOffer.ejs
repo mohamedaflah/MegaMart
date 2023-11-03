@@ -4,7 +4,7 @@
             <div class="content_section">
                 <div class="overview_section">
                     <div class="head_inp">
-                        <h5>Category Offer</h5>
+                        <h5>Product Offer</h5>
                         <div style="display: flex;gap: 20px;">
                             <form class="inp" style="height: 30px;display: flex;align-items: center;justify-content: start;background: #29292c;border-radius: 4.099px;padding: 0 10px;" method="post" action="/admin/category/serach/searchcategory/">
                                 <input type="text" style="height: 100%;border: none;outline: none;background:transparent;font-size: 12px;" placeholder="Search Category" name="search">
@@ -29,49 +29,52 @@
                             <div class="cls">
                                 <img src="/images/Closebtn.svg" alt="" id="clsbtn">
                             </div>
-                            <form class="cupon_form" id="couponAddForm" onsubmit="addCategoryOffer(event)">
+                            <form class="cupon_form" id="couponAddForm" onsubmit="addProdcutOffer(event)">
                                 <div class="header">
-                                    <h3>Add category offer</h3>
+                                    <h3>Add product offer</h3>
                                 </div>
+                                <span style="color: rgb(30, 187, 30);font-weight: 300;" id="showPrice"></span>
                                 <div class="header andcontrol">
-                                    <label for="couponname">Select category</label>
-                                        <select name="category" id="offercategory"  style="color: black;height: 30px;">
-                                            <option value="" disabled selected>Select a category</option>
-                                            <%categories.forEach((category)=>{%>
-                                                <option value="<%-category._id%>" data-id="<%-category._id%>"><%-category.categoryname%></option>
-                                           <% })%>
+                                    <label for="couponname">Product</label>
+                                        <select name="category" id="offerproduct"  style="color: black;height: 30px;" onchange="showCorrespondingPrice(this)">
+                                            <option value="" disabled selected>Select a product</option>
+                                            <%products.forEach((product)=>{%>
+                                                <%let price%>
+                                                <%if(product.discount){%>
+                                                    <%price=product.discount%>
+                                                    <%}else{%>
+                                                        <%price=product.price%>
+                                                <%}%>
+                                                <option value="<%-product._id%>" data-price="<%-price%>">
+                                                    <img src="/product-images/<%-product.image[0].mainimage%>" alt="" style="width: 15px;height: auto;">
+                                                    <%-product.productName%></option>
+                                            <%})%>
                                         </select>
-                                    <span style="color:red;margin: 0;visibility: hidden;" id="catoffererr">Please Select Category</span>
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="offername">Please Select One product</span>
                                 </div>
                                 <div class="header andcontrol">
                                     <label for="couponcode">Offer Percentage</label>
-                                    <input type="number" name="offerprice"  placeholder="Enter Offer Percentage (%)" oninput=""
-                                        id="categoryofferamount">
-                                    <span style="color:red;margin: 0;visibility: hidden;" id="offerpercent">Please enter offer Percentage</span>
+                                    <input type="text" name="offerprice" placeholder="Enter Offer in Percentage %" 
+                                        id="produtofferamount">
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="productOffererr">Please enter offer Percentage</span>
                                 </div>
                                 <div class="header andcontrol">
                                     <label for="expiry">Expiry Date</label>
-                                        <input type="datetime-local" name="expiry" id="expiry" oninput="checkLatest(event)" >
-                                        <span style="color:red;margin: 0;visibility: hidden;" id="offerdateer">Please select
+                                        <input type="datetime-local" name="expiry" id="productOfferexpiry" oninput="checkLatest(event)"
+                                            min="<%= new Date().toISOString().slice(0, 16) %>">
+                                        <span style="color:red;margin: 0;visibility: hidden;" id="productOfferdateerr">Please select
                                             date</span>
                                 </div>
                                 <div class="header andcontrol btns">
                                     <button type="submit">Add</button>
                                     <button type="reset">Reset</button>
                                 </div>
-                                <!-- 
-                                <label for="logo" class="logodiv">
-                                    <p>Upload Logo</p>
-                                    <img src="" alt="">
-                                </label>
-                                <input type="file" name="logo" id="logo" style="display: none;">
-                                <button type="submit">add</button> -->
                             </form>
                         </div>
                     </div>
                     <div class="table" id="tb">
                         <div class="top_section">
-                            <p>Category Offer</p>
+                            <p>Product Offer</p>
                             <!-- <div class="filter">
                                 <a onclick="opnecategoryFilter('categoryfilter')">Filtered by
                                     <svg width="17" height="18" viewBox="0 0 17 18" fill="none"
@@ -121,53 +124,60 @@
                             </a> -->
                         </div>
                         <div class="table_content">
-                            <div class="table_datas head">CATEGORY NAME</div>
-                            <div class="table_datas head" style="width: 15%;">OFFER PERCENT</div>
-                            <div class="table_datas head" style="width: 15%;">ADDED DATE</div>
-                            <div class="table_datas head" style="width: 15%;">EXPIRY DATE</div>
-
+                            <div class="table_datas head">PRODUCT NAME</div>
+                            <div class="table_datas head" style="width: 10%;">IMAGE</div>
+                            <div class="table_datas head">OFFER</div>
+                            <div class="table_datas head" style="width: 20%;">ADDED DATE</div>
+                            <div class="table_datas head" style="width: 20%;">EXPIRY DATE</div>
                             <div class="table_datas head" style="width: 10%;">EDIT</div>
                             <div class="table_datas head" style="width: 10%;">DELETE</div>
-
                         </div>
-                        <%if(currentOffer.length<=0){%>
+                        <%if(productOffers.length<=0){%>
                             <h2 style="color: aliceblue;text-align: center;">No Offers</h2>
-                        <%}%>
-                        <%currentOffer.forEach((category)=>{%>
-                            <div class="table_content data_section">
-                                <div class="table_datas "><%-category.joined.categoryname%></div>
-                                <div class="table_datas " style="width: 15%;">
-                                  <%-category.offerAmt%>%
-                                </div>
-                                <div class="table_datas" style="width: 15%;">
-                                    <% let d = new Date(category.addedDate) %>
-                                    <% let dayAr = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] %>
-                                    <% let monthAr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] %>
-                                    <%- d.getDate() %> <%- monthAr[d.getMonth()] %> <%- d.getFullYear() %>
-                                    <%- dayAr[d.getDay()] %>
-                                    <%- d.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }) %>
-                                </div>
-                                <div class="table_datas" style="width: 15%;">
-                                    <% let expr = new Date(category.expiryDate) %>
-                                    <% let dayAr1 = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] %>
-                                    <% let monthAr1 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] %>
-                                    <%- expr.getDate() %> <%- monthAr1[expr.getMonth()] %> <%- expr.getFullYear() %>
-                                    <%- dayAr1[expr.getDay()] %>
-                                    <%- expr.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true }) %>
-                                </div>
-                                
-                                <div class="table_datas " style="width: 10%;">
-                                    <a href="">
-                                        <img src="/images/couponedit.svg" style="width: 25px;height: 25px;margin-right:10px" alt="">
-                                    </a>
-                                </div>
-                                <div class="table_datas " style="width: 10%;">
-                                        <a href="">
-                                            <img src="/images/trsh.svg" style="width: 25px;height: 25px;margin-right:10px" alt="">
-                                        </a>
-                                </div>
+                            <%}%>
+                     <%productOffers.forEach((offer)=>{%>
+                        <div class="table_content data_section">
+                            <div class="table_datas "><%-offer.offeredproduct.productName%></div>
+                            <div class="table_datas " style="width: 10%;">
+                                    <img src="/product-images/<%-offer.offeredproduct.image[0].mainimage%>" style="width: 40px;height: auto;" alt="">
+
                             </div>
-                        <%})%>
+                            <div class="table_datas " >
+                              
+                                    <%-offer.offerAmt%>%
+                                
+                            </div>
+                            <% let d = new Date(offer.addedDate) %>
+                            <% let dayAr = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] %>
+                            <% let monthAr = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] %>
+                            <% let ampm = d.getHours() >= 12 ? 'PM' : 'AM' %>
+                            
+                            <div class="table_datas" style="width: 20%;">
+                              <%- d.getDate() %> <%- monthAr[d.getMonth()] %> <%- d.getFullYear() %> <%- dayAr[d.getDay()] %><br>
+                              <%- (d.getHours() % 12 || 12) %>:<%- d.getMinutes().toString().padStart(2, '0') %> <%= ampm %>
+                            </div>
+                            
+                            <% let d1 = new Date(offer.expiryDate) %>
+                            <% let dayAr1 = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"] %>
+                            <% let monthAr1 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] %>
+                            <% let ampm1 = d1.getHours() >= 12 ? 'PM' : 'AM' %>
+                            
+                            <div class="table_datas" style="width: 20%;">
+                              <%- d1.getDate() %> <%- monthAr1[d1.getMonth()] %> <%- d1.getFullYear() %> <%- dayAr1[d1.getDay()] %> <br>
+                              <%- (d1.getHours() % 12 || 12) %>:<%- d1.getMinutes().toString().padStart(2, '0') %> <%= ampm1 %>
+                            </div>
+                            <div class="table_datas " style="width: 10%;">
+                               
+                                    <img src="/images/couponedit.svg" style="width: 25px;height: 25px;margin-right:10px" alt="">
+                             
+
+                                 
+                            </div>
+                            <div class="table_datas " style="width: 10%;">
+                                        <img src="/images/trsh.svg" style="width: 25px;height: 25px;margin-right:10px" alt="">
+                            </div>
+                        </div>
+                    <%})%>
                     </div>
                     <div class="key_val" id="key-val">
         
@@ -234,11 +244,9 @@
         var categoryPopup=document.getElementById("mySizeChartModal")
         var closePopup=document.getElementById('clsbtn')
         addCatgorybutton.addEventListener('click',()=>{
-            window.scrollTo({ top: 0, behavior: "smooth" });
             categoryPopup.classList.add("active")
         })
         closePopup.addEventListener('click',()=>{
-            window.scrollTo({ top: 0, behavior: "smooth" });
             categoryPopup.classList.remove("active")
         })
         function opnecategoryFilter(openpop){

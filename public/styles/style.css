@@ -1510,6 +1510,9 @@ body .signup .checkout .checkandAddress {
 body .signup .checkout .checkandAddress .checkoutform,
 body .signup .checkout .checkandAddress .checkoutbox {
   width: 50%;
+  max-height: 500px;
+  overflow-y: auto;
+  position: relative;
 }
 body .signup .checkout .checkandAddress .place_order {
   display: flex;
@@ -1702,6 +1705,12 @@ body .signup .checkout .checkoutbox .item_box .button button img {
   100% {
     transform: rotate(-360deg);
   }
+}
+body .signup .checkout .checkoutbox .item_box .bottom_part {
+  background-color: white;
+  position: sticky;
+  bottom: 0;
+  right: 0;
 }
 body .signup_section {
   width: 85%;
