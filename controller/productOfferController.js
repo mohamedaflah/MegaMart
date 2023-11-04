@@ -54,10 +54,6 @@ async function addProductOffer(req, res) {
       );
       console.log(JSON.stringify(product));
       if (product) {
-        if (
-          !product.offer ||
-          product.offer.offerexpiryDate < productOffer.expiryDate
-        ) {
           await productCollection
             .updateOne(
               { _id: new ObjectId(productoffer) },
@@ -72,7 +68,6 @@ async function addProductOffer(req, res) {
             .then(() => {
               console.log("updated produt collection");
             });
-        }
       }
       res.json({ status: true });
     } else {

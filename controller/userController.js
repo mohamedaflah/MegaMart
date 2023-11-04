@@ -487,14 +487,14 @@ async function userLoginPost(req, res) {
   }
 }
 function FailedLogin(req, res) {
-  res.render("users/failedlogin", {
-    profile: false,
-    err: "Login Failed",
-    cartCount: 0,
-    whishCount: 0,
-    id: false,
-  });
-  // res.send("failed");
+  // res.render("users/failedlogin", {
+  //   profile: false,
+  //   err: "Login Failed",
+  //   cartCount: 0,
+  //   whishCount: 0,
+  //   id: false,
+  // });
+  res.send("failed");
 }
 
 function forgotPassword(req, res) {

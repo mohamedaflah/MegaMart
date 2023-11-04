@@ -1416,6 +1416,62 @@ body .signup {
   height: 100vh;
   justify-content: center;
   position: relative;
+  overflow-x: hidden;
+}
+body .signup .toast {
+  width: 240px;
+  height: 55px;
+  border-radius: 4px;
+  position: absolute;
+  right: 3%;
+  top: 10px;
+  background: rgb(255, 255, 255);
+  box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.42);
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  flex-wrap: wrap;
+  gap: 15px;
+  row-gap: 0;
+  padding: 0 15px;
+  right: -100%;
+  transition: 0.4s;
+}
+body .signup .toast .cls {
+  color: red;
+  font-size: 22px;
+}
+body .signup .toast span {
+  font-size: 18px;
+}
+body .signup .toast .prgrs {
+  width: 100%;
+  height: 5px;
+  border-radius: 3px;
+}
+body .signup .toast .prgrs .bar {
+  animation: progress 5s 2 forwards;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: red;
+}
+@keyframes progress {
+  0% {
+    width: 100%;
+  }
+  25% {
+    width: 75%;
+  }
+  50% {
+    width: 50%;
+  }
+  75% {
+    width: 25%;
+  }
+  100% {
+    width: 0%;
+  }
 }
 body .signup .loading {
   position: absolute;
@@ -2845,7 +2901,8 @@ button:hover {
 .home .content_section .items_section .ebcf_modal .control_section.cuponControl .cupon_form .header.andcontrol label {
   font-weight: 400;
 }
-.home .content_section .items_section .ebcf_modal .control_section.cuponControl .cupon_form .header.andcontrol input, .home .content_section .items_section .ebcf_modal .control_section.cuponControl .cupon_form .header.andcontrol select {
+.home .content_section .items_section .ebcf_modal .control_section.cuponControl .cupon_form .header.andcontrol input,
+.home .content_section .items_section .ebcf_modal .control_section.cuponControl .cupon_form .header.andcontrol select {
   width: 100%;
   border-radius: 4px;
   font-size: 12px;
@@ -3253,7 +3310,8 @@ button:hover {
   display: flex;
   justify-content: space-between;
 }
-.home .content_section .items_section .another_offer .category_offer, .home .content_section .items_section .another_offer .product_offer {
+.home .content_section .items_section .another_offer .category_offer,
+.home .content_section .items_section .another_offer .product_offer {
   width: 30%;
   height: 100%;
   display: flex;
@@ -3263,11 +3321,13 @@ button:hover {
   gap: 10px;
   background: #000;
 }
-.home .content_section .items_section .another_offer .category_offer span, .home .content_section .items_section .another_offer .product_offer span {
+.home .content_section .items_section .another_offer .category_offer span,
+.home .content_section .items_section .another_offer .product_offer span {
   color: #fff;
   font-size: 18px;
 }
-.home .content_section .items_section .another_offer .category_offer img, .home .content_section .items_section .another_offer .product_offer img {
+.home .content_section .items_section .another_offer .category_offer img,
+.home .content_section .items_section .another_offer .product_offer img {
   width: 24px;
   height: 24px;
 }

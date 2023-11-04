@@ -138,7 +138,7 @@
                                 <p class="discounted">
                                     <%if(data && data.offer && data.offer.offerprice){%>
                                         
-                                        ₹<%-data.price-data.price*(data.offer.offerprice/100)%>
+                                        ₹<%-data.price-(data.price*data.offer.offerprice)/100%>
                                     <%}else if(data.discount){%>
                                             ₹<%-data.discount%>
                                             <%}else{%>

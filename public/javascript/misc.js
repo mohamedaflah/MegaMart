@@ -244,6 +244,7 @@ function loginFormSubmit(e) {
           setTimeout(() => {
             errDivForLog.style.visibility = "hidden";
           }, 3000);
+          shoToast()
         }
         if (response.data.admin) {
           window.location.href = "/admin/";
@@ -255,6 +256,12 @@ function loginFormSubmit(e) {
   } catch (err) {
     alert(err);
   }
+}
+function shoToast(){
+  document.getElementById("toast").style.right='3%'
+  setTimeout(()=>{
+    document.getElementById("toast").style.right='-100%'
+  },5000)
 }
 function loginErrClose() {
   document.getElementById("errLog").style.visibility = "hidden";
