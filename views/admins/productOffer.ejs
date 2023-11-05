@@ -69,6 +69,52 @@
                             </form>
                         </div>
                     </div>
+                    <div id="mySizeChartModalforEditingProductOffer" class="ebcf_modal" style="background: rgba(245, 245, 220, 0.163);">
+                        <div class="control_section cuponControl" style="min-height: 500px;">
+                            <div class="cls">
+                                <img src="/images/Closebtn.svg" alt="" onclick="closeProdutofferEditModal()">
+                            </div>
+                            <form class="cupon_form" id="couponAddForm" onsubmit="updateProductOffer(event)">
+                                <div class="header">
+                                    <h3>Update product offer</h3>
+                                </div>
+                                <span style="color: rgb(30, 187, 30);font-weight: 300;" id="showPrice"></span>
+                                <div class="header andcontrol">
+                                    <label for="couponname">Product</label>
+                                        <!-- <select name="category" id="offerproduct"  style="color: black;height: 30px;" onchange="showCorrespondingPrice(this)">
+                                            <option value="" disabled selected>Select a product</option>
+                                            <%products.forEach((product)=>{%>
+                                                <%if(!product.deletionStatus && product.stock>=1){%>
+
+                                                    <option value="<%-product._id%>" data-price="<%-product.price%>">
+                                                        <img src="/product-images/<%-product.image[0].mainimage%>" alt="" style="width: 15px;height: auto;">
+                                                        <%-product.productName%></option>
+                                                <%}%>
+                                            <%})%>
+                                        </select> -->
+                                        <input type="text" id="showProductNameforProductOffer" readonly>
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="offername">Please Select One product</span>
+                                </div>
+                                <div class="header andcontrol">
+                                    <label for="couponcode">Offer Percentage</label>
+                                    <input type="text" name="offerprice" placeholder="Enter Offer in Percentage %" 
+                                        id="editprodutofferamount">
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="editproductOffererr">Please enter offer Percentage</span>
+                                </div>
+                                <div class="header andcontrol">
+                                    <label for="expiry">Expiry Date</label>
+                                        <input type="datetime-local" name="expiry" id="editproductOfferexpiry" oninput="checkLatest(event)"
+                                            min="<%= new Date().toISOString().slice(0, 16) %>">
+                                        <span style="color:red;margin: 0;visibility: hidden;" id="editproductOfferdateerr">Please select
+                                            date</span>
+                                </div>
+                                <div class="header andcontrol btns">
+                                    <button type="submit">Add</button>
+                                    <button type="reset">Reset</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     <div class="table" id="tb">
                         <div class="top_section">
                             <p>Product Offer</p>
@@ -139,7 +185,7 @@
                                     <img src="/product-images/<%-offer.offeredproduct.image[0].mainimage%>" style="width: 40px;height: auto;" alt="">
 
                             </div>
-                            <div class="table_datas " >
+                            <div class="table_datas " id="offerPercent">
                               
                                     <%-offer.offerAmt%>%
                                 
@@ -159,13 +205,13 @@
                             <% let monthAr1 = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"] %>
                             <% let ampm1 = d1.getHours() >= 12 ? 'PM' : 'AM' %>
                             
-                            <div class="table_datas" style="width: 20%;">
+                            <div class="table_datas" style="width: 20%;" id="showDateprodutoffer">
                               <%- d1.getDate() %> <%- monthAr1[d1.getMonth()] %> <%- d1.getFullYear() %> <%- dayAr1[d1.getDay()] %> <br>
                               <%- (d1.getHours() % 12 || 12) %>:<%- d1.getMinutes().toString().padStart(2, '0') %> <%= ampm1 %>
                             </div>
                             <div class="table_datas " style="width: 10%;">
                                
-                                    <img src="/images/couponedit.svg" style="width: 25px;height: 25px;margin-right:10px" alt="">
+                                    <img src="/images/couponedit.svg" style="width: 25px;height: 25px;margin-right:10px" alt="" onclick="openProductOfferEditModal('<%-offer._id%>')">
                              
 
                                  

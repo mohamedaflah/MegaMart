@@ -580,7 +580,7 @@ function updateCategoryOffer(event) {
     document.getElementById("offerdateerinedit").style.visibility = "hidden";
   }
   const formBody = {
-    offerId:categoryId,
+    offerId: categoryId,
     categoryoffer: updatecategoryofferpercentage.value,
     offerexpiry: categoryoffereditexpiry.value,
   };
@@ -591,10 +591,119 @@ function updateCategoryOffer(event) {
   })
     .then((response) => response.json())
     .then((res) => {
-      if(res.status){
-        window.location.href=`http://localhost:5001/admin/product/offers/categoryoffer/`
-      }else{
-        alert(JSON.stringify(res))
+      if (res.status) {
+        window.location.href = `http://localhost:5001/admin/product/offers/categoryoffer/`;
+      } else {
+        alert(JSON.stringify(res));
+      }
+    });
+}
+
+function openProductOfferEditModal(produtOfferId) {
+  try {
+    document
+      .getElementById("mySizeChartModalforEditingProductOffer")
+      .classList.add("active");
+    localStorage.setItem("productOfferId", produtOfferId);
+    fetch(
+      `/admin/product/offers/getupdateproductoffer/?offerId=${produtOfferId}`
+    )
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.offerData) {
+          // alert(JSON.stringify(res.offerData))
+          const data = res.offerData;
+          const produtname = res.produtname;
+          const productname = document.getElementById(
+            "showProductNameforProductOffer"
+          );
+          const offerPercent = document.getElementById("editprodutofferamount");
+          const offerexpiry = document.getElementById("editproductOfferexpiry");
+          productname.value = produtname;
+          offerPercent.value = data.offerAmt;
+          offerexpiry.value = formatDateandTime(new Date(data.expiryDate));
+        } else {
+          alert(JSON.stringify(res));
+        }
+      });
+  } catch (err) {
+    alert(err);
+  }
+}
+function closeProdutofferEditModal() {
+  document
+    .getElementById("mySizeChartModalforEditingProductOffer")
+    .classList.remove("active");
+}
+
+function updateProductOffer(event) {
+  event.preventDefault();
+  const offerId = localStorage.getItem("productOfferId");
+  const offerPercentage = document.getElementById("editprodutofferamount");
+  const expiry = document.getElementById("editproductOfferexpiry");
+  if (!offerPercentage) {
+    document.querySelector("#editproductOffererr").style.visibility = "visible";
+    return;
+  } else {
+    document.querySelector("#editproductOffererr").style.visibility = "hidden";
+  }
+  if (offerPercentage < 1 || offerPercentage > 90) {
+    document.querySelector("#editproductOffererr").textContent =
+      "Offer Percentage between 1 and 90 %";
+    document.querySelector("#editproductOffererr").style.visibility = "visible";
+    return;
+  } else {
+    document.querySelector("#editproductOffererr").style.visibility = "hidden";
+  }
+
+  if (!expiry) {
+    document.getElementById("editproductOfferdateerr").style.visibility =
+      "visible";
+    return;
+  } else {
+    document.getElementById("editproductOfferdateerr").style.visibility =
+      "hidden";
+  }
+
+  if (new Date(expiry.value) <= new Date()) {
+    document.getElementById("editproductOfferdateerr").textContent =
+      "Please select lates date";
+    document.getElementById("editproductOfferdateerr").style.visibility =
+      "visible";
+    return;
+  } else {
+    document.getElementById("editproductOfferdateerr").style.visibility =
+      "hidden";
+  }
+  const formBody = {
+    offerAmt: offerPercentage.value,
+    expiry: expiry.value,
+  };
+  fetch(
+    `/admin/product/offers/productoffer/updateproductoffer?offerId=${offerId}`,
+    {
+      method: "POST",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify(formBody),
+    }
+  )
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.status) {
+        // alert(res.status);
+        document
+          .getElementById("mySizeChartModalforEditingProductOffer")
+          .classList.remove("active");
+      document.getElementById("offerPercent").textContent=formBody.offerAmt+"%";
+      let d=new Date(formBody.expiry) 
+      let dayAr=["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+      let monthAr=["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+      let ampm=d.getHours() >=12?"PM":"AM"
+      document.getElementById("showDateprodutoffer").innerHTML=
+      `${d.getDate()} ${monthAr[d.getMonth()]} ${d.getFullYear()} ${dayAr[d.getDay()]}<br>
+      ${d.getHours()%12 || 12}:${d.getMinutes().toString().padStart(2, '0')} ${ampm}`
+      } else {
+        alert(JSON.stringify(res));
       }
     });
 }

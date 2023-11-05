@@ -63,7 +63,7 @@ const {
   getupdateCategoryOffer,
   updateCategoryOfferPost,
 } = require("../controller/categoryOfferController");
-const { showProductOffer, addProductOffer } = require("../controller/productOfferController");
+const { showProductOffer, addProductOffer, getUpdateProductofferDetail, updateProductofferPost } = require("../controller/productOfferController");
 const { showAllreturns } = require("../controller/returnsController").admin;
 router.get("/", admiLoginVerify, adminHomeShowuser);
 router.get("/login", adminLoginGet);
@@ -180,4 +180,7 @@ router.post("/product/offers/productoffer/add-product-offer",addProductOffer);
 
 router.get("/product/offers/categoryoffer/getupdatecategoryoffer/",getupdateCategoryOffer)
 router.post("/product/offers/categoryoffer/updatecategoryoffer/",updateCategoryOfferPost)
+
+router.get("/product/offers/getupdateproductoffer",getUpdateProductofferDetail)
+router.post("/product/offers/productoffer/updateproductoffer",updateProductofferPost)
 module.exports = { router };
