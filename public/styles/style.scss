@@ -3521,6 +3521,7 @@ $sidBarWidth: 250px;
                   font-weight: 500;
                   position: relative;
                   overflow: hidden;
+                  position: relative;
                   img {
                     position: absolute;
                     height: 70%;
@@ -3529,6 +3530,25 @@ $sidBarWidth: 250px;
                     top: 50%;
                     transform: translate(-50%, -50%);
                     z-index: 99;
+                  }
+                  .trash1{
+                    // background-color: red;
+                    width: auto;
+                    height: auto;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    position: absolute;
+                    bottom: 10px;
+                    right: 5px;
+                    img{
+                      width: 20px;
+                      height: 20px;
+                      position: static;
+                      margin:0;
+                      padding:0;
+                      transform: translate(0);
+                    }
                   }
                 }
               }

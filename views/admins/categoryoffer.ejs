@@ -69,6 +69,52 @@
                             </form>
                         </div>
                     </div>
+                    <div id="mySizeCategoryOfferEditModal" class="ebcf_modal" style="background: rgba(245, 245, 220, 0.163);">
+                        <div class="control_section cuponControl" style="min-height: 500px;">
+                            <div class="cls">
+                                <img src="/images/Closebtn.svg" alt="" id="clsbtn" onclick="closeCategoryOfferEditModal('mySizeCategoryOfferEditModal')">
+                            </div>
+                            <form class="cupon_form" id="couponAddForm" onsubmit="updateCategoryOffer(event)">
+                                <div class="header">
+                                    <h3>Update category offer</h3>
+                                </div>
+                                <div class="header andcontrol">
+                                    <label for="couponname">category</label>
+                                        <!-- <select name="category" id="updatecategoryoffercategory"  style="color: black;height: 30px;">
+                                            <option value="" disabled selected>Select a category</option>
+                                            <%categories.forEach((category)=>{%>
+                                                <option value="<%-category._id%>" data-id="<%-category._id%>"><%-category.categoryname%></option>
+                                           <% })%>
+                                        </select> -->
+                                        <input type="text"  id="updatecategoryoffercategory" readonly>
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="catoffererrinedit">Please Select Category</span>
+                                </div>
+                                <div class="header andcontrol">
+                                    <label for="couponcode">Offer Percentage</label>
+                                    <input type="number" id="updatecategoryofferpercentage"  placeholder="Enter Offer Percentage (%)" oninput=""
+                                        id="categoryofferamount">
+                                    <span style="color:red;margin: 0;visibility: hidden;" id="offerpercentinedit">Please enter offer Percentage</span>
+                                </div>
+                                <div class="header andcontrol">
+                                    <label for="expiry">Expiry Date</label>
+                                        <input type="datetime-local" name="expiry" id="categoryoffereditexpiry" oninput="checkLatest(event)" >
+                                        <span style="color:red;margin: 0;visibility: hidden;" id="offerdateerinedit">Please select
+                                            date</span>
+                                </div>
+                                <div class="header andcontrol btns">
+                                    <button type="submit">Add</button>
+                                    <button type="reset">Reset</button>
+                                </div>
+                                <!-- 
+                                <label for="logo" class="logodiv">
+                                    <p>Upload Logo</p>
+                                    <img src="" alt="">
+                                </label>
+                                <input type="file" name="logo" id="logo" style="display: none;">
+                                <button type="submit">add</button> -->
+                            </form>
+                        </div>
+                    </div>
                     <div class="table" id="tb">
                         <div class="top_section">
                             <p>Category Offer</p>
@@ -157,8 +203,8 @@
                                 </div>
                                 
                                 <div class="table_datas " style="width: 10%;">
-                                    <a href="">
-                                        <img src="/images/couponedit.svg" style="width: 25px;height: 25px;margin-right:10px" alt="">
+                                    <a >
+                                        <img src="/images/couponedit.svg" style="width: 25px;height: 25px;margin-right:10px" alt="" onclick="getCategoryOfferModal('mySizeCategoryOfferEditModal','<%-category._id%>')">
                                     </a>
                                 </div>
                                 <div class="table_datas " style="width: 10%;">

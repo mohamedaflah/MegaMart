@@ -60,6 +60,8 @@ const {
 const {
   showCategoryOffers,
   addOfferforCategory,
+  getupdateCategoryOffer,
+  updateCategoryOfferPost,
 } = require("../controller/categoryOfferController");
 const { showProductOffer, addProductOffer } = require("../controller/productOfferController");
 const { showAllreturns } = require("../controller/returnsController").admin;
@@ -175,4 +177,7 @@ router.post(
 );
 router.get("/product/offers/productoffer/", admiLoginVerify, showProductOffer);
 router.post("/product/offers/productoffer/add-product-offer",addProductOffer);
+
+router.get("/product/offers/categoryoffer/getupdatecategoryoffer/",getupdateCategoryOffer)
+router.post("/product/offers/categoryoffer/updatecategoryoffer/",updateCategoryOfferPost)
 module.exports = { router };

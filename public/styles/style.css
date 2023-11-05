@@ -2980,6 +2980,7 @@ button:hover {
   font-weight: 500;
   position: relative;
   overflow: hidden;
+  position: relative;
 }
 .home .content_section .items_section .add_product_section .form_section .images .preview_imgs .secondary label img {
   position: absolute;
@@ -2989,6 +2990,24 @@ button:hover {
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 99;
+}
+.home .content_section .items_section .add_product_section .form_section .images .preview_imgs .secondary label .trash1 {
+  width: auto;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: 10px;
+  right: 5px;
+}
+.home .content_section .items_section .add_product_section .form_section .images .preview_imgs .secondary label .trash1 img {
+  width: 20px;
+  height: 20px;
+  position: static;
+  margin: 0;
+  padding: 0;
+  transform: translate(0);
 }
 .home .content_section .items_section .add_product_section .form_section .images .preview_imgs .main {
   width: 370px;

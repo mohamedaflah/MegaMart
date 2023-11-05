@@ -75,6 +75,15 @@ function previewImage(inputId, imgId, label) {
     img.src = "";
   }
 }
+// function closePreviewImage(inputId,imgId,label){
+//   const input=document.getElementById(inputId)
+//   const image=document.getElementById(imgId)
+//   const label=document.getElementById(label)
+//   input.value=''
+//   // image.setAttribute('src','')
+//   image.src=''
+//   label.style.display='block'
+// }
 
 // search product
 
@@ -366,7 +375,7 @@ function addCategoryOffer(event) {
   if (!offeramount) {
     document.getElementById("offerpercent").style.visibility = "visible";
     return;
-  }else{
+  } else {
     document.getElementById("offerpercent").style.visibility = "hidden";
   }
   if (offeramount < 1 || offeramount > 90) {
@@ -399,8 +408,8 @@ function addCategoryOffer(event) {
     .then((res) => {
       if (res.status) {
         location.href = `http://localhost:5001/admin/product/offers/categoryoffer/`;
-      }else if(res.err){
-        alert(res.err)
+      } else if (res.err) {
+        alert(res.err);
       }
     });
 }
@@ -445,11 +454,12 @@ function addProdcutOffer(event) {
   } else {
     document.getElementById("productOffererr").style.visibility = "hidden";
   }
-  if(produtofferamount<1 || produtofferamount>90){
-    document.getElementById("productOffererr").textContent='Percentage must be between 1 and 90 %';
+  if (produtofferamount < 1 || produtofferamount > 90) {
+    document.getElementById("productOffererr").textContent =
+      "Percentage must be between 1 and 90 %";
     document.getElementById("productOffererr").style.visibility = "visible";
-    return
-  }else{
+    return;
+  } else {
     document.getElementById("productOffererr").style.visibility = "hidden";
   }
   const expiry = document.getElementById("productOfferexpiry").value;
@@ -485,6 +495,106 @@ function addProdcutOffer(event) {
         window.location.href = `http://localhost:5001/admin/product/offers/productoffer/`;
       } else {
         alert(res.err);
+      }
+    });
+}
+function getCategoryOfferModal(popup, categoryId) {
+  try {
+    document.getElementById(popup).classList.add("active");
+    localStorage.setItem("categoryofferId", categoryId);
+    fetch(
+      `/admin/product/offers/categoryoffer/getupdatecategoryoffer/?offerId=${categoryId}`
+    )
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.err) {
+          return alert(res.err);
+        }
+        const categoryofferData = res.categoryOfferData;
+
+        const updatecategoryoffercategory = document.getElementById(
+          "updatecategoryoffercategory"
+        );
+        const updatecategoryofferpercentage = document.getElementById(
+          "updatecategoryofferpercentage"
+        );
+        const categoryoffereditexpiry = document.getElementById(
+          "categoryoffereditexpiry"
+        );
+
+        updatecategoryoffercategory.value = res.category.categoryname; // Set the value of the select element to the category's ID
+        updatecategoryofferpercentage.value = categoryofferData.offerAmt;
+        categoryoffereditexpiry.value = formatDateandTime(
+          new Date(categoryofferData.expiryDate)
+        );
+      });
+  } catch (err) {
+    alert(err);
+  }
+}
+
+function closeCategoryOfferEditModal(categoryEditPoppuWIndow) {
+  document.getElementById(categoryEditPoppuWIndow).classList.remove("active");
+}
+function formatDateandTime(date) {
+  const yyyy = date.getFullYear();
+  const mm = (date.getMonth() + 1).toString().padStart(2, "0"); // Month is zero-based
+  const dd = date.getDate().toString().padStart(2, "0");
+  const hh = date.getHours().toString().padStart(2, "0");
+  const min = date.getMinutes().toString().padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+}
+function updateCategoryOffer(event) {
+  event.preventDefault();
+  const categoryId = localStorage.getItem("categoryofferId");
+
+  const updatecategoryofferpercentage = document.getElementById(
+    "updatecategoryofferpercentage"
+  );
+  const categoryoffereditexpiry = document.getElementById(
+    "categoryoffereditexpiry"
+  );
+  if (!updatecategoryofferpercentage.value) {
+    document.getElementById("offerpercentinedit").style.visibility = "visible";
+    return;
+  } else {
+    document.getElementById("offerpercentinedit").style.visibility = "hidden";
+  }
+  if (
+    updatecategoryofferpercentage.value < 1 ||
+    updatecategoryofferpercentage.value > 90
+  ) {
+    document.getElementById("offerpercentinedit").textContent =
+      "Must be enter percentage between 1 and 90";
+    document.getElementById("offerpercentinedit").style.visibility = "visible";
+    return;
+  } else {
+    document.getElementById("offerpercentinedit").style.visibility = "hidden";
+  }
+  if (new Date(categoryoffereditexpiry.value) <= new Date()) {
+    document.getElementById("offerdateerinedit").style.visibility = "visible";
+    document.getElementById("offerdateerinedit").textContent =
+      "Please select latest date and time";
+    return;
+  } else {
+    document.getElementById("offerdateerinedit").style.visibility = "hidden";
+  }
+  const formBody = {
+    offerId:categoryId,
+    categoryoffer: updatecategoryofferpercentage.value,
+    offerexpiry: categoryoffereditexpiry.value,
+  };
+  fetch("/admin/product/offers/categoryoffer/updatecategoryoffer/", {
+    method: "POST",
+    headers: { "Content-type": "application/json" },
+    body: JSON.stringify(formBody),
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      if(res.status){
+        window.location.href=`http://localhost:5001/admin/product/offers/categoryoffer/`
+      }else{
+        alert(JSON.stringify(res))
       }
     });
 }
