@@ -7,6 +7,7 @@ const {
   getCartCount,
   getUserCartData,
   getTotalAmount,
+  calculateSubtotal,
 } = require("../helper/cart-helper");
 const { getWhishLIstCount } = require("../helper/whish-helper");
 
@@ -149,6 +150,7 @@ async function getCartPage(req, res) {
 async function increaseQuantity(req, res) {
   const userId = req.params.userId;
   const productId = req.params.productId;
+  const qtyChange=req.query.qty;
   const currentData = await productsCollection.findOne({
     _id: new ObjectId(productId),
   });
@@ -162,7 +164,7 @@ async function increaseQuantity(req, res) {
     userId: new ObjectId(userId),
     "products.productId": new ObjectId(productId),
   });
-  let updated = data.products[0].qty + 1;
+  let updated = data.products[0].qty + Number(qtyChange);
   console.log("daata i________ " + updated);
   await cartCollection.updateOne(
     {
@@ -170,11 +172,14 @@ async function increaseQuantity(req, res) {
       "products.productId": new ObjectId(productId),
     },
     {
-      $inc: { "products.$.qty": 1 },
+      $inc: { "products.$.qty": Number(qtyChange) },
     }
   );
-
-  res.redirect(`/users/product/cart/showcart/${userId}`);
+  const totalAmount=await getTotalAmount(userId)
+  const subtotal= calculateSubtotal(currentData,updated)
+  console.log(subtotal+'sub total')
+  // res.redirect(`/users/product/cart/showcart/${userId}`);
+  res.json({status:true,stock:currentData.stock,totalAmount,subtotal})
   // res.status(200).json({message:"su"})
 }
 
@@ -197,22 +202,28 @@ async function decreaseQuantity(req, res) {
 
 // Remove Item From Cart while clicking Delete Button
 async function deleteItemFromCart(req, res) {
-  const userId = req.params.userId;
-  const productId = req.params.productId;
-  await cartCollection.updateOne(
-    {
-      userId: new ObjectId(userId),
-      "products.productId": new ObjectId(productId),
-    },
-    {
-      $pull: {
-        products: {
-          productId: new ObjectId(productId),
-        },
+  try{
+
+    const userId = req.params.userId;
+    const productId = req.params.productId;
+    await cartCollection.updateOne(
+      {
+        userId: new ObjectId(userId),
+        "products.productId": new ObjectId(productId),
       },
-    }
-  );
-  res.redirect(`/users/product/cart/showcart/${userId}`);
+      {
+        $pull: {
+          products: {
+            productId: new ObjectId(productId),
+          },
+        },
+      }
+    );
+    const totalAmount=await getTotalAmount(userId)
+    res.json({status:true,totalAmount})
+  }catch(err){
+    console.log("error in removing item from cart "+err)
+  }
 }
 
 module.exports = {

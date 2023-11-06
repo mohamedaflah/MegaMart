@@ -13,8 +13,8 @@
                     <div class="cols qty">Quantity</div>
                     <div class="cols price">Subtotal</div>
                 </div>
-                <%userCartdata.forEach((cartdata)=>{%>
-                    <div class="row">
+                <%userCartdata.forEach((cartdata,index)=>{%>
+                    <div class="row" id="deleterow<%-index%>">
                         <div class="cols product">
                             <img src="/product-images/<%-cartdata.cartData.image[0].mainimage%>" style="width:50px;height:auto" alt="">
                             <span style="margin-left: 20px;"><%-cartdata.cartData.productName%></span>
@@ -30,55 +30,59 @@
                         </div>
                         <div class="cols qty">
                             <div class="qty_button">
-                                <div class="text">
+                                <div class="text" id="qtyShow<%-index%>">
                                     <% if (cartdata.products && cartdata.products.qty) { %>
                                         <% if (cartdata.products.qty < 10) { %>
-                                            0<%- cartdata.products.qty %>
+                                          0<%- cartdata.products.qty %>
                                         <% } else { %>
-                                            <%- cartdata.products.qty %>
+                                          <%- cartdata.products.qty %>
                                         <% } %>
-                                    <% }%>
+                                      <% } %>
                                 </div>
                                 <div class="nav">
-                                    <%if(cartdata.cartData.stock>cartdata.products.qty){%>
-                                        <a href="/users/product/cart/increaseqty/<%-id%>/<%-cartdata.products.productId%>/">
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M7.75732 7.36666L4.45732 10.6667L3.51465 9.72399L7.75732 5.48132L12 9.72399L11.0573 10.6667L7.75732 7.36666Z" fill="black"/>
-                                                </svg> 
-                                        </a>
-                                        <%}else{%>
-                                            <a style="visibility: hidden;" href="/users/product/cart/increaseqty/<%-id%>/<%-cartdata.products.productId%>/">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M7.75732 7.36666L4.45732 10.6667L3.51465 9.72399L7.75732 5.48132L12 9.72399L11.0573 10.6667L7.75732 7.36666Z" fill="black"/>
-                                                    </svg> 
-                                            </a>
-                                    <%}%>
-                                    <%if(cartdata.products && cartdata.products.qty>=2 ){%>
-                                        <a href="/users/product/cart/decreaseqty/<%-id%>/<%-cartdata.products.productId%>/">
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M8.24268 8.63334L11.5427 5.33334L12.4854 6.27601L8.24268 10.5187L4.00002 6.27601L4.94268 5.33334L8.24268 8.63334Z" fill="black"/>
-                                              </svg>
-                                        </a>
-                                    <%}else{%>
-                                        <a style="visibility: hidden;" href="/users/product/cart/decreaseqty/<%-id%>/<%-cartdata.products.productId%>/">
-                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M8.24268 8.63334L11.5427 5.33334L12.4854 6.27601L8.24268 10.5187L4.00002 6.27601L4.94268 5.33334L8.24268 8.63334Z" fill="black"/>
-                                              </svg>
-                                        </a>
-                                   <% }%>
-                                </div>
+                                    <% if (cartdata.cartData.stock > cartdata.products.qty) { %>
+                                      <a onclick="increaseCartQty('changebtnInc<%-index%>', '<%-id%>', '<%-cartdata.products.productId%>', 1, '<%-cartdata.cartData%>', 'subtotal<%-index%>', 'qtyShow<%-index%>','decrease<%-index%>')" id="changebtnInc<%-index%>"> <!-- Updated the ID -->
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <path d="M7.75732 7.36666L4.45732 10.6667L3.51465 9.72399L7.75732 5.48132L12 9.72399L11.0573 10.6667L7.75732 7.36666Z" fill="black"/>
+                                        </svg> 
+                                      </a>
+                                    <% } else { %>
+                                      <a style="visibility: hidden;" >
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <path d="M7.75732 7.36666L4.45732 10.6667L3.51465 9.72399L7.75732 5.48132L12 9.72399L11.0573 10.6667L7.75732 7.36666Z" fill="black"/>
+                                        </svg> 
+                                      </a>
+                                    <% } %>
+                                    <% if (cartdata.products && cartdata.products.qty >= 2) { %>
+                                      <a onclick="increaseCartQty('changebtnInc<%-index%>', '<%-id%>', '<%-cartdata.products.productId%>', -1, '<%-cartdata.cartData%>', 'subtotal<%-index%>', 'qtyShow<%-index%>','decrease<%-index%>')" id="decrease<%-index%>"> <!-- Updated the ID -->
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <path d="M8.24268 8.63334L11.5427 5.33334L12.4854 6.27601L8.24268 10.5187L4.00002 6.27601L4.94268 5.33334L8.24268 8.63334Z" fill="black"/>
+                                        </svg>
+                                      </a>
+                                    <% } else { %>
+                                      <a style="visibility: hidden;" onclick="increaseCartQty('changebtnInc<%-index%>', '<%-id%>', '<%-cartdata.products.productId%>', -1, '<%-cartdata.cartData%>', 'subtotal<%-index%>', 'qtyShow<%-index%>','decrease<%-index%>')" id="decrease<%-index%>"> <!-- Updated the ID -->
+                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                          <path d="M8.24268 8.63334L11.5427 5.33334L12.4854 6.27601L8.24268 10.5187L4.00002 6.27601L4.94268 5.33334L8.24268 8.63334Z" fill="black"/>
+                                        </svg>
+                                      </a>
+                                    <% } %>
+                                  </div>
                             </div>
                         </div>
-                        <div class="cols price" style="justify-content: space-between;">₹
-                            <%if(cartdata && cartdata.cartData && cartdata.cartData.offer && cartdata.cartData.offer.offerprice){%>
-                                <%let price=cartdata.cartData.price-(cartdata.cartData.price*cartdata.cartData.offer.offerprice)/100%>
-                                <%-cartdata.products.qty*price%>
-                            <%}else if(cartdata.cartData && cartdata.cartData.discount){%>
-                                <%-cartdata.products.qty*cartdata.cartData.discount%>
-                           <%}else{%>
-                               <%-cartdata.products.qty*cartdata.cartData.price%>
-                           <%}%>
-                            <a href="/users/product/cart/deleteitemfromcart/<%-id%>/<%-cartdata.products.productId%>/">
+                        <div class="cols price" style="justify-content: space-between;" >
+                            <span id="subtotal<%-index%>">
+                                ₹
+
+                                <%if(cartdata && cartdata.cartData && cartdata.cartData.offer && cartdata.cartData.offer.offerprice){%>
+                                    <%let price=cartdata.cartData.price-(cartdata.cartData.price*cartdata.cartData.offer.offerprice)/100%>
+                                    <%-cartdata.products.qty*price%>
+                                <%}else if(cartdata.cartData && cartdata.cartData.discount){%>
+                                    <%-cartdata.products.qty*cartdata.cartData.discount%>
+                               <%}else{%>
+                                   <%-cartdata.products.qty*cartdata.cartData.price%>
+                               <%}%>
+                            </span>
+                            <a  onclick="removeItemfromCart('<%-id%>','<%-cartdata.products.productId%>','deleterow<%-index%>','finalsub','aftertotal')">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="12" cy="12" r="9" fill="#DB4444"/>
                                     <path d="M9 15L12 12M15 9L11.9994 12M11.9994 12L9 9M12 12L15 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -104,7 +108,7 @@
                       Cart Total
                     </div>
                     <div class="midtxt">
-                        <div class="txt"><span>Subtotal</span> <span>₹<%-totalAmount%></span></div>
+                        <div class="txt"><span>Subtotal</span> <span id="finalsub">₹<%-totalAmount%></span></div>
                         <div class="txt"><span>Shipping</span> <span>Free</span></div>
                         <%let totalamount=totalAmount%>
                         <div class="txt"><span>Total</span> <span >₹<span id="aftertotal"><%-totalamount%></span></span></div>
