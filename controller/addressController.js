@@ -69,7 +69,7 @@ async function postUserAddress(req, res) {
       }else if(cartItem.cartData.discount){
         price=cartItem.cartData.discount
       }else{
-        price=cartItem.price
+        price=cartItem.cartData.price
       }
       return({
         productId: cartItem.products.productId,

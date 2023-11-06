@@ -38,7 +38,7 @@ const {
   suggestUniqueUsername,
   // resendOTP,
 } = require("../controller/userController");
-const { checkOut, placeOrder, placeOrderPost, userOrders, cancelOrder } =
+const { checkOut, placeOrder, placeOrderPost, userOrders, cancelOrder,genereateRazopayforOrder,razopayPaymentVerification } =
   userOrderHelper;
 
 const {
@@ -217,6 +217,7 @@ router
   .route("/users/product/cart/checkout/place-order/:userId", verifySessionAuth)
   .get(placeOrder)
   .post(placeOrderPost);
+  
 router
   .route("/users/account/address/add-address/:userId", verifySessionAuth)
   .get(addingAddressGet)
@@ -303,4 +304,7 @@ router.get('/users/account/deleteAddress/:userId/:addressId',deleteUserAddressin
 router.route('/users/account/editAddress/:userId/:addressId').get(editAddressinProfileGet).post(editAddressinProfilePost)
 router.get('/users/products/return/getreturnitem',getReturnedProduct)
 router.get('/users/products/returns/seeallreturns/:userId',sesionVerification,seeAllreturns)
+
+router.post('/users/orders/checkout/razorpay/generaterazorpay',genereateRazopayforOrder)
+router.post("/users/orders/checkout/razorpay/verifyrazorpaypayment",razopayPaymentVerification)
 module.exports = { router };

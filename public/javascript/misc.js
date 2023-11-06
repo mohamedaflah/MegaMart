@@ -89,7 +89,136 @@ function checkoutWithAddress(event, userId) {
   //  alert('error is'+err)
   //});
 }
+function submitCheckoutFormExplicit(userId){
+  const address = document.querySelector('input[name="address"]:checked');
+  const payment_method = document.querySelector(
+    'input[name="payment_method"]:checked'
+  );
+  // if(payment_method.value=='COD'){
+  // }
+  let checkoutFormdata = {
+    address: address.value,
+    payment_method: payment_method.value,
+  };
 
+  fetch(`/users/product/cart/checkout/place-order/${userId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(checkoutFormdata),
+  })
+    .then((response) => response.json())
+    .then((res) => {
+        location.href = `/users/product/checkout/payment/success/${userId}`;
+    });
+}
+
+function placeOrderCheckout(userId, totalAmount) {
+  localStorage.setItem("userId",userId)
+  const payment_method = document.querySelector(
+    'input[name="payment_method"]:checked'
+  ).value
+  if (payment_method == "COD") {
+
+    // document.getElementById("forCheckout").submit();
+    submitCheckoutFormExplicit(userId)
+  } else if (payment_method == "Wallet") {
+    // document.getElementById("forCheckout").submit();
+    submitCheckoutFormExplicit(userId)
+  } else {
+    fetch("/users/orders/checkout/razorpay/generaterazorpay", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, totalAmount }),
+    })
+      .then((response) => response.json())
+      .then((res) => {
+        if (res.order) {
+          razorpayPayment(res.order, userId);
+        } else {
+          alert(JSON.stringify(res));
+        }
+      });
+  }
+}
+function razorpayPayment(order, userId) {
+  let options = {
+    key: "rzp_test_4DklPLkGmokBbK",
+    amount: order.amount,
+    currency: "INR",
+    order_id: order.id,
+    handler: (response) => {
+      console.log(response);
+      if (response.razorpay_payment_id) {
+        // window.location.href = `http://localhost:5001/users/product/checkout/payment/success/${userId}`;
+        verifyRazorpayPayment(order.id, response.razorpay_payment_id, userId);
+      } else {
+        alert("window closed");
+      }
+    },
+    theme: {
+      color: "#de3641",
+      image:
+        "https://png.pngtree.com/element_our/md/20180620/md_5b29c1dab1cf4.jpg", // URL of your logo
+    },
+  };
+  const rzp = new Razorpay(options);
+  rzp.on("payment.failed",function (response){
+    alert("Payment Failed "+response.error.description)
+  })
+  rzp.on("payment.window.beforeclose", function () {
+    // window.razorpayWindowClosed = true;
+    handleRazorpayClosureOrFailure();
+  });
+  // rzp.on()
+  rzp.open();
+}
+
+function verifyRazorpayPayment(orderId, paymentId, userId) {
+  // alert("reached");
+  try {
+    fetch(`/users/orders/checkout/razorpay/verifyrazorpaypayment`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ orderId, paymentId }),
+    })
+      .then((response) => response.json())
+      .then(async(res) => {
+        if (res.status) {
+          // document.getElementById("forCheckout").submit();
+          
+          submitCheckoutFormExplicit(localStorage.getItem("userId"))
+          // document.querySelector(".checkandAddress").submit();
+          // const address = document.querySelector(
+          //   'input[name="address"]:checked'
+          // );
+          // const payment_method = document.querySelector(
+          //   'input[name="payment_method"]:checked'
+          // );
+          // let checkoutFormdata = {
+          //   address: address.value,
+          //   payment_method: payment_method.value,
+          // };
+          // await fetch(`/users/product/cart/checkout/place-order/${userId}`, {
+          //   method: "POST",
+          //   headers: {
+          //     "Content-Type": "application/json",
+          //   },
+          //   body: JSON.stringify(checkoutFormdata),
+          // })
+            // location.href = `/users/product/checkout/payment/success/${userId}`;
+        } else {
+          alert("Payment verification failed");
+          alert(JSON.stringify(res));
+        }
+      });
+  } catch (err) {
+    alert(JSON.stringify(err));
+  }
+}
 function checkoutformSubmit(event, userId) {
   //let placeorderbtn=document.getElementById("placeorderbtn")
   //placeorderbtn.disabled=true;
@@ -103,62 +232,45 @@ function checkoutformSubmit(event, userId) {
   const payment_method = document.querySelector(
     'input[name="payment_method"]:checked'
   );
+  // if(payment_method.value=='COD'){
+  // }
   event.preventDefault();
-
-  if (!window.razorpayWindowClosed) {
-    let checkoutFormdata = {
-      address: address.value,
-      payment_method: payment_method.value,
-    };
-
-    fetch(`/users/product/cart/checkout/place-order/${userId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(checkoutFormdata),
-    })
-      .then((response) => response.json())
-      .then((res) => {
-        if (res.status === "COD") {
-          location.href = `/users/product/checkout/payment/success/${userId}`;
-        } else if (res.status == "Wallet") {
-          location.href = `/users/product/checkout/payment/success/${userId}`;
-        } else {
-          razorpayPayment(res, userId);
-        }
-      });
-  } else {
-    // Handle the case when the Razorpay window was closed
+  if (window.razorpayWindowClosed) {
     alert("Payment window was closed. Please try again.");
-    // Optionally, you can reset the flag
-    window.razorpayWindowClosed = false;
+    event.preventDefault(); // Prevent the form from submitting
+    return;
   }
-}
-
-function razorpayPayment(order, userId) {
-  let options = {
-    key: "rzp_test_4DklPLkGmokBbK",
-    amount: order.amount,
-    currency: "INR",
-    order_id: order.order_id,
-    handler: (response) => {
-      console.log(response);
-      if (response.razorpay_payment_id) {
-        window.location.href = `http://localhost:5001/users/product/checkout/payment/success/${userId}`;
-      }
-    },
-    theme: {
-      color: "#de3641",
-      image:
-        "https://png.pngtree.com/element_our/md/20180620/md_5b29c1dab1cf4.jpg", // URL of your logo
-    },
+  let checkoutFormdata = {
+    address: address.value,
+    payment_method: payment_method.value,
   };
-  const rzp = new Razorpay(options);
-  rzp.on("payment.window.beforeclose", function () {
-    window.razorpayWindowClosed = true;
-  });
-  rzp.open();
+
+  fetch(`/users/product/cart/checkout/place-order/${userId}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(checkoutFormdata),
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.status === "COD" || res.status == "Wallet") {
+        location.href = `/users/product/checkout/payment/success/${userId}`;
+        // } else if (res.status == "Wallet") {
+        // location.href = `/users/product/checkout/payment/success/${userId}`;
+        // } else {
+        // razorpayPayment(res, userId);
+      }
+    });
+}
+// const razorpaySuccessButton = document.getElementById("razorpaySuccessButton")
+// razorpaySuccessButton.addEventListener("click",()=>{
+//   alert('asdfh')
+// })
+
+function handleRazorpayClosureOrFailure() {
+  alert("Payment window was closed or there was a failure. Please try again.");
+  window.razorpayWindowClosed = false;
 }
 
 async function addToWhishList(productId, userId) {
@@ -244,7 +356,7 @@ function loginFormSubmit(e) {
           setTimeout(() => {
             errDivForLog.style.visibility = "hidden";
           }, 3000);
-          shoToast()
+          shoToast();
         }
         if (response.data.admin) {
           window.location.href = "/admin/";
@@ -257,11 +369,11 @@ function loginFormSubmit(e) {
     alert(err);
   }
 }
-function shoToast(){
-  document.getElementById("toast").style.right='3%'
-  setTimeout(()=>{
-    document.getElementById("toast").style.right='-100%'
-  },5000)
+function shoToast() {
+  document.getElementById("toast").style.right = "3%";
+  setTimeout(() => {
+    document.getElementById("toast").style.right = "-100%";
+  }, 5000);
 }
 function loginErrClose() {
   document.getElementById("errLog").style.visibility = "hidden";
@@ -295,7 +407,7 @@ function applyCoupon(event, userId) {
         let current = Number(total.textContent);
         let discount = Number(res.discount);
         // confirm(current+'    '+discount)
-        let duductedAmount=current*(discount/100)
+        let duductedAmount = current * (discount / 100);
         total.textContent = current - duductedAmount;
         total.style.color = "red";
         alert("Coupon Apply Succefull");
@@ -305,9 +417,10 @@ function applyCoupon(event, userId) {
     });
 }
 
-function openReturn(productId, orderId) {
+function openReturn(productId, orderId, finalprice) {
   confirm("are you sure to return");
   sessionStorage.setItem("productId", productId);
+  localStorage.setItem("finalpriceforreturn", finalprice);
   sessionStorage.setItem("orderId", orderId);
   document.getElementById("returpop").style.display = "flex";
 
@@ -364,6 +477,7 @@ function returnForm(event, userId) {
   let fm = document.getElementById("returnForm");
   let productId = sessionStorage.getItem("productId");
   let orderId = sessionStorage.getItem("orderId");
+  let finalprice = localStorage.getItem("finalpriceforreturn");
   // alert(productId);
   let reason = document.getElementById("reson");
   let Reason = reason.options[reason.selectedIndex].value;
@@ -389,7 +503,7 @@ function returnForm(event, userId) {
     // alert("Selected file type: " + selectedFile.type);
     // alert(JSON.stringify(selectedFile));
     fetch(
-      `/users/product/orders/returnproduct/${productId}/${userId}/?orderId=${orderId}`,
+      `/users/product/orders/returnproduct/${productId}/${userId}/?orderId=${orderId}&&finalprice=${finalprice}`,
       {
         method: "POST",
         body: formDt,

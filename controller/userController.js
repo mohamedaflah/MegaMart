@@ -198,8 +198,7 @@ async function singupPost(req, res) {
           from: process.env.USER_EMAIL,
           to: req.body.email_or_Phone,
           subject: "Megamart Confirmation Registration",
-          html:
-           `    <div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
+          html: `    <div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
            <div style="margin:50px auto;width:70%;padding:20px 0">
              <div style="border-bottom:1px solid #eee">
                <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">MegaMart</a>
@@ -325,36 +324,42 @@ async function confirmPost(req, res) {
         let wallerExist = await walletCollection.findOne({
           userId: new ObjectId(req.session.userreferalId),
         });
+        const offAmt = await referalDb.find();
+        const referalId = offAmt[0]._id;
         if (wallerExist) {
-          const offAmt = await referalDb.find();
-          const referalId = offAmt[0]._id;
           await walletCollection.updateOne(
             { userId: new ObjectId(req.session.userreferalId) },
             { $inc: { amount: offAmt[0].offeramount } }
           );
-          await referalDb.updateOne(
-            { _id: new ObjectId(referalId) },
-            {
-              $push: {
-                invitedUser: {
-                  userId: new ObjectId(req.query.userSignupwithreferal),
-                },
-              },
-            }
-          );
-          await referalDb.updateOne(
-            {
-              _id: new ObjectId(referalId),
-            },
-            {
-              $push: {
-                joinedUser: {
-                  userId: new ObjectId(req.session.userId),
-                },
-              },
-            }
-          );
+        } else {
+          await new walletCollection({
+            userId: new ObjectId(req.session.userreferalId),
+            amount: offAmt[0].offeramount,
+            creditAmount: offAmt[0].offeramount,
+          }).save()
         }
+        await referalDb.updateOne(
+          { _id: new ObjectId(referalId) },
+          {
+            $push: {
+              invitedUser: {
+                userId: new ObjectId(req.query.userSignupwithreferal),
+              },
+            },
+          }
+        );
+        await referalDb.updateOne(
+          {
+            _id: new ObjectId(referalId),
+          },
+          {
+            $push: {
+              joinedUser: {
+                userId: new ObjectId(req.session.userId),
+              },
+            },
+          }
+        );
       }
       res.json({ status: true });
     } else {

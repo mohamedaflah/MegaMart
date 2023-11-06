@@ -6,7 +6,7 @@ const orderCollection = require("../model/collections/orders");
 const walletCollection = require("../model/collections/wallet");
 const { getCartCount } = require("../helper/cart-helper");
 const { getWhishLIstCount } = require("../helper/whish-helper");
-const {getAllreturnedProductByUseId}=require('../helper/returnHelper')
+const { getAllreturnedProductByUseId } = require("../helper/returnHelper");
 async function getReturnedProduct(req, res) {
   const producId = req.query.id;
   const product = await productCollection.findOne({
@@ -26,6 +26,7 @@ async function returnProduct(req, res) {
     const productId = req.params.productId;
     const userId = req.params.userId;
     const orderId = req.query.orderId;
+    const fianlprice = req.query.finalprice;
     console.log(productId + "  this is the produt id ");
     console.log(userId + "  this is the user id ");
     console.log(orderId + "  this is the order -- id ");
@@ -71,10 +72,21 @@ async function returnProduct(req, res) {
     } else {
       actualPrice = productPrice.price;
     }
-    await walletCollection.updateOne(
-      { userId: new ObjectId(userId) },
-      { $inc: { amount: actualPrice } }
-    );
+    const walletExist = await walletCollection.findOne({
+      userId: new ObjectId(userId),
+    });
+    if (walletExist) {
+      await walletCollection.updateOne(
+        { userId: new ObjectId(userId) },
+        { $inc: { amount: fianlprice } }
+      );
+    } else {
+      await new walletCollection({
+        userId:new ObjectId(userId),
+        amount:fianlprice,
+        orderId:new ObjectId(orderId)
+      }).save()
+    }
     const filename = `/return-images/${req.file.filename}`;
 
     await new returnCollection({
@@ -82,6 +94,7 @@ async function returnProduct(req, res) {
       product: new ObjectId(productId),
       image: filename,
       reason: req.body.reason,
+      finalPrice: Number(fianlprice),
       returnedDate: Date.now(),
       orderDate: orderData.delverydate,
     }).save();
@@ -107,26 +120,23 @@ async function seeAllreturns(req, res) {
   //     _id: new ObjectId(allReturnData[i]),
   //   });
   // }
-  const allUserreturns=await getAllreturnedProductByUseId(userId)
-  console.log('after calling '+JSON.stringify(allUserreturns))
+  const allUserreturns = await getAllreturnedProductByUseId(userId);
+  console.log("after calling " + JSON.stringify(allUserreturns));
   res.render("users/returns", {
     profile: true,
     id: userId,
     cartCount,
     whishCount,
     allUserreturns,
-    
   });
 }
 
-
 // for admin start
 
-function showAllreturns(req,res){
-  
-  res.render('admins/returns')
+function showAllreturns(req, res) {
+  res.render("admins/returns");
 }
 
 // admin side end
-const admin={showAllreturns}
-module.exports = { getReturnedProduct, returnProduct, seeAllreturns,admin };
+const admin = { showAllreturns };
+module.exports = { getReturnedProduct, returnProduct, seeAllreturns, admin };

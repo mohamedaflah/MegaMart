@@ -13,15 +13,18 @@ const schema = mongoose.Schema({
   reason: {
     type: String,
   },
-  image:{
-    type:String
+  finalPrice: {
+    type: Number,
   },
-  returnedDate:{
-    type:Date,
+  image: {
+    type: String,
   },
-  orderDate:{
-    type:Date
-  }
+  returnedDate: {
+    type: Date,
+  },
+  orderDate: {
+    type: Date,
+  },
 });
 
 // module.exports = mongoose.model("Cart", schema);

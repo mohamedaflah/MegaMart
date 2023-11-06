@@ -427,19 +427,27 @@ async function placeOrderPost(req, res) {
     const userCartdata = await getUserCartData(userId);
     const products = userCartdata.map((cartItem) => {
       let price;
-      if(cartItem.cartData && cartItem.cartData.offer && cartItem.cartData.offer.offerprice){
-        price=cartItem.cartData.price-(cartItem.cartData.price*(cartItem.cartData.offer.offerprice/100))
-      }else if(cartItem.cartData.discount){
-        price=cartItem.cartData.discount
-      }else{
-        price=cartItem.price
+      console.log(JSON.stringify(cartItem) + "--------cart items");
+      if (
+        cartItem.cartData &&
+        cartItem.cartData.offer &&
+        cartItem.cartData.offer.offerprice
+      ) {
+        price =
+          cartItem.cartData.price -
+          cartItem.cartData.price * (cartItem.cartData.offer.offerprice / 100);
+      } else if (cartItem.cartData.discount) {
+        price = cartItem.cartData.discount;
+      } else {
+        price = cartItem.cartData.price;
       }
-      return({
+      return {
         productId: cartItem.products.productId,
         qty: cartItem.products.qty,
-        price:price
-      });
+        price: price - price * (cartItem.getDiscount / 100),
+      };
     });
+    // console.log(JSON.stringify(products)='!!!!!!!!!!!!!!!!!!!!!!!!!!!')
     await new orderCollection({
       userId: new ObjectId(userId),
       paymentmode: req.body.payment_method,
@@ -449,8 +457,6 @@ async function placeOrderPost(req, res) {
       address: addressdata.addresses[Number(req.body.address)],
       products: products,
     }).save();
-    // qty=[]
-    // console.log(qty + "(((((((9");
     await cartCollection.deleteOne({ userId: new ObjectId(userId) });
     products.forEach(async (product) => {
       const currentData = await productsCollection.findOne({
@@ -481,7 +487,7 @@ async function placeOrderPost(req, res) {
     } else {
       let orderId = await getOrderId(userId);
       generateRazorpay(orderId, totalAmount, userId)
-        .then((order) => {
+        .then(async (order) => {
           res.json(order);
         })
         .catch((err) => {
@@ -491,6 +497,10 @@ async function placeOrderPost(req, res) {
             .json({ error: "Error in Generating Razopay Checkout" });
         });
     }
+
+    // qty=[]
+    // console.log(qty + "(((((((9");
+
     // res.redirect(`/users/product/checkout/payment/success/${userId}`);
   } catch (err) {
     console.log("error in checkout place order post" + err);
@@ -591,7 +601,7 @@ async function userOrders(req, res) {
           delverydate: "$userOrders.delverydate",
           status: "$userOrders.status",
           address: "$userOrders.address",
-          totalAmount:"$userOrders.totalAmount",
+          totalAmount: "$userOrders.totalAmount",
           products: "$userOrders.products.productDetails", // Reshape here
           __v: "$userOrders.__v",
         },
@@ -618,7 +628,7 @@ async function userOrders(req, res) {
         const orderId = userOrder._id;
         const productQty = await getOrderProductByOrderId(orderId, product._id);
         product.qty = productQty.qty;
-        product.finalprice=productQty.price
+        product.finalprice = productQty.price;
         // product.price=
         console.log(productQty + " this is the qty of product");
       }
@@ -709,12 +719,83 @@ async function cancelOrder(req, res) {
     console.log("Error during cancel order" + err);
   }
 }
+function genereateRazopayforOrder(req, res) {
+  try {
+    const { totalAmount, userId } = req.body;
+    const KEY_ID = process.env.RAZORPAY_KEYID;
+    const KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
+    const Razorpay = require("razorpay");
+    const razorpay = new Razorpay({
+      key_id: KEY_ID, // Use 'key_id' instead of 'KEY_ID'
+      key_secret: KEY_SECRET,
+    });
+    let options = {
+      amount: totalAmount * 100, // Amount in paise (multiply by 100 to convert to currency)
+      currency: "INR",
+      receipt: userId,
+      payment_capture: 1,
+    };
+    razorpay.orders.create(options, (err, order) => {
+      if (err) {
+        console.error("Razorpay order creation error", err);
+        return res.status(500).json({ error: "Razorpay order creation error" });
+      } else {
+        res.json({ order });
+      }
+    });
+  } catch (err) {
+    console.log("errr in rzp9090  -?" + err);
+    res.json({ error: "Err is " + err });
+  }
+}
+function razopayPaymentVerification(req, res) {
+  try {
+    const { orderid, paymentId } = req.body;
+    const Razorpay = require("razorpay");
+    const KEY_ID = process.env.RAZORPAY_KEYID;
+    const KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
+    const razorpay = new Razorpay({
+      key_id: KEY_ID, // Use 'key_id' instead of 'KEY_ID'
+      key_secret: KEY_SECRET,
+    });
+    let status = true;
+    razorpay.payments
+      .fetch(paymentId)
+      .then((payment) => {
+        if (payment.status === "captured") {
+          // Payment was successfully captured
+          res.json({ status: true });
+        } else {
+          // Payment verification failed
+          res
+            .status(400)
+            .json({ status: false, message: "Payment verification failed" });
+        }
+      })
+      .catch((error) => {
+        console.error("Razorpay payment verification error:", error);
+        res
+          .status(500)
+          .json({
+            status: false,
+            message: "An error occurred while verifying the payment" + error,
+          });
+      });
+    //  res.json({status})
+  } catch (err) {
+    res
+      .status(500)
+      .json({ status: false, message: "Error in verify payment " + err });
+  }
+}
 const forUser = {
   checkOut,
   placeOrder,
   placeOrderPost,
   userOrders,
   cancelOrder,
+  genereateRazopayforOrder,
+  razopayPaymentVerification,
 };
 
 // user contor end

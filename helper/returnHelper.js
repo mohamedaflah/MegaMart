@@ -12,16 +12,18 @@ async function getAllreturnedProductByUseId(userId) {
       const prooductId = returnedProduct.product;
       const orderDate = returnedProduct.orderDate;
       const returnedDate = returnedProduct.returnedDate;
+      const fianlprice = returnedProduct.finalPrice;
       const product = await productCollection.findById(prooductId);
       const combinedInfo = {
         product,
         orderDate,
+        fianlprice,
         returnedDate,
       };
       console.log("Returned Produc", JSON.stringify(combinedInfo));
       returnAr.push(combinedInfo);
     }
-   console.log(JSON.stringify(returnAr)+' after pushi')
+    console.log(JSON.stringify(returnAr) + " after pushi");
     return returnAr;
   } catch (err) {
     console.error("Erro in return helper " + err);

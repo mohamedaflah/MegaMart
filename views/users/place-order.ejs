@@ -110,7 +110,7 @@
                            
                        </div> -->
                        <div class="priceandimg select button" style="justify-content: space-between;">
-                           <button type="submit" id="placeorderbtn">Place Order 
+                           <button id="placeorderbtn" type="button" onclick="placeOrderCheckout('<%-id%>','<%-totalAmount%>')">Place Order 
                                <!-- <img src="/images/loading.png"  alt=""> -->
                            </button>
                            <a   id="add" href="/users/account/address/add-address/<%-id%>" class="add">
@@ -124,5 +124,6 @@
         </div>
     </div>
     </div>    
+    
     <%-include('../partials/footer.ejs') %>
 
