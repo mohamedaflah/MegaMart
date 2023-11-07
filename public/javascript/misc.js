@@ -72,16 +72,25 @@ function increaseCartQty(
       }
     });
 }
-function removeItemfromCart(userId, productId, deletingRow,subtotal,maintotal) {
+function removeItemfromCart(
+  userId,
+  productId,
+  deletingRow,
+  subtotal,
+  maintotal
+) {
   document.getElementById(deletingRow).style.display = "none";
   fetch(`/users/product/cart/deleteitemfromcart/${userId}/${productId}/`)
-  .then((response) => response.json())
-  .then((res) => {
-    if(res.status){
-      console.log('item delted');
-      document.getElementById(subtotal).textContent=`₹${res.totalAmount}`
-      document.getElementById(maintotal).textContent=res.totalAmount;
-    }
+    .then((response) => response.json())
+    .then((res) => {
+      if (res.status) {
+        console.log("item delted");
+        document.getElementById(subtotal).textContent = `₹${res.totalAmount}`;
+        document.getElementById(maintotal).textContent = res.totalAmount;
+        const cartCount = document.getElementById("cartCnt");
+        const current=cartCount.textContent
+        cartCount.textContent=Number(current)-1;
+      }
     });
 }
 function showPreviewImg(productId, todisplayimage, appendingImgtag) {
@@ -153,7 +162,7 @@ function checkoutWithAddress(event, userId) {
   //  alert('error is'+err)
   //});
 }
-function submitCheckoutFormExplicit(userId) {
+function submitCheckoutFormExplicit(userId,seletedmethod) {
   const address = document.querySelector('input[name="address"]:checked');
   const payment_method = document.querySelector(
     'input[name="payment_method"]:checked'
@@ -174,7 +183,9 @@ function submitCheckoutFormExplicit(userId) {
   })
     .then((response) => response.json())
     .then((res) => {
-      location.href = `/users/product/checkout/payment/success/${userId}`;
+      if(seletedmethod!=='Bank'){
+        location.href = `/users/product/checkout/payment/success/${userId}`;
+      }
     });
 }
 
@@ -185,10 +196,10 @@ function placeOrderCheckout(userId, totalAmount) {
   ).value;
   if (payment_method == "COD") {
     // document.getElementById("forCheckout").submit();
-    submitCheckoutFormExplicit(userId);
+    submitCheckoutFormExplicit(userId,'COD');
   } else if (payment_method == "Wallet") {
     // document.getElementById("forCheckout").submit();
-    submitCheckoutFormExplicit(userId);
+    submitCheckoutFormExplicit(userId,'Wallet');
   } else {
     fetch("/users/orders/checkout/razorpay/generaterazorpay", {
       method: "POST",
@@ -253,7 +264,8 @@ function verifyRazorpayPayment(orderId, paymentId, userId) {
         if (res.status) {
           // document.getElementById("forCheckout").submit();
 
-          submitCheckoutFormExplicit(localStorage.getItem("userId"));
+          submitCheckoutFormExplicit(localStorage.getItem("userId"),'Bank');
+          location.href = `/users/product/checkout/payment/success/${userId}`
           // document.querySelector(".checkandAddress").submit();
           // const address = document.querySelector(
           //   'input[name="address"]:checked'

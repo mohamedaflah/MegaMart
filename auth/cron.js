@@ -17,11 +17,14 @@ async function updateCouponStatus() {
       console.log(`Updated coupon expired` + JSON.stringify(expiredCoupons));
     } catch (err) {
       console.log("error in updating coupon" + err);
+      res.status(404)
     }
   });
 }
 async function updateProductOffer() {
-  cron.schedule("* * * * * *", async () => {
+  cron.schedule("*/1 * * * *", async () => {
+    // * * * * * *
+    // console.log('running');
     const currentDate = new Date();
     const productOffer=await products.find({"offer.offertype":"product"})
     productOffer.forEach(async(product)=>{

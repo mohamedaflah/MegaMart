@@ -83,7 +83,7 @@ module.exports = {
       // console.log(Number(totalAmount-getDiscount)+'    sd havi');
       totalAmount = totalAmount - totalAmount * (getDiscount / 100);
       console.log(totalAmount + " in cart total -_____)_))_");
-      return totalAmount;
+      return Math.ceil(totalAmount);
     } catch (error) {
       console.error("Error in getTotalAmount:", error);
       return 0; // Handle the error gracefully, returning 0 or any other appropriate value.

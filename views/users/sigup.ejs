@@ -1,129 +1,328 @@
 <%-include('../partials/header.ejs') %>
     <div class="signup">
         <div class="loading">
-            <img src="/images/loading.png"  alt="">
+            <img src="/images/loading.png" alt="">
         </div>
         <div class="signup_section">
-            <div class="image_section">
-                <img src="/images/removedSign.png" alt="">
-            </div>
             <div class="input_section">
 
-                <form   class="controlls" id="form"  onsubmit="signupSubmit(event)">
+                <form class="controlls" id="form" onsubmit="signupSubmit(event)">
                     <div class="header_text">
-                        <h2>Create An Account</h2>
+                        <h2 style="font-weight: 400;">Create An Account</h2>
                         <p>Enter your detail below</p>
                     </div>
-                    <%if(err){%>
-                        <p id="err" style="visibility: visible;">
-                            <span id="displayErr"><%-err%></span>
-                            <a id="errclose" style="cursor: pointer;"><img src="/images/cross.png"
-                                        style="width: 13px;height:13px" alt=""></a></p>
-                    <%}%>
-                        <p id="err" style="visibility: hidden;">
-                            <span id="displayErr"></span>
-                            <a id="errclose" style="cursor: pointer;"><img src="/images/cross.png"
-                                        style="width: 13px;height:13px" alt=""></a></p>
 
-                            <div class="input_box">
-                                <div class="inp_l">
-                                    <input list="uniques" name="name" id="name" autofocus autocomplete="off" oninput="getUnique(event)">
-                                    <label for="name">Name</label>
-                                     <datalist id="uniques" style="background-color: red;">
-                                       
-                                     </datalist>
-                                </div>
-                            </div>
-                            <div class="input_box">
-                                <div class="inp_l">
-                                    <input type="text" id="emailOrMobileInput" name="email_or_Phone"  >
-                                    <label for="emailOrMobileInput">Enter Your Email Address</label>
-                                </div>
-                            </div>
-                            <div class="input_box">
-                                <div class="inp_l">
-                                    <input type="password" name="password" id="pass"  >
-                                    <label for="pass">Password</label>
-                                </div>
-                            </div>
-                            <div class="input_box" style="display: flex;align-items: center;justify-content: center;">
-                                <button type="submit">Create Account</button>
-                            </div>
-                            <div class="input_box" style="display: flex;align-items: center;justify-content: center;">
-                                <a href="/auth/google/signup" id="signup"
-                                    style="border: 1px solid rgba(0, 0, 0, 0.40); background: #fff;color:#000;display:flex;align-items:center;justify-content: center;gap:5px">
-                                    <img src="/images/Google.svg" alt="">
-                                    Signup with Google</a>
-                            </div>
-                            <div class="input_box" style="display: flex;align-items: center;justify-content: center;">
-                                <p>Already Have an Account? <a href="/user/login"> Login</a></p>
-                            </div>
+                    <p id="err" style="visibility: hidden;">
+                        <span id="displayErr"></span>
+                        <a id="errclose" style="cursor: pointer;"><img src="/images/cross.png"
+                                style="width: 13px;height:13px" alt=""></a>
+                    </p>
+
+                    <div class="input_box">
+                        <div class="inp_l">
+                            <input list="uniques" name="name" id="name" autofocus autocomplete="off"
+                                oninput="getUnique(event,'uniqueUsername')">
+                            <label for="name">Name</label>
+                            <datalist id="uniques" style="background-color: red;">
+
+                            </datalist>
+                        </div>
+                    </div>
+                    <div class="input_box">
+                        <div class="inp_l">
+                            <input type="text" id="emailOrMobileInput" name="email_or_Phone"
+                                oninput="checkUniqueEmail(event,'uniqueemail')">
+                            <label for="emailOrMobileInput">Enter Your Email Address</label>
+                        </div>
+                    </div>
+                    <div class="input_box">
+                        <div class="inp_l">
+                            <input type="password" name="password" id="pass" oninput="checkPassValidation(event,'eightchar','containnum','containcharcter','containuppercase','containlowercase')">
+                            <label for="pass">Password</label>
+                        </div>
+                    </div>
+                    <div class="input_box">
+                        <div class="inp_l">
+                            <input type="password" oninput="checkPasswordisMatch(event)" id="pass">
+                            <label for="pass">Confirm Password</label>
+                        </div>
+                    </div>
+                    <div class="input_box" style="display: flex;align-items: center;justify-content: center;">
+                        <button type="submit" disabled="true" id="createAc">Create Account</button>
+                    </div>
+                    <div class="input_box" style="display: flex;align-items: center;justify-content: center;">
+                        <a href="/auth/google/signup" id="signup"
+                            style="border: 1px solid rgba(0, 0, 0, 0.40); background: #fff;color:#000;display:flex;align-items:center;justify-content: center;gap:5px">
+                            <img src="/images/Google.svg" alt="">
+                            Signup with Google</a>
+                    </div>
+                    <div class="input_box" style="display: flex;align-items: center;justify-content: center;">
+                        <p>Already Have an Account? <a href="/user/login"> Login</a></p>
+                    </div>
 
                 </form>
+            </div>
+            <div class="image_section">
+                <div class="heading_inst">
+                    <div class="instruction_heading">
+                        <h2 style="font-weight: 400;">Instructions</h2>
+                    </div>
+                    <div class="instruction_box">
+                        <div class="instructions">
+                            <div>
+                                <span>
+                                    <!-- <img src="/images/icons8-verified-account-94 1.svg" alt="" id="uniqueUsername"> -->
+                                    <img src="/images/icons8-close-94 1.svg" alt="" id="uniqueUsername">
+                                </span>
+                                <span>
+                                    Unique username
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    <img src="/images/icons8-close-94 1.svg" alt="" id="uniqueemail">
+                                </span>
+                                <span>
+                                    Unique Email
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    <img src="/images/icons8-close-94 1.svg" alt="" id="eightchar">
+                                </span>
+                                <span>
+                                    Password 8 charcters
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    <img src="/images/icons8-close-94 1.svg" alt="" id="containnum">
+                                </span>
+                                <span>
+                                    Password Contain atelast one number
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    <img src="/images/icons8-close-94 1.svg" alt="" id="containcharcter">
+                                </span>
+                                <span>
+                                    Password Contain atelast one charecter
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    <img src="/images/icons8-close-94 1.svg" alt="" id="containuppercase">
+                                </span>
+                                <span>
+                                    Password Contain atelast one Uppercase letter
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    <img src="/images/icons8-close-94 1.svg" alt="" id="containlowercase">
+                                </span>
+                                <span>
+                                    Password Contain atelast one Lowercase letter
+                                </span>
+                            </div>
+                            <div>
+                                <span>
+                                    <img src="/images/icons8-close-94 1.svg" alt="" id="passMatchImg">
+                                </span>
+                                <span>
+                                    Password Match
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     </div>
     <script>
-        let errMsg=document.getElementById("err")
-        let closeErr=document.getElementById("errclose")
-        let displayErr=document.getElementById("displayErr")
-        function signupSubmit(event){
+        let passCases={
+            passMatch:false,
+            eightCharecter:false,
+            containNumber:false,
+            containCharcter:false,
+            containUppercase:false,
+            containLowercase:false,
+            unniqueUsername:false,
+            uniqueEmail:false,
+        }
+        function validateForm() {
+            try{
+                if (
+                  passCases.passMatch&&
+                  passCases.eightCharecter&&
+                  passCases.containNumber&&
+                  passCases.containUppercase&&
+                  passCases.containCharcter&&
+                  passCases.containLowercase&&
+                  passCases.uniqueEmail&&
+                  passCases.unniqueUsername
+                ) {
+                  document.getElementById("createAc").disabled=false
+                  document.getElementById("createAc").style.background='#44bc61'
+                  
+                } 
+            }catch(err){
+                alert(err)
+            }
+          }
+        let errMsg = document.getElementById("err")
+        let closeErr = document.getElementById("errclose")
+        let displayErr = document.getElementById("displayErr")
+        function signupSubmit(event) {
             event.preventDefault()
-            const name=document.getElementById("name")
-            const email=document.getElementById("emailOrMobileInput")
-            const pass=document.getElementById("pass")
-            const formDetail={
-                name:name.value,
-                email_or_Phone:email.value,
-                password:pass.value
+            const name = document.getElementById("name")
+            const email = document.getElementById("emailOrMobileInput")
+            const pass = document.getElementById("pass")
+            const formDetail = {
+                name: name.value,
+                email_or_Phone: email.value,
+                password: pass.value
             }
             //alert(JSON.stringify(formDetail))
-            if(!name.value.trim() || !email.value.trim() || !pass.value.trim()){
-                displayErr.innerHTML=`Must enter values in all fields`
+            if (!name.value.trim() || !email.value.trim() || !pass.value.trim()) {
+                displayErr.innerHTML = `Must enter values in all fields`
                 errMsg.style.visibility = "visible";
                 return;
             }
-            fetch('/signup',{
-                method:"POST",
-                headers:{'Content-Type': 'application/json'},
-                body:JSON.stringify(formDetail)
-            }).then((response)=>response.json()).then((res)=>{
-                
-                    if(res.status){
-                        location.href=`/mail/confirm`
-                    }else if(res.err){    
-                    document.querySelector('.loading').style.display='none'
-                    errMsg.style.visibility='visible'
-                    displayErr.textContent=res.err
+            fetch('/signup', {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formDetail)
+            }).then((response) => response.json()).then((res) => {
+
+                if (res.status) {
+                    location.href = `/mail/confirm`
+                } else if (res.err) {
+                    document.querySelector('.loading').style.display = 'none'
+                    errMsg.style.visibility = 'visible'
+                    displayErr.textContent = res.err
                     return
                 }
             })
         }
-        closeErr.addEventListener('click',()=>{
-            errMsg.style.visibility='hidden'
+        closeErr.addEventListener('click', () => {
+            errMsg.style.visibility = 'hidden'
         })
-        function getUnique(event){
-            let body={
-                name:event.target.value
+        function getUnique(event, changeImg) {
+            let imgTag = document.getElementById(changeImg)
+            let body = {
+                name: event.target.value
             }
-            fetch("/users/signup/suggestunique",{
-                method:'POST',
-                headers:{'Content-Type': 'application/json'},
-                body:JSON.stringify(body)
-            }).then((response)=>response.json()).
-            then((res)=>{
-                let suggestions=res.suggestions;
-                let optons=[];
-                suggestions.forEach((value)=>{
-                    let option=`<option value="${value}"> ✅ ${value}</option>`
+            fetch(`/users/signup/checkunique`, {
+                method: "POST",
+                headers: { "Content-type": "application/json" },
+                body: JSON.stringify(body)
+            }).then(response => response.json()).then(res => {
+                if (res.status) {
+                    imgTag.src = `/images/icons8-verified-account-94 1.svg`
+                    passCases.unniqueUsername=true
+                } else {
+                    imgTag.src = `/images/icons8-close-94 1.svg`
+                    passCases.unniqueUsername=false
+                }
+                validateForm()
+            })
+            fetch("/users/signup/suggestunique", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            }).then((response) => response.json()).
+                then((res) => {
+                    let suggestions = res.suggestions;
+                    let optons = [];
+                    suggestions.forEach((value) => {
+                        let option = `<option value="${value}"> ✅ ${value}</option>`
                         optons.push(option)
+                    })
+                    let joined = optons.join('')
+                    document.getElementById("uniques").innerHTML = joined
                 })
-                let joined=optons.join('')
-                document.getElementById("uniques").innerHTML=joined
+        }
+        function checkPasswordisMatch(event) {
+            let currentPass = document.getElementById("pass")
+            let imgTag = document.getElementById("passMatchImg")
+            if (event.target.value == currentPass.value) {
+                imgTag.src = `/images/icons8-verified-account-94 1.svg`
+                passCases.passMatch=true
+            } else {
+                imgTag.src = `/images/icons8-close-94 1.svg`
+                passCases.passMatch=false
+            }
+            validateForm()
+
+        }
+        function checkUniqueEmail(event, changeImg) {
+
+            fetch(`/users/signup/checkuniqueemail`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: event.target.value })
+            }).then(response => response.json()).then(res => {
+                if (res.status) {
+                    document.getElementById(changeImg).src = `/images/icons8-verified-account-94 1.svg`
+                    passCases.uniqueEmail=true
+                } else {
+                    document.getElementById(changeImg).src = `/images/icons8-close-94 1.svg`
+                    passCases.uniqueEmail=false
+                }
+                validateForm()
             })
         }
+        function checkPassValidation(event,eightCharecter,containNumber,containCharcter,containUppercase,containLowecase){
+            if(event.target.value.trim().length>=8){
+                document.getElementById(eightCharecter).src=`/images/icons8-verified-account-94 1.svg`
+                passCases.eightCharecter=true
+            }else{
+                document.getElementById(eightCharecter).src=`/images/icons8-close-94 1.svg`
+                passCases.eightCharecter=false
+            }
+            if(hasNumbers(event.target.value.trim())){
+                document.getElementById(containNumber).src=`/images/icons8-verified-account-94 1.svg`
+                passCases.containNumber=true
+            }else{
+                document.getElementById(containNumber).src=`/images/icons8-close-94 1.svg`
+                passCases.containNumber=false
+            }
+            if(containsCharacter(event.target.value.trim())){
+                document.getElementById(containCharcter).src=`/images/icons8-verified-account-94 1.svg`
+                passCases.containCharcter=true
+            }else{
+                document.getElementById(containCharcter).src=`/images/icons8-close-94 1.svg`
+                passCases.containCharcter=false
+            }
+            if(/[A-Z]/.test(event.target.value.trim())){
+                document.getElementById(containUppercase).src=`/images/icons8-verified-account-94 1.svg`
+                passCases.containUppercase=true
+            }else{
+                document.getElementById(containUppercase).src=`/images/icons8-close-94 1.svg`
+                passCases.containUppercase=false
+            }
+            if(/[a-z]/.test(event.target.value.trim())){
+                document.getElementById(containLowecase).src=`/images/icons8-verified-account-94 1.svg`
+                passCases.containLowercase=true
+            }else{
+                document.getElementById(containLowecase).src=`/images/icons8-close-94 1.svg`
+                passCases.containLowercase=false
+            }
+            validateForm()
+        }
+        const hasNumbers = (str) => {
+            return /\d/.test(str);
+          };
+          function containsCharacter(password) {
+            // Define a regular expression that checks for at least one character
+            const characterRegex = /[a-zA-Z]/;
+          
+            // Test the password against the regular expression
+            return characterRegex.test(password);
+          }    
     </script>
-    
-    <%-include('../partials/footer.ejs') %>
 
+    <%-include('../partials/footer.ejs') %>

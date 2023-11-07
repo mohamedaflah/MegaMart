@@ -118,6 +118,14 @@ async function getCartPage(req, res) {
     let userCartdata = await getUserCartData(userId);
     // let totalAmount = 0;
     let totalAmount = await getTotalAmount(userId);
+    let couponExistStatus;
+    let cart=await cartCollection.findOne({userId:new ObjectId(userId)})
+    console.log(cart)
+    if(cart.getDiscount<=0){
+      couponExistStatus=false
+    }else{
+      couponExistStatus=true
+    }
     console.log(totalAmount + " in cart");
     if (userCartdata.length <= 0) {
       // console.log(JSON.stringify(userCartdata) + "data");
@@ -128,6 +136,7 @@ async function getCartPage(req, res) {
         userCartdata,
         totalAmount,
         empty: false,
+        couponExistStatus,
         whishCount,
       });
     } else {
@@ -138,6 +147,7 @@ async function getCartPage(req, res) {
         userCartdata,
         totalAmount,
         empty: true,
+        couponExistStatus,
         whishCount
       });
     }

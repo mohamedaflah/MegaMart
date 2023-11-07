@@ -97,11 +97,16 @@
                 <!-- <a href="">Update cart</a> -->
             </div>
             <div class="place-order">
-                
+                <%if(!couponExistStatus){%>
                     <form  class="sp cupon_apply" onsubmit="applyCoupon(event,'<%-id%>','<%-totalAmount%>')" id="couponBoxInput">
                         <input type="text" placeholder="Apply Coupon" name="couponcode" id="couponcode">
                         <button type="submit">apply Coupon</button>
                     </form>
+                    <%}else{%>
+                        <form  class="sp cupon_apply" style="visibility: hidden;">
+                            
+                        </form>
+                <%}%>
                 
                 <div class="place_order_box">
                     <div class="headertxt">

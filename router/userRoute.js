@@ -36,6 +36,8 @@ const {
   updateProfile,
   updateProfilePost,
   suggestUniqueUsername,
+  checkUniqueOrnot,
+  checkUniqueEmail,
   // resendOTP,
 } = require("../controller/userController");
 const { checkOut, placeOrder, placeOrderPost, userOrders, cancelOrder,genereateRazopayforOrder,razopayPaymentVerification } =
@@ -120,7 +122,8 @@ router.get("/auth/google/callback", (req, res, next) => {
       // Handle authentication failure
       console.error("Authentication failed:", info.message);
 
-      return res.redirect("/signup?err=Email%20Already%20Exists");
+      // return res.redirect("/signup?err=Email%20Already%20Exists");
+      return res.json({err:info.message});
       // return res.render("users/sigup", {
       //   err: "Email Alread Exist",
       //   profile: false,
@@ -156,6 +159,13 @@ router.get("/auth/google/login/callback", (req, res, next) => {
     }
     if (!user) {
       console.error("Authentication failed during Google login:", info.message);
+      // return res.json({err:info.message})
+      // fetch('/user/login',{
+      //   method:"POST",
+      //   body:user
+      // }).then(response=>response.json()).then(res=>{
+
+      // })
       return res.render("users/login", {
         err: "User not found",
         profile: false,
@@ -307,4 +317,6 @@ router.get('/users/products/returns/seeallreturns/:userId',sesionVerification,se
 
 router.post('/users/orders/checkout/razorpay/generaterazorpay',genereateRazopayforOrder)
 router.post("/users/orders/checkout/razorpay/verifyrazorpaypayment",razopayPaymentVerification)
+router.post('/users/signup/checkunique',checkUniqueOrnot)
+router.post('/users/signup/checkuniqueemail',checkUniqueEmail)
 module.exports = { router };

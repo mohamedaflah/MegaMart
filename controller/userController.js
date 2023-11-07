@@ -336,7 +336,7 @@ async function confirmPost(req, res) {
             userId: new ObjectId(req.session.userreferalId),
             amount: offAmt[0].offeramount,
             creditAmount: offAmt[0].offeramount,
-          }).save()
+          }).save();
         }
         await referalDb.updateOne(
           { _id: new ObjectId(referalId) },
@@ -717,6 +717,35 @@ async function suggestUniqueUsername(req, res) {
   }
   res.json({ suggestions: usernames });
 }
+async function checkUniqueOrnot(req, res) {
+  if (!req.body.name || req.body.name === "") {
+    return res.json({ status: false });
+  }
+  if(req.body.name.length<=2){
+    return res.json({ status: false });
+  }
+  let isExist = await UserCollection.findOne({ name: req.body.name });
+  if (isExist) {
+    res.json({ status: false });
+  } else {
+    res.json({ status: true });
+  }
+}
+async function checkUniqueEmail(req, res) {
+  if(!EmailCheck(req.body.email)){
+    return res.json({ status: false });
+  }
+  if (!req.body.email || req.body.email === "") {
+    return res.json({ status: false });
+  }
+  const emailExist = await UserCollection.findOne({ email: req.body.email });
+  const emailExistinAdmin=await adminCollection.findOne({email:req.body.email})
+  if(emailExist || emailExistinAdmin){
+    res.json({status:false})
+  }else{
+    res.json({status:true})
+  }
+}
 module.exports = {
   userHome,
   singupGet,
@@ -744,4 +773,6 @@ module.exports = {
   updateProfile,
   updateProfilePost,
   suggestUniqueUsername,
+  checkUniqueOrnot,
+  checkUniqueEmail,
 };
