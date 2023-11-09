@@ -1,4 +1,10 @@
+const speakeasy = require("speakeasy");
 function generateOTP() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-  }
-  module.exports={generateOTP}
+  const secret = speakeasy.generateSecret({ length: 6 });
+  const code = speakeasy.totp({
+    secret: secret.base32,
+    encoding: "base32",
+  });
+  return code;
+}
+module.exports = { generateOTP };

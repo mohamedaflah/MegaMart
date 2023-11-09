@@ -1,5 +1,5 @@
 <%-include('../partials/header.ejs') %>
-    <div class="signup">
+    <div class="signup" id="forLogin">
         <div class="toast" id="toast">
             <i class="cls fa-sharp fa-circle-xmark"></i>
             <span id="msg">Login Failed</span>
@@ -7,10 +7,10 @@
                 <span class="bar"></span>
             </div>
         </div>
-        <div class="signup_section">
-            <div class="input_section">
+        <div class="signup_section" style="height: 540px;">
+            <div class="input_section forlogin" style="border-radius: 4px;">
 
-                <form   class="controlls" id="formLogin" onsubmit="loginFormSubmit(event)">
+                <form   class="controlls" style="height: 90%;" id="formLogin" onsubmit="loginFormSubmit(event)">
                     <div class="header_text">
                         <h2>Login to MegaMart</h2>
                         <p>Enter your detail below</p>
@@ -39,8 +39,8 @@
                                 <p style="padding:0"><a href="/users/accounts/forgotpassword/" style="color: rgb(201, 43, 43);text-decoration: none;"> Forgot Password?</a></p>
                             </div>
                             <div class="input_box" style="display: flex;align-items: center;justify-content: center;">
-                                <a href="/auth/google/login" id="signup"
-                                    style="border: 1px solid rgba(0, 0, 0, 0.40); background: #fff;color:#000;display:flex;align-items:center;justify-content: center;gap:5px">
+                                <a href="/auth/google/login" id="signup" 
+                                    style="border: 1px solid rgba(0, 0, 0, 0.40); background: #fff;color:#000;display:flex;align-items:center;justify-content: center;gap:5px;">
                                     <img src="/images/Google.svg" alt="">
                                     Login with Google</a>
                             </div>

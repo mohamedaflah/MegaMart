@@ -167,7 +167,10 @@
                   document.getElementById("createAc").disabled=false
                   document.getElementById("createAc").style.background='#44bc61'
                   
-                } 
+                } else{
+                    document.getElementById("createAc").disabled=true
+                    document.getElementById("createAc").style.background='#db4444'
+                }
             }catch(err){
                 alert(err)
             }

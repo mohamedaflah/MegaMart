@@ -165,7 +165,7 @@ async function increaseQuantity(req, res) {
     _id: new ObjectId(productId),
   });
   if (currentData && currentData.stock) {
-    if (currentData.qty >= currentData.stock) {
+    if (qtyChange >= currentData.stock) {
       return;
     }
   }
@@ -193,24 +193,6 @@ async function increaseQuantity(req, res) {
   // res.status(200).json({message:"su"})
 }
 
-// Quantity Decreasing while Decrease Button
-async function decreaseQuantity(req, res) {
-  const userId = req.params.userId;
-  const productId = req.params.productId;
-  await cartCollection.updateOne(
-    {
-      userId: new ObjectId(userId),
-      "products.productId": new ObjectId(productId),
-    },
-    {
-      $inc: { "products.$.qty": -1 },
-    }
-  );
-
-  res.redirect(`/users/product/cart/showcart/${userId}`);
-}
-
-// Remove Item From Cart while clicking Delete Button
 async function deleteItemFromCart(req, res) {
   try{
 
@@ -240,6 +222,6 @@ module.exports = {
   addTocart,
   getCartPage,
   increaseQuantity,
-  decreaseQuantity,
+  // decreaseQuantity,
   deleteItemFromCart,
 };

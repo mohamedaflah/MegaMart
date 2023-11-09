@@ -75,6 +75,11 @@ function previewImage(inputId, imgId, label) {
     img.src = "";
   }
 }
+function delteImageInAddProduct(event,input,image,label){
+  document.getElementById(input).value=''
+  document.getElementById(image).src=''
+  document.getElementById(label).style.display='block'
+}
 // function closePreviewImage(inputId,imgId,label){
 //   const input=document.getElementById(inputId)
 //   const image=document.getElementById(imgId)

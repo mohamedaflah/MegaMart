@@ -15,11 +15,13 @@ const { getCartCount } = require("../helper/cart-helper");
 const CategoryDb = require("../model/collections/CategoryDb");
 const isValidMail = require("../auth/isValidEmail");
 const { generateUniqueUsername } = require("../helper/generteUniquename");
+const { generateOTP } = require("../auth/otpgen");
 const walletCollection = require("../model/collections/wallet");
 const { getWhishLIstCount } = require("../helper/whish-helper");
 const couponCollection = require("../model/collections/cupon");
 const adminCollection = require("../model/collections/adminDb");
 const referalDb = require("../model/collections/referalDb");
+const { sendOtp } = require("../helper/sendmail");
 changeStream.on("otpDeleted", (documentId) => {
   console.log(`OTP document deleted with ID: ${documentId}`);
 });
@@ -721,7 +723,7 @@ async function checkUniqueOrnot(req, res) {
   if (!req.body.name || req.body.name === "") {
     return res.json({ status: false });
   }
-  if(req.body.name.length<=2){
+  if (req.body.name.length <= 2) {
     return res.json({ status: false });
   }
   let isExist = await UserCollection.findOne({ name: req.body.name });
@@ -732,19 +734,42 @@ async function checkUniqueOrnot(req, res) {
   }
 }
 async function checkUniqueEmail(req, res) {
-  if(!EmailCheck(req.body.email)){
+  if (!EmailCheck(req.body.email)) {
     return res.json({ status: false });
   }
   if (!req.body.email || req.body.email === "") {
     return res.json({ status: false });
   }
   const emailExist = await UserCollection.findOne({ email: req.body.email });
-  const emailExistinAdmin=await adminCollection.findOne({email:req.body.email})
-  if(emailExist || emailExistinAdmin){
-    res.json({status:false})
-  }else{
-    res.json({status:true})
+  const emailExistinAdmin = await adminCollection.findOne({
+    email: req.body.email,
+  });
+  if (emailExist || emailExistinAdmin) {
+    res.json({ status: false });
+  } else {
+    res.json({ status: true });
   }
+}
+function resendOTP(req, res) {
+  const userEmail = req.session.userFullDetail.email_or_Phone;
+  const from = process.env.USER_EMAIL;
+  const otp = generateOTP();
+  const subject = "MegaMart Confirmation Registration Resned OTP";
+  sendOtp(otp, from, userEmail, subject)
+    .then(async (response) => {
+      
+        // res.status(200).json({ status: true });
+        await OtpCollection.deleteOne({ useremail: userEmail });
+        await new OtpCollection({
+          otpnum: otp,
+          useremail: userEmail,
+        }).save();
+        res.json({status:true})
+      
+    })
+    .catch((err) => {
+      console.log("error in send resend Otp", err);
+    });
 }
 module.exports = {
   userHome,
@@ -769,10 +794,10 @@ module.exports = {
   forgotPasswordPasswordEnter,
   forgotPasswordPasswordEnterPost,
   getPaymentSuccess,
-  // resendOTP,
   updateProfile,
   updateProfilePost,
   suggestUniqueUsername,
   checkUniqueOrnot,
   checkUniqueEmail,
+  resendOTP,
 };

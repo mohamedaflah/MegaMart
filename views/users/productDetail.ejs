@@ -1,40 +1,69 @@
 <%-include('../partials/header.ejs') %>
-<div class="home">
+<div class="home" style="min-height: 100vh;" id="he">
+    <img src="/images/addAnim.gif" alt="" class="addtocartanima">
+    <style>
+        figure.zoom {
+            position: relative;
+            width: 500px;
+            overflow: hidden;
+            cursor: zoom-in;
+            background-position: 50% 50%;
+            display: flex;
+            justify-content: center;
+            height: 100%;
+            position: relative;
+            background-repeat: no-repeat;
+            background-size: cover;
+          }
+          figure.zoom img:hover {
+            opacity: 0;
+          }
+          
+          figure.zoom img {
+            transition: opacity 0.5s;
+            display: block;
+            width: 100%;
+          }
+
+          
+    </style>
     <%-include('../partials/profiletoggle.ejs')%>
     <div class="product_detail_section">
         <div class="preview_images" id="prev">
             <div class="imgs">
                 <div class="secondaries">
-                    <a style="cursor: pointer;" class="prviewImg preview1" 
-                    href="/products/product-detail/<%-productData[0]._id%>/image1"
-                    <!-- onclick="showPreviewImg('<%-productData[0]._id%>','image1','toDisplay5')" -->
+                    <!-- href="/products/product-detail/<%-productData[0]._id%>/image1" -->
+                    <a style="cursor: pointer;" class="prviewImg preview1"
+                    onclick="showPreviewImg('<%-productData[0]._id%>','toDisplay1','toDisplay5')">
                     
-                        <img src="/product-images/<%-productData[0].image[0].image1%>" alt="" id="toDisplay1">
+                        <img src="/product-images/<%-productData[0].image[0].image1%>" alt="" id="toDisplay1" >
                     </a>
+                    <!-- href="/products/product-detail/<%-productData[0]._id%>/image2" -->
                     <a style="cursor: pointer;" class="prviewImg preview2" 
-                    href="/products/product-detail/<%-productData[0]._id%>/image2"
-                     <!-- onclick="showPreviewImg('<%-productData[0]._id%>','image2','toDisplay5')" -->
+                    onclick="showPreviewImg('<%-productData[0]._id%>','toDisplay2','toDisplay5')">
                      
                         <img src="/product-images/<%-productData[0].image[0].image2%>" alt="" id="toDisplay2">
                     </a>
+                    <!-- href="/products/product-detail/<%-productData[0]._id%>/image3" -->
                     <a style="cursor: pointer;" class="prviewImg preview3" 
-                    href="/products/product-detail/<%-productData[0]._id%>/image3"
-                     <!-- onclick="showPreviewImg('<%-productData[0]._id%>','image3','toDisplay5')" -->
+                    onclick="showPreviewImg('<%-productData[0]._id%>','toDisplay3','toDisplay5')">
                      
                         <img src="/product-images/<%-productData[0].image[0].image3%>" alt="" id="toDisplay3">
                     </a>
+                    <!-- href="/products/product-detail/<%-productData[0]._id%>/image4" -->
                     <a style="cursor: pointer;" class="prviewImg preview4"
-                     href="/products/product-detail/<%-productData[0]._id%>/image4"
-                     <!-- onclick="showPreviewImg('<%-productData[0]._id%>','image4','toDisplay5')" -->
+                    onclick="showPreviewImg('<%-productData[0]._id%>','toDisplay4','toDisplay5')">
                      
                         <img src="/product-images/<%-productData[0].image[0].image4%>" alt="" id="toDisplay4">
                     </a>
                 </div>
-                <a style="cursor: pointer;" class="main" id="img-container"
-                 href="/products/product-detail/<%-productData[0]._id%>/mainimage"
-                <!-- onclick="showPreviewImg('<%-productData[0]._id%>','mainimage','toDisplay5')" -->
+                <!-- href="/products/product-detail/<%-productData[0]._id%>/mainimage" -->
                 
-                    <img src="/product-images/<%-productData[0].image[0][mainImageas]%>" alt="" id="toDisplay5">
+                <a style="cursor: pointer;" class="main" id="img-container"
+                onclick="showPreviewImg('<%-productData[0]._id%>','toDisplay5','toDisplay5')">
+                <figure  id="figure" class="zoom" onmousemove="zoom(event,this,'toDisplay5')" onmouseleave="removeBg(this,'toDisplay5')">
+                    <img src="/product-images/<%-productData[0].image[0][mainImageas]%>" alt="" id="toDisplay5" style="height: 50%;width: auto;position: absolute;top:50%;left:50%;transform: translate(-50%,-50%);">
+                </figure>
                 </a>
                 
             </div>
@@ -96,7 +125,7 @@
                                 ">₹<%-productData[0].price%></h3>
                             </div>
                             <p><%-productData[0].description%></p>
-                            <ul>
+                            <ul class="list">
                                <%for(let data in productData[0].specification[0]){%>
                                 <li><%-productData[0].specification[0][data]%></li>
                              <%  }%>
@@ -115,7 +144,7 @@
                         <%}else if(exist){%>
                             <a  onclick="location.href=`http://localhost:5001/users/product/cart/showcart/<%-id%>`" class="addtocart">Go to Cart</a>
                             <%}else{%>
-                                <a  onclick="addToCart(event,'<%-productData[0]._id%>','detail','<%-id%>')" class="addtocart" id="cartTxt">Add to Cart</a>
+                                <a  onclick="addToCart(event,'<%-productData[0]._id%>','detail','<%-id%>','addtocartanima')" class="addtocart" id="cartTxt">Add to Cart</a>
                          <%} %>
                         <a href="" class="whish"><img class="whish" src="/images/heart.svg" alt=""></a>
                     </div>
@@ -181,9 +210,24 @@
         width:300,
         zoomWidth:500,
         zoomHeigth:500,
+        zIndex:99,
         offset:{vertical:0,horizontal:210}
     }
-    new ImageZoom(document.getElementById('img-container'),options)
+    new ImageZoom(document.getElementById('image-container'),options)
+    function zoom(e,figure,img){
+        document.getElementById(img).style.display='none'
+        figure.style.background=`url(${document.getElementById(img).src})`
+        var zoomer = e.currentTarget;
+        e.offsetX ? offsetX = e.offsetX : offsetX = e.touches[0].pageX
+        e.offsetY ? offsetY = e.offsetY : offsetX = e.touches[0].pageX
+        x = offsetX/zoomer.offsetWidth*100
+        y = offsetY/zoomer.offsetHeight*100
+        zoomer.style.backgroundPosition = x + '% ' + y + '%';
+      }
+      function removeBg(figure,image){
+        figure.style.background=''
+        document.getElementById(image).style.display='block'
+      }
      //function detailImage(productId,imagetoChange,imgdisplay){
     //  const ImgTags=document.getElementById(imgdisplay)
     //  fetch(`/products/product-detail/${productId}/${imagetoChange}`).

@@ -38,6 +38,9 @@ body {
   align-items: center;
   justify-content: space-between;
 }
+.main_nav .nav_bar .all_items .logo_section .sma {
+  display: none;
+}
 .main_nav .nav_bar .all_items .links {
   display: flex;
   align-items: flex-start;
@@ -46,6 +49,9 @@ body {
 .main_nav .nav_bar .all_items .links a {
   color: black;
   text-decoration: none;
+}
+.main_nav .nav_bar .all_items .links a span {
+  display: none;
 }
 .main_nav .nav_bar .all_items .icons {
   display: flex;
@@ -61,7 +67,7 @@ body {
 }
 .main_nav .nav_bar .all_items .icons .search_box input {
   border: none;
-  width: 180px;
+  width: 100%;
   outline: none;
   background: transparent;
   font-size: 12px;
@@ -95,10 +101,10 @@ body {
 
 .main_nav .nav_bar .all_items .links.active {
   display: flex;
-  background-color: rgba(193, 187, 187, 0.716);
+  background-color: rgba(255, 255, 255, 0.97);
   position: absolute;
   right: 0;
-  z-index: 99;
+  z-index: 999;
   top: 100px;
   display: flex;
   flex-direction: column;
@@ -106,10 +112,32 @@ body {
   height: 100vh;
   padding: 10px;
 }
+.main_nav .nav_bar .all_items .links.active a {
+  width: 100%;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  border-bottom: 1px solid rgb(42, 41, 41);
+  position: relative;
+}
+.main_nav .nav_bar .all_items .links.active a .ico {
+  position: static;
+  margin-right: 5px;
+}
+.main_nav .nav_bar .all_items .links.active a span {
+  display: block;
+  position: absolute;
+  right: 0;
+}
 
 @media (max-width: 750px) {
   .main_nav .top_bar {
     font-size: 10px;
+  }
+  .main_nav .nav_bar .all_items .logo_section a img {
+    width: 90px;
+    height: auto;
   }
 }
 @media (max-width: 950px) {
@@ -118,6 +146,9 @@ body {
   }
 }
 @media (max-width: 1047px) {
+  .main_nav .nav_bar .all_items .icons {
+    gap: 10px;
+  }
   .main_nav .nav_bar .all_items .icons .menu {
     display: block;
     cursor: pointer;
@@ -141,11 +172,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  gap: 10px;
 }
 .main_footer .footer_center .footer_items {
-  width: 300px;
-  min-height: 250px;
+  width: 210px;
+  min-height: 180px;
   color: white;
   padding: 10px;
 }
@@ -181,6 +211,13 @@ body {
 .home {
   position: relative;
   height: 100vh;
+}
+.home .addtocartanima {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%, -50%);
+  display: none;
 }
 .home .referal_share {
   position: absolute;
@@ -892,6 +929,10 @@ body {
   justify-content: center;
   margin-top: 2px;
 }
+.home .cart_secttion .table .row .cols img {
+  width: 40px;
+  height: auto;
+}
 .home .cart_secttion .table .row .cols:nth-child(1) {
   width: 40%;
 }
@@ -1118,10 +1159,12 @@ body {
 .home .products_section .product_card .image_section {
   width: 100%;
   height: 70%;
-  background-color: #f5f5f5;
+  background-color: #ffffff;
+  border: 1px solid #ebeaea;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 5px;
   position: relative;
 }
 .home .products_section .product_card .image_section .move {
@@ -1240,6 +1283,73 @@ body {
     font-size: 12px;
   }
 }
+@media (max-width: 800px) {
+  .home .profile_card {
+    min-height: 800px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .home .profile_card .side_section {
+    flex-direction: row;
+    width: 100%;
+    min-height: 200px;
+    flex-wrap: wrap;
+    align-items: start;
+  }
+  .home .profile_card .side_section .profile_with_img {
+    min-width: 40%;
+  }
+  .home .profile_card .side_section .profile_with_img .img-s {
+    width: 37px;
+    height: 37px;
+  }
+  .home .profile_card .side_section .navigations {
+    width: 400px;
+    height: 80px;
+    order: -1;
+    display: flex;
+    padding: 0;
+    align-items: center;
+  }
+  .home .profile_card .side_section .navigations .acc_manage {
+    background-color: rebeccapurple;
+    min-height: 80px;
+    margin: 0;
+    display: flex;
+    border-radius: 4px;
+    background: #f5f5f5;
+    align-items: center;
+  }
+  .home .profile_card .side_section .navigations .acc_manage .links {
+    flex-direction: row;
+    align-items: center;
+    width: 90%;
+  }
+  .home .profile_card .side_section .navigations .acc_manage .links a {
+    background-color: #e1e1e1;
+    height: 30px;
+    width: 200px;
+    display: flex;
+    font-size: 12px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+  }
+  .home .profile_card .side_section .navigations .acc_manage p {
+    display: none;
+  }
+  .home .profile_card .content_s {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    overflow: hidden;
+  }
+  .home .profile_card .content_s .profile_card {
+    min-height: 500px;
+  }
+}
 @media (max-width: 713px) {
   .home .profile_card {
     width: 90%;
@@ -1275,6 +1385,44 @@ body {
   }
 }
 @media (max-width: 870px) {
+  .home .cart_secttion {
+    width: 100%;
+    padding: 0 10px;
+  }
+  .home .cart_secttion .table .row .cols {
+    position: relative;
+    font-size: 12px;
+  }
+  .home .cart_secttion .table .row .cols .qty_button {
+    height: 35px;
+    width: 40px;
+    justify-content: space-between;
+  }
+  .home .cart_secttion .table .row .cols .qty_button .text {
+    width: 50%;
+  }
+  .home .cart_secttion .table .row .cols .qty_button .nav a svg {
+    width: 15px;
+    height: auto;
+  }
+  .home .cart_secttion .table .row .cols .cancel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .home .cart_secttion .table .row .cols .cancel svg {
+    width: 20px;
+    height: auto;
+  }
+  .home .cart_secttion .table .row .cols img {
+    width: 30px;
+    height: auto;
+  }
   .home .cart_secttion .place-order {
     flex-direction: column;
     justify-content: center;
@@ -1909,6 +2057,13 @@ body .signup_section .input_section .controlls .sp_ {
   height: 100px;
   border-bottom: none;
 }
+body .signup_section .input_section.forlogin {
+  box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.05);
+  width: 470px;
+}
+body .signup_section .input_section.forlogin .controlls {
+  width: 90%;
+}
 
 #err {
   background-color: white;
@@ -1942,21 +2097,63 @@ body .signup_section .input_section .controlls .sp_ {
   }
 }
 @media (max-width: 768px) {
+  body .signup .checkout .checkandAddress .checkoutform .address {
+    height: 280px;
+  }
   body .signup .checkout .checkandAddress .checkoutbox .item_box {
     width: 320px;
+  }
+}
+@media (max-width: 664px) {
+  body .signup .checkout .heading {
+    text-align: center;
+    height: 50px;
+    border-bottom: 1px solid #f5f5f5;
+  }
+  body .signup .checkout .heading h1 {
+    letter-spacing: 0px;
+  }
+  body .signup .checkout .checkandAddress {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  body .signup .checkout .checkandAddress .checkoutform {
+    height: 300px;
+    width: 90%;
+  }
+  body .signup .checkout .checkandAddress .checkoutbox {
+    width: 90%;
+  }
+  body .signup .checkout .checkandAddress .checkoutbox .item_box {
+    width: 90%;
   }
 }
 @media (max-width: 600px) {
   .main_nav .nav_bar .all_items .logo_section img {
     width: 100px;
   }
+  .main_nav .nav_bar .all_items .icons {
+    gap: 10px;
+  }
   .main_nav .nav_bar .all_items .icons .search_box input {
     width: 100px;
   }
 }
-@media (max-width: 500px) {
-  .main_nav .nav_bar .all_items .logo_section img {
-    width: 90px;
+@media (max-width: 588px) {
+  .main_nav .nav_bar .all_items {
+    width: 95%;
+  }
+  .main_nav .nav_bar .all_items .logo_section .sma {
+    display: block;
+    width: 33px;
+    height: auto;
+  }
+  .main_nav .nav_bar .all_items .logo_section .main {
+    display: none;
+  }
+  .main_nav .nav_bar .all_items .icons {
+    gap: 5px;
   }
   .main_nav .nav_bar .all_items .icons img {
     width: 25px;
@@ -2010,21 +2207,56 @@ body .signup_section .input_section .controlls .sp_ {
     width: 18px;
     height: 18px;
   }
+  body .signup .input_section.forlogin {
+    width: 450px;
+  }
+  body .signup .input_section.forlogin .controlls .input_box button {
+    min-height: 35px;
+  }
+  body .signup .input_section.forlogin .controlls .input_box #signup {
+    height: 35px;
+  }
   body .signup .signup_section {
     display: flex;
     align-items: center;
     justify-content: center;
     min-width: 80%;
+    padding: 5px;
     height: auto;
     flex-direction: column;
   }
   body .signup .signup_section .image_section {
     height: 400px;
+    width: 400px;
+  }
+  body .signup .signup_section .image_section .heading_inst .instruction_box .instructions {
+    width: 100%;
+    padding: 0 5px;
+    gap: 0;
+  }
+  body .signup .signup_section .image_section .heading_inst .instruction_box .instructions div {
+    display: flex;
+    min-height: 30px;
+    margin: 0;
+    font-size: 12px;
+  }
+  body .signup .signup_section .image_section .heading_inst .instruction_box .instructions div span {
+    margin: 0 5px;
+  }
+  body .signup .signup_section .input_section {
+    width: 400px;
   }
 }
 @media (max-width: 527px) {
-  body .signup .signup_section .input_section .controlls {
+  body #forLogin {
+    height: 70vh;
+  }
+  body #forLogin .signup_section .input_section .controlls {
     width: 100%;
+  }
+  body #forLogin .signup_section .input_section.forlogin {
+    width: 330px;
+    height: 420px;
   }
 }
 /* Global styles */
@@ -2392,19 +2624,24 @@ button:hover {
 .home .product_detail_section .preview_images .imgs .secondaries .prviewImg {
   width: 100%;
   height: 23%;
-  background: #f5f5f5;
+  background: #ffffff;
+  border: 1px solid #dfdede;
   display: flex;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
   align-items: center;
   justify-content: center;
 }
 .home .product_detail_section .preview_images .imgs .secondaries .prviewImg img {
-  height: 70%;
+  height: 80%;
   width: auto;
 }
 .home .product_detail_section .preview_images .imgs .main {
   width: 72%;
   height: 100%;
-  background: #f5f5f5;
+  background: #ffffff;
+  border: 1px solid #dfdede;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2429,7 +2666,7 @@ button:hover {
 .home .product_detail_section .descriptions .contents .head_part {
   display: flex;
   flex-direction: column;
-  min-height: 55%;
+  min-height: 280px;
   border-bottom: 1px solid gray;
 }
 .home .product_detail_section .descriptions .contents .head_part h1 {
@@ -2453,6 +2690,9 @@ button:hover {
 }
 .home .product_detail_section .descriptions .contents .head_part .rate_and_desc .price h3 {
   font-size: 15px;
+}
+.home .product_detail_section .descriptions .contents .head_part .rate_and_desc .list {
+  min-height: 105px;
 }
 .home .product_detail_section .descriptions .contents .head_part .rate_and_desc p {
   font-size: 12px;
@@ -2548,6 +2788,7 @@ button:hover {
   }
   .home .product_detail_section .preview_images {
     width: 90%;
+    height: 400px;
   }
   .home .product_detail_section .preview_images .imgs {
     flex-direction: column-reverse;
@@ -2558,6 +2799,7 @@ button:hover {
   .home .product_detail_section .preview_images .imgs .secondaries {
     flex-direction: row;
     width: 100%;
+    margin-top: 5px;
     justify-content: space-between;
     height: 30%;
   }
@@ -2575,8 +2817,10 @@ button:hover {
 @media (max-width: 953px) {
   .home .product_detail_section {
     flex-direction: column;
-    height: 100vh;
+    min-height: 125vh;
     width: 700px;
+    align-items: center;
+    justify-content: center;
   }
 }
 @media (max-width: 722px) {
@@ -2595,6 +2839,7 @@ button:hover {
   }
   .home .product_detail_section .preview_images {
     height: 50%;
+    height: 300px;
   }
 }
 @media (max-width: 405px) {
@@ -3052,6 +3297,23 @@ button:hover {
   transform: translate(-50%, -50%);
   z-index: 99;
 }
+.home .content_section .items_section .add_product_section .form_section .images .preview_imgs .secondary label button {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 2px;
+  font-size: 12px;
+  background: #000000;
+  border-radius: 50%;
+  color: #ffffff;
+}
 .home .content_section .items_section .add_product_section .form_section .images .preview_imgs .secondary label .trash1 {
   width: auto;
   height: auto;
@@ -3101,6 +3363,19 @@ button:hover {
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 99;
+}
+.home .content_section .items_section .add_product_section .form_section .images .preview_imgs .main label button {
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  color: #fff;
+  background: #000000;
+  border-radius: 50%;
+  position: absolute;
+  right: 3px;
+  width: 27px;
+  height: 27px;
+  bottom: 3px;
 }
 .home .content_section .items_section .add_product_section .form_section .inputs {
   width: 50%;
@@ -3595,5 +3870,62 @@ button:hover {
   }
   .home .content_section .items_section .key_val z .detail {
     width: 90%;
+  }
+}
+@media (max-width: 1282px) {
+  .signup .checkout.foradding {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .signup .checkout.foradding .heading {
+    display: flex;
+    justify-content: center;
+  }
+  .signup .checkout.foradding .checkandAddress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 800px;
+  }
+  .signup .checkout.foradding .checkandAddress .checkoutform {
+    align-items: center;
+    justify-content: baseline;
+  }
+  .signup .checkout.foradding .checkandAddress .checkoutform .controller {
+    width: 40%;
+    margin: 5px;
+  }
+  .signup .checkout.foradding .checkandAddress .checkoutform .controller input {
+    width: 100%;
+  }
+}
+@media (max-width: 867px) {
+  .signup .checkout.foradding .checkandAddress {
+    width: 500px;
+  }
+  .signup .checkout.foradding .checkandAddress .checkoutform {
+    justify-content: space-between;
+  }
+}
+@media (max-width: 665px) {
+  .signup .checkout.foradding {
+    height: 100vh;
+    justify-content: start;
+  }
+  .signup .checkout.foradding .checkandAddress {
+    width: 100%;
+    height: 100%;
+  }
+  .signup .checkout.foradding .checkandAddress .checkoutform {
+    min-height: 680px;
+    overflow: hidden;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+  }
+  .signup .checkout.foradding .checkandAddress .checkoutform .controller {
+    width: 80%;
   }
 }/*# sourceMappingURL=style.css.map */

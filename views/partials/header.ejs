@@ -53,17 +53,58 @@
                 <div class="logo_section">
                     <a href="/">
 
-                        <img src="/images/Logo.svg" alt="">
+                        <img src="/images/Logo.svg" alt="" class="main">
+                        <img src="/images/title_icon.png" alt="" class="sma">
                     </a>
                 </div>
                 <div class="links">
-                    <a href="/">Home</a>
-                    <a href="">Contact</a>
-                    <a href="">About</a>
+                    <a href="/">
+                        <span class="ico">
+                            <i class="fa-sharp fa-house"></i>
+                        </span>
+                        Home
+                        <span>
+                            <img src="/images/icons8-right-16.png" alt="">
+                        </span>
+                    </a>
+                    <a href="">
+                        <span class="ico">
+                            <i class="fa-solid fa-address-card"></i>
+                        </span>
+                        Contact
+                        <span>
+                            <img src="/images/icons8-right-16.png" alt="">
+                        </span>
+                    </a>
+                    <a href="">
+                        <span class="ico">
+                            <i class="fa-solid fa-eject"></i>
+                        </span>
+                        About
+                        <span>
+                            <img src="/images/icons8-right-16.png" alt="">
+                        </span>
+                    </a>
                     <%if(profile){%>
-                        <a href="/users/product/orders/trackorders/<%-id%>">Orders</a>
+                        <a href="/users/product/orders/trackorders/<%-id%>">
+                            <span class="ico">
+                                <i class="fa-solid fa-truck"></i>
+                            </span>
+                            Orders
+                            <span>
+                                <img src="/images/icons8-right-16.png" alt="">
+                            </span>
+                        </a>
                         <%}else{%>
-                            <a href="/user/login">Login</a>
+                            <a href="/user/login">
+                                <span class="ico">
+                                    <i class="fa-solid fa-at"></i>
+                                </span>
+                                Login
+                                <span>
+                                    <img src="/images/icons8-right-16.png" alt="">
+                                </span>
+                            </a>
                         <%}%>
                 </div>
                 <div class="icons">

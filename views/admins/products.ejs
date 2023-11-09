@@ -36,6 +36,7 @@
                                                 Upload Preview image 1
                                             </p>
                                             <img src="" alt="" id="im1">
+                                            <button type="button"><i class="fa-solid fa-trash" onclick="delteImageInAddProduct(event,'imag1','im1','1l')"></i></button>
                                             <!-- <div class="trash">
                                                 <img src="/images/delforwhish.svg" alt="">
                                             </div> -->
@@ -46,16 +47,18 @@
                                                 Upload Preview image 2
                                             </p>
                                             <img src="" alt="" id="im2">
+                                            <button type="button"><i class="fa-solid fa-trash" onclick="delteImageInAddProduct(event,'imag2','im2','l2')"></i></button>
                                             <!-- <div class="trash">
                                                 <img src="/images/delforwhish.svg" alt="">
                                             </div> -->
                                         </label>
-                                        <input type="file" name="image3" accept="image/*" id="imag3"  onchange="previewImage('imag3', 'im3','l3')">
+                                        <input type="file" name="image3" accept="image/*" id="imag3"  onchange="previewImage('imag3', 'im3','l2')">
                                         <label for="imag3">
                                             <p id="l3">
                                                 Upload Preview image 3
                                             </p>
                                             <img src="" alt="" id="im3">
+                                            <button type="button"><i class="fa-solid fa-trash" onclick="delteImageInAddProduct(event,'imag3','im3','l3')"></i></button>
                                             <!-- <div class="trash">
                                                 <img src="/images/delforwhish.svg" alt="">
                                             </div> -->
@@ -66,6 +69,9 @@
                                                 Upload Preview image 4
                                             </p>
                                             <img src="" alt="" id="im4">
+                                            <button type="button" onclick="delteImageInAddProduct(event,'imag4','im4','l4')">
+                                                <i class="fa-solid fa-trash"></i>
+                                            </button>
                                             <!-- <div class="trash">
                                                 <img src="/images/delforwhish.svg" alt="">
                                             </div> -->
@@ -77,6 +83,7 @@
                                             <p id="ml">
                                                 Main image
                                             </p>
+                                            <button style="z-index: 9999;" type="button" onclick="delteImageInAddProduct(event,'main','mn','ml')"><i class="fa-solid fa-trash"></i></button>
                                             <img src="" alt="" id="mn">
                                             <!-- <div class="trash">
                                                 <img src="/images/delforwhish.svg" alt="">

@@ -1,12 +1,16 @@
-async function addToCart(event, id, inComing, userId) {
+async function addToCart(event, id, inComing, userId,animationimg) {
   event.stopPropagation();
   if (inComing == "home") {
     document.getElementById("changeImg").src = "/images/sp3.svg";
   } else {
+    document.querySelector(`.${animationimg}`).style.display='block'
     document.getElementById("cartTxt").textContent = "Go to Cart";
     document.getElementById("cartTxt").onclick = () => {
       location.href = `http://localhost:5001/users/product/cart/showcart/${userId}`;
     };
+    setTimeout(()=>{
+      document.querySelector(`.${animationimg}`).style.display='none'
+    },1500)
   }
   // /users/product/add-to-cart/<%-data._id%>
   const response = await fetch(`/users/product/add-to-cart/${id}`).then(
@@ -39,6 +43,9 @@ function increaseCartQty(
       if (response.status) {
         let currentQty = qtyShow.textContent;
         let afterIncreasing = Number(currentQty) + Number(qtytochange);
+        if(afterIncreasing<1){
+          return
+        }
         const subtotal = document.getElementById(subtotalsection);
         if (afterIncreasing <= 9) {
           qtyShow.textContent = `0${afterIncreasing}`;
@@ -95,23 +102,28 @@ function removeItemfromCart(
 }
 function showPreviewImg(productId, todisplayimage, appendingImgtag) {
   let displayImageTag = document.getElementById(appendingImgtag);
-  fetch(`/product/detail/${productId}/${todisplayimage}`)
-    .then((response) => response.json())
-    .then((res) => {
-      let productData = res.productData;
-      let image = res.mainImageas;
-      displayImageTag.src = `/product-images/${productData[0].image[0][image]}`;
-      displayImageTag.setAttribute(
-        "src",
-        `/product-images/${productData[0].image[0][image]}`
-      );
-    });
+  // fetch(`/product/detail/${productId}/${todisplayimage}`)
+  //   .then((response) => response.json())
+  //   .then((res) => {
+  //     let productData = res.productData;
+  //     let image = res.mainImageas;
+  //     displayImageTag.src = `/product-images/${productData[0].image[0][image]}`;
+  //     displayImageTag.setAttribute(
+  //       "src",
+  //       `/product-images/${productData[0].image[0][image]}`
+  //     );
+  //   });
+  let alreadySrc=document.getElementById(todisplayimage);
+  let mainsrc=displayImageTag.src;
+  let toSrc=alreadySrc.src;
+  displayImageTag.src=toSrc;
+  alreadySrc.src=mainsrc;
   let options = {
     width: 300,
     zoomWidth: 300,
     offset: { vertical: 0, horizontal: 210 },
   };
-  new ImageZoom(document.getElementById("img-container"), options);
+  new ImageZoom(document.getElementById(appendingImgtag), options);
 }
 
 function checkoutWithAddress(event, userId) {

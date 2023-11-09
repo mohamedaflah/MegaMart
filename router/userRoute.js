@@ -38,7 +38,7 @@ const {
   suggestUniqueUsername,
   checkUniqueOrnot,
   checkUniqueEmail,
-  // resendOTP,
+  resendOTP,
 } = require("../controller/userController");
 const { checkOut, placeOrder, placeOrderPost, userOrders, cancelOrder,genereateRazopayforOrder,razopayPaymentVerification } =
   userOrderHelper;
@@ -64,7 +64,7 @@ const {
   addTocart,
   getCartPage,
   increaseQuantity,
-  decreaseQuantity,
+  // decreaseQuantity,
   deleteItemFromCart,
 } = require("../controller/cartController");
 
@@ -184,7 +184,7 @@ router.get("/failedlogin", FailedLogin);
 router.post("/signup", singupPost);
 router.get("/mail/confirm", confirm);
 router.post("/mail/confirm", confirmPost);
-// router.get('/main/confirm/resendotp/',resendOTP)
+router.get('/mail/confirm/resendotp/',resendOTP)
 router.get("/errorMessage/close", closeErr);
 router.get("/otp/close", otpClose);
 router.get("/user/account/:id", sesionVerification,userAccount);
@@ -201,10 +201,10 @@ router.get('/users/product/whishlist/:id',sesionVerification,getWhishListPage)
 router.get('/users/product/whishlist/add-to-whishlist/:productId/:userId',sesionVerification,addToWhishList)
 router.get('/users/product/whishlist/remove-product-whish/:productId/:userId',removeProductInwhish)
 router.get('/users/product/whishlist/move-product-cart/:productId/:userId',movetoCartinWhishList)
-router.get(
-  "/users/product/cart/decreaseqty/:userId/:productId/",
-  decreaseQuantity
-);
+// router.get(
+//   "/users/product/cart/decreaseqty/:userId/:productId/",
+//   decreaseQuantity
+// );
 router.get(
   "/users/product/cart/deleteitemfromcart/:userId/:productId/",
   deleteItemFromCart
@@ -245,7 +245,7 @@ router.get(
 
 router.get(
   "/users/product/orders/trackorders/:userId",
-  verifySessionAuth,
+  sesionVerification,
   userOrders
 );
 

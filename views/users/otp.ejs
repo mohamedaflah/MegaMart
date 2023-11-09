@@ -19,10 +19,10 @@
             
             <!-- Field to display entered OTP -->
             <input type="text" id="emailverificationCode" placeholder="Enter verification code" name="verifyNum" readonly style="visibility: hidden;">
-            <!-- <div>Expires In: <span id="date"></span>s </div> -->
+            <div>Expires In: <span id="date">60</span>s </div>
             
             <!-- Button to verify OTP -->
-            <button  style="width: 110px;font-size: 12px;display: none;" id="resendBtn">resend OTP</button>
+            <button  style="width: 110px;font-size: 12px;display: none;" id="resendBtn" onclick="resendOtp()" type="button">resend OTP</button>
             <button type="submit" id="verifyEmailOTP" style="font-size: 12px;">VERIFY &amp; PROCEED</button>
         </form>
       </div>
@@ -32,8 +32,8 @@
     const ErrDiv = document.getElementById('err');
     const showErr = document.getElementById('showErr');
     const resnedBtn = document.getElementById('resendBtn');
-    let count = sessionStorage.getItem("count")||60;
-    
+    let initialCount = parseInt(localStorage.getItem('initialCount')) || 60
+    let count = parseInt(localStorage.getItem('count')) || initialCount
     function otpFormSubmit(event) {
         event.preventDefault();
         let formData = {
@@ -59,17 +59,18 @@
             });
     }
     
-    //let s = setInterval(() => {
-    //    document.getElementById('date').textContent = count;
-    //    if (count === 0) {
-    //        clearInterval(s);
-    //    }
-    //    count--;
-//
-    //    sessionStorage.setItem("count",count)
-    //}, 900);
+    let s = setInterval(() => {
+        document.getElementById('date').textContent = count;
+        if (count <= 0) {
+            localStorage.setItem('initialCount', initialCount); 
+            localStorage.setItem("count",count)
+            clearInterval(s);
+        }
+        count--;
+        localStorage.setItem("count",count)
+    }, 1000);
     
-    let milliSecond = 50000;
+    let milliSecond = 60000;
     setTimeout(() => {
         ErrDiv.style.visibility = 'visible';
         showErr.textContent = 'Otp Expired';
@@ -79,6 +80,18 @@
     function errClose() {
         document.getElementById('err').style.visibility = 'hidden';
     }
-    
+    function resendOtp(){
+        fetch("/mail/confirm/resendotp/").then(response=>response.json()).then(res=>{
+            if(res.status){
+                showErr.textContent = 'Otp Resended';
+                resnedBtn.style.display = 'inline-block';
+                resnedBtn.style.color = 'green';
+                setTimeout(()=>{
+                    resnedBtn.style.display='none'
+                },2000)
+                localStorage.setItem('initialCount', 0); 
+            }
+        })
+    }
 </script>
 <%-include('../partials/footer.ejs') %>
