@@ -5,7 +5,10 @@
         </div>
         <div class="signup_section">
             <div class="input_section">
-
+<%var errshow=false%>
+<%if(err){%>
+    <%errshow=err%>
+<%}%>
                 <form class="controlls" id="form" onsubmit="signupSubmit(event)">
                     <div class="header_text">
                         <h2 style="font-weight: 400;">Create An Account</h2>

@@ -80,6 +80,11 @@ async function userHome(req, res) {
     });
   }
 }
+
+function showLanding(req,res){
+  res.render('users/landing')
+}
+
 function singupGet(req, res) {
   if (req.session.userAuth) {
     return res.redirect("/");
@@ -773,6 +778,7 @@ function resendOTP(req, res) {
 }
 module.exports = {
   userHome,
+  showLanding,
   singupGet,
   AfterMailSuccessfull,
   MailVerificationFail,

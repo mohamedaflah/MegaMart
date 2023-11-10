@@ -1,6 +1,8 @@
 <%-include('../partials/header.ejs') %>
 <div class="home" style="min-height: 100vh;">
     <%-include('../partials/profiletoggle.ejs')%>
+    <%if(orderDetail && orderDetail.length > 0 && typeof orderDetail[0].userOrders !== 'undefined'){%>
+    
     <div class="cart_secttion">
         <div class="return_pop" id="returpop">
             <form class="retur_form" id="returnForm" onsubmit="returnForm(event,'<%-id%>')" enctype="multipart/form-data">
@@ -142,5 +144,10 @@
             <%}%>
         <%})%>
     </div>
+    <%}else{%>
+        <div class="cart_secttion">
+            <img src="/images/blankOrder.png" style="height: 100%;width: auto;" alt="">
+        </div>
+    <%}%>
     <%-include('../partials/footer.ejs') %>
 </div>

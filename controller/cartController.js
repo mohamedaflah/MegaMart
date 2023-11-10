@@ -165,9 +165,12 @@ async function increaseQuantity(req, res) {
     _id: new ObjectId(productId),
   });
   if (currentData && currentData.stock) {
-    if (qtyChange >= currentData.stock) {
+    if (qtyChange > currentData.stock) {
       return;
     }
+    // if(qtyChange<1){
+    //   return
+    // }
   }
   
   let data = await cartCollection.findOne({
@@ -222,6 +225,5 @@ module.exports = {
   addTocart,
   getCartPage,
   increaseQuantity,
-  // decreaseQuantity,
   deleteItemFromCart,
 };

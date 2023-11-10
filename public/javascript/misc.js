@@ -43,9 +43,6 @@ function increaseCartQty(
       if (response.status) {
         let currentQty = qtyShow.textContent;
         let afterIncreasing = Number(currentQty) + Number(qtytochange);
-        if(afterIncreasing<1){
-          return
-        }
         const subtotal = document.getElementById(subtotalsection);
         if (afterIncreasing <= 9) {
           qtyShow.textContent = `0${afterIncreasing}`;

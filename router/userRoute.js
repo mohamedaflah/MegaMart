@@ -39,6 +39,7 @@ const {
   checkUniqueOrnot,
   checkUniqueEmail,
   resendOTP,
+  showLanding,
 } = require("../controller/userController");
 const { checkOut, placeOrder, placeOrderPost, userOrders, cancelOrder,genereateRazopayforOrder,razopayPaymentVerification } =
   userOrderHelper;
@@ -89,6 +90,7 @@ const {getReturnedProduct, returnProduct, seeAllreturns}=require("../controller/
 require("../auth/passportAuth");
 require("../auth/LoginwithGoogle");
 router.get("/", userHome);
+router.get("/landing",showLanding)
 router.get("/setSession", sessionsetWhileSignupWithGoogle);
 router.get("/signup", singupGet);
 router.get(
@@ -123,13 +125,12 @@ router.get("/auth/google/callback", (req, res, next) => {
       console.error("Authentication failed:", info.message);
 
       // return res.redirect("/signup?err=Email%20Already%20Exists");
-      return res.json({err:info.message});
-      // return res.render("users/sigup", {
-      //   err: "Email Alread Exist",
-      //   profile: false,
-      //   cartCount: 0,
-      //   id: false,
-      // }); // Redirect to a failure page
+      return res.render("users/sigup", {
+        err: "Email Alread Exist",
+        profile: false,
+        cartCount: 0,
+        id: false,
+      }); // Redirect to a failure page
 
       // fetch('/signup',{
       //   method:"POST",

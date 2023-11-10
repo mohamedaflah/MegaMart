@@ -85,25 +85,9 @@
         });
     </script> -->
 
-    <!-- <script>
-        $(document).ready(function(){
-            $('#form').submit(function(e){
-                e.preventDefault();
-                let name1 = $('#name').val()
-                let email1 = $('#emailOrMobileInput').val()
-                let password1 = $("#pass").val()
-
-                $.ajax({
-                    type:'POST',
-                    url:'/signup',
-                    data:{name:name1,email_or_Phone:email1,password:password1},
-                    success:function(response){
-                        $('#name').val('')
-                        $('#emailOrMobileInput').val('')
-                        $('#pass').val('')
-                    }
-                })
-            })
-        })
-    </script> -->
+    <script>
+        '<%if(err){%>'
+        alert("<%-err%>")
+        '<%}%>'
+    </script>
     <%-include('../partials/footer.ejs') %>

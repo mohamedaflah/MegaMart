@@ -142,7 +142,7 @@
                         <%if( productData[0].stock<=0){%>
                             <a class="addtocart" style="cursor: not-allowed;background-color: #c79c9c;">Add to Cart</a>
                         <%}else if(exist){%>
-                            <a  onclick="location.href=`http://localhost:5001/users/product/cart/showcart/<%-id%>`" class="addtocart">Go to Cart</a>
+                            <a  href="http://localhost:5001/users/product/cart/showcart/<%-id%>" class="addtocart">Go to Cart</a>
                             <%}else{%>
                                 <a  onclick="addToCart(event,'<%-productData[0]._id%>','detail','<%-id%>','addtocartanima')" class="addtocart" id="cartTxt">Add to Cart</a>
                          <%} %>
@@ -213,7 +213,7 @@
         zIndex:99,
         offset:{vertical:0,horizontal:210}
     }
-    new ImageZoom(document.getElementById('image-container'),options)
+    new ImageZoom(document.getElementById('yd'),options)
     function zoom(e,figure,img){
         document.getElementById(img).style.display='none'
         figure.style.background=`url(${document.getElementById(img).src})`

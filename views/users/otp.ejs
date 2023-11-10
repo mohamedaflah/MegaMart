@@ -32,8 +32,7 @@
     const ErrDiv = document.getElementById('err');
     const showErr = document.getElementById('showErr');
     const resnedBtn = document.getElementById('resendBtn');
-    let initialCount = parseInt(localStorage.getItem('initialCount')) || 60
-    let count = parseInt(localStorage.getItem('count')) || initialCount
+    let count=60;
     function otpFormSubmit(event) {
         event.preventDefault();
         let formData = {
@@ -62,13 +61,10 @@
     let s = setInterval(() => {
         document.getElementById('date').textContent = count;
         if (count <= 0) {
-            localStorage.setItem('initialCount', initialCount); 
-            localStorage.setItem("count",count)
             clearInterval(s);
         }
         count--;
-        localStorage.setItem("count",count)
-    }, 1000);
+    }, 950);
     
     let milliSecond = 60000;
     setTimeout(() => {
