@@ -40,6 +40,7 @@ const {
   checkUniqueEmail,
   resendOTP,
   showLanding,
+  showProductPage,
 } = require("../controller/userController");
 const { checkOut, placeOrder, placeOrderPost, userOrders, cancelOrder,genereateRazopayforOrder,razopayPaymentVerification } =
   userOrderHelper;
@@ -91,6 +92,7 @@ require("../auth/passportAuth");
 require("../auth/LoginwithGoogle");
 router.get("/", userHome);
 router.get("/landing",showLanding)
+router.get("/products",showProductPage)
 router.get("/setSession", sessionsetWhileSignupWithGoogle);
 router.get("/signup", singupGet);
 router.get(

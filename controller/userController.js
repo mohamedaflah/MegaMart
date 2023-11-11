@@ -82,9 +82,14 @@ async function userHome(req, res) {
 }
 
 function showLanding(req,res){
-  res.render('users/landing')
+  res.render('users/landing',{profile:false,id:false,cartCount:0,whishCount:0})
 }
-
+async function showProductPage(req,res){
+  const categories=await CategoryDb.find()
+  const brands = await productsCollection.distinct("brand");
+  const products=await productsCollection.find({deletionStatus:false})
+  res.render("users/products",{profile:false,id:false,cartCount:0,whishCount:0,categories,brands,products})
+}
 function singupGet(req, res) {
   if (req.session.userAuth) {
     return res.redirect("/");
@@ -779,6 +784,7 @@ function resendOTP(req, res) {
 module.exports = {
   userHome,
   showLanding,
+  showProductPage,
   singupGet,
   AfterMailSuccessfull,
   MailVerificationFail,

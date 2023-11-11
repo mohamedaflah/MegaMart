@@ -267,6 +267,69 @@ $itemSectionheight: 75vh;
 $topBarwidth: 90%;
 $categoryWidth: 30%;
 
+.main_page{
+  // background: blanchedalmond;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  .side_bar{
+    width: 250px;
+    min-height: 100%;
+    border-right: 1px solid grey;
+    position: sticky;
+    left: 0;
+    top: 0;
+    display: flex;
+    // overflow-y: auto;
+    flex-direction: column;
+    .heading{
+      width: 100%;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      padding-left: 5px;
+      font-weight: 500;
+      border-bottom:1px solid black;
+      font-size: 18px;
+
+    }
+    .filter_value{
+      width: 100%;
+      min-height: 80px;
+      padding: 0 10px;
+      .filter_head{
+        // color: #ffffff;
+        font-size: 14px;
+        text-transform: uppercase;
+      }
+    }
+    .filter_data{
+      width: 100%;
+      min-height:200px;
+      overflow-y: auto;
+      
+
+      ul{
+        list-style: none;
+        font-size: 13px;
+        li{
+          margin: 5px 0;
+          input{
+            accent-color: #db4444;
+          }
+        }
+      }
+    }
+    
+
+
+  }
+  .list_product{
+    
+    width: 100%;
+
+  }
+}
 .home {
   position: relative;
   .addtocartanima {
