@@ -213,6 +213,17 @@ body {
   overflow: hidden;
   display: flex;
 }
+.main_page .top_bar {
+  height: 50px;
+  width: 100%;
+  border-bottom: 1px solid beige;
+  font-size: 14px;
+  display: none;
+  box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.029);
+}
+.main_page .top_bar .br {
+  border-right: 1px solid rgb(126, 126, 122);
+}
 .main_page .side_bar {
   width: 250px;
   min-height: 100%;
@@ -230,7 +241,7 @@ body {
   align-items: center;
   padding-left: 5px;
   font-weight: 500;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid rgb(210, 209, 209);
   font-size: 18px;
 }
 .main_page .side_bar .filter_value {
@@ -261,6 +272,19 @@ body {
   width: 100%;
 }
 
+@media (max-width: 768px) {
+  .main_page {
+    flex-direction: column;
+  }
+  .main_page .side_bar {
+    display: none;
+  }
+  .main_page .top_bar {
+    margin: auto;
+    width: 90%;
+    display: block;
+  }
+}
 .home {
   position: relative;
   height: 100vh;

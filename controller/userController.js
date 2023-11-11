@@ -81,14 +81,54 @@ async function userHome(req, res) {
   }
 }
 
-function showLanding(req,res){
-  res.render('users/landing',{profile:false,id:false,cartCount:0,whishCount:0})
+function showLanding(req, res) {
+  res.render("users/landing", {
+    profile: false,
+    id: false,
+    cartCount: 0,
+    whishCount: 0,
+  });
 }
-async function showProductPage(req,res){
-  const categories=await CategoryDb.find()
+async function showProductPage(req, res) {
+  const categories = await CategoryDb.find();
   const brands = await productsCollection.distinct("brand");
-  const products=await productsCollection.find()
-  res.render("users/products",{profile:false,id:false,cartCount:0,whishCount:0,categories,brands,products})
+  const products = await productsCollection.find().sort({addedDate:-1});
+
+  const userStatus = await UserCollection.findOne({
+    email: req.session.userEmail,
+  });
+  console.log(userStatus)
+  console.log(req.session.userEmail)
+  if (userStatus && userStatus.status) {
+    // return res.render("users/login", {
+    //   profile: false,
+    //   err: "Your Permission Denied by Admin",
+    //   cartCount: false,
+    //   whishCount: false,
+    //   id: false,
+    // });
+    let cartCount=await getCartCount(userStatus._id)
+    let whishCount=await getWhishLIstCount(userStatus._id)
+    return res.render("users/products", {
+      profile: true,
+      id: userStatus._id,
+      cartCount,
+      whishCount,
+      categories,
+      brands,
+      products,
+    });
+  }else{
+    return res.render("users/products", {
+      profile: false,
+      id: false,
+      cartCount:0,
+      whishCount:0,
+      categories,
+      brands,
+      products,
+    });
+  }
 }
 function singupGet(req, res) {
   if (req.session.userAuth) {
@@ -767,15 +807,13 @@ function resendOTP(req, res) {
   const subject = "MegaMart Confirmation Registration Resned OTP";
   sendOtp(otp, from, userEmail, subject)
     .then(async (response) => {
-      
-        // res.status(200).json({ status: true });
-        await OtpCollection.deleteOne({ useremail: userEmail });
-        await new OtpCollection({
-          otpnum: otp,
-          useremail: userEmail,
-        }).save();
-        res.json({status:true})
-      
+      // res.status(200).json({ status: true });
+      await OtpCollection.deleteOne({ useremail: userEmail });
+      await new OtpCollection({
+        otpnum: otp,
+        useremail: userEmail,
+      }).save();
+      res.json({ status: true });
     })
     .catch((err) => {
       console.log("error in send resend Otp", err);

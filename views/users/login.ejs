@@ -52,38 +52,6 @@
         </div>
     </div>
     </div>
-    <!-- <script>
-        $(document).ready(function () {
-            $("#form").on("submit", function (event) {
-                event.preventDefault();
-                let name1 = $('#name').val()
-                let email1 = $('#emailOrMobileInput').val()
-                let password1 = $("#pass").val()
-    
-                // Send a POST request to the server
-                $.ajax({
-                    url: '/signup',
-                    method: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({ name: name1, email_or_Phone: email1, password: password1 }),
-                    success: function (data) {
-                        // Check if the server response indicates success and redirects accordingly
-                        if (data.success) {
-                            // Redirect to the /mail/confirm route
-                            window.location.href = '/mail/confirm';
-                        } else {
-                            // Handle any error messages from the server
-                            alert(data.error);
-                        }
-                    },
-                    error: function (error) {
-                        // Handle AJAX request error
-                        console.error("Error:", error);
-                    }
-                });
-            });
-        });
-    </script> -->
 
     <script>
         '<%if(err){%>'

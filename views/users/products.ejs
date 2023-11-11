@@ -161,7 +161,7 @@
                     </a>
                 </div>
                 <div class="links">
-                    <a href="/">
+                    <a href="/" style="font-size: 14px;">
                         <span class="ico">
                             <i class="fa-sharp fa-house"></i>
                         </span>
@@ -170,7 +170,7 @@
                             <img src="/images/icons8-right-16.png" alt="">
                         </span>
                     </a>
-                    <a href="">
+                    <a href="" style="font-size: 14px;">
                         <span class="ico">
                             <i class="fa-solid fa-address-card"></i>
                         </span>
@@ -179,7 +179,7 @@
                             <img src="/images/icons8-right-16.png" alt="">
                         </span>
                     </a>
-                    <a href="/products">
+                    <a href="/products" style="font-size: 14px;">
                         <span class="ico">
                             <i class="fa-solid fa-eject"></i>
                         </span>
@@ -189,7 +189,7 @@
                         </span>
                     </a>
                     <%if(profile){%>
-                        <a href="/users/product/orders/trackorders/<%-id%>">
+                        <a href="/users/product/orders/trackorders/<%-id%>" style="font-size: 14px;">
                             <span class="ico">
                                 <i class="fa-solid fa-truck"></i>
                             </span>
@@ -199,7 +199,7 @@
                             </span>
                         </a>
                         <%}else{%>
-                            <a href="/user/login">
+                            <a href="/user/login" style="font-size: 14px;">
                                 <span class="ico">
                                     <i class="fa-solid fa-at"></i>
                                 </span>
@@ -254,6 +254,43 @@
         </div>
     </header>
     <main class="main_page" style="min-height: 100vh;">
+        <div class="top_bar d-flex align-items-center position-sticky top-0 d-lg-none d-md-none ">
+            <div class="br w-50 d-flex justify-content-center">
+                <button class="m-0 p-2 bg-transparent text-dark" type="button" data-bs-toggle="modal" data-bs-target="#filtermodal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                        <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+                      </svg> Filter
+                </button>
+            </div>
+            <div class="w-50 d-flex justify-content-center">
+                <button class="m-0 p-2 bg-transparent text-dark">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sort-down" viewBox="0 0 16 16">
+                        <path d="M3.5 2.5a.5.5 0 0 0-1 0v8.793l-1.146-1.147a.5.5 0 0 0-.708.708l2 1.999.007.007a.497.497 0 0 0 .7-.006l2-2a.5.5 0 0 0-.707-.708L3.5 11.293V2.5zm3.5 1a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zM7.5 6a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zm0 3a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1h-1z"/>
+                      </svg>
+                      Sort
+                </button>
+            </div>
+        </div>
+        <div class="modal fade" id="filtermodal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Filters<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
+                    <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+                  </svg>  </h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  ...
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          
         <div class="side_bar">
             <div class="heading">
                 <span>Filters <span class="fa fa-filter" style="font-size: 13px;"></span></span>
@@ -352,7 +389,7 @@
                 <div class="row g-3">
                     <%products.forEach(product=>{%>
                         
-                        <a class="col-xl-2 col-lg-3 col-md-4 col-sm-6 d-flex justify-content-center text-decoration-none text-dark" onclick="window.location.href='/products/product-detail/${productId}/mainimage'">
+                        <a class="col-xl-2 col-lg-3 col-md-4 col-sm-6 d-flex justify-content-center text-decoration-none text-dark" onclick="window.location.href='/products/product-detail/<%-product._id%>/mainimage'">
                            <div class="card d-flex flex-column justify-content-between position-relative" style="width: 12rem;height: 15rem;box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.156);border: none;">
                             <%if(product.stock<1){%>
                                 <span style="font-size: 12px;padding:2px;background: rgba(255, 0, 0, 0.224);width: 90px;margin: 2px;border-radius: 30px;display: flex;align-items: center;justify-content: center;" class="text-white">out of stock</span>
@@ -375,14 +412,28 @@
                                 </span>
                                 <span style="font-size: 13px;text-decoration: line-through;">
                                     <%if(product.discount){%>
-                                        ₹1000
+                                        ₹<%-product.price%>
                                    <% }%>
 
                                 </span>
                             </div>
                             <div class="px-2 d-flex justify-content-between mb-2">
-                                <button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;">Add to cart</button>
-                                <button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;"><i class="fa fa-heart"></i></button>
+                                <%if(product.stock<1){%>
+                                    <button class="btn-dark m-0 py-1 px-3 disabled" style="font-size: 12px;background: rgba(107, 105, 105, 0.818);cursor: no-drop;" disabled>Add to cart</button>
+                                    <%}else{%>
+                                        <%if(id){%>
+
+                                            <button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;">Add to cart</button>
+                                            <%}else{%>
+                                                <button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;" onclick="window.location.href='/user/login'">Add to cart</button>
+                                        <%}%>
+                                    <%}%>
+                                    <%if(id){%>
+
+                                        <button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;"><i class="fa fa-heart"></i></button>
+                                        <%}else{%>
+                                            <button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;" onclick="window.location.href='/user/login'"><i class="fa fa-heart"></i></button>
+                                    <%}%>
                             </div>
                            </div>
                         </a>

@@ -272,6 +272,17 @@ $categoryWidth: 30%;
   position: relative;
   overflow: hidden;
   display: flex;
+  .top_bar{
+    height: 50px;
+    width: 100%;
+    border-bottom:1px solid beige ;
+    font-size: 14px;
+    display: none;
+    box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.029);
+    .br{
+      border-right: 1px solid rgb(126, 126, 122);
+    }
+  }
   .side_bar{
     width: 250px;
     min-height: 100%;
@@ -288,9 +299,10 @@ $categoryWidth: 30%;
       height: 50px;
       display: flex;
       align-items: center;
+      
       padding-left: 5px;
       font-weight: 500;
-      border-bottom:1px solid black;
+      border-bottom:1px solid rgb(210, 209, 209);
       font-size: 18px;
 
     }
@@ -329,6 +341,19 @@ $categoryWidth: 30%;
     
     width: 100%;
 
+  }
+}
+@media(max-width:768px){
+  .main_page{
+    flex-direction: column;
+    .side_bar{
+      display: none;
+    }
+    .top_bar{
+      margin: auto;
+      width: 90%;
+      display: block;
+    }
   }
 }
 .home {
