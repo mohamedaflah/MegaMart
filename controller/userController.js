@@ -87,7 +87,7 @@ function showLanding(req,res){
 async function showProductPage(req,res){
   const categories=await CategoryDb.find()
   const brands = await productsCollection.distinct("brand");
-  const products=await productsCollection.find({deletionStatus:false})
+  const products=await productsCollection.find()
   res.render("users/products",{profile:false,id:false,cartCount:0,whishCount:0,categories,brands,products})
 }
 function singupGet(req, res) {

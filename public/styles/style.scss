@@ -275,7 +275,8 @@ $categoryWidth: 30%;
   .side_bar{
     width: 250px;
     min-height: 100%;
-    border-right: 1px solid grey;
+    
+    box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.295);
     position: sticky;
     left: 0;
     top: 0;
