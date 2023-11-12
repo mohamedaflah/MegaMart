@@ -94,7 +94,7 @@ async function addProduct(req, res) {
     if (price <= discount) {
       return res.json({ err: "Discount Amount Must be Lessthan Price" });
     }
-    if(price<=0){
+    if (price <= 0) {
       return res.json({ err: "Muste enter positive values" });
     }
     if (
@@ -191,7 +191,10 @@ async function postEditProduct(req, res) {
     console.log("category is a ++++++++++" + category);
     // let previousCategoryId=await productCollection.findOne({_id:new ObjectId(proId)})
     let categoryId = await categoryCollection.find({ categoryname: category });
-    await categoryCollection.updateOne({_id:new ObjectId(categoryId[0]._id)},{$inc:{stock:1}})
+    await categoryCollection.updateOne(
+      { _id: new ObjectId(categoryId[0]._id) },
+      { $inc: { stock: 1 } }
+    );
     await productCollection.updateOne(
       { _id: new ObjectId(proId) },
       {
@@ -290,8 +293,6 @@ async function recoverProduct(req, res) {
   );
   res.redirect("/admin/products");
 }
-
-
 
 async function filtereProduct(req, res) {
   const filterorder = req.params.filtereorder;
@@ -527,11 +528,11 @@ async function detailProductGet(req, res) {
     email: req.session.userEmail,
   });
   const userId = userData._id;
-  const whishCount=await getWhishLIstCount(userId)
+  const whishCount = await getWhishLIstCount(userId);
   const cartData = await cartCollection.findOne({
     userId: new ObjectId(userId),
   });
-  let cartCount=await getCartCount(userId)
+  let cartCount = await getCartCount(userId);
 
   let productData = await productCollection.aggregate([
     {
@@ -586,7 +587,7 @@ async function detailProductGet(req, res) {
         currentStatus: true,
         deletionStatus: true,
         stock: true,
-        offer:true,
+        offer: true,
       },
     },
   ]);
@@ -650,7 +651,6 @@ async function searchProduct(req, res) {
     res.json({ productData: productData });
   } else {
     res.json({ productData: productData });
-
   }
 }
 
@@ -679,14 +679,14 @@ async function filteredbyMinandMaxGet(req, res) {
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
-  
+
   const categories = await categoryCollection.find();
   if (req.session.userAuth && userStatus[0].status) {
     const userData = await UserCollection.findOne({
       email: req.session.userEmail,
     });
     const userId = userData._id;
-    const whishCount=await getWhishLIstCount(userId)
+    const whishCount = await getWhishLIstCount(userId);
     var cartCount = await getCartCount(userId);
     console.log("data of a cart " + cartCount);
 
@@ -697,7 +697,7 @@ async function filteredbyMinandMaxGet(req, res) {
       id: userStatus[0]._id,
       err: false,
       categories,
-      whishCount
+      whishCount,
     });
     // return;
   } else {
@@ -769,7 +769,7 @@ async function filterProductwithBrand(req, res) {
     });
     const userId = userData[0]._id;
     var cartCount = await getCartCount(userId);
-    var whishCount=await getWhishLIstCount(userId)
+    var whishCount = await getWhishLIstCount(userId);
     // console.log("data of a cart " + cartCount);
 
     res.render("users/index", {
@@ -793,6 +793,39 @@ async function filterProductwithBrand(req, res) {
       brands,
     });
   }
+}
+async function filteringandSort(req, res) {
+  try{
+    const categories = req.query.category ? req.query.category.split(",") : [];
+    const brands = req.query.brand ? req.query.brand.split(",") : [];
+    const sort = req.query.sort || "";
+  console.log(sort,'sort ')
+    let filterQuery = {};
+    if (categories.length > 0) {
+      filterQuery.category = { $in: categories };
+    }
+    if (brands.length > 0) {
+      filterQuery.brand = { $in: brands };
+    }
+    let sortOption = {};
+    if (sort == "hightolow") {
+      sortOption.price = -1;
+    } else if (sort == "lowtohigh") {
+      sortOption.price = 1;
+    } else if (sort == "latest") {
+      sortOption.addedDate = -1;
+    } else if (sort == "oldest") {
+      sortOption.addedDate = 1;
+    }
+    console.log(filterQuery)
+    console.log(sortOption,'sort option')
+    const data=await productCollection.find(filterQuery).sort(sortOption)
+    // console.log(data)
+    res.json({data})
+  }catch(err){
+    console.log("err in sort and filter"+err);
+  }
+
 }
 async function detailProductForFetch(req, res) {
   console.log("detail api called");
@@ -875,6 +908,7 @@ const usersProduct = {
   filteredbyMinandMaxGet,
   sortProducts,
   filterProductwithBrand,
+  filteringandSort,
   detailProductForFetch,
 };
 // Users controlling End

@@ -77,6 +77,7 @@ const {
   filteredbyMinandMaxGet,
   sortProducts,
   filterProductwithBrand,
+  filteringandSort,
   detailProductForFetch
 } = userProductHelper;
 const {applyCoupon}=require('../controller/cuponController').forUserCoupon
@@ -280,6 +281,7 @@ router.get(
   filteredbyMinandMaxGet
 );
 router.get('/users/product/filteredbybrand',filterProductwithBrand)
+router.get('/users/product/filtereandsort/',filteringandSort)
 router.get(
   "/users/product/checkout/payment/success/:userId",
   verifySessionAuth,

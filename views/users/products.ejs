@@ -285,13 +285,13 @@
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
+                  <button type="button" class="btn btn-primary">Appply</button>
                 </div>
               </div>
             </div>
           </div>
           
-        <div class="side_bar">
+        <form class="side_bar" id="sfs">
             <div class="heading">
                 <span>Filters <span class="fa fa-filter" style="font-size: 13px;"></span></span>
             </div>
@@ -303,7 +303,7 @@
                     <ul>
                         <%categories.forEach((value)=>{%>
                             <li>
-                                <input type="radio" name="category" id="<%- value.categoryname %>" value="<%-value.categoryname %>">
+                                <input type="checkbox" name="category" id="<%- value.categoryname %>" value="<%-value._id %>">
                                 <label for="<%- value.categoryname %>"><%- value.categoryname %></label></li>
                         <%})%>
                     </ul>
@@ -317,7 +317,7 @@
                     <ul>
                         <%brands.forEach((value)=>{%>
                             <li>
-                                <input type="radio" name="brand" id="<%- value %>" value="<%-value %>">
+                                <input type="checkbox" name="brand" id="<%-value%>" value="<%=value %>">
                                 <label for="<%- value %>"><%- value %></label></li>
                         <%})%>
                     </ul>
@@ -375,18 +375,18 @@
                 <div class="filter_data">
                     <ul>
                             <li>
-                                <input type="radio" name="product" id="latest" value="latest">
+                                <input type="radio" name="sort" id="latest" value="latest">
                                 <label for="hightolow">Latest</label></li>
                             <li>
-                                <input type="radio" name="product" id="latest" value="latest">
-                                <label for="lowtohigh">Olders</label></li>
+                                <input type="radio" name="sort" id="oldest" value="oldest">
+                                <label for="lowtohigh">Oldest</label></li>
                     </ul>
                 </div>
             </div>
-        </div>
+        </form>
         <div class="list_product">
             <div class="container my-4">
-                <div class="row g-3">
+                <div class="row g-3" id="displayData">
                     <%products.forEach(product=>{%>
                         
                         <a class="col-xl-2 col-lg-3 col-md-4 col-sm-6 d-flex justify-content-center text-decoration-none text-dark" onclick="window.location.href='/products/product-detail/<%-product._id%>/mainimage'">
@@ -422,9 +422,10 @@
                                     <button class="btn-dark m-0 py-1 px-3 disabled" style="font-size: 12px;background: rgba(107, 105, 105, 0.818);cursor: no-drop;" disabled>Add to cart</button>
                                     <%}else{%>
                                         <%if(id){%>
-
+                                            <span style="display: none;" id="userId"><%-id%></span>
                                             <button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;">Add to cart</button>
                                             <%}else{%>
+                                                <span style="display: none;" id="userId"></span>
                                                 <button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;" onclick="window.location.href='/user/login'">Add to cart</button>
                                         <%}%>
                                     <%}%>
@@ -449,7 +450,7 @@
                 <h5>Subscribe</h5>
                 <p>Get 10% off your first order</p>
                 <div class="footer_input">
-                    <input type="text" placeholder="Enter Your Email">
+                    <input type="text" placeholder="Enter Your Email" class="text-white">
                     <img src="/images/icon-send.svg" alt="">
                 </div>
             </div>
@@ -513,51 +514,8 @@
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
     <script src="/javascript/script.js"></script>
-    <script>
-        const rangeInput = document.querySelectorAll(".range-input input"),
-  priceInput = document.querySelectorAll(".price-input input"),
-  range = document.querySelector(".slider .progress");
-let priceGap = 1000;
-
-priceInput.forEach((input) => {
-  input.addEventListener("input", (e) => {
-    let minPrice = parseInt(priceInput[0].value),
-      maxPrice = parseInt(priceInput[1].value);
-
-    if (maxPrice - minPrice >= priceGap && maxPrice <= rangeInput[1].max) {
-      if (e.target.className === "input-min") {
-        rangeInput[0].value = minPrice;
-        range.style.left = (minPrice / rangeInput[0].max) * 100 + "%";
-      } else {
-        rangeInput[1].value = maxPrice;
-        range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";
-      }
-    }
-  });
-});
-
-rangeInput.forEach((input) => {
-  input.addEventListener("input", (e) => {
-    let minVal = parseInt(rangeInput[0].value),
-      maxVal = parseInt(rangeInput[1].value);
-
-    if (maxVal - minVal < priceGap) {
-      if (e.target.className === "range-min") {
-        rangeInput[0].value = maxVal - priceGap;
-      } else {
-        rangeInput[1].value = minVal + priceGap;
-      }
-    } else {
-      priceInput[0].value = minVal;
-      priceInput[1].value = maxVal;
-      range.style.left = (minVal / rangeInput[0].max) * 100 + "%";
-      range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";
-    }
-  });
-});
-
-    </script>
     <script src="/javascript/validate.js"></script>
+    <script src="/javascript/productlist.js"></script>
     <script>
         const popup=document.querySelector('.forsort')
         const srtBtn=document.querySelector(".sorting")

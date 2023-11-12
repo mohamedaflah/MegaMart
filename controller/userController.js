@@ -92,7 +92,7 @@ function showLanding(req, res) {
 async function showProductPage(req, res) {
   const categories = await CategoryDb.find();
   const brands = await productsCollection.distinct("brand");
-  const products = await productsCollection.find().sort({addedDate:-1});
+  const products = await productsCollection.find({deletionStatus:false}).sort({addedDate:-1});
 
   const userStatus = await UserCollection.findOne({
     email: req.session.userEmail,
