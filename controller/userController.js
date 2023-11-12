@@ -92,13 +92,16 @@ function showLanding(req, res) {
 async function showProductPage(req, res) {
   const categories = await CategoryDb.find();
   const brands = await productsCollection.distinct("brand");
-  const products = await productsCollection.find({deletionStatus:false}).sort({addedDate:-1});
-
+  const products = await productsCollection
+    .find({ deletionStatus: false })
+    .sort({ addedDate: -1 });
+  const min = Math.min(...products.map((item) => item.price));
+  const max = Math.max(...products.map((item) => item.price));
   const userStatus = await UserCollection.findOne({
     email: req.session.userEmail,
   });
-  console.log(userStatus)
-  console.log(req.session.userEmail)
+  console.log(userStatus);
+  console.log(req.session.userEmail);
   if (userStatus && userStatus.status) {
     // return res.render("users/login", {
     //   profile: false,
@@ -107,8 +110,8 @@ async function showProductPage(req, res) {
     //   whishCount: false,
     //   id: false,
     // });
-    let cartCount=await getCartCount(userStatus._id)
-    let whishCount=await getWhishLIstCount(userStatus._id)
+    let cartCount = await getCartCount(userStatus._id);
+    let whishCount = await getWhishLIstCount(userStatus._id);
     return res.render("users/products", {
       profile: true,
       id: userStatus._id,
@@ -117,16 +120,20 @@ async function showProductPage(req, res) {
       categories,
       brands,
       products,
+      min,
+      max,
     });
-  }else{
+  } else {
     return res.render("users/products", {
       profile: false,
       id: false,
-      cartCount:0,
-      whishCount:0,
+      cartCount: 0,
+      whishCount: 0,
       categories,
       brands,
       products,
+      min,
+      max,
     });
   }
 }

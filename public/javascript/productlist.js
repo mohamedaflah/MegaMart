@@ -39,30 +39,7 @@ rangeInput.forEach((input) => {
     }
   });
 });
-// document.querySelectorAll('input[name="category"], input[name="brand"], .input-min, .input-max, input[name="sort"]').forEach(element=>{
-//   console.log(JSON.stringify(element))
-//   element.addEventListener('input', updateProducts);
-// })
-// function updateProducts(){
-//   try{
 
-//     const category = document.querySelector('input[name="category"]:checked').value;
-//     const brand = document.querySelector('input[name="brand"]:checked').value;
-//     const minPrice = document.querySelector('.input-min').value;
-//     const maxPrice = document.querySelector('.input-max').value;
-//     const sortBy = document.querySelector('input[name="sort"]:checked').value;
-
-//     alert(category,brand,minPrice,maxPrice,sortBy)
-//   }catch(err){
-//     alert(err)
-//   }
-// }
-// document.getElementById("sfs").addEventListener("input",updateProducts)
-// function updateProducts(event){
-//   event.preventDefault()
-//   alert(JSON.stringify(new FormData(even)))
-
-// }
 document.addEventListener("DOMContentLoaded", () => {
   const updateProductList = () => {
     const categories = Array.from(
