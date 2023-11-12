@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
         res.data.forEach((product)=>{
           if(!product.deletionStatus){
             let card=`
-            <a class="col-xl-2 col-lg-3 col-md-4 col-sm-6 d-flex justify-content-center text-decoration-none text-dark" onclick="window.location.href='/products/product-detail/${product._id}/mainimage'">
+            <a class="col-xl-2 col-lg-3 col-md-4 col-sm-6 d-flex col-6 justify-content-center text-decoration-none text-dark" onclick="window.location.href='/products/product-detail/${product._id}/mainimage'">
             <div class="card d-flex flex-column justify-content-between position-relative" style="width: 12rem;height: 15rem;box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.156);border: none;">
                 ${product.stock < 1 ? 
                     `<span style="font-size: 12px;padding:2px;background: rgba(255, 0, 0, 0.224);width: 90px;margin: 2px;border-radius: 30px;display: flex;align-items: center;justify-content: center;" class="text-white">out of stock</span>` 

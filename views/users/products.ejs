@@ -211,14 +211,6 @@
                         <%}%>
                 </div>
                 <div class="icons">
-                    <div style="display: flex;align-items: center;justify-content: center;padding:5px 7px;background: #f5f5f5f5;font-size: 12px;cursor: pointer;" class="sorting">
-                        sort
-                      <img src="/images/sort.svg" style="width: 15px;height: 18px;" alt="">
-                    </div>
-                    <div style="display: flex;align-items: center;justify-content: center;padding:5px 7px;background: #f5f5f5f5;font-size: 12px;cursor: pointer;" id="filterbtn">
-                        filter
-                        <img src="/images/filter.svg" style="height: 15px;width: 15px;" alt="">
-                    </div>
                     <form class="search_box"  id="searchboxforproduct">
                         <input type="search" placeholder="search product" name="searchdata" oninput="searchProductInHome(event,'<%-profile%>')">
                         <input type="submit" value="" id="btn" style="display: none;">
@@ -254,7 +246,7 @@
         </div>
     </header>
     <main class="main_page" style="min-height: 100vh;">
-        <div class="top_bar d-flex align-items-center position-sticky top-0 d-lg-none d-md-none ">
+        <div class="top_bar d-flex align-items-center  d-lg-none d-md-none ">
             <div class="br w-50 d-flex justify-content-center">
                 <button class="m-0 p-2 bg-transparent text-dark" type="button" data-bs-toggle="modal" data-bs-target="#filtermodal">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
@@ -278,14 +270,46 @@
                   <h1 class="modal-title fs-5" id="exampleModalLabel">Filters<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
                     <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
                   </svg>  </h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" ></button>
                 </div>
                 <div class="modal-body">
-                  ...
+                  <div class="row ">
+                    <div class="col-12 col-sm-6 " style="border-right: 1px solid #2625257d;">
+                        <div class="head">
+                            <h3 style="font-size: 18px;" class="text-uppercase">Categories <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmarks" viewBox="0 0 16 16">
+                                <path d="M2 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v11.5a.5.5 0 0 1-.777.416L7 13.101l-4.223 2.815A.5.5 0 0 1 2 15.5V4zm2-1a1 1 0 0 0-1 1v10.566l3.723-2.482a.5.5 0 0 1 .554 0L11 14.566V4a1 1 0 0 0-1-1H4z"/>
+                                <path d="M4.268 1H12a1 1 0 0 1 1 1v11.768l.223.148A.5.5 0 0 0 14 13.5V2a2 2 0 0 0-2-2H6a2 2 0 0 0-1.732 1z"/>
+                              </svg> </h3>
+                        </div>
+                        <ul class="list-unstyled px-2">
+                            <%categories.forEach(category=>{%>
+                                <li>
+                                    <input type="checkbox" name="category" id="<%-category._id%>" value="<%-category._id%>">
+                                    <label for="<%-category._id%>" style="font-size: 13px;"><%-category.categoryname%></label>
+                                </li>
+                            <%})%>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-sm-6 border-1 ">
+                        <div class="head">
+                            <h3 style="font-size: 18px;" class="text-uppercase">Brands <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-slack" viewBox="0 0 16 16">
+                                <path d="M3.362 10.11c0 .926-.756 1.681-1.681 1.681S0 11.036 0 10.111C0 9.186.756 8.43 1.68 8.43h1.682v1.68zm.846 0c0-.924.756-1.68 1.681-1.68s1.681.756 1.681 1.68v4.21c0 .924-.756 1.68-1.68 1.68a1.685 1.685 0 0 1-1.682-1.68v-4.21zM5.89 3.362c-.926 0-1.682-.756-1.682-1.681S4.964 0 5.89 0s1.68.756 1.68 1.68v1.682H5.89zm0 .846c.924 0 1.68.756 1.68 1.681S6.814 7.57 5.89 7.57H1.68C.757 7.57 0 6.814 0 5.89c0-.926.756-1.682 1.68-1.682h4.21zm6.749 1.682c0-.926.755-1.682 1.68-1.682.925 0 1.681.756 1.681 1.681s-.756 1.681-1.68 1.681h-1.681V5.89zm-.848 0c0 .924-.755 1.68-1.68 1.68A1.685 1.685 0 0 1 8.43 5.89V1.68C8.43.757 9.186 0 10.11 0c.926 0 1.681.756 1.681 1.68v4.21zm-1.681 6.748c.926 0 1.682.756 1.682 1.681S11.036 16 10.11 16s-1.681-.756-1.681-1.68v-1.682h1.68zm0-.847c-.924 0-1.68-.755-1.68-1.68 0-.925.756-1.681 1.68-1.681h4.21c.924 0 1.68.756 1.68 1.68 0 .926-.756 1.681-1.68 1.681h-4.21z"/>
+                              </svg></h3>
+                        </div>
+                        <ul class="list-unstyled px-2">
+                            <%brands.forEach(value=>{%>
+                                <li>
+                                    <input type="checkbox" name="brand" id="<%-value%>" value="<%-value%>">
+                                    <label for="<%-value%>" style="font-size: 13px;"><%-value%></label>
+                                </li>
+                            <%})%>
+                        </ul>
+                    </div>
+                  </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Appply</button>
+                  <button type="button" class="btn btn-dark" data-bs-dismiss="modal" style="font-size: 14px;">Apply</button>
+                  <!-- <button type="button" class="btn btn-primary">Appply</button> -->
                 </div>
               </div>
             </div>
