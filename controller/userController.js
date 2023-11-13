@@ -22,6 +22,7 @@ const couponCollection = require("../model/collections/cupon");
 const adminCollection = require("../model/collections/adminDb");
 const referalDb = require("../model/collections/referalDb");
 const { sendOtp } = require("../helper/sendmail");
+const whish = require("../model/collections/whish");
 changeStream.on("otpDeleted", (documentId) => {
   console.log(`OTP document deleted with ID: ${documentId}`);
 });
@@ -112,6 +113,28 @@ async function showProductPage(req, res) {
     // });
     let cartCount = await getCartCount(userStatus._id);
     let whishCount = await getWhishLIstCount(userStatus._id);
+    console.log('reachec__');
+    let i=0;
+    for (const product of products) {
+      let existStatusinCart = await cartCollection.findOne({
+        userId: new ObjectId(userStatus._id),
+        "products.productId": new ObjectId(product._id)
+      });
+      let existStatusinWhish = await whish.findOne({
+        userId: new ObjectId(userStatus._id),
+        "products.productId": new ObjectId(product._id)
+      });
+      if (existStatusinCart) {
+        products[i].cartExist = true;
+        
+      }
+    
+      if (existStatusinWhish) {
+        products[i].whishExist = true;
+      }
+      i++
+    }
+    console.log(products)
     return res.render("users/products", {
       profile: true,
       id: userStatus._id,

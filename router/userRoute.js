@@ -224,7 +224,7 @@ router
 router.get("/users/product/cart/checkout/:userId", verifySessionAuth, checkOut);
 router.post("/users/signup/suggestunique",suggestUniqueUsername)
 router
-  .route("/users/product/checkout/address/:userId")
+  .route("/users/product/checkout/address/:userId",verifySessionAuth)
   .get(enterAddress)
   .post(postUserAddress);
 router

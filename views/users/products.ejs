@@ -503,15 +503,22 @@
                                     <%}else{%>
                                         <%if(id){%>
                                             <span style="display: none;" id="userId"><%-id%></span>
-                                            <button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;">Add to cart</button>
+                                            <%if(product && product.cartExist){%>
+                                                <button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;" onclick="GotocartinProduct(event)">Go to cart</button>
+                                                <%}else{%>
+                                                    <button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;" onclick="addToCart(event,'<%-product._id%>','products','<%-id%>','changeBtn<%-product._id%>')" id="changeBtn<%-product._id%>">Add to cart</button>
+                                            <%}%>
                                             <%}else{%>
                                                 <span style="display: none;" id="userId"></span>
                                                 <button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;" onclick="window.location.href='/user/login'">Add to cart</button>
                                         <%}%>
                                     <%}%>
                                     <%if(id){%>
-
-                                        <button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;"><i class="fa fa-heart"></i></button>
+                                        <%if(product && product.whishExist){%>
+                                            <button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.179);color: #e81224;background: transparent;" onclick="addToWhishListinProducts(event,'<%-product._id%>','<%-id%>',this,'remove')"><i class="fa fa-heart"></i></button>
+                                            <%}else{%>
+                                                <button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;" onclick="addToWhishListinProducts(event,'<%-product._id%>','<%-id%>',this,'add')"><i class="fa fa-heart"></i></button>
+                                        <%}%>
                                         <%}else{%>
                                             <button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;" onclick="window.location.href='/user/login'"><i class="fa fa-heart"></i></button>
                                     <%}%>

@@ -178,6 +178,7 @@ async function increaseQuantity(req, res) {
     "products.productId": new ObjectId(productId),
   });
   let updated = data.products[0].qty + Number(qtyChange);
+  // console.log(qtyofuser,' qty of user');
   console.log("daata i________ " + updated);
   await cartCollection.updateOne(
     {
@@ -189,7 +190,25 @@ async function increaseQuantity(req, res) {
     }
   );
   const totalAmount=await getTotalAmount(userId)
-  const subtotal= calculateSubtotal(currentData,updated)
+  console.log(qtyChange,'updated');
+  let qtyofuser = await cartCollection.aggregate([
+    {
+      $match: { userId: new ObjectId(userId) }
+    },
+    {
+      $unwind: "$products"
+    },
+    {
+      $match: { "products.productId": new ObjectId(productId) }
+    },
+    {
+      $project: {
+        qty: "$products.qty"
+      }
+    }
+  ]);
+  const subtotal= calculateSubtotal(currentData,qtyofuser[0].qty)
+  
   console.log(subtotal+'sub total')
   // res.redirect(`/users/product/cart/showcart/${userId}`);
   res.json({status:true,stock:currentData.stock,totalAmount,subtotal})

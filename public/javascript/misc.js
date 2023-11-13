@@ -1,16 +1,18 @@
-async function addToCart(event, id, inComing, userId,animationimg) {
+async function addToCart(event, id, inComing, userId, animationimg) {
   event.stopPropagation();
   if (inComing == "home") {
     document.getElementById("changeImg").src = "/images/sp3.svg";
+  } else if ("products") {
+    document.getElementById(animationimg).textContent='Go to cart'
   } else {
-    document.querySelector(`.${animationimg}`).style.display='block'
+    document.querySelector(`.${animationimg}`).style.display = "block";
     document.getElementById("cartTxt").textContent = "Go to Cart";
     document.getElementById("cartTxt").onclick = () => {
       location.href = `http://localhost:5001/users/product/cart/showcart/${userId}`;
     };
-    setTimeout(()=>{
-      document.querySelector(`.${animationimg}`).style.display='none'
-    },1500)
+    setTimeout(() => {
+      document.querySelector(`.${animationimg}`).style.display = "none";
+    }, 1500);
   }
   // /users/product/add-to-cart/<%-data._id%>
   const response = await fetch(`/users/product/add-to-cart/${id}`).then(
@@ -92,8 +94,8 @@ function removeItemfromCart(
         document.getElementById(subtotal).textContent = `₹${res.totalAmount}`;
         document.getElementById(maintotal).textContent = res.totalAmount;
         const cartCount = document.getElementById("cartCnt");
-        const current=cartCount.textContent
-        cartCount.textContent=Number(current)-1;
+        const current = cartCount.textContent;
+        cartCount.textContent = Number(current) - 1;
       }
     });
 }
@@ -110,11 +112,11 @@ function showPreviewImg(productId, todisplayimage, appendingImgtag) {
   //       `/product-images/${productData[0].image[0][image]}`
   //     );
   //   });
-  let alreadySrc=document.getElementById(todisplayimage);
-  let mainsrc=displayImageTag.src;
-  let toSrc=alreadySrc.src;
-  displayImageTag.src=toSrc;
-  alreadySrc.src=mainsrc;
+  let alreadySrc = document.getElementById(todisplayimage);
+  let mainsrc = displayImageTag.src;
+  let toSrc = alreadySrc.src;
+  displayImageTag.src = toSrc;
+  alreadySrc.src = mainsrc;
   let options = {
     width: 300,
     zoomWidth: 300,
@@ -134,9 +136,6 @@ function checkoutWithAddress(event, userId) {
   const street = document.getElementById("street");
   const phone = document.getElementById("phone");
   const apartment = document.getElementById("apar");
-  const selectedPaymentMethod = document.querySelector(
-    'input[name="payment_method"]:checked'
-  );
   event.preventDefault();
   //let val = document.getElementById("name");
   let formData = {
@@ -148,10 +147,9 @@ function checkoutWithAddress(event, userId) {
     street: street.value,
     phone: phone.value,
     apartment: apartment.value,
-    payment_method: selectedPaymentMethod.value,
   };
 
-  fetch(`http://localhost:5001/users/product/checkout/address/${userId}`, {
+  fetch(`/users/product/checkout/address/${userId}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -161,17 +159,15 @@ function checkoutWithAddress(event, userId) {
     .then((response) => response.json())
     .then((res) => {
       console.log(res.status + " -______- status");
-      if (res.status === "COD") {
-        location.href = `/users/product/checkout/payment/success/${userId}`;
-      } else {
-        razorpayPayment(res, userId);
-      }
+      if (res.status) {
+        location.href = `/users/product/cart/checkout/place-order/${userId}`;
+      } 
     });
   //.catch((err)=>{
   //  alert('error is'+err)
   //});
 }
-function submitCheckoutFormExplicit(userId,seletedmethod) {
+function submitCheckoutFormExplicit(userId, seletedmethod) {
   const address = document.querySelector('input[name="address"]:checked');
   const payment_method = document.querySelector(
     'input[name="payment_method"]:checked'
@@ -192,7 +188,7 @@ function submitCheckoutFormExplicit(userId,seletedmethod) {
   })
     .then((response) => response.json())
     .then((res) => {
-      if(seletedmethod!=='Bank'){
+      if (seletedmethod !== "Bank") {
         location.href = `/users/product/checkout/payment/success/${userId}`;
       }
     });
@@ -205,10 +201,10 @@ function placeOrderCheckout(userId, totalAmount) {
   ).value;
   if (payment_method == "COD") {
     // document.getElementById("forCheckout").submit();
-    submitCheckoutFormExplicit(userId,'COD');
+    submitCheckoutFormExplicit(userId, "COD");
   } else if (payment_method == "Wallet") {
     // document.getElementById("forCheckout").submit();
-    submitCheckoutFormExplicit(userId,'Wallet');
+    submitCheckoutFormExplicit(userId, "Wallet");
   } else {
     fetch("/users/orders/checkout/razorpay/generaterazorpay", {
       method: "POST",
@@ -273,8 +269,8 @@ function verifyRazorpayPayment(orderId, paymentId, userId) {
         if (res.status) {
           // document.getElementById("forCheckout").submit();
 
-          submitCheckoutFormExplicit(localStorage.getItem("userId"),'Bank');
-          location.href = `/users/product/checkout/payment/success/${userId}`
+          submitCheckoutFormExplicit(localStorage.getItem("userId"), "Bank");
+          location.href = `/users/product/checkout/payment/success/${userId}`;
           // document.querySelector(".checkandAddress").submit();
           // const address = document.querySelector(
           //   'input[name="address"]:checked'
@@ -430,7 +426,7 @@ function loginFormSubmit(e) {
       password: pass,
     };
     axios
-      .post(`http://localhost:5001/user/login`, {
+      .post(`/user/login`, {
         formData,
       })
       .then((response) => {
@@ -647,56 +643,62 @@ function shareOnWhatsapp(useId) {
   // whatsapp-share-button
 }
 
-function searchProductInHome(e,profile){
-    
-  let searchData={
-      searchdata:e.target.value
-  }
-  fetch('/users/product/search-product/',{
-      method:"POST",
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body:JSON.stringify(searchData)
-  }).then((response)=>response.json()).then((res)=>{
-      let productData=res.productData;
-      let mainSection=[]
-      
-      if(productData.length>=1){
-          productData.forEach((data)=>{
-              if(!data.deletionStatus){
-                  const card = `
+function searchProductInHome(e, profile) {
+  let searchData = {
+    searchdata: e.target.value,
+  };
+  fetch("/users/product/search-product/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(searchData),
+  })
+    .then((response) => response.json())
+    .then((res) => {
+      let productData = res.productData;
+      let mainSection = [];
+
+      if (productData.length >= 1) {
+        productData.forEach((data) => {
+          if (!data.deletionStatus) {
+            const card = `
   <div class="product_card">
-      ${data.stock < 1
+      ${
+        data.stock < 1
           ? `
           <div class="unavailable">
               <p>out of stock</p>
           </div>`
-          : ''}
+          : ""
+      }
 
       <div class="image_section">
           <div class="move">
-              ${data.stock < 1
+              ${
+                data.stock < 1
                   ? `
                   <a style="z-index: 99; visibility: hidden;">
                       <img src="/images/spcrt.svg" alt="">
                   </a>`
-                  : (profile
-                      ? `
+                  : profile
+                  ? `
                       <a style="z-index: 99;" onclick="addToCart('${data._id}')">
                           <img src="/images/spcrt.svg" alt="">
                       </a>`
-                      : `
+                  : `
                       <a href="/users/product/add-to-cart/${data._id}">
                           <img src="/images/spcrt.svg" alt="">
                       </a>`
-                  )}
+              }
 
               <a href="">
                   <img src="/images/movewish.svg" alt="" class="whish">
               </a>
           </div>
-          <img src="/product-images/${data.image[0].mainimage}" alt="" onclick="gotoDetail('${data._id}')">
+          <img src="/product-images/${
+            data.image[0].mainimage
+          }" alt="" onclick="gotoDetail('${data._id}')">
       </div>
 
       <div class="detail_section" onclick="gotoDetail('${data._id}')">
@@ -706,7 +708,7 @@ function searchProductInHome(e,profile){
                   ${data.discount ? `₹${data.discount}` : `₹${data.price}`}
               </p>
               <p class="mrp">
-                  ${data.discount ? `₹${data.price}` : ''}
+                  ${data.discount ? `₹${data.price}` : ""}
               </p>
           </div>
           <div class="star_rating">
@@ -719,16 +721,15 @@ function searchProductInHome(e,profile){
       </div>
   </div>
 `;
-mainSection.push(card)
-              }
-
-          })
-          const datas=mainSection.join('')
-           document.getElementById('prod_section').innerHTML=datas
-          }else{
-          document.getElementById('prod_section').innerHTML=`<h3>Search Data Not Found "${e.target.value}"</h3>`
+            mainSection.push(card);
+          }
+        });
+        const datas = mainSection.join("");
+        document.getElementById("prod_section").innerHTML = datas;
+      } else {
+        document.getElementById(
+          "prod_section"
+        ).innerHTML = `<h3>Search Data Not Found "${e.target.value}"</h3>`;
       }
-
-  })
+    });
 }
-
