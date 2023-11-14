@@ -45,7 +45,7 @@ async function userHome(req, res) {
     });
   }
 
-  let productData = await productsCollection.find().sort({ addedDate: -1 });
+  let productData = await productsCollection.find({stock:{$gte:1}}).sort({ addedDate: -1 }).limit(6)
   const categories = await CategoryDb.find();
   const brands = await productsCollection.distinct("brand");
   console.log(categories);
