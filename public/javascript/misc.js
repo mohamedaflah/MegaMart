@@ -2,8 +2,8 @@ async function addToCart(event, id, inComing, userId, animationimg) {
   event.stopPropagation();
   if (inComing == "home") {
     document.getElementById("changeImg").src = "/images/sp3.svg";
-  } else if ("products") {
-    document.getElementById(animationimg).textContent='Go to cart'
+  } else if (inComing == "products") {
+    document.getElementById(animationimg).textContent = "Go to cart";
   } else {
     document.querySelector(`.${animationimg}`).style.display = "block";
     document.getElementById("cartTxt").textContent = "Go to Cart";
@@ -161,7 +161,7 @@ function checkoutWithAddress(event, userId) {
       console.log(res.status + " -______- status");
       if (res.status) {
         location.href = `/users/product/cart/checkout/place-order/${userId}`;
-      } 
+      }
     });
   //.catch((err)=>{
   //  alert('error is'+err)
@@ -643,7 +643,7 @@ function shareOnWhatsapp(useId) {
   // whatsapp-share-button
 }
 
-function searchProductInHome(e, profile) {
+function searchProductInHome(e, profile, comingfrom) {
   let searchData = {
     searchdata: e.target.value,
   };
@@ -658,7 +658,8 @@ function searchProductInHome(e, profile) {
     .then((res) => {
       let productData = res.productData;
       let mainSection = [];
-
+      let forListProduct = [];
+      let id = localStorage.getItem("userId");
       if (productData.length >= 1) {
         productData.forEach((data) => {
           if (!data.deletionStatus) {
@@ -721,15 +722,71 @@ function searchProductInHome(e, profile) {
       </div>
   </div>
 `;
+            let productListcard = `
+<a class="col-xl-2 col-lg-3 col-md-4 col-sm-6 d-flex col-6 justify-content-center text-decoration-none text-dark" onclick="window.location.href='/products/product-detail/${
+              data._id
+            }/mainimage'">
+<div class="card d-flex flex-column justify-content-between position-relative" style="width: 12rem;height: 15rem;box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.156);border: none;">
+    ${
+      data.stock < 1
+        ? `<span style="font-size: 12px;padding:2px;background: rgba(255, 0, 0, 0.224);width: 90px;margin: 2px;border-radius: 30px;display: flex;align-items: center;justify-content: center;" class="text-white">out of stock</span>`
+        : `<span style="visibility:hidden;font-size: 12px;padding:2px;background: rgba(255, 0, 0, 0.224);width: 90px;margin: 2px;border-radius: 30px;display: flex;align-items: center;justify-content: center;" class="text-white"></span>`
+    }
+    <div class="img d-flex justify-content-center" style="border-bottom: 1px solid rgb(205, 205, 205);height: 6rem;">
+        <img src="/product-images/${
+          data.image[0].mainimage
+        }" style="height: 80%;width: auto;" alt="" class="card-top-img mt-2">
+    </div>
+    <div class="px-2">
+        <span style="font-size: 13px;">${data.productName}</span>
+    </div>
+    <div class="px-2 d-flex justify-content-between">
+        <span style="font-size: 13px;">
+            ${data.discount ? `₹${data.discount}` : `₹${data.price}`}
+        </span>
+        <span style="font-size: 13px;text-decoration: line-through;">
+            ${data.discount ? `₹${data.price}` : ""}
+        </span>
+    </div>
+    <div class="px-2 d-flex justify-content-between mb-2">
+        ${
+          data.stock < 1
+            ? `<button class="btn-dark m-0 py-1 px-3 disabled" style="font-size: 12px;background: rgba(107, 105, 105, 0.818);cursor: no-drop;" disabled>Add to cart</button>`
+            : `<button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;" ${
+                id ? "" : "onclick=\"window.location.href='/user/login'\""
+              }>Add to cart</button>`
+        }
+        ${
+          id
+            ? `<button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;"><i class="fa fa-heart"></i></button>`
+            : ""
+        }
+    </div>
+</div>
+</a>
+`;
+            forListProduct.push(productListcard);
             mainSection.push(card);
           }
         });
-        const datas = mainSection.join("");
-        document.getElementById("prod_section").innerHTML = datas;
+        if (comingfrom == "home") {
+          const datas = mainSection.join("");
+          document.getElementById("prod_section").innerHTML = datas;
+        } else {
+          const listdata = forListProduct.join("");
+          document.getElementById("displayData").innerHTML = listdata;
+        }
       } else {
-        document.getElementById(
-          "prod_section"
-        ).innerHTML = `<h3>Search Data Not Found "${e.target.value}"</h3>`;
+        if(comingfrom=='home'){
+          document.getElementById(
+            "prod_section"
+          ).innerHTML = `<h3>Search Data Not Found "${e.target.value}"</h3>`;
+        }else{
+          document.getElementById(
+            "displayData"
+          ).innerHTML = `<h3>Search Data Not Found "${e.target.value}"</h3>`;
+        }
+        
       }
     });
 }
