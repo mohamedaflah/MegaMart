@@ -9,7 +9,7 @@ passport.use(
     {
       clientID: process.env.LOGIN_CLIENT_ID,
       clientSecret: process.env.LOGIN_SECRET_ID,
-      callbackURL: "http://localhost:5001/auth/google/login/callback",
+      callbackURL: "https://aflahaflu.shop/auth/google/login/callback",
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {

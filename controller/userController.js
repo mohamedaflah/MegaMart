@@ -30,8 +30,6 @@ async function userHome(req, res) {
   if (req.session.adminAuth) {
     return res.redirect("/admin/");
   }
-  // let userStatus=await UserCollection.find({email:req.session.userEmail})
-  // console.log(typeof req.session.userEmail+'email ');
   const userStatus = await UserCollection.find({
     email: req.session.userEmail,
   });
@@ -48,7 +46,6 @@ async function userHome(req, res) {
   let productData = await productsCollection.find({stock:{$gte:1}}).sort({ addedDate: -1 }).limit(6)
   const categories = await CategoryDb.find();
   const brands = await productsCollection.distinct("brand");
-  console.log(categories);
   if (req.session.userAuth && userStatus[0].status) {
     const userData = await UserCollection.findOne({
       email: req.session.userEmail,
@@ -104,16 +101,10 @@ async function showProductPage(req, res) {
   console.log(userStatus);
   console.log(req.session.userEmail);
   if (userStatus && userStatus.status) {
-    // return res.render("users/login", {
-    //   profile: false,
-    //   err: "Your Permission Denied by Admin",
-    //   cartCount: false,
-    //   whishCount: false,
-    //   id: false,
-    // });
+
     let cartCount = await getCartCount(userStatus._id);
     let whishCount = await getWhishLIstCount(userStatus._id);
-    console.log('reachec__');
+
     let i=0;
     for (const product of products) {
       let existStatusinCart = await cartCollection.findOne({
@@ -134,7 +125,7 @@ async function showProductPage(req, res) {
       }
       i++
     }
-    console.log(products)
+
     return res.render("users/products", {
       profile: true,
       id: userStatus._id,
@@ -189,7 +180,6 @@ function singupGet(req, res) {
       id: false,
     });
   }
-  // }
 }
 function AfterMailSuccessfull(req, res) {
   console.log(req.isAuthenticated() + "authentication__________________");
@@ -214,25 +204,13 @@ async function singupPost(req, res) {
       console.log(dupEmail + ">> THis is the email");
       console.log(dupUsername + "<><><>< THis is the userkjsadklfj");
       if (dupEmail.length > 0) {
-        // res.render("users/sigup", {
-        //   err: "Email is Already Exist",
-        //   profile: false,
-        // });
         res.json({ err: "Email is Already Exist" });
       } else if (dupUsername.length > 0) {
-        // res.render("users/sigup", {
-        //   err: "Username is Already Exist Enter Unique",
-        //   profile: false,
-        // });
         res.json({ err: "Username is Already Exist Enter Unique" });
       } else {
         const password = req.body.password;
         const passwordCondition = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
         if (!password.match(passwordCondition)) {
-          // return res.render("users/sigup", {
-          //   err: "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number.",
-          //   profile: false,
-          // });
           return res.json({
             err: "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, and one number.",
           });
@@ -268,14 +246,9 @@ async function singupPost(req, res) {
             });
         }
         console.log("Secret ", secret.base32);
-        let otp = await OtpCollection.findOne({
-          useremail: req.body.email_or_Phone,
-        });
         console.log("Secret ", secret.base32);
         codEmai = code;
         console.log("Code ", code);
-        // console.log(req.body);
-        // res.json({load:true})
         const mailOptions = {
           from: process.env.USER_EMAIL,
           to: req.body.email_or_Phone,
@@ -299,7 +272,6 @@ async function singupPost(req, res) {
          </div>`,
         };
 
-        // await transporter.sendMail(mailOptions)
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
             console.error("Error sending email:", error);
@@ -785,7 +757,7 @@ async function updateProfilePost(req, res) {
     { _id: new ObjectId(req.params.userId) },
     { $set: { name: req.body.name } }
   );
-  res.redirect(`http://localhost:5001/user/account/${req.params.userId}`);
+  res.redirect(`/user/account/${req.params.userId}`);
 }
 async function suggestUniqueUsername(req, res) {
   const name = req.body.name;

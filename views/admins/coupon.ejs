@@ -443,7 +443,7 @@
                     discounterr.textContent=res.existerr
                 }
                 if (res.status) {
-                    location.href = 'http://localhost:5001/admin/products/cupons/allcupons'
+                    location.href = '/admin/products/cupons/allcupons'
                 }
             })
 
@@ -513,7 +513,7 @@
                 body:JSON.stringify(formBody)
             }).then((response)=>response.json()).then(res=>{
                 if(res.status){
-                    location.href='http://localhost:5001/admin/products/cupons/allcupons'
+                    location.href='/admin/products/cupons/allcupons'
                 }
             })
         })

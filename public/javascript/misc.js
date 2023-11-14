@@ -8,7 +8,7 @@ async function addToCart(event, id, inComing, userId, animationimg) {
     document.querySelector(`.${animationimg}`).style.display = "block";
     document.getElementById("cartTxt").textContent = "Go to Cart";
     document.getElementById("cartTxt").onclick = () => {
-      location.href = `http://localhost:5001/users/product/cart/showcart/${userId}`;
+      location.href = `/users/product/cart/showcart/${userId}`;
     };
     setTimeout(() => {
       document.querySelector(`.${animationimg}`).style.display = "none";
@@ -232,7 +232,6 @@ function razorpayPayment(order, userId) {
     handler: (response) => {
       console.log(response);
       if (response.razorpay_payment_id) {
-        // window.location.href = `http://localhost:5001/users/product/checkout/payment/success/${userId}`;
         verifyRazorpayPayment(order.id, response.razorpay_payment_id, userId);
       } else {
         alert("window closed");
@@ -592,7 +591,7 @@ function returnForm(event, userId) {
       .then((respons) => respons.json())
       .then((res) => {
         if (res.status) {
-          location.href = `http://localhost:5001/users/product/orders/trackorders/${userId}`;
+          location.href = `/users/product/orders/trackorders/${userId}`;
         }
         if (res.err) {
           alert(res.err);
@@ -634,7 +633,7 @@ function inviteBoxClose() {
 }
 
 function shareOnWhatsapp(useId) {
-  const referalLink = `http://localhost:5001/signup?id=${useId}`;
+  const referalLink = `https://aflahaflu.shop/signup?id=${useId}`;
   const message = "Check out this amazing invitation linkis" + referalLink;
   const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
     message

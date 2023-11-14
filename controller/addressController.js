@@ -10,22 +10,12 @@ const {
   getTotalAmount,
 } = require("../helper/cart-helper");
 const { ObjectId } = require("bson");
-const { generateRazorpay } = require("../helper/razorpay");
-const { getOrderId } = require("../helper/orderhelper");
 const { getWhishLIstCount } = require("../helper/whish-helper");
 
 // Address form Get
 async function enterAddress(req, res) {
   const userId = req.params.userId;
   let userCartdata = await getUserCartData(userId);
-  console.log(JSON.stringify(userCartdata));
-  // const cartData = await cartCollection.findOne({
-  //   userId: new ObjectId(userId),
-  // });
-  // var cartCount = 0;
-  // if (cartData) {
-  //   cartCount = cartData.products.length;
-  // }
   const cartCount = await getCartCount(userId);
   const whishCount=await getWhishLIstCount(userId)
   const totalAmount = await getTotalAmount(userId);
@@ -46,7 +36,6 @@ async function postUserAddress(req, res) {
     console.log("reached_______________ and api called");
     const userId = req.params.userId;
     let userCartdata = await getUserCartData(userId);
-    console.log(JSON.stringify(userCartdata) + " this is the body of request");
     const {
       name,
       email,
@@ -58,10 +47,6 @@ async function postUserAddress(req, res) {
       apartment,
       payment_method,
     } = req.body;
-    // const productIds = userCartdata.map(
-    //   (cartItem) => cartItem.products.productId
-    // );
-    // const quantities = userCartdata.map((cartItem) => cartItem.products.qty);
     const products = userCartdata.map((cartItem) => {
       let price;
       if(cartItem.cartData && cartItem.cartData.offer && cartItem.cartData.offer.offerprice){
@@ -77,11 +62,6 @@ async function postUserAddress(req, res) {
         price:price
       });
     });
-    console.log(JSON.stringify(products)+' products i')
-    // console.log(userCartdata+' orders data')
-    // console.log('            sadf'+JSON.stringify(products)+'this is the products')
-    let totalAmount = await getTotalAmount(userId);
-
     await new addressCollection({
       userId: new ObjectId(userId),
       addresses: [
@@ -98,15 +78,9 @@ async function postUserAddress(req, res) {
         },
       ],
     }).save();
-    // new
-    // const existingOrder = await orderCollection.findOne({
-    //   userId: new ObjectId(userId),
-    // });
-    const addressdata = await addressCollection.findOne({
-      userId: new ObjectId(userId),
-    });
     res.json({status:true,userId})
   } catch (err) {
+    res.json({status:false,err})
     console.log("error in post address" + err);
   }
 }
@@ -144,7 +118,6 @@ async function addinAddressPost(req, res) {
       },
     }
   );
-  // http://localhost:5001/users/product/cart/checkout/place-order/651a9eeb4ff6eaf25dbaa56f
   res.redirect(`/users/product/cart/checkout/place-order/${userId}`);
 }
 
@@ -156,14 +129,6 @@ async function updateAddresGet(req, res) {
     { userId: new ObjectId(userId), "addresses._id": new ObjectId(addressId) },
     { "addresses.$": true }
   );
-  // let data1 = await addressCollection.updateOne(
-  //   {
-  //     userId: new ObjectId(userId),
-  //     "addresses._id": new ObjectId(productId),
-  //   },
-  //   { $inc: { "products.$.qty": 1 } }
-  // );
-  // console.log(JSON.stringify(data)+' {{{{{{{{{{{{{{{{{{{{{data ')
   const cartCount = await getCartCount(userId);
   const whishCount=await getWhishLIstCount(userId)
   res.render("users/editAddress", {
@@ -201,7 +166,7 @@ async function updateAddressPost(req, res) {
     }
   );
   res.redirect(
-    `http://localhost:5001/users/product/cart/checkout/place-order/${userId}`
+    `/users/product/cart/checkout/place-order/${userId}`
   );
 }
 
@@ -218,7 +183,7 @@ async function deleteUserAddress(req, res) {
     }
   );
   res.redirect(
-    `http://localhost:5001/users/product/cart/checkout/place-order/${userId}`
+    `/users/product/cart/checkout/place-order/${userId}`
   );
 }
 async function addAddressinProfileGet(req, res) {
@@ -275,7 +240,7 @@ async function addAddressinProfilePost(req, res) {
       ],
     }).save();
   }
-  res.redirect(`http://localhost:5001/user/account/${userId}`);
+  res.redirect(`/user/account/${userId}`);
 }
 async function deleteUserAddressinProfile(req, res) {
   const addressId = req.params.addressId;
@@ -288,7 +253,7 @@ async function deleteUserAddressinProfile(req, res) {
       },
     }
   );
-  res.redirect(`http://localhost:5001/user/account/${userId}`);
+  res.redirect(`/user/account/${userId}`);
 }
 async function editAddressinProfileGet(req, res) {
   const userId = req.params.userId;
@@ -332,7 +297,7 @@ async function editAddressinProfilePost(req, res) {
       },
     }
   );
-  res.redirect(`http://localhost:5001/user/account/${userId}`);
+  res.redirect(`/user/account/${userId}`);
 }
 // for Users
 const forUserAddress = {

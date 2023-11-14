@@ -12,7 +12,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:5001/auth/google/callback",
+      callbackURL: "https://aflahaflu.shop/auth/google/callback",
       passReqToCallback: true,
     },
     async function (request, accessToken, refreshToken, profile, done) {
@@ -64,25 +64,4 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-// signup strategy end
 
-// passport.use(
-//   "google-login",
-//   new GoogleStrategy(
-//     {
-//       clientID: process.env.LOGIN_CLIENT_ID,
-//       clientSecret: process.env.LOGIN_SECRET_ID,
-//       callbackURL: "http://localhost:5001/auth/google/login/callback",
-//       passReqToCallback: true,
-//     },
-//     async function(request,accessToken,refreshToken,profile,done){
-//       console.log('reached')
-//       let userDat=await UserCollection.find({email:profile.email})
-//       if(userDat.length>0){
-//         done(null,profile)
-//       }else{
-//         return done(null,false,{message:"User not Found"})
-//       }
-//     }
-//   )
-// )

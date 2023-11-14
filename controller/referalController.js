@@ -1,13 +1,7 @@
 const { ObjectId } = require("bson");
 const referalCollection = require("../model/collections/referalDb");
 async function showAllReferalOffer(req, res) {
-  //   await new referalCollection({
-  //     offeramount: 200,
-  //     updatedDate: Date.now(),
-  //     status: true,
-  //     joinedUser: [],
-  //     invitedUser: [],
-  //   }).save()
+
   const referalData = await referalCollection.find();
   res.render("admins/offer", { referalData });
 }

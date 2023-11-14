@@ -4,8 +4,6 @@ const bcrypt = require("bcrypt");
 const fs = require("fs");
 
 const { ObjectId } = require("bson");
-// const CategoryDb=require('../model/collections/CategoryDb')
-// const formidable = require("formidable");
 async function adminHomeShowuser(req, res) {
   let usersData = await userDb.find().sort({ joinDate: -1 });
   res.render("admins/admin", { usersData });
@@ -19,13 +17,6 @@ async function adminLoginGet(req, res) {
 }
 async function adminLoginPost(req, res) {
   try {
-    // console.log(JSON.stringify(req.body)+'admin ')
-    // req.body.password=bcrypt.hashSync(req.body.password,10)
-    // await new adminDb({
-    //   email:req.body.email_or_Phone,
-    //   password:req.body.password,
-    //   joinDate:Date.now()
-    // }).save()
     let getData = await adminDb.find({ email: req.body.email_or_Phone });
 
     if (getData.length > 0) {
@@ -101,11 +92,8 @@ async function serchUser(req, res) {
   const usersData = await userDb.find({
     name: { $regex: "^" + searchData, $options: "i" },
   });
-  // res.render("admins/admin", { usersData });
   res.json({usersData})
-  // const productData = await productsCollection.find({
-  //   productName: { $regex: "^" + req.body.searchdata, $options: "i" },
-  // });
+
 }
 
 

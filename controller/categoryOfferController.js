@@ -5,7 +5,6 @@ const products = require("../model/collections/products");
 
 async function showCategoryOffers(req, res) {
   let cateogories = await CategoryDb.find();
-  let offeredCategories = categoryOffer.find();
   let currentOffer = await categoryOffer.aggregate([
     {
       $lookup: {
@@ -19,12 +18,11 @@ async function showCategoryOffers(req, res) {
       $unwind: "$joined",
     },
   ]);
-  // console.log(JSON.stringify(joined));
   res.render("admins/categoryoffer", { categories: cateogories, currentOffer });
 }
 async function addOfferforCategory(req, res) {
   try {
-    console.log(req.body);
+
     const { category, offeramount, expiry } = req.body;
     const expiryDate = new Date(expiry);
 
@@ -68,9 +66,6 @@ async function addOfferforCategory(req, res) {
             },
           }
         );
-        console.log(
-          "Updated product collection for product ID: " + product._id
-        );
       }
     });
 
@@ -90,7 +85,6 @@ async function getupdateCategoryOffer(req, res) {
     const categoryOfferData = await categoryOffer.findById(
       new ObjectId(categoryOfferId)
     );
-    console.log(categoryOfferData);
     const category = await CategoryDb.findOne({
       _id: new ObjectId(categoryOfferData.categoryId),
     });
@@ -104,9 +98,8 @@ async function getupdateCategoryOffer(req, res) {
 
 async function updateCategoryOfferPost(req, res) {
   try {
-    console.log(JSON.stringify(req.body));
     let { offerId, categoryoffer, offerexpiry } = req.body;
-    console.log(offerId);
+
     const getCategory = await categoryOffer.findOne({
       _id: new ObjectId(offerId),
     });

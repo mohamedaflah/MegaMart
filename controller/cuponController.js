@@ -50,13 +50,7 @@ async function editCouponPost(req, res) {
       if(!couponname || !couponcode || !expiry || !discount || !usagelimit || !minorderAmt){
         return res.json({err:"Fill all field"})
       }
-    let couponData=await couponCollection.findById(new ObjectId(couponId)) 
-    // if(couponname==couponData.couponname){
-    //   return res.json({err:"Coupon name already exist"})
-    // } 
-    // if(couponcode==couponData.couponname){
 
-    // }
     expiry = new Date(expiry);
     let status;
     if(expiry>=new Date()){
@@ -77,7 +71,6 @@ async function editCouponPost(req, res) {
         },
       }
     );
-    // res.redirect('http://localhost:5001/admin/products/cupons/allcupons')
     res.json({status:true})
   }catch(err){
     console.log('error founded in update copon'+err);
@@ -95,83 +88,6 @@ async function checkCouponisExist(req, res) {
   }
 }
 
-// for user
-
-// async function applyCoupon(req, res) {
-//   const { couponcode } = req.body;
-//   const userId = req.query._id;
-//   try {
-//     const couponData = await couponCollection.findOne({
-//       couponcode: couponcode,
-//     });
-//     const userCn = await couponCollection.findOne({
-//       couponcode: couponcode,
-//       "users.userId": new ObjectId(userId),
-//     });
-//     const userCouponInfo = await couponCollection.aggregate([
-//       {
-//         $match: {
-//           couponcode: couponcode,
-//           "users.userId": new ObjectId(userId),
-//         },
-//       },
-//       {
-//         $project: { _id: 0, count: "$users.count" },
-//       },
-//     ]);
-//     console.log(userCn + "           99");
-//     console.log(couponData + "sadlkf   9");
-//     console.log("coupon info _______", JSON.stringify(userCouponInfo));
-
-//     if (!couponData) {
-//       return res.json({ err: "Coupon not matching" });
-//     }
-//     const result = await couponCollection.aggregate([
-//       {
-//         $match: { couponcode: couponcode },
-//       },
-//       {
-//         $unwind: "$users",
-//       },
-//       {
-//         $match: { "users.userId": new ObjectId(userId) },
-//       },
-//     ]);
-//     console.log(JSON.stringify(result) + "sdaf      sadfsd");
-//     if (userCouponInfo.length<=0 || userCouponInfo[0].count <= 3) {
-//       console.log('reached __');
-//       let discount = couponData.discount;
-//       if(userCouponInfo.length<=0){
-//         console.log('reached if sdf()(');
-//         await couponCollection.updateOne({couponcode:couponcode},{$push:{
-//           userId:new ObjectId(userId),
-//           count:1
-//         }})
-//       }else{
-//         console.log('reached if sdf()(-=-=');
-//         await couponCollection.updateOne(
-//           {
-//             couponcode: couponcode,
-//             "users.userId": new ObjectId(userId)
-//           },
-//           {
-//             $inc: { "users.$.count": 1 }
-//           }
-//         );
-//       }
-//       await cartCollection.updateOne(
-//         { userId: new ObjectId(userId) },
-//         { $set: { getDiscount: discount } }
-//       );
-//       res.json({status:true,discount})
-//     } else {
-//       return res.json({ err: "Your limit exceed" });
-//     }
-//   } catch (err) {
-//     console.log("error in apply coupon post", err);
-//   }
-// }
-
 async function applyCoupon(req, res) {
   const { couponcode } = req.body;
   const userId = req.query.id;
@@ -180,8 +96,7 @@ async function applyCoupon(req, res) {
   if (!coupondata) {
     return res.json({ err: "Coupon not matching" });
   }
-  console.log(coupondata.minOrderAmt + "min order amt");
-  console.log(userOrderAmt + " user  order amt");
+
   if (userOrderAmt >= coupondata.minOrderAmt) {
     const discountAmount = coupondata.discount;
     await cartCollection
@@ -213,11 +128,6 @@ async function applyCoupon(req, res) {
         },
       },
     ]);
-    console.log(JSON.stringify(userdata) + "    data of   user  ");
-    // if (userdata[0].count > coupondata.usageLimit) {
-    //   return res.json({ err: "User limit exceeded" });
-    // }
-    console.log(JSON.stringify(userdata));
     if (userdata.length <= 0) {
       await couponCollection.updateOne(
         { couponcode: couponcode },

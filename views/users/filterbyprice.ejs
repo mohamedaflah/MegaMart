@@ -13,7 +13,7 @@
         <div class="categoy_section">
             <div class="category_links">
                 <%categories.forEach((data)=>{%>
-                    <a href="http://localhost:5001/products/product-detail/<%-data._id%>/mainimage"><%-data.categoryname %></a>
+                    <a href="/products/product-detail/<%-data._id%>/mainimage"><%-data.categoryname %></a>
                 <%})%>
             </div>
         </div>
@@ -47,7 +47,7 @@
   
         <%productData.forEach((data)=>{%>
             <%if(!data.deletionStatus){%>
-                <a href="http://localhost:5001/products/product-detail/<%-data._id%>/mainimage" style="text-decoration: none;color:black" >
+                <a href="https://aflahaflu.shop/products/product-detail/<%-data._id%>/mainimage" style="text-decoration: none;color:black" >
                     <div class="product_card">
                         <div class="image_section">
                             <!-- <div class="move">

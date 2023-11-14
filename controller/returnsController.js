@@ -27,9 +27,6 @@ async function returnProduct(req, res) {
     const userId = req.params.userId;
     const orderId = req.query.orderId;
     const fianlprice = req.query.finalprice;
-    console.log(productId + "  this is the produt id ");
-    console.log(userId + "  this is the user id ");
-    console.log(orderId + "  this is the order -- id ");
     const productData = await orderCollection.findOne(
       {
         _id: new ObjectId(orderId),
@@ -40,7 +37,7 @@ async function returnProduct(req, res) {
         "products.$": 1,
       }
     );
-    console.log(JSON.stringify(productData), "   data of produt ");
+
     await productCollection.updateOne(
       { _id: new ObjectId(productId) },
       { $inc: { stock: 1 } }
@@ -106,20 +103,10 @@ async function returnProduct(req, res) {
   }
 }
 async function seeAllreturns(req, res) {
-  console.log("api called");
   const userId = req.params.userId;
   const cartCount = await getCartCount(userId);
   const whishCount = await getWhishLIstCount(userId);
-  // console.log(JSON.stringify(returns) + " all returns");
 
-  // let allReturnData = await orderCollection.find();
-  // let obj = [];
-  // for (let i = 0; i < allReturnData.length; i++) {
-  //   // if()
-  //   let productData = await productCollection.findOne({
-  //     _id: new ObjectId(allReturnData[i]),
-  //   });
-  // }
   const allUserreturns = await getAllreturnedProductByUseId(userId);
   console.log("after calling " + JSON.stringify(allUserreturns));
   res.render("users/returns", {

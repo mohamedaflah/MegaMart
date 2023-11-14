@@ -360,7 +360,7 @@ function updateOffAmt(e) {
     .then((response) => response.json())
     .then((data) => {
       if (data.status) {
-        location.href = "http://localhost:5001/admin/product/offers/seeOffers";
+        location.href = "/admin/product/offers/seeOffers";
       }
     });
 }
@@ -412,7 +412,7 @@ function addCategoryOffer(event) {
     .then((response) => response.json())
     .then((res) => {
       if (res.status) {
-        location.href = `http://localhost:5001/admin/product/offers/categoryoffer/`;
+        location.href = `/admin/product/offers/categoryoffer/`;
       } else if (res.err) {
         alert(res.err);
       }
@@ -497,7 +497,7 @@ function addProdcutOffer(event) {
     .then((response) => response.json())
     .then((res) => {
       if (res.status) {
-        window.location.href = `http://localhost:5001/admin/product/offers/productoffer/`;
+        window.location.href = `/admin/product/offers/productoffer/`;
       } else {
         alert(res.err);
       }
@@ -597,7 +597,7 @@ function updateCategoryOffer(event) {
     .then((response) => response.json())
     .then((res) => {
       if (res.status) {
-        window.location.href = `http://localhost:5001/admin/product/offers/categoryoffer/`;
+        window.location.href = `/admin/product/offers/categoryoffer/`;
       } else {
         alert(JSON.stringify(res));
       }

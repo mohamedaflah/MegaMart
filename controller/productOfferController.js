@@ -18,8 +18,6 @@ async function showProductOffer(req, res) {
     },
   ]);
 
-  console.log(JSON.stringify(productOffers));
-
   res.render("admins/productOffer", { products, productOffers });
 }
 async function addProductOffer(req, res) {
@@ -56,7 +54,6 @@ async function addProductOffer(req, res) {
       const product = await productCollection.findById(
         new ObjectId(productoffer)
       );
-      console.log(JSON.stringify(product));
       if (product) {
         await productCollection
           .updateOne(

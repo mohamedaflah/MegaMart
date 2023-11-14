@@ -13,7 +13,6 @@ function generateRazorpay(orderId, totalAmount, userId) {
     const username = await userCollection.findOne({
       _id: new ObjectId(userId),
     });
-    // http://localhost:5001/users/product/checkout/payment/success/${userId}
     const amountInPaise=totalAmount*100
     let options = {
       amount: amountInPaise, // Amount in paise (multiply by 100 to convert to currency)

@@ -14,9 +14,6 @@ async function manageProducts(req, res) {
     for (let i = 0; i < productData.length; i++) {
       let catId = newData[i].category;
       let catName = await categoryCollection.findOne({ _id: catId });
-      // newData[i].category=catName.categoryname;
-      console.log(catId + " cate Id");
-      console.log(catName + " cate datas");
     }
     // console.log(JSON.stringify(newData)+"product updated data")
     let combined = await productCollection.aggregate([
@@ -55,7 +52,6 @@ async function manageProducts(req, res) {
         },
       },
     ]);
-    console.log(JSON.stringify(combined, null, 2) + "lookup data");
     res.render("admins/products", { categories, productData: combined });
   } catch (error) {
     console.error("Error querying products:", error);
@@ -117,7 +113,6 @@ async function addProduct(req, res) {
     const img3 = req.files["image2"][0];
     const img4 = req.files["image3"][0];
     const img5 = req.files["image4"][0];
-    console.log("name is " + productname);
     let categoryId = await categoryCollection.find({ categoryname: category });
     await new productCollection({
       productName: productname,
@@ -142,8 +137,6 @@ async function addProduct(req, res) {
       },
       stock: stock,
     }).save();
-    let data = await categoryCollection.find({ categoryname: category });
-    // console.log(data + " __ this category data");
     await categoryCollection.updateOne(
       { categoryname: category },
       { $inc: { stock: 1 } }

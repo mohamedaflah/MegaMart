@@ -20,112 +20,6 @@ const { getWalletAmountofUser } = require("../auth/walet-helper");
 const walletCollection = require("../model/collections/wallet");
 // Listing Orders is Admin Side
 async function listAllOrders(req, res) {
-  // const orderDetail = await userDb.aggregate([
-  //   {
-  //     $lookup: {
-  //       from: "orders",
-  //       localField: "_id",
-  //       foreignField: "userId",
-  //       as: "userOrders",
-  //     },
-  //   },
-  //   {
-  //     $unwind: "$userOrders",
-  //   },
-  //   {
-  //     $lookup: {
-  //       from: "products",
-  //       localField: "userOrders.products.productId",
-  //       foreignField: "_id",
-  //       as: "userOrders.products.productDetails",
-  //     },
-  //   },
-  //   {
-  //     $unwind: "$userOrders.products.productDetails",
-  //   },
-  //   {
-  //     $project: {
-  //       _id: 1,
-  //       userOrders: {
-  //         _id: "$userOrders._id",
-  //         userId: "$userOrders.userId",
-  //         paymentmode: "$userOrders.paymentmode",
-  //         delverydate: "$userOrders.delverydate",
-  //         status: "$userOrders.status",
-  //         address: "$userOrders.address",
-  //         products: "$userOrders.products.productDetails", // Reshape here
-  //       },
-
-  //     },
-  //   },
-  //   {
-  //     $group: {
-  //       _id: "$_id",
-  //       userAddress: { $first: "$userAddress" },
-  //       userOrders: { $push: "$userOrders" },
-  //     },
-  //   },
-  // ]);
-
-  // const orderDetail=await orderCollection.aggregate([
-  //   {
-  //     $lookup: {
-  //       from: 'users', // Use the name of your Users collection here
-  //       localField: 'userId',
-  //       foreignField: '_id',
-  //       as: 'user',
-  //     },
-  //   },
-  //   {
-  //     $unwind: '$user',
-  //   },
-  //   {
-  //     $unwind: '$products',
-  //   },
-  //   {
-  //     $lookup: {
-  //       from: 'products', // Use the name of your Products collection here
-  //       localField: 'products.productId',
-  //       foreignField: '_id',
-  //       as: 'product',
-  //     },
-  //   },
-  //   {
-  //     $unwind: '$product',
-  //   },
-  //   {
-  //     $group: {
-  //       _id: '$_id',
-  //       userId: { $first: '$userId' },
-  //       paymentmode: { $first: '$paymentmode' },
-  //       delverydate: { $first: '$delverydate' },
-  //       status: { $first: '$status' },
-  //       address: { $first: '$address' },
-  //       user: { $first: '$user' },
-  //       products: {
-  //         $push: {
-  //           productId: '$product._id',
-  //           qty: '$products.qty',
-  //           productName: '$product.productName', // Add other product fields as needed
-  //         },
-  //       },
-  //     },
-  //   },
-  //   {
-  //     $project: {
-  //       _id: 1,
-  //       userId: 1,
-  //       paymentmode: 1,
-  //       delverydate: 1,
-  //       status: 1,
-  //       address: 1,
-  //       'user._id': 1,
-  //       'user.name': 1, // Add other user fields as needed
-  //       products: 1,
-  //     },
-  //   },
-  // ])
-
   const orderDetail = await orderCollection.aggregate([
     {
       $lookup: {
@@ -169,7 +63,6 @@ async function listAllOrders(req, res) {
       },
     },
   ]);
-  console.log(JSON.stringify(orderDetail) + " orders ");
   res.render("admins/listOrders", { orderDetail });
 }
 
@@ -227,7 +120,6 @@ async function getOrderDetails(req, res) {
       },
     },
   ]);
-  console.log(JSON.stringify(orderDetail) + " specific order");
   var totalAmount = 0;
   orderDetail.forEach((order) => {
     const product = order.products.productDetails;
@@ -245,9 +137,7 @@ async function getOrderDetails(req, res) {
     } else {
       price = product.price;
     }
-    console.log(price + " proc");
 
-    // Calculate the subtotal for this product
     const subtotal = quantity * price;
     console.log(subtotal + "  sub total");
     // Add the subtotal to the total amount
@@ -269,8 +159,6 @@ async function changeOrderStatus(req, res) {
       },
     }
   );
-  console.log(ordeId + "     r");
-  console.log(userId + "id");
   res.redirect(
     `/admin/products/orders/list-orders/orders-detail/${ordeId}/${userId}/`
   );
@@ -372,7 +260,7 @@ async function checkOut(req, res) {
   let useraddressIsExist = await addressCollection.findOne({
     userId: new ObjectId(userId),
   });
-  console.log(useraddressIsExist + "        ext");
+
   if (!useraddressIsExist || useraddressIsExist.addresses.length <= 0) {
     res.redirect(`/users/product/checkout/address/${userId}`);
   } else {
@@ -397,10 +285,7 @@ async function placeOrder(req, res) {
   } else {
     walletStatus = false;
   }
-  console.log(walletAmount + " amount of wallet");
-  console.log(totalAmount + " amount of total");
-  // console.log(JSON.stringify(addressData) + "address data");
-  console.log(JSON.stringify(cartData));
+
   res.render("users/place-order", {
     profile: true,
     cartCount,
@@ -418,8 +303,6 @@ async function placeOrderPost(req, res) {
   try {
     const userId = req.params.userId;
     const totalAmount = await getTotalAmount(userId);
-    console.log("api called__________");
-    console.log(JSON.stringify(req.body) + "body of request");
     const addressdata = await addressCollection.findOne({
       userId: new ObjectId(userId),
     });
@@ -447,7 +330,6 @@ async function placeOrderPost(req, res) {
         price: price - price * (cartItem.getDiscount / 100),
       };
     });
-    // console.log(JSON.stringify(products)='!!!!!!!!!!!!!!!!!!!!!!!!!!!')
     await new orderCollection({
       userId: new ObjectId(userId),
       paymentmode: req.body.payment_method,
@@ -498,10 +380,6 @@ async function placeOrderPost(req, res) {
         });
     }
 
-    // qty=[]
-    // console.log(qty + "(((((((9");
-
-    // res.redirect(`/users/product/checkout/payment/success/${userId}`);
   } catch (err) {
     console.log("error in checkout place order post" + err);
   }
@@ -510,64 +388,6 @@ async function userOrders(req, res) {
   const userId = req.params.userId;
   const cartCount = await getCartCount(userId);
   const whishCount = await getWhishLIstCount(userId);
-  const userDetail = await UserCollection.findOne({
-    _id: new ObjectId(userId),
-  });
-  const orderDetail = await UserCollection.aggregate([
-    {
-      $match: { _id: new ObjectId(userId) },
-    },
-    {
-      $lookup: {
-        from: "orders",
-        localField: "_id",
-        foreignField: "userId",
-        as: "userOrders",
-      },
-    },
-    {
-      $unwind: "$userOrders",
-    },
-    {
-      $lookup: {
-        from: "products",
-        localField: "userOrders.products.productId",
-        foreignField: "_id",
-        as: "userOrders.products.productDetails",
-      },
-    },
-    {
-      $unwind: "$userOrders.products.productDetails",
-    },
-    {
-      $project: {
-        _id: 1,
-        userOrders: {
-          _id: "$userOrders._id",
-          userId: "$userOrders.userId",
-          paymentmode: "$userOrders.paymentmode",
-          delverydate: "$userOrders.delverydate",
-          status: "$userOrders.status",
-          address: "$userOrders.address",
-          products: "$userOrders.products.productDetails", // Reshape here
-          __v: "$userOrders.__v",
-        },
-        __v: 1,
-      },
-    },
-    {
-      $sort: {
-        "userOrders.delverydate": -1, // Sort by delverydate in descending order (latest first)
-      },
-    },
-    {
-      $group: {
-        _id: "$_id",
-        userAddress: { $first: "$userAddress" },
-        userOrders: { $push: "$userOrders" },
-      },
-    },
-  ]);
   const anotherOrder = await UserCollection.aggregate([
     {
       $match: { _id: new ObjectId(userId) },
@@ -634,36 +454,17 @@ async function userOrders(req, res) {
       }
     }
   }
-  console.log(`
 
-  
-  ${JSON.stringify(anotherOrder)}
-
-  `);
   let orderqtys = await orderCollection.find({
     userId: new ObjectId(userId),
   });
-  // console.log(JSON.stringify(orderqtys) + "   orders is _>");
+
   let qty = [];
   orderqtys.forEach((value) => {
     value.products.forEach((qt) => {
       qty.push(qt.qty);
     });
   });
-  // console.log(qty + "<----->       p");
-  // console.log(JSON.stringify(orderqtys) + "order s");
-  // console.log(JSON.stringify(orderqtys) + "     oreder quantities ");
-  // console.log(JSON.stringify(orderDetail) + "details of orders");
-  // console.log(req.session.qty + " <-in order1111111111112222222    ");
-
-  // res.render("users/orders", {
-  //   profile: true,
-  //   cartCount,
-  //   whishCount,
-  //   id: userId,
-  //   orderDetail,
-  //   qty,
-  // });
 
   res.render("users/tesorder", {
     profile: true,
@@ -683,9 +484,7 @@ async function cancelOrder(req, res) {
       _id: new ObjectId(orderId),
       userId: new ObjectId(userId),
     });
-    // const productIdsandQty=orderData.products.map((data)=>{
 
-    // })
     const paymentMode = await orderCollection.findOne({
       _id: new ObjectId(orderId),
       userId: new ObjectId(userId),
@@ -703,16 +502,15 @@ async function cancelOrder(req, res) {
         { $inc: { stock: data.qty } }
       );
     });
-    console.log(paymentMode + "<<<<<<<<<????????saldfkaslkdfjlaksdfjlk");
     if (paymentMode.paymentmode == "Bank") {
       addAmountIntoWallet(userId, orderId).then(() => {
         res.redirect(
-          `http://localhost:5001/users/product/orders/trackorders/${userId}`
+          `/users/product/orders/trackorders/${userId}`
         );
       });
     } else {
       res.redirect(
-        `http://localhost:5001/users/product/orders/trackorders/${userId}`
+        `/users/product/orders/trackorders/${userId}`
       );
     }
   } catch (err) {
