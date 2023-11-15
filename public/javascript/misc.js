@@ -270,25 +270,6 @@ function verifyRazorpayPayment(orderId, paymentId, userId) {
 
           submitCheckoutFormExplicit(localStorage.getItem("userId"), "Bank");
           location.href = `/users/product/checkout/payment/success/${userId}`;
-          // document.querySelector(".checkandAddress").submit();
-          // const address = document.querySelector(
-          //   'input[name="address"]:checked'
-          // );
-          // const payment_method = document.querySelector(
-          //   'input[name="payment_method"]:checked'
-          // );
-          // let checkoutFormdata = {
-          //   address: address.value,
-          //   payment_method: payment_method.value,
-          // };
-          // await fetch(`/users/product/cart/checkout/place-order/${userId}`, {
-          //   method: "POST",
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //   },
-          //   body: JSON.stringify(checkoutFormdata),
-          // })
-          // location.href = `/users/product/checkout/payment/success/${userId}`;
         } else {
           alert("Payment verification failed");
           alert(JSON.stringify(res));
@@ -299,13 +280,7 @@ function verifyRazorpayPayment(orderId, paymentId, userId) {
   }
 }
 function checkoutformSubmit(event, userId) {
-  //let placeorderbtn=document.getElementById("placeorderbtn")
-  //placeorderbtn.disabled=true;
-  //placeorderbtn.innerHTML=`Processing...<img src="/images/loading.png"  alt="">`
-  //setTimeout(()=>{
-  //    placeorderbtn.disabled=false
-  //    placeorderbtn.innerHTML=`Place Order`
-  //},2000)
+
   const checkoutformwithoutAddress = document.getElementById("forCheckout");
   const address = document.querySelector('input[name="address"]:checked');
   const payment_method = document.querySelector(
@@ -335,17 +310,10 @@ function checkoutformSubmit(event, userId) {
     .then((res) => {
       if (res.status === "COD" || res.status == "Wallet") {
         location.href = `/users/product/checkout/payment/success/${userId}`;
-        // } else if (res.status == "Wallet") {
-        // location.href = `/users/product/checkout/payment/success/${userId}`;
-        // } else {
-        // razorpayPayment(res, userId);
       }
     });
 }
-// const razorpaySuccessButton = document.getElementById("razorpaySuccessButton")
-// razorpaySuccessButton.addEventListener("click",()=>{
-//   alert('asdfh')
-// })
+
 
 function handleRazorpayClosureOrFailure() {
   alert("Payment window was closed or there was a failure. Please try again.");
@@ -353,8 +321,7 @@ function handleRazorpayClosureOrFailure() {
 }
 
 async function addToWhishList(productId, userId) {
-  // alert('sd')
-  // /users/product/whishlist/add-to-whishlist/:productId/:userId
+
   let response = await fetch(
     `/users/product/whishlist/add-to-whishlist/${productId}/${userId}`
   );

@@ -41,13 +41,46 @@ rangeInput.forEach((input) => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+  let data=localStorage.getItem("filterData")
+  // let checkedCategories=localStorage.getItem("filtercategories")
+  // let checkedBrands=localStorage.getItem("filterbrands")
+  // if(checkedCategories ){
+  //   checkedCategories=checkedCategories.split(",")
+  //   if(checkedCategories.length>0){
+  //     checkedCategories.forEach((checkedCat)=>{
+  //       if(checkedCat){
+  //         document.getElementById(checkedCat).checked =true
+  //       }
+  //     })
+  //   }
+  // }
+  // if(checkedBrands ){
+  //   checkedBrands=checkedBrands.split(",")
+  //   if(checkedBrands.length>0){
+
+  //     checkedBrands.forEach((checkedBrand)=>{
+  //       if(checkedBrand){
+  //         document.getElementById(checkedBrand).checked=true
+  //         alert(document.getElementById(checkedBrand).checked)
+  //       }
+  //     })
+  //   }
+  // }
+
+  
+  if(data){
+    document.getElementById("displayData").innerHTML=data
+
+  }
   const updateProductList = () => {
     const categories = Array.from(
       document.querySelectorAll('input[name="category"]:checked')
     ).map((checkbox) => checkbox.value);
+    localStorage.setItem("filtercategories",categories) 
     const brands = Array.from(
       document.querySelectorAll('input[name="brand"]:checked')
-    ).map((checkbox) => checkbox.value);
+      ).map((checkbox) => checkbox.value);
+      localStorage.setItem("filterbrands",brands)
     // const sortedByPrice=document.querySelectorAll('input[name="sortprice"]:checked')?.value || '';
     const sortedBy =
       document.querySelector('input[name="sort"]:checked')?.value || "";
@@ -68,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const id = localStorage.getItem("userId");
         res.data.forEach((product) => {
           if (!product.deletionStatus) {
+
             let card = `
             <a class="col-xl-2 col-lg-3 col-md-4 col-sm-6 d-flex col-6 justify-content-center text-decoration-none text-dark" onclick="window.location.href='/products/product-detail/${
               product._id
@@ -120,6 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
         const cardConverted = allCard.join("");
+        localStorage.setItem("filterData",cardConverted)
         if (cardConverted.length > 0) {
           document.getElementById("displayData").innerHTML = cardConverted;
         } else {
