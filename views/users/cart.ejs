@@ -21,11 +21,20 @@
                         </div>
                         <div class="cols price">
                             <%if(cartdata.cartData && cartdata.cartData.offer && cartdata.cartData.offer.offerprice){%>
-                                ₹<%-cartdata.cartData.price-(cartdata.cartData.price*cartdata.cartData.offer.offerprice)/100%>
+                              ₹
+                              <span id="priceshow<%-index%>">
+                                <%-cartdata.cartData.price-(cartdata.cartData.price*cartdata.cartData.offer.offerprice)/100%>
+                              </span>
                             <%}else if(cartdata.cartData && cartdata.cartData.discount){%>
-                                ₹<%-cartdata.cartData.discount%>
+                              ₹
+                              <span id="priceshow<%-index%>">
+                                <%-cartdata.cartData.discount%>
+                              </span>
                                 <%}else{%>
-                                ₹<%-cartdata.cartData.price%>
+                                  ₹
+                                  <span id="priceshow<%-index%>">
+                                    <%-cartdata.cartData.price%>
+                                  </span>
                              <%}%>
                         </div>
                         <div class="cols qty">
@@ -41,7 +50,7 @@
                                 </div>
                                 <div class="nav">
                                     <% if (cartdata.cartData.stock > cartdata.products.qty) { %>
-                                      <a onclick="increaseCartQty('changebtnInc<%-index%>', '<%-id%>', '<%-cartdata.products.productId%>', 1, '<%-cartdata.cartData%>', 'subtotal<%-index%>', 'qtyShow<%-index%>','decrease<%-index%>')" id="changebtnInc<%-index%>"> <!-- Updated the ID -->
+                                      <a onclick="increaseCartQty('changebtnInc<%-index%>', '<%-id%>', '<%-cartdata.products.productId%>', 1, '<%-cartdata.cartData%>', 'subtotal<%-index%>', 'qtyShow<%-index%>','decrease<%-index%>','priceshow<%-index%>','<%-cartdata.cartData.price%>')" id="changebtnInc<%-index%>"> <!-- Updated the ID -->
                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                           <path d="M7.75732 7.36666L4.45732 10.6667L3.51465 9.72399L7.75732 5.48132L12 9.72399L11.0573 10.6667L7.75732 7.36666Z" fill="black"/>
                                         </svg> 
@@ -54,13 +63,13 @@
                                       </a>
                                     <% } %>
                                     <% if (cartdata.products && cartdata.products.qty >= 2) { %>
-                                      <a onclick="increaseCartQty('changebtnInc<%-index%>', '<%-id%>', '<%-cartdata.products.productId%>', -1, '<%-cartdata.cartData%>', 'subtotal<%-index%>', 'qtyShow<%-index%>','decrease<%-index%>')" id="decrease<%-index%>"> <!-- Updated the ID -->
+                                      <a onclick="increaseCartQty('changebtnInc<%-index%>', '<%-id%>', '<%-cartdata.products.productId%>', -1, '<%-cartdata.cartData%>', 'subtotal<%-index%>', 'qtyShow<%-index%>','decrease<%-index%>','priceshow<%-index%>','<%-cartdata.cartData.stock%>')" id="decrease<%-index%>" id="increase<%-index%>"> <!-- Updated the ID -->
                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                           <path d="M8.24268 8.63334L11.5427 5.33334L12.4854 6.27601L8.24268 10.5187L4.00002 6.27601L4.94268 5.33334L8.24268 8.63334Z" fill="black"/>
                                         </svg>
                                       </a>
                                     <% } else { %>
-                                      <a style="visibility: hidden;" onclick="increaseCartQty('changebtnInc<%-index%>', '<%-id%>', '<%-cartdata.products.productId%>', -1, '<%-cartdata.cartData%>', 'subtotal<%-index%>', 'qtyShow<%-index%>','decrease<%-index%>')" id="decrease<%-index%>"> <!-- Updated the ID -->
+                                      <a style="visibility: hidden;" onclick="increaseCartQty('changebtnInc<%-index%>', '<%-id%>', '<%-cartdata.products.productId%>', -1, '<%-cartdata.cartData%>', 'subtotal<%-index%>', 'qtyShow<%-index%>','decrease<%-index%>','priceshow<%-index%>','<%-cartdata.cartData.stock%>')" id="decrease<%-index%>"> <!-- Updated the ID -->
                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                           <path d="M8.24268 8.63334L11.5427 5.33334L12.4854 6.27601L8.24268 10.5187L4.00002 6.27601L4.94268 5.33334L8.24268 8.63334Z" fill="black"/>
                                         </svg>

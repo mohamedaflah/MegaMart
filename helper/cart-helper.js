@@ -29,7 +29,7 @@ module.exports = {
         $unwind: "$cartData",
       },
     ]);
-
+    
     return userCart;
   },
   getTotalAmount: async (userId) => {
