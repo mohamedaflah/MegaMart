@@ -41,7 +41,7 @@ const {
   getOrderDetails,
   changeOrderStatus,
   filterOrders,
-  filterSpecificOrder,
+  getSalesReport,
 } = require("../controller/ordersController");
 const { ManageBrands, addBrand } = require("../controller/brandController");
 const {
@@ -133,6 +133,7 @@ router.post(
 router.get("/products/delete-product/:id", deleteProduct);
 router.get("/products/recover-product/:id", recoverProduct);
 router.get("/products/orders/list-orders/", admiLoginVerify, listAllOrders);
+router.get("/products/orders/getSalesReport",getSalesReport)
 router.get(
   "/products/orders/list-orders/orders-detail/:orderId/:userId",
   admiLoginVerify,
@@ -183,4 +184,5 @@ router.post("/product/offers/categoryoffer/updatecategoryoffer/",updateCategoryO
 
 router.get("/product/offers/getupdateproductoffer",getUpdateProductofferDetail)
 router.post("/product/offers/productoffer/updateproductoffer",updateProductofferPost)
+
 module.exports = { router };

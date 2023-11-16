@@ -1,5 +1,6 @@
 const adminDb = require("../model/collections/adminDb");
 const userDb = require("../model/collections/UserDb");
+const orderHelper = require("../helper/orderhelper");
 const bcrypt = require("bcrypt");
 const fs = require("fs");
 
@@ -68,10 +69,24 @@ function adminLogout(req, res) {
   res.redirect("/user/login");
 }
 function overView(req, res) {
+  // orderHelper.getDeliveredOrders().then((response) => {
+  //   console.log(response);
+  //   const daySalesReport = response.map((entry) => ({
+  //     label: `${entry._id.day}/${entry._id.month}`,
+  //     count: entry.count,
+  //   }));
+  //   const daySalesReportCount=daySalesReport.map(count=>count.count)
+
+  //   const monthSalesData = response.map((entry) => ({
+  //     label:`${entry._id.month}/${entry._id.year}`,
+  //     count:entry.count
+  //   }));
+
+  //   console.log("Day Sales Data",daySalesReport);
+  //   console.log("Month Sales Data",monthSalesData);
+  // });
   res.render("admins/overview");
 }
-
-
 
 async function filterUser(req, res) {
   const filterOrder = req.params.filterorder;
@@ -92,12 +107,8 @@ async function serchUser(req, res) {
   const usersData = await userDb.find({
     name: { $regex: "^" + searchData, $options: "i" },
   });
-  res.json({usersData})
-
+  res.json({ usersData });
 }
-
-
-
 
 module.exports = {
   adminHomeShowuser,

@@ -13,6 +13,7 @@ const { generateRazorpay } = require("../helper/razorpay");
 const {
   getOrderId,
   getOrderProductByOrderId,
+  getDeliveredOrders,
 } = require("../helper/orderhelper");
 const { addAmountIntoWallet } = require("./walletController");
 const { getWhishLIstCount } = require("../helper/whish-helper");
@@ -379,7 +380,6 @@ async function placeOrderPost(req, res) {
             .json({ error: "Error in Generating Razopay Checkout" });
         });
     }
-
   } catch (err) {
     console.log("error in checkout place order post" + err);
   }
@@ -504,14 +504,10 @@ async function cancelOrder(req, res) {
     });
     if (paymentMode.paymentmode == "Bank") {
       addAmountIntoWallet(userId, orderId).then(() => {
-        res.redirect(
-          `/users/product/orders/trackorders/${userId}`
-        );
+        res.redirect(`/users/product/orders/trackorders/${userId}`);
       });
     } else {
-      res.redirect(
-        `/users/product/orders/trackorders/${userId}`
-      );
+      res.redirect(`/users/product/orders/trackorders/${userId}`);
     }
   } catch (err) {
     console.log("Error during cancel order" + err);
@@ -572,12 +568,10 @@ function razopayPaymentVerification(req, res) {
       })
       .catch((error) => {
         console.error("Razorpay payment verification error:", error);
-        res
-          .status(500)
-          .json({
-            status: false,
-            message: "An error occurred while verifying the payment" + error,
-          });
+        res.status(500).json({
+          status: false,
+          message: "An error occurred while verifying the payment" + error,
+        });
       });
     //  res.json({status})
   } catch (err) {
@@ -585,6 +579,20 @@ function razopayPaymentVerification(req, res) {
       .status(500)
       .json({ status: false, message: "Error in verify payment " + err });
   }
+}
+function getSalesReport(req, res) {
+  console.log('api called');
+  getDeliveredOrders().then((response) => {
+
+    let {ordersbyDay,ordersByWeek,ordersByMonth}=response
+    console.log("By day ",ordersbyDay)
+    console.log("By Week ",ordersByWeek)
+    console.log("By Month ",ordersByMonth)
+    res.json({ordersbyDay,ordersByWeek,ordersByMonth})
+
+  }).catch(err=>{
+    res.json({err})
+  })
 }
 const forUser = {
   checkOut,
@@ -604,5 +612,6 @@ module.exports = {
   changeOrderStatus,
   filterOrders,
   forUser,
+  getSalesReport,
   // filterSpecificOrder
 };

@@ -517,7 +517,7 @@
                                         <%if(product && product.whishExist){%>
                                             <button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.179);color: #e81224;background: transparent;" onclick="addToWhishListinProducts(event,'<%-product._id%>','<%-id%>',this,'remove')"><i class="fa fa-heart"></i></button>
                                             <%}else{%>
-                                                <button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;" onclick="addToWhishListinProducts(event,'<%-product._id%>','<%-id%>',this,'add')"><i class="fa fa-heart"></i></button>
+                                            <button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;" onclick="addToWhishListinProducts(event,'<%-product._id%>','<%-id%>',this,'add')"><i class="fa fa-heart"></i></button>
                                         <%}%>
                                         <%}else{%>
                                             <button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;" onclick="window.location.href='/user/login'"><i class="fa fa-heart"></i></button>

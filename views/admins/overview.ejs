@@ -8,66 +8,138 @@
                         <a href="/admin/logout">Logout</a>
                     </div>
                 </div>
-                <div class="items_section" style="display: flex;flex-direction: column;align-items: center;justify-content: end;">
-                    <div class="chart" style="width: 60%;height: 500px;display: flex;align-items: center;justify-content: center;">
+                <div class="items_section" style="display: flex;flex-direction: column;align-items: end;justify-content: end;background-color: white;">
+<div class="report">
+    <div class="buttons">
+        <div class="head">
+            <h2>Sales Report</h2>
+        </div>
+        <div class="btns">
+            <button class="active" onclick="loadChart()">By Day</button>
+            <button onclick="byWeekReport()">By Week</button>
+            <button onclick="byMonthReport()">By Month</button>
+        </div>
+    </div>
+    <div class="chart" style=" box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.227);width: 80%;height: 500px;display: flex;align-items: center;justify-content: center;" id="myChart">
+    </div>
+</div>
 
-                        <canvas id="myChart"  ></canvas>
-                    </div>
-                    <div class="chart" style="width: 60%;height: 500px;display: flex;align-items: center;justify-content: center;">
-
-                        <canvas id="chart2"  ></canvas>
-                    </div>
                 </div>
             </div>
     </div>
-    <script>
-        const ctx = document.getElementById("myChart").getContext("2d");
+   <script>
+    var month;
+    function loadChart(){
+        try{
+            fetch("/admin/products/orders/getSalesReport").then(response=>{
+                return response.json()
+              }).then(res=>{
+                if(res.err){
+                    alert(JSON.stringify(res.err),"err")
+                }
+                localStorage.setItem("ByMonth",res.ordersByMonth)
+                month=res.ordersByMonth
+                localStorage.setItem("ByDay",res.ordersbyDay)
+                google.charts.load('current',{packages:['corechart']});
+                google.charts.setOnLoadCallback(drawChart);
+                google.charts.setOnLoadCallback(drawColumnnChart);
+                let days=["Monday","Tuesday","Wednesday","Thersday","Friday","Satuarday","Sunday"]
+                function drawChart(){
+                    let byDay=res.ordersbyDay.map(value=>(
+                        [value.day,
+                        value.count]
+                    ))
 
-        new Chart(ctx, {
-            type: "bar",
-            data: {
-//                linear-gradient(90deg, #92FE9D 0%, #00C9FF 100%, #00C9FF 100%))
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [
-                    {
-                        label: "10 of votes",
-                        data: [12, 9, 3, 2, 3],
-                        borderWidth: 1,
-                    },
-                ],
-            },
-            options: {
-                aspectRatio:1.8,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                    },
-                },
-            },
-        });
-        const ctx2=document.getElementById("chart2").getContext('2d')
-        new Chart(ctx2,{
-            type:"line",
-            data: {
-                labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-                datasets: [
-                    {
-                        label: "10 of votes",
-                        data: [12, 9, 3, 2, 3],
-                        borderWidth: 1,
-                    },
-                ],
-            },
-            options: {
-                aspectRatio:1.8,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                    },
-                },
-            },
-        })
-    </script>
+                    byDay.unshift(['Repor', 'Analytic'])
+
+                  const data=google.visualization.arrayToDataTable(byDay)
+            
+              
+                    const options={
+                        
+                        title:"Sales Report by Day",
+                        hAxis: {title: 'Day'},
+                        vAxis: {title: 'Total Number of sales'},
+                        legend: 'none',
+                        curveType: 'function',
+                        colors: ['#92FE9D', '#92FE9D', '#92FE9D',
+                        '#92FE9D', '#92FE9D', '#92FE9D',"#92FE9D"]
+     
+            
+                    }
+              
+                    //Draw
+                    const chart = new google.visualization.LineChart(document.getElementById('myChart'));
+                    chart.draw(data, options);
+              
+                }
+                function drawColumnnChart(){
+                    let byDay=res.ordersbyDay.map(value=>(
+                        [value.day,
+                        value.count]
+                    ))
+
+                    byDay.unshift(['Day', 'Total Sales'])
+
+                  const data=google.visualization.arrayToDataTable(byDay)
+            
+              
+                    const options={
+                        
+                        title:"Sales Report by Day",
+                        hAxis: {title: 'Total Number of Sales'},
+                        vAxis: {title: 'Days'},
+                        legend: 'none',
+                        colors: ['#92FE9D', '#92FE9D', '#92FE9D',
+                        '#92FE9D', '#92FE9D', '#92FE9D',"#92FE9D"]
+     
+            
+                    }
+              
+                    //Draw
+                    const chart = new google.visualization.ColumnChart(document.getElementById('myChart2'));
+                    chart.draw(data, options);
+                }
+              })
+        }catch(err){
+          alert(err)
+        }
+    }
+    loadChart()
+    function byMonthReport(){
+        google.charts.load('current',{packages:['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart(){
+            let byDay=month.map(value=>(
+                [value.month,
+                value.count]
+            ))
+
+            alert(JSON.stringify(month))
+            byDay.unshift(['Month', 'Total Sales'])
+          const data=google.visualization.arrayToDataTable(byDay)
+    
+      
+            const options={
+                
+                title:"Sales Report by Day",
+                hAxis: {title: 'Day'},
+                vAxis: {title: 'Total Number of sales'},
+                legend: 'none',
+                curveType: 'function',
+                colors: ['#92FE9D', '#92FE9D', '#92FE9D',
+                '#92FE9D', '#92FE9D', '#92FE9D',"#92FE9D"]
+
+    
+            }
+      
+            //Draw
+            const chart = new google.visualization.LineChart(document.getElementById('myChart'));
+            chart.draw(data, options);
+      
+        }
+    }
+   </script>
     <style>
         #myChart {
           width: 200px;

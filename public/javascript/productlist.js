@@ -102,54 +102,48 @@ document.addEventListener("DOMContentLoaded", () => {
         res.data.forEach((product) => {
           if (!product.deletionStatus) {
 
-            let card = `
-            <a class="col-xl-2 col-lg-3 col-md-4 col-sm-6 d-flex col-6 justify-content-center text-decoration-none text-dark" onclick="window.location.href='/products/product-detail/${
-              product._id
-            }/mainimage'">
+            let card = `<a class="col-xl-2 col-lg-3 col-md-4 col-sm-4 col-6  d-flex justify-content-center text-decoration-none text-dark" onclick="window.location.href='/products/product-detail/${product._id}/mainimage'">
             <div class="card d-flex flex-column justify-content-between position-relative" style="width: 12rem;height: 15rem;box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.156);border: none;">
-                ${
-                  product.stock < 1
+                ${product.stock < 1
                     ? `<span style="font-size: 12px;padding:2px;background: rgba(255, 0, 0, 0.224);width: 90px;margin: 2px;border-radius: 30px;display: flex;align-items: center;justify-content: center;" class="text-white">out of stock</span>`
                     : `<span style="visibility:hidden;font-size: 12px;padding:2px;background: rgba(255, 0, 0, 0.224);width: 90px;margin: 2px;border-radius: 30px;display: flex;align-items: center;justify-content: center;" class="text-white"></span>`
                 }
                 <div class="img d-flex justify-content-center" style="border-bottom: 1px solid rgb(205, 205, 205);height: 6rem;">
-                    <img src="/product-images/${
-                      product.image[0].mainimage
-                    }" style="height: 80%;width: auto;" alt="" class="card-top-img mt-2">
+                    <img src="/product-images/${product.image[0].mainimage}" style="height: 80%;width: auto;" alt="" class="card-top-img mt-2">
                 </div>
                 <div class="px-2">
                     <span style="font-size: 13px;">${product.productName}</span>
                 </div>
                 <div class="px-2 d-flex justify-content-between">
                     <span style="font-size: 13px;">
-                        ${
-                          product.discount
-                            ? `₹${product.discount}`
-                            : `₹${product.price}`
-                        }
+                        ${product.discount ? `₹${product.discount}` : `₹${product.price}`}
                     </span>
                     <span style="font-size: 13px;text-decoration: line-through;">
                         ${product.discount ? `₹${product.price}` : ""}
                     </span>
                 </div>
                 <div class="px-2 d-flex justify-content-between mb-2">
-                    ${
-                      product.stock < 1
+                    ${product.stock < 1
                         ? `<button class="btn-dark m-0 py-1 px-3 disabled" style="font-size: 12px;background: rgba(107, 105, 105, 0.818);cursor: no-drop;" disabled>Add to cart</button>`
-                        : `<button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;" ${
-                            id
-                              ? ""
-                              : "onclick=\"window.location.href='/user/login'\""
-                          }>Add to cart</button>`
+                        : `${id
+                            ? `${product && product.cartExist
+                                ? `<button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;" onclick="GotocartinProduct(event)">Go to cart</button>`
+                                : `<button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;" onclick="addToCart(event,'${product._id}','products','${id}','changeBtn${product._id}')" id="changeBtn${product._id}">Add to cart</button>`
+                            }`
+                            : `<button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;" onclick="window.location.href='/user/login'">Add to cart</button>`
+                        }`
                     }
-                    ${
-                      id
-                        ? `<button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;"><i class="fa fa-heart"></i></button>`
-                        : ""
+                    ${id
+                        ? `${product && product.whishExist
+                            ? `<button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;box-shadow: 0px 1px 13px 0px rgba(0, 0, 0, 0.179);color: #e81224;background: transparent;" onclick="addToWhishListinProducts(event,'${product._id}','${id}',this,'remove')"><i class="fa fa-heart"></i></button>`
+                            : `<button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;" onclick="addToWhishListinProducts(event,'${product._id}','${id}',this,'add')"><i class="fa fa-heart"></i></button>`
+                        }`
+                        : `<button class="btn-dark m-0 py-1 px-2" style="font-size: 15px;" onclick="window.location.href='/user/login'"><i class="fa fa-heart"></i></button>`
                     }
                 </div>
             </div>
         </a>`;
+        ;
             allCard.push(card);
           }
         });

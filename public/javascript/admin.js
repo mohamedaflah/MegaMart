@@ -712,3 +712,4 @@ function updateProductOffer(event) {
       }
     });
 }
+
