@@ -118,7 +118,6 @@ function removeItemfromCart(
         icon: "success",
       });
       currentLength-=1
-      alert(currentLength)
       if(currentLength<=1){
         window.location.reload()
       }
