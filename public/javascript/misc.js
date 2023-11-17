@@ -22,7 +22,7 @@ async function addToCart(event, id, inComing, userId, animationimg) {
     position: "center",
     style: {
       background: "linear-gradient(to right, #00b09b, #96c93d)",
-    },
+    }
   }).showToast();
   // /users/product/add-to-cart/<%-data._id%>
   const response = await fetch(`/users/product/add-to-cart/${id}`).then(
@@ -45,51 +45,50 @@ function increaseCartQty(
   subtotalsection,
   qtyshow,
   decrease,
-  price1,
+  price,
   stock
 ) {
   const qtyShow = document.getElementById(qtyshow);
-  let price=document.getElementById(price1).textContent
-  let currentQty = qtyShow.textContent;
-  let afterIncreasing = Number(currentQty) + Number(qtytochange);
-  const subtotal = document.getElementById(subtotalsection);
-  if (afterIncreasing <= 9) {
-    qtyShow.textContent = `0${afterIncreasing}`;
-  } else {
-    qtyShow.textContent = `${afterIncreasing}`;
-  }
-  let decreaseBtn = document.getElementById(decrease); // Updated the ID
-  let qtybtn1 = document.getElementById(qtybtn);
-  alert(qtybtn1.textContent)
-  if (
-    Number(afterIncreasing) >= Number(stock) ||
-    stock <= 0
-  ) {
-    qtybtn1.style.visibility = "hidden";
-    return
-  } else {
-    qtybtn1.style.visibility = "visible";
-  }
-
-  if (Number(qtyShow.textContent) >= 2) {
-    decreaseBtn.style.visibility = "visible";
-  } else {
-    decreaseBtn.style.visibility = "hidden";
-    return
-  }
-  const currentStock = stock;
-  // alert(price)
-  subtotal.textContent = `₹${Number(price)*afterIncreasing}`;
+  document.getElementById("load").style.display='flex'
+  setTimeout(()=>{
+    document.getElementById("load").style.display='none'
+  },2000)
   fetch(
     `/users/product/cart/increaseqty/${userId}/${productId}/?qty=${qtytochange}`
   )
     .then((response) => response.json())
     .then((response) => {
       if (response.status) {
+        let currentQty = qtyShow.textContent;
+        let afterIncreasing = Number(currentQty) + Number(qtytochange);
+        const subtotal = document.getElementById(subtotalsection);
+        if (afterIncreasing <= 9) {
+          qtyShow.textContent = `0${afterIncreasing}`;
+        } else {
+          qtyShow.textContent = `${afterIncreasing}`;
+        }
+        let qtybtn1 = document.getElementById(qtybtn);
+        const currentStock = response.stock;
+        let decreaseBtn = document.getElementById(decrease); // Updated the ID
+        if (
+          Number(qtyShow.textContent) >= Number(currentStock) ||
+          response.stock <= 0
+        ) {
+          qtybtn1.style.visibility = "hidden";
+        } else {
+          qtybtn1.style.visibility = "visible";
+        }
+        // alert(Number(qtyShow.textContent),' quantity')
+        if (Number(qtyShow.textContent) >= 2) {
+          decreaseBtn.style.visibility = "visible";
+        } else {
+          decreaseBtn.style.visibility = "hidden";
+        }
+        let currentSubtotal = subtotal.textContent.trim();
+        subtotal.textContent = `₹${response.subtotal}`;
         document.getElementById(
           "finalsub"
         ).textContent = `₹${response.totalAmount}`;
-        // alert(Number(qtyShow.textContent),' quantity')
         document.getElementById("aftertotal").textContent =
           response.totalAmount;
       }
@@ -297,6 +296,7 @@ function verifyRazorpayPayment(orderId, paymentId, userId) {
   }
 }
 function checkoutformSubmit(event, userId) {
+
   const checkoutformwithoutAddress = document.getElementById("forCheckout");
   const address = document.querySelector('input[name="address"]:checked');
   const payment_method = document.querySelector(
@@ -330,12 +330,14 @@ function checkoutformSubmit(event, userId) {
     });
 }
 
+
 function handleRazorpayClosureOrFailure() {
   alert("Payment window was closed or there was a failure. Please try again.");
   window.razorpayWindowClosed = false;
 }
 
 async function addToWhishList(productId, userId) {
+
   let response = await fetch(
     `/users/product/whishlist/add-to-whishlist/${productId}/${userId}`
   );
@@ -416,7 +418,7 @@ function loginFormSubmit(e) {
           setTimeout(() => {
             errDivForLog.style.visibility = "hidden";
           }, 3000);
-          shoToast();
+          shoToast(response.data.err);
         }
         if (response.data.admin) {
           window.location.href = "/admin/";
@@ -429,11 +431,19 @@ function loginFormSubmit(e) {
     alert(err);
   }
 }
-function shoToast() {
-  document.getElementById("toast").style.right = "3%";
-  setTimeout(() => {
-    document.getElementById("toast").style.right = "-100%";
-  }, 5000);
+function shoToast(msg) {
+    Toastify({
+    text: msg,
+    className: "info",
+    duration: 2000,
+    close: true,
+    gravity: "top",
+    position: "center",
+
+    style: {
+      background: "linear-gradient(to right, #00b09b, #96c93d)",
+    }
+  }).showToast();
 }
 function loginErrClose() {
   document.getElementById("errLog").style.visibility = "hidden";
@@ -757,15 +767,18 @@ function searchProductInHome(e, profile, comingfrom) {
           document.getElementById("displayData").innerHTML = listdata;
         }
       } else {
-        if (comingfrom == "home") {
+        if(comingfrom=='home'){
           document.getElementById(
             "prod_section"
           ).innerHTML = `<h3>Search Data Not Found "${e.target.value}"</h3>`;
-        } else {
+        }else{
           document.getElementById(
             "displayData"
           ).innerHTML = `<h3>Search Data Not Found "${e.target.value}"</h3>`;
         }
+        
       }
     });
 }
+
+

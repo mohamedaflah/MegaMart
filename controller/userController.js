@@ -348,8 +348,9 @@ function confirm(req, res) {
 }
 async function confirmPost(req, res) {
   try {
+    let useremail=req.body.email
     let otp = await OtpCollection.findOne({
-      useremail: req.session.userFullDetail.email_or_Phone,
+      useremail: useremail,
     });
     console.log("Otp in " + otp);
     if (req.body.verifyNum == Number(otp.otpnum)) {
@@ -362,7 +363,7 @@ async function confirmPost(req, res) {
       userInformation.password = bcrypt.hashSync(userInformation.password, 10);
       await new UserCollection({
         name: userInformation.name,
-        email: userInformation.email_or_Phone,
+        email:useremail,
         password: userInformation.password,
         joinDate: Date.now(),
       })
@@ -803,13 +804,14 @@ async function checkUniqueEmail(req, res) {
   }
 }
 function resendOTP(req, res) {
-  const userEmail = req.session.userFullDetail.email_or_Phone;
+  const userEmail = req.query.email
   const from = process.env.USER_EMAIL;
   const otp = generateOTP();
   const subject = "MegaMart Confirmation Registration Resned OTP";
   sendOtp(otp, from, userEmail, subject)
     .then(async (response) => {
       // res.status(200).json({ status: true });
+      console.log(response,'asdfsdaf')
       await OtpCollection.deleteOne({ useremail: userEmail });
       await new OtpCollection({
         otpnum: otp,

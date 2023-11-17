@@ -36,7 +36,8 @@
     function otpFormSubmit(event) {
         event.preventDefault();
         let formData = {
-            verifyNum: formValue.value
+            verifyNum: formValue.value,
+            email:localStorage.getItem("userEmail")
         };
         fetch('/mail/confirm/', {
             method: 'POST',
@@ -77,15 +78,18 @@
         document.getElementById('err').style.visibility = 'hidden';
     }
     function resendOtp(){
-        fetch("/mail/confirm/resendotp/").then(response=>response.json()).then(res=>{
+        fetch(`/mail/confirm/resendotp/?email=${localStorage.getItem("userEmail")}`).then(response=>response.json()).then(res=>{
             if(res.status){
-                showErr.textContent = 'Otp Resended';
-                resnedBtn.style.display = 'inline-block';
+                alert(res.status)
+                resnedBtn.style.display = 'none';
                 resnedBtn.style.color = 'green';
+                resnedBtn.style.display='none'
+                showErr.textContent = 'Otp Resended';
+                showErr.style.color = 'green';
                 setTimeout(()=>{
-                    resnedBtn.style.display='none'
+                    showErr.style.visibility = 'hidden';
                 },2000)
-                localStorage.setItem('initialCount', 0); 
+                count=60
             }
         })
     }

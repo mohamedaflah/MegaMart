@@ -1005,6 +1005,23 @@ $categoryWidth: 30%;
     margin: auto;
     margin-bottom: 10px;
     gap: 10px;
+    .load{
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 999;
+      // backdrop-filter: blur(1px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      display: none;
+      .load_box{
+        width: 30%;
+        height: 30%;
+      }
+    }
     .empty {
       // background-color: rebeccapurple;
       width: 100%;

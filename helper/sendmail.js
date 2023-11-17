@@ -69,13 +69,13 @@ function sendOtp(maincontent, from, to, subject) {
         // res.status(500).json({
         //   err: "An error occurred while sending the confirmation email.",
         // });
-        reject({status:false})
+        resolve({status:false})
       } else {
+        resolve({status:true})
         console.log("Email sent:", info.response);
         console.log("code in 201_________" + codEmai);
         // res.status(201).redirect("/mail/confirm");
         // res.status(200).json({ status: true });
-        resolve({status:true})
       }
     });
   })

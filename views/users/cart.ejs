@@ -1,7 +1,90 @@
 <%-include('../partials/header.ejs') %>
 <div class="home" style="min-height: 100vh;">
+  <style>
+    .spinner-box {
+      width: 300px;
+      height: 100%;
+      margin: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .leo {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+    }
+    .blue-orbit {
+      width: 165px;
+      height: 165px;
+      border: 1px solid #91daffa5;
+      -webkit-animation: spin3D 3s linear .2s infinite;
+    }
+    .green-orbit {
+      width: 120px;
+      height: 120px;
+      border: 1px solid #91ffbfa5;
+      -webkit-animation: spin3D 2s linear 0s infinite;
+    }
+    
+.red-orbit {
+	width: 90px;
+	height: 90px;
+  border: 1px solid #ffca91a5;
+  -webkit-animation: spin3D 1s linear 0s infinite;
+}
+
+.white-orbit {
+	width: 60px;
+	height: 60px;
+  border: 2px solid #ffffff;
+  -webkit-animation: spin3D 10s linear 0s infinite;
+}
+
+.w1 {
+  transform: rotate3D(1, 1, 1, 90deg);
+}
+
+.w2 {
+  transform: rotate3D(1, 2, .5, 90deg);
+}
+
+.w3 {
+  transform: rotate3D(.5, 1, 2, 90deg);
+}
+@keyframes spin3D {
+  from {
+    transform: rotate3d(.5,.5,.5, 360deg);
+  }
+  to{
+    transform: rotate3d(0deg);
+  }
+}
+    
+  </style>
     <%-include('../partials/profiletoggle.ejs')%>
     <div class="cart_secttion">
+      <div class="load" id="load">
+        <div class="load_box">
+          <div class="spinner-box">
+            <div class="blue-orbit leo">
+            </div>
+          
+            <div class="green-orbit leo">
+            </div>
+            
+            <div class="red-orbit leo">
+            </div>
+            
+            <div class="white-orbit w1 leo">
+            </div><div class="white-orbit w2 leo">
+            </div><div class="white-orbit w3 leo">
+            </div>
+          </div>
+        </div>
+      </div>
         <div class="brudCrump">
             <span>Home</span><span>/</span><span>Cart</span>
         </div>
@@ -50,7 +133,7 @@
                                 </div>
                                 <div class="nav">
                                     <% if (cartdata.cartData.stock > cartdata.products.qty) { %>
-                                      <a onclick="increaseCartQty('changebtnInc<%-index%>', '<%-id%>', '<%-cartdata.products.productId%>', 1, '<%-cartdata.cartData%>', 'subtotal<%-index%>', 'qtyShow<%-index%>','decrease<%-index%>','priceshow<%-index%>','<%-cartdata.cartData.price%>')" id="changebtnInc<%-index%>"> <!-- Updated the ID -->
+                                      <a onclick="increaseCartQty('changebtnInc<%-index%>', '<%-id%>', '<%-cartdata.products.productId%>', 1, '<%-cartdata.cartData%>', 'subtotal<%-index%>', 'qtyShow<%-index%>','decrease<%-index%>','priceshow<%-index%>','<%-cartdata.cartData.stock%>')" id="changebtnInc<%-index%>"> <!-- Updated the ID -->
                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                           <path d="M7.75732 7.36666L4.45732 10.6667L3.51465 9.72399L7.75732 5.48132L12 9.72399L11.0573 10.6667L7.75732 7.36666Z" fill="black"/>
                                         </svg> 
@@ -63,7 +146,7 @@
                                       </a>
                                     <% } %>
                                     <% if (cartdata.products && cartdata.products.qty >= 2) { %>
-                                      <a onclick="increaseCartQty('changebtnInc<%-index%>', '<%-id%>', '<%-cartdata.products.productId%>', -1, '<%-cartdata.cartData%>', 'subtotal<%-index%>', 'qtyShow<%-index%>','decrease<%-index%>','priceshow<%-index%>','<%-cartdata.cartData.stock%>')" id="decrease<%-index%>" id="increase<%-index%>"> <!-- Updated the ID -->
+                                      <a onclick="increaseCartQty('changebtnInc<%-index%>', '<%-id%>', '<%-cartdata.products.productId%>', -1, '<%-cartdata.cartData%>', 'subtotal<%-index%>', 'qtyShow<%-index%>','decrease<%-index%>','priceshow<%-index%>','<%-cartdata.cartData.stock%>')" id="decrease<%-index%>"> <!-- Updated the ID -->
                                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                                           <path d="M8.24268 8.63334L11.5427 5.33334L12.4854 6.27601L8.24268 10.5187L4.00002 6.27601L4.94268 5.33334L8.24268 8.63334Z" fill="black"/>
                                         </svg>
