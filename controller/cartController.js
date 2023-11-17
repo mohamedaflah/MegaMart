@@ -10,7 +10,6 @@ const {
 } = require("../helper/cart-helper");
 const { getWhishLIstCount } = require("../helper/whish-helper");
 
-
 // Addto Cart Functionality
 async function addTocart(req, res) {
   try {
@@ -74,9 +73,9 @@ async function addTocart(req, res) {
         );
       }
     }
-    res.json({status:true})
+    res.json({ status: true });
   } catch (err) {
-    res.json({status:false,err})
+    res.json({ status: false, err });
     console.log("error in add to cart" + err);
   }
 }
@@ -89,15 +88,15 @@ async function getCartPage(req, res) {
     });
     const userId = userData._id;
     const cartCount = await getCartCount(userId);
-    const whishCount=await getWhishLIstCount(userId)
+    const whishCount = await getWhishLIstCount(userId);
     let userCartdata = await getUserCartData(userId);
     let totalAmount = await getTotalAmount(userId);
     let couponExistStatus;
-    let cart=await cartCollection.findOne({userId:new ObjectId(userId)})
-    if(cart.getDiscount<=0){
-      couponExistStatus=false
-    }else{
-      couponExistStatus=true
+    let cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
+    if (cart && cart.getDiscount && cart.getDiscount <= 0) {
+      couponExistStatus = false;
+    } else {
+      couponExistStatus = true;
     }
     if (userCartdata.length <= 0) {
       res.render("users/cart", {
@@ -119,7 +118,7 @@ async function getCartPage(req, res) {
         totalAmount,
         empty: true,
         couponExistStatus,
-        whishCount
+        whishCount,
       });
     }
   } catch (err) {
@@ -131,7 +130,7 @@ async function getCartPage(req, res) {
 async function increaseQuantity(req, res) {
   const userId = req.params.userId;
   const productId = req.params.productId;
-  const qtyChange=req.query.qty;
+  const qtyChange = req.query.qty;
   const currentData = await productsCollection.findOne({
     _id: new ObjectId(productId),
   });
@@ -143,7 +142,7 @@ async function increaseQuantity(req, res) {
     //   return
     // }
   }
-  
+
   let data = await cartCollection.findOne({
     userId: new ObjectId(userId),
     "products.productId": new ObjectId(productId),
@@ -158,35 +157,34 @@ async function increaseQuantity(req, res) {
       $inc: { "products.$.qty": Number(qtyChange) },
     }
   );
-  const totalAmount=await getTotalAmount(userId)
-  console.log(qtyChange,'updated');
+  const totalAmount = await getTotalAmount(userId);
+  console.log(qtyChange, "updated");
   let qtyofuser = await cartCollection.aggregate([
     {
-      $match: { userId: new ObjectId(userId) }
+      $match: { userId: new ObjectId(userId) },
     },
     {
-      $unwind: "$products"
+      $unwind: "$products",
     },
     {
-      $match: { "products.productId": new ObjectId(productId) }
+      $match: { "products.productId": new ObjectId(productId) },
     },
     {
       $project: {
-        qty: "$products.qty"
-      }
-    }
+        qty: "$products.qty",
+      },
+    },
   ]);
-  const subtotal= calculateSubtotal(currentData,qtyofuser[0].qty)
-  
-  console.log(subtotal+'sub total')
+  const subtotal = calculateSubtotal(currentData, qtyofuser[0].qty);
+
+  console.log(subtotal + "sub total");
   // res.redirect(`/users/product/cart/showcart/${userId}`);
-  res.json({status:true,stock:currentData.stock,totalAmount,subtotal})
+  res.json({ status: true, stock: currentData.stock, totalAmount, subtotal });
   // res.status(200).json({message:"su"})
 }
 
 async function deleteItemFromCart(req, res) {
-  try{
-
+  try {
     const userId = req.params.userId;
     const productId = req.params.productId;
     await cartCollection.updateOne(
@@ -202,10 +200,10 @@ async function deleteItemFromCart(req, res) {
         },
       }
     );
-    const totalAmount=await getTotalAmount(userId)
-    res.json({status:true,totalAmount})
-  }catch(err){
-    console.log("error in removing item from cart "+err)
+    const totalAmount = await getTotalAmount(userId);
+    res.json({ status: true, totalAmount });
+  } catch (err) {
+    console.log("error in removing item from cart " + err);
   }
 }
 
