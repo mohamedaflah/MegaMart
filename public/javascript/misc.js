@@ -1,5 +1,6 @@
 async function addToCart(event, id, inComing, userId, animationimg) {
   event.stopPropagation();
+  // alert(event)
   swal("Success", "Product Added in Cart", "success");
   if (inComing == "home") {
   } else if (inComing == "products") {
