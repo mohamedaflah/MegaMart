@@ -22,8 +22,7 @@ async function updateCouponStatus() {
   });
 }
 async function updateProductOffer() {
-  cron.schedule("*/1 * * * *", async () => {
-    // * * * * * *
+  cron.schedule("* * * * * *", async () => {
     // console.log('running');
     const currentDate = new Date();
     const productOffer=await products.find({"offer.offertype":"product"})
@@ -39,6 +38,7 @@ async function updateProductOffer() {
         }
       }
     })
+
     const result = await products.updateMany(
       {
         "offer.offerexpiryDate": { $lte: currentDate },
@@ -46,7 +46,7 @@ async function updateProductOffer() {
       {
         $unset: { offer: 1 },
       }
-    );
+    )
   });
   
 }
