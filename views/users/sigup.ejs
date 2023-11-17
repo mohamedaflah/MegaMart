@@ -145,12 +145,6 @@
     </div>
     </div>
     <script>
-        document.getElementById("createAc").addEventListener("click",()=>{
-            
-            document.getElementById("createAc").textContent='Processing...'
-            document.getElementById("createAc").style.background='#b84848'
-            document.getElementById("createAc").disabled=true
-        })
         let passCases={
             passMatch:false,
             eightCharecter:false,
@@ -204,6 +198,9 @@
                 return;
             }
             localStorage.setItem("userEmail",formDetail.email_or_Phone)
+            document.getElementById("createAc").textContent='Processing...'
+            document.getElementById("createAc").style.background='#b84848'
+            document.getElementById("createAc").disabled=true
             fetch('/signup', {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
