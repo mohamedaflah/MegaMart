@@ -89,7 +89,7 @@
             <span>Home</span><span>/</span><span>Cart</span>
         </div>
         <%if(empty){%>
-            <div class="table">
+            <div class="table" id="carTable">
                 <div class="row">
                     <div class="cols product">products</div>
                     <div class="cols price">Price</div>
@@ -174,7 +174,7 @@
                                    <%-cartdata.products.qty*cartdata.cartData.price%>
                                <%}%>
                             </span>
-                            <a  onclick="removeItemfromCart('<%-id%>','<%-cartdata.products.productId%>','deleterow<%-index%>','finalsub','aftertotal')" class="cancel">
+                            <a  onclick="removeItemfromCart('<%-id%>','<%-cartdata.products.productId%>','deleterow<%-index%>','finalsub','aftertotal','<%-userCartdata.length%>')" class="cancel">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <circle cx="12" cy="12" r="9" fill="#DB4444"/>
                                     <path d="M9 15L12 12M15 9L11.9994 12M11.9994 12L9 9M12 12L15 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -184,11 +184,11 @@
                     </div>
                 <%})%>
             </div>
-            <div class="returnandupdate" style="visibility: hidden;">
+            <div class="returnandupdate" style="visibility: hidden;" id="returnSEction">
                 <a  id="return" style="font-size: 12px;width: 140px;">See All Coupons</a>
                 <!-- <a href="">Update cart</a> -->
             </div>
-            <div class="place-order">
+            <div class="place-order" id="placrOrderBx">
                 <%if(!couponExistStatus){%>
                     <form  class="sp cupon_apply" onsubmit="applyCoupon(event,'<%-id%>','<%-totalAmount%>')" id="couponBoxInput">
                         <input type="text" placeholder="Apply Coupon" name="couponcode" id="couponcode">
@@ -216,7 +216,7 @@
                 </div>
             </div>
         <%}else{%>
-            <div class="empty">
+            <div class="empty" id="emptySection">
                 <img src="/images/cartEmpty.webp" alt="">
             </div>
         <%}%>

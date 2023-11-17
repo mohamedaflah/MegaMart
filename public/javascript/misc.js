@@ -1,5 +1,6 @@
 async function addToCart(event, id, inComing, userId, animationimg) {
   event.stopPropagation();
+  swal("Success", "Product Added in Cart", "success");
   if (inComing == "home") {
   } else if (inComing == "products") {
     document.getElementById(animationimg).textContent = "Go to cart";
@@ -99,21 +100,45 @@ function removeItemfromCart(
   productId,
   deletingRow,
   subtotal,
-  maintotal
+  maintotal,
+  currentLength,
 ) {
-  document.getElementById(deletingRow).style.display = "none";
-  fetch(`/users/product/cart/deleteitemfromcart/${userId}/${productId}/`)
-    .then((response) => response.json())
-    .then((res) => {
-      if (res.status) {
-        console.log("item delted");
-        document.getElementById(subtotal).textContent = `₹${res.totalAmount}`;
-        document.getElementById(maintotal).textContent = res.totalAmount;
-        const cartCount = document.getElementById("cartCnt");
-        const current = cartCount.textContent;
-        cartCount.textContent = Number(current) - 1;
+  localStorage.setItem("userId",userId)
+  var refresh=false
+  swal({
+    title: "Are you sure?",
+    text: "Once deleted, you will not be able to recover this product !",
+    icon: "warning",
+    buttons: true,
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+      swal("Poof! Your Product has been deleted!", {
+        icon: "success",
+      });
+      currentLength-=1
+      alert(currentLength)
+      if(currentLength<=1){
+        window.location.reload()
       }
-    });
+      document.getElementById(deletingRow).style.display = "none";
+      fetch(`/users/product/cart/deleteitemfromcart/${userId}/${productId}/`)
+        .then((response) => response.json())
+        .then((res) => {
+          if (res.status) {
+            console.log("item delted");
+            document.getElementById(subtotal).textContent = `₹${res.totalAmount}`;
+            document.getElementById(maintotal).textContent = res.totalAmount;
+            const cartCount = document.getElementById("cartCnt");
+            const current = cartCount.textContent;
+            cartCount.textContent = Number(current) - 1;
+          }
+        });
+    } else {
+      swal("Your Excpected Product is safe!");
+    }
+  });
 }
 function showPreviewImg(productId, todisplayimage, appendingImgtag) {
   let displayImageTag = document.getElementById(appendingImgtag);

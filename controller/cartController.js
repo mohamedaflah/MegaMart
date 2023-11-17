@@ -64,7 +64,7 @@ async function addTocart(req, res) {
           }
         );
       } else {
-        res.json({status:false})
+        // res.json({status:false})
         let data = await cartCollection.updateOne(
           {
             userId: new ObjectId(userId),
