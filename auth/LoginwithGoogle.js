@@ -45,11 +45,6 @@ passport.use(
             userInformation
           }).save()
         }
-        if (!existingUser) {
-          // If the user is not registered, you can handle this case as needed.
-          // You can redirect them to a signup page or show an error message.
-          return done(null, false, { message: "User not registered." });
-        }
 
         // User is registered, so log them in
         request.session.userAuth = true;
