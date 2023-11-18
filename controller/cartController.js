@@ -93,7 +93,7 @@ async function getCartPage(req, res) {
     let totalAmount = await getTotalAmount(userId);
     let couponExistStatus;
     let cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
-    if (cart && cart.getDiscount && cart.getDiscount <= 0) {
+    if (cart && cart.getDiscount <= 0) {
       couponExistStatus = false;
     } else {
       couponExistStatus = true;
