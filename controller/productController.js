@@ -1,6 +1,7 @@
 const UserCollection = require("../model/collections/UserDb");
 const productCollection = require("../model/collections/products");
 const cartCollection = require("../model/collections/cart");
+
 const { ObjectId } = require("bson");
 const categoryCollection = require("../model/collections/CategoryDb");
 const { getCartCount } = require("../helper/cart-helper");
@@ -812,7 +813,12 @@ async function filteringandSort(req, res) {
     }
     console.log(filterQuery)
     console.log(sortOption,'sort option')
-    const data=await productCollection.find(filterQuery).sort(sortOption)
+    let data;
+    if(Object.keys(sortOption).length<=0){
+      data=await productCollection.find(filterQuery).sort({addedDate:-1})
+    }else{
+      data=await productCollection.find(filterQuery).sort(sortOption)
+    }
     // console.log(data)
     res.json({data})
   }catch(err){

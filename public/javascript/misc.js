@@ -377,6 +377,11 @@ async function addToWhishList(productId, userId) {
 function removeItemFromWhish(event, productId, userId, noneBox, operation) {
   try {
     event.stopPropagation();
+    let whishcount=localStorage.getItem('whishcount')
+    alert(whishcount)
+    if(whishcount<=1){
+      window.location.reload()
+    }
     const invisibleBox = document.getElementById(noneBox);
     const whishCountinWhish = document.getElementById("whiCountinWHish");
     if (operation == "remove") {
@@ -417,7 +422,10 @@ function removeItemFromWhish(event, productId, userId, noneBox, operation) {
           }
         });
     }
-  } catch (err) {}
+    localStorage.setItem("whishcount",whishcount--)
+  } catch (err) {
+    alert(err)
+  }
 }
 // show errors
 function loginFormSubmit(e) {
@@ -807,3 +815,57 @@ function searchProductInHome(e, profile, comingfrom) {
 }
 
 
+
+// show current location
+
+function showCurrentLocation(){
+  if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+    
+          // Use a reverse geocoding service to get location details based on coordinates
+          const apiEndpoint = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+    
+          // Make a request to the reverse geocoding API
+          fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
+              // Access the place name and state information from the response
+              const placeName = data.display_name;
+              const state = data.address.state;
+              const district = data.address.state_district.split(" ")[0]
+              const country=data.address.country
+              const postcode = data.address.postcode;
+              localStorage.setItem(`user_place`,placeName)
+              localStorage.setItem(`user_state`,state)
+              localStorage.setItem('user_district',district)
+              localStorage.setItem('user_country',country)
+              if(placeName){
+                  document.getElementById("street").value=placeName;
+              }
+              if(state){
+                  document.getElementById("state").value=state
+              }
+              if(district){
+                  document.getElementById("district").value=district
+              }
+              if(postcode){
+                  document.getElementById("pincode").value=postcode
+              }
+              console.log(`Place Name: ${placeName}, State: ${state}`);
+            })
+            .catch(error => {
+              console.error('Error getting location details:', error);
+            });
+        },
+        // Error callback
+        function(error) {
+          console.error(`Error getting location: ${error.message}`);
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+    }
+}
