@@ -1,7 +1,7 @@
 const passport = require("passport");
 require("dotenv").config();
-const bcrypt=require('bcrypt')
-const passGenerator=require('generate-password')
+const bcrypt = require("bcrypt");
+const passGenerator = require("generate-password");
 const UserCollection = require("../model/collections/UserDb");
 const { sendMailforUser } = require("../helper/sendmail");
 const GoogleStrategy = require("passport-google-oauth2").Strategy;
@@ -26,25 +26,27 @@ passport.use(
         const existingUser = await UserCollection.findOne({
           email: profile.email,
         });
-        if(!existingUser){
+        if (!existingUser) {
           let hashedPassword = passGenerator.generate({
             length: 10,
             numbers: true,
           });
           let password = bcrypt.hashSync(hashedPassword, 10);
-          
+
           let userInformation = {
             name: profile.displayName,
             email: profile.email,
-            password:password,
+            password: password,
             profileImage: profile.picture,
             emailAuth: true,
             joinDate: Date.now(),
           };
-          sendMailforUser(profile.email,"MegaMart Secret Password",hashedPassword)
-          await new UserCollection({
-            userInformation
-          }).save()
+          sendMailforUser(
+            profile.email,
+            "MegaMart Secret Password",
+            hashedPassword
+          );
+          await new UserCollection(userInformation).save();
         }
 
         // User is registered, so log them in
