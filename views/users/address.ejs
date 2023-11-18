@@ -2,8 +2,9 @@
     <div class="signup" id="forplace">
         <%-include('../partials/profiletoggle.ejs')%>
         <div class="checkout forplace">
-            <div class="heading">
-                <h1>Billing Details</h1>
+            <div class="heading" style="display: flex;align-items: center;gap:10px;">
+                <h1>Address </h1>
+                <button style="margin: 0;padding: 0;font-size: 12px;min-width: 150px;height: 30px;" onclick="showCurrentLocation()">Use current location 📍</button>
             </div>
             <form class="checkandAddress"  id="checkoutform1" onsubmit="checkoutWithAddress(event,'<%-id%>')">
                 <div class="checkoutform">
@@ -78,6 +79,58 @@
         </div>
     </div>
     </div>    
-      
+      <script>
+        function showCurrentLocation(){
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                  function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+              
+                    // Use a reverse geocoding service to get location details based on coordinates
+                    const apiEndpoint = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+              
+                    // Make a request to the reverse geocoding API
+                    fetch(apiEndpoint)
+                      .then(response => response.json())
+                      .then(data => {
+                        // Access the place name and state information from the response
+                        const placeName = data.display_name;
+                        const state = data.address.state;
+                        const district = data.address.state_district.split(" ")[0]
+                        const country=data.address.country
+                        const postcode = data.address.postcode;
+                        localStorage.setItem(`user_place`,placeName)
+                        localStorage.setItem(`user_state`,state)
+                        localStorage.setItem('user_district',district)
+                        localStorage.setItem('user_country',country)
+                        if(placeName){
+                            document.getElementById("street").value=placeName;
+                        }
+                        if(state){
+                            document.getElementById("state").value=state
+                        }
+                        if(district){
+                            document.getElementById("district").value=district
+                        }
+                        if(postcode){
+                            document.getElementById("pincode").value=postcode
+                        }
+                        console.log(`Place Name: ${placeName}, State: ${state}`);
+                      })
+                      .catch(error => {
+                        console.error('Error getting location details:', error);
+                      });
+                  },
+                  // Error callback
+                  function(error) {
+                    console.error(`Error getting location: ${error.message}`);
+                  }
+                );
+              } else {
+                console.error('Geolocation is not supported by this browser.');
+              }
+        }
+      </script>
     <%-include('../partials/footer.ejs') %>
 
