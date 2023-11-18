@@ -567,7 +567,7 @@ function FailedLogin(req, res) {
   //   whishCount: 0,
   //   id: false,
   // });
-  res.send("failed");
+  res.send("User not Found You can Singup");
 }
 
 function forgotPassword(req, res) {

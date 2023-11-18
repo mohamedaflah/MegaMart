@@ -27,11 +27,12 @@ passport.use(
           email: profile.email,
         });
         if(!existingUser){
-          let hashedPassword=passGenerator.generate({
-            length:10,
-            numbers:true,
-          })
-          let password=hashedPassword=bcrypt.hashSync(hashedPassword,10)
+          let hashedPassword = passGenerator.generate({
+            length: 10,
+            numbers: true,
+          });
+          let password = bcrypt.hashSync(hashedPassword, 10);
+          
           let userInformation = {
             name: profile.displayName,
             email: profile.email,
