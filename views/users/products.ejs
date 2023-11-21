@@ -46,7 +46,7 @@
   }
   .price-input .field {
     display: flex;
-    width: 64%;
+    width: 164%;
     height: 25px;
     align-items: center;
   }
@@ -79,8 +79,8 @@
   }
   .slider .progress {
     height: 100%;
-    left: 25%;
-    right: 25%;
+    left: 2%;
+    right: 11%;
     position: absolute;
     border-radius: 5px;
     background: #4458db;
@@ -220,6 +220,7 @@
                             <img src="/images/search.svg" alt="">
                         </label>
                     </form>
+                     
                     <%if(profile){%>
                         <a href="/users/product/whishlist/<%-id%>"  class="crt whish">
                             <img class="whish" src="/images/heart.svg" alt="">
@@ -405,9 +406,27 @@
                     </ul>
                 </div>
             </div>
+            <div class="filter_value">
+                <div class="filter_head">
+                    <span class="text-secondary">Price range</span>
+                </div>
+                <div class="filter_data">
+                    <ul>
+                            <li>
+                                <input type="checkbox" name="" id="500-1000" value="500-1000">
+                                <label for="<%-min%>-1000">₹ 500-1000</label></li>
+                            <li>
+                                <input type="checkbox" name="" id="1000-1500" value="500-1000">
+                                <label for="<%-min%>-1000">₹ 1000-1500</label></li>
+                            <li>
+                                <input type="checkbox" name="" id="1500-2000" value="500-1000">
+                                <label for="<%-min%>-1000">₹ 1500-2000</label></li>
+                    </ul>
+                </div>
+            </div>
 
             <!-- Filter by price -->
-            
+
             <!-- <div class="filter_value">
                 <div class="filter_head">
                     <span class="text-secondary">Price range</span>
@@ -416,19 +435,19 @@
                       <div class="wrapper">
                         <div class="price-input">
                           <div class="field">
-                            <input type="number" class="input-min" value="2500" readonly>
+                            <input type="number" class="input-min" value="<%-min%>" readonly>
                           </div>
                           <div class="separator">-</div>
                           <div class="field">
-                            <input type="number" class="input-max" value="7500" readonly>
+                            <input type="number" class="input-max" value="<%-max%>" readonly>
                           </div>
                         </div>
                         <div class="slider">
                           <div class="progress"></div>
                         </div>
                         <div class="range-input">
-                          <input type="range" class="range-min" min="0" max="10000" value="2500" step="100">
-                          <input type="range" class="range-max" min="0" max="10000" value="7500" step="100">
+                          <input type="range" class="range-min" min="0" max="10000" value="<%-min%>" step="100">
+                          <input type="range" class="range-max" min="0" max="10000" value="<%-max%>" step="100">
                         </div>
                       </div>
                 </div>

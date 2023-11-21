@@ -311,7 +311,6 @@ async function placeOrderPost(req, res) {
     const userCartdata = await getUserCartData(userId);
     const products = userCartdata.map((cartItem) => {
       let price;
-      console.log(JSON.stringify(cartItem) + "--------cart items");
       if (
         cartItem.cartData &&
         cartItem.cartData.offer &&

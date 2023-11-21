@@ -515,9 +515,7 @@ async function searchProductForAdmin(req, res) {
 async function detailProductGet(req, res) {
   let proId = req.params.id;
   let mainImageas = req.params.image;
-  console.log(proId);
-  // if (req.session.userAuth) {
-  // }
+
   const userData = await UserCollection.findOne({
     email: req.session.userEmail,
   });
