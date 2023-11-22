@@ -130,7 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                 ? `<button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;" onclick="GotocartinProduct(event)">Go to cart</button>`
                                 : `<button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;" onclick="addToCart(event,'${product._id}','products','${id}','changeBtn${product._id}')" id="changeBtn${product._id}">Add to cart</button>`
                             }`
-                            : `<button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;" onclick="window.location.href='/user/login'">Add to cart</button>`
+                            : `<button class="btn-dark m-0 py-1 px-3" style="font-size: 12px;">Add to cart</button>`
                         }`
                     }
                     ${id

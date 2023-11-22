@@ -35,7 +35,7 @@ app.use((req, res) => {
 });
 const port = process.env.PORT;
 app.listen(port, () => {
-  console.log(`Server Currenty Runnig in http://localhost:${port}`);
+  console.log(`app started`);
   updateCouponStatus()
   updateProductOffer()
 });

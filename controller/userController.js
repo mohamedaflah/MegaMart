@@ -369,7 +369,7 @@ async function confirmPost(req, res) {
       })
         .save()
         .then((dat, err) => {
-          console.log("inserted");
+          console.log("inserted",dat);
           req.session.userId = dat._id;
         });
       // req.session.userSignupwithreferal ;
@@ -380,7 +380,9 @@ async function confirmPost(req, res) {
           userId: new ObjectId(req.session.userreferalId),
         });
         const offAmt = await referalDb.find();
+        console.log(offAmt,'offer db');
         const referalId = offAmt[0]._id;
+        console.log(referalId,'_id')
         if (wallerExist) {
           await walletCollection.updateOne(
             { userId: new ObjectId(req.session.userreferalId) },
@@ -418,12 +420,6 @@ async function confirmPost(req, res) {
       }
       res.json({ status: true });
     } else {
-      // res.render("users/otp", {
-      //   err: "Verification Failed and Pleas Try Agin!!...",
-      //   profile: false,
-      //   cartCount: 0,
-      //   id: false,
-      // });
       res.json({ err: "Verification Failed and Pleas Try Agin!!..." });
     }
   } catch (err) {
