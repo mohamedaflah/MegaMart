@@ -503,7 +503,7 @@ function applyCoupon(event, userId) {
     .then((response) => response.json())
     .then((res) => {
       if (res.err) {
-        alert(res.err);
+        swal("Oops!", res.err, "error");
       }
       if (res.status) {
         let total = document.getElementById("aftertotal");
