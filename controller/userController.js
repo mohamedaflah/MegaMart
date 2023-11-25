@@ -100,7 +100,16 @@ async function showProductPage(req, res) {
   });
   console.log(userStatus);
   console.log(req.session.userEmail);
-  if (userStatus && userStatus.status) {
+  if (req.session.userAuth) {
+    if(!userStatus.status){
+      return res.render("users/login", {
+        profile: false,
+        err: "Your Permission Denied by Admin",
+        cartCount: false,
+        whishCount: false,
+        id: false,
+      });
+    }
 
     let cartCount = await getCartCount(userStatus._id);
     let whishCount = await getWhishLIstCount(userStatus._id);
