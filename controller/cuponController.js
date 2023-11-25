@@ -7,33 +7,37 @@ async function showAllCouponInAdmin(req, res) {
   res.render("admins/coupon", { coupons });
 }
 async function addCouponPost(req, res) {
-  console.log(req.body);
-  let { couponname, couponcode, expiry, discount, usagelimit, minorderAmt } =
-    req.body;
-  expiry = new Date(expiry);
-  if (expiry < new Date()) {
-    return res.json({ existerr: "Coupon has already expired.", exist: true });
+  try{
+    console.log(req.body);
+    let { couponname, couponcode, expiry, discount, usagelimit, minorderAmt } =
+      req.body;
+    expiry = new Date(expiry);
+    if (expiry < new Date()) {
+      return res.json({ existerr: "Coupon has already expired.", exist: true });
+    }
+    let couponExistStatus = await couponCollection.findOne({
+      couponcode: couponcode,
+    });
+    if (couponExistStatus) {
+      return res.json({ existerr: "Coupon code already exists!!", exist: true });
+    }
+    if (Number(discount) <1 || Number(discount)>90) {
+      return res.json({ existerr: "must be between 1 and 90 %", percent: true });
+    }
+    await new couponCollection({
+      couponname: couponname,
+      couponcode: couponcode,
+      addedDate: Date.now(),
+      statusChangeDate: expiry,
+      discount: discount,
+      usageLimit: usagelimit,
+      status: "active",
+      minOrderAmt: minorderAmt,
+    }).save();
+    res.json({ status: true });
+  }catch(err){
+    return res.json({ existerr: "Coupon name already taken You Can edit", exist: true });
   }
-  let couponExistStatus = await couponCollection.findOne({
-    couponcode: couponcode,
-  });
-  if (couponExistStatus) {
-    return res.json({ existerr: "Coupon code already exists!!", exist: true });
-  }
-  if (Number(discount) <1 || Number(discount)>90) {
-    return res.json({ existerr: "must be between 1 and 90 %", percent: true });
-  }
-  await new couponCollection({
-    couponname: couponname,
-    couponcode: couponcode,
-    addedDate: Date.now(),
-    statusChangeDate: expiry,
-    discount: discount,
-    usageLimit: usagelimit,
-    status: "active",
-    minOrderAmt: minorderAmt,
-  }).save();
-  res.json({ status: true });
 }
 
 async function getEditCouponData(req, res) {

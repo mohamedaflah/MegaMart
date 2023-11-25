@@ -5,7 +5,6 @@ const mongoose = require("mongoose");
 const schema = mongoose.Schema({
   couponname: {
     type: String,
-    unique:true,
   },
   couponcode: {
     type: String,
@@ -42,9 +41,9 @@ const schema = mongoose.Schema({
     enum: ["active", "expired"],
     default: "active",
   },
-  minOrderAmt:{
-    type:Number
-  }
+  minOrderAmt: {
+    type: Number,
+  },
 });
 
 module.exports = mongoose.model(process.env.COUPON_COLLECTION, schema);

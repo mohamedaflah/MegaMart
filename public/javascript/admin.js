@@ -364,6 +364,24 @@ function updateOffAmt(e) {
       }
     });
 }
+function generateCouponCodeandPutInput(e,element){
+    document.getElementById("couponcode").value=generateCouponCode(e.target.value)
+}
+function generateCouponCode(name) {
+  // Convert the name to uppercase
+  const uppercaseName = name.toUpperCase();
+
+  // Remove any non-alphabetic characters
+  const alphanumericName = uppercaseName.replace(/[^A-Z]/g, '');
+
+  // Generate a random 6-digit number
+  const randomDigits = Math.floor(100000 + Math.random() * 900000);
+
+  // Combine the first 3 characters of the alphanumeric name and the random 3 digits
+  const couponCode = (alphanumericName.substr(0, 3) + randomDigits).substr(0, 6);
+
+  return couponCode;
+}
 function addCategoryOffer(event) {
   event.preventDefault();
   const offerCategorySelect = document.getElementById("offercategory");
