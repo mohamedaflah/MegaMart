@@ -259,7 +259,8 @@ function placeOrderCheckout(userId, totalAmount) {
         if (res.order) {
           razorpayPayment(res.order, userId);
         } else {
-          alert(JSON.stringify(res));
+          swal(JSON.stringify(res));
+
         }
       });
   }
@@ -287,6 +288,7 @@ function razorpayPayment(order, userId) {
   const rzp = new Razorpay(options);
   rzp.on("payment.failed", function (response) {
     alert("Payment Failed " + response.error.description);
+    // swal("Payment Failed " + response.error.description);
   });
   rzp.on("payment.window.beforeclose", function () {
     // window.razorpayWindowClosed = true;
@@ -312,7 +314,8 @@ function verifyRazorpayPayment(orderId, paymentId, userId) {
           submitCheckoutFormExplicit(localStorage.getItem("userId"), "Bank");
           location.href = `/users/product/checkout/payment/success/${userId}`;
         } else {
-          alert("Payment verification failed");
+          // alert("Payment verification failed");
+          swal("Payment verification failed")
           alert(JSON.stringify(res));
         }
       });
