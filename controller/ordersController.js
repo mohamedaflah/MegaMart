@@ -50,7 +50,7 @@ async function listAllOrders(req, res) {
         status: 1,
         address: 1,
         isEmpty: 1,
-        user: 1, // This will contain all user details
+        user: 1, 
         products: {
           productId: "$product._id",
           qty: "$products.qty",
