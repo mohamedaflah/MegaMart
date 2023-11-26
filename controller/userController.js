@@ -23,6 +23,7 @@ const adminCollection = require("../model/collections/adminDb");
 const referalDb = require("../model/collections/referalDb");
 const { sendOtp } = require("../helper/sendmail");
 const whish = require("../model/collections/whish");
+const ProductHelper =require("../helper/product-helper");
 changeStream.on("otpDeleted", (documentId) => {
   console.log(`OTP document deleted with ID: ${documentId}`);
 });
@@ -134,7 +135,6 @@ async function showProductPage(req, res) {
       }
       i++
     }
-
     return res.render("users/products", {
       profile: true,
       id: userStatus._id,
