@@ -1,6 +1,5 @@
 async function addToCart(event, id, inComing, userId, animationimg) {
   event.stopPropagation();
-  // alert(event)
   swal("Success", "Product Added in Cart", "success");
   if (inComing == "home") {
   } else if (inComing == "products") {
@@ -80,7 +79,6 @@ function increaseCartQty(
         } else {
           qtybtn1.style.visibility = "visible";
         }
-        // alert(Number(qtyShow.textContent),' quantity')
         if (Number(qtyShow.textContent) >= 2) {
           decreaseBtn.style.visibility = "visible";
         } else {
@@ -203,18 +201,16 @@ function checkoutWithAddress(event, userId) {
       if (res.status) {
         location.href = `/users/product/cart/checkout/place-order/${userId}`;
       }
-    });
-  //.catch((err)=>{
-  //  alert('error is'+err)
-  //});
+    })
+  .catch((err)=>{
+    swal("Oops!", err, "error");
+  });
 }
 function submitCheckoutFormExplicit(userId, seletedmethod) {
   const address = document.querySelector('input[name="address"]:checked');
   const payment_method = document.querySelector(
     'input[name="payment_method"]:checked'
   );
-  // if(payment_method.value=='COD'){
-  // }
   let checkoutFormdata = {
     address: address.value,
     payment_method: payment_method.value,
@@ -299,7 +295,7 @@ function razorpayPayment(order, userId) {
 }
 
 function verifyRazorpayPayment(orderId, paymentId, userId) {
-  // alert("reached");
+  
   try {
     fetch(`/users/orders/checkout/razorpay/verifyrazorpaypayment`, {
       method: "POST",
@@ -314,7 +310,6 @@ function verifyRazorpayPayment(orderId, paymentId, userId) {
           submitCheckoutFormExplicit(localStorage.getItem("userId"), "Bank");
           location.href = `/users/product/checkout/payment/success/${userId}`;
         } else {
-          // alert("Payment verification failed");
           swal("Payment verification failed")
           alert(JSON.stringify(res));
         }
@@ -381,7 +376,6 @@ function removeItemFromWhish(event, productId, userId, noneBox, operation) {
   try {
     event.stopPropagation();
     let whishcount=localStorage.getItem('whishcount')
-    alert(whishcount)
     if(whishcount<=1){
       window.location.reload()
     }
@@ -401,7 +395,7 @@ function removeItemFromWhish(event, productId, userId, noneBox, operation) {
             let whiShCurr = Number(whishCountinWhish.textContent);
             whishCountinWhish.textContent = whiShCurr - 1;
           } else {
-            alert("err");
+            swal("Oops!", "Something went wrong", "error");
           }
         });
     } else {
@@ -421,13 +415,13 @@ function removeItemFromWhish(event, productId, userId, noneBox, operation) {
               cart.textContent = Number(cartCntCurrent) + 1;
             }
           } else {
-            alert("erlk");
+            swal("Oops!", "Something went wrong", "error");
           }
         });
     }
     localStorage.setItem("whishcount",whishcount--)
   } catch (err) {
-    alert(err)
+    swa(err)
   }
 }
 // show errors
@@ -464,7 +458,7 @@ function loginFormSubmit(e) {
         }
       });
   } catch (err) {
-    alert(err);
+    swal("Oops!", "Network Issue", "error");
   }
 }
 function shoToast(msg) {
@@ -516,9 +510,9 @@ function applyCoupon(event, userId) {
         let duductedAmount = current * (discount / 100);
         total.textContent = current - duductedAmount;
         total.style.color = "red";
-        alert("Coupon Apply Succefull");
+        swal("Success", `Coupon Applied and You got ${discount}% Discount`, "success");
+
         document.getElementById("couponBoxInput").style.visibility = "hidden";
-        // alert('deducted ')
       }
     });
 }
@@ -574,9 +568,7 @@ function showReturnImage(inputId, imageId) {
   }
 }
 
-// document.getElementById("returnForm").addEventListener("submit",()=>{
-//   alert('hle')
-// })
+
 let fm = document.getElementById("returnForm");
 function returnForm(event, userId) {
   event.preventDefault();
@@ -584,7 +576,6 @@ function returnForm(event, userId) {
   let productId = sessionStorage.getItem("productId");
   let orderId = sessionStorage.getItem("orderId");
   let finalprice = localStorage.getItem("finalpriceforreturn");
-  // alert(productId);
   let reason = document.getElementById("reson");
   let Reason = reason.options[reason.selectedIndex].value;
   if (Reason == "other") {
@@ -602,12 +593,6 @@ function returnForm(event, userId) {
     // Append the selected file to the FormData object with the correct field name
     formDt.append("file", selectedFile);
     formDt.append("reason", Reason);
-
-    // alert("Selected reason: " + Reason);
-    // alert("Selected file name: " + selectedFile.name);
-    // alert("Selected file size: " + selectedFile.size + " bytes");
-    // alert("Selected file type: " + selectedFile.type);
-    // alert(JSON.stringify(selectedFile));
     fetch(
       `/users/product/orders/returnproduct/${productId}/${userId}/?orderId=${orderId}&&finalprice=${finalprice}`,
       {
@@ -621,11 +606,11 @@ function returnForm(event, userId) {
           location.href = `/users/product/orders/trackorders/${userId}`;
         }
         if (res.err) {
-          alert(res.err);
+          swal(res.err);
         }
       });
   } else {
-    alert("Please upload the wrong image");
+    swal("Please upload the wrong image");
   }
 }
 
