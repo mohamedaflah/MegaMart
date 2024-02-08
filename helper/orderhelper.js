@@ -43,14 +43,8 @@ function getDeliveredOrders() {
         monthCount[monthofYear]++;
       });
       // Function to get the day of the week
-      const ordersbyDay = dayCount.map((count, dayOfweek) => ({
-        day: getDayName(dayOfweek),
-        count,
-      }));
-      const ordersByMonth = monthCount.map((count, monthofYear) => ({
-        month: getMonthName(monthofYear),
-        count,
-      }));
+      const ordersbyDay = dayCount.map((count, dayOfweek) => count);
+      const ordersByMonth = monthCount.map((count, monthofYear) => count);
       const salesByWeek = {};
       const salesByMonth = {};
       DeliveredOrders.forEach((order) => {
@@ -121,7 +115,5 @@ function getWeekNumber(date) {
   return Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
 }
 
-function sendConfirmationMail(userId){
-
-}
+function sendConfirmationMail(userId) {}
 module.exports = { getOrderId, getOrderProductByOrderId, getDeliveredOrders };

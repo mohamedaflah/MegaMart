@@ -587,7 +587,8 @@ function getSalesReport(req, res) {
     console.log("By day ",ordersbyDay)
     console.log("By Week ",ordersByWeek)
     console.log("By Month ",ordersByMonth)
-    res.json({ordersbyDay,ordersByWeek,ordersByMonth})
+    // res.json({ordersbyDay,ordersByWeek,ordersByMonth})
+    res.render('admins/dashboard/index.ejs')
 
   }).catch(err=>{
     res.json({err})

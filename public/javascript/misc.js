@@ -572,6 +572,9 @@ function showReturnImage(inputId, imageId) {
 let fm = document.getElementById("returnForm");
 function returnForm(event, userId) {
   event.preventDefault();
+  document.getElementById("returnSubmitButton").disabled=true
+  document.getElementById("returnSubmitButton").style.pointerEvents='none'
+
   let fm = document.getElementById("returnForm");
   let productId = sessionStorage.getItem("productId");
   let orderId = sessionStorage.getItem("orderId");

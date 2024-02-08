@@ -66,6 +66,7 @@ const {
 const { showProductOffer, addProductOffer, getUpdateProductofferDetail, updateProductofferPost } = require("../controller/productOfferController");
 const { showAllreturns } = require("../controller/returnsController").admin;
 router.get("/", admiLoginVerify, adminHomeShowuser);
+router.get("/dashboard",admiLoginVerify,getSalesReport)
 router.get("/login", adminLoginGet);
 router.post("/login", adminLoginPost);
 router.get("/errorMessage/close/", adminErrClose);

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MegarMart |</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="icon" href="/images/title_icon.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
+        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="/styles/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js" integrity="sha512-7U4rRB8aGAHGVad3u2jiC7GA5/1YhQcQjxKeaVms/bT66i3LVBMRcBI9KwABNWnxOSwulkuSXxZLGuyfvo7V1A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="path/to/chartjs/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" integrity="sha512-W/zrbCncQnky/EzL+/AYwTtosvrM+YG/V6piQLSe2HuKS6cmbw89kjYkp3tWFn1dkWV7L1ruvJyKbLz73Vlgfg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/regular.min.css" integrity="sha512-rOTVxSYNb4+/vo9pLIcNAv9yQVpC8DNcFDWPoc+gTv9SLu5H8W0Dn7QA4ffLHKA0wysdo6C5iqc+2LEO1miAow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/regular.min.css" integrity="sha512-rOTVxSYNb4+/vo9pLIcNAv9yQVpC8DNcFDWPoc+gTv9SLu5H8W0Dn7QA4ffLHKA0wysdo6C5iqc+2LEO1miAow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- <script defer src="./node_modules/axios/dist/axios.min.js"></script> -->
+    <script >
+        function popup1() {
+            
+            document.getElementById("filterpop").classList.toggle("active")
+        }
+        function sortpop() {
+            document.getElementById("productstock").classList.toggle('active')
+        }
+        //let adprbtn = document.querySelector('#mySizeChart')
+        //let popup = document.querySelector('.add_product_section')
+        //let closeb = document.querySelector('#clsbtn')
+        //function addProdcut() {
+        //    popup.classList.add('active')
+        //}
+        //function closeProduct(){
+        //    popup.classList.remove('active')
+        //}
+    </script>
+</head>
+
+<body>
+    <div class="home" style="display: flex;" style="min-height:100vh">
+        <div class="side_bar" id="side">
+            <div class="logo">
+                <img id="lg" src="/images/logo.svg" style="width: 110px;" alt="">
+        
+                <img src="/images/side.svg" alt="" style="cursor: pointer;" id="sidebartoggle">
+        
+            </div>
+            <div class="links">
+                <p style="margin: 0;padding:0">MENU</p>
+                <div class="tags">
+                    <a href="/admin/overview" class="actived">
+                        <img src="/images/home.svg" alt="">
+                        Overview</a>
+                    <a href="/admin/">
+                        <img src="/images/customers.svg" alt="">
+                        Customers</a>
+                    <a href="/admin/products">
+                        <img src="/images/product.svg" alt="">
+                        products</a>
+                    <a href="/admin/products/orders/list-orders/">
+                        <img src="/images/transaction.svg" alt="">
+                        orders</a>
+                    <!-- <a href="">
+                        <img src="/images/order.svg" alt="">
+                        Transaction</a> -->
+                    <a href="">
+                        <img src="/images/reports.svg" alt="">
+                        Report</a>
+                    <a href="/admin/category">
+                        <img src="/images/categories.svg" alt="">
+                        Category</a>
+                    <a href="/admin/">
+                        <img src="/images/bnr.svg" alt="">
+                        Banner</a>
+                    <!-- <a href="/admin/brand">
+                        <img src="/images/br.svg" alt="">
+                        Brand</a> -->
+                    <a href="/admin/products/cupons/allcupons">
+                        <img src="/images/voucher.svg" alt="">
+                        Coupon</a>
+                    <a href="/admin/product/offers/seeOffers">
+                        <img src="/images/offer.svg" alt="">
+                        Offers</a>
+                    <!-- <a href="/admin/product/returns/showallreturns">
+                        <img src="/images/returns.svg" alt="">
+                        Returns</a> -->
+                </div>
+            </div>
+            <div class="activeLink">
+                <div class="tags">
+                    <a href="/admin/overview">
+                        <img src="/images/home.svg" alt=""></a>
+                    <a href="/admin/">
+                        <img src="/images/customers.svg" alt=""></a>
+                    <a href="/admin/products">
+                        <img src="/images/product.svg" alt="">
+                    </a>
+                    <a href="">
+                        <img src="/images/transaction.svg" alt="">
+                    </a>
+                    <a href="">
+                        <img src="/images/order.svg" alt="">
+                    </a>
+                    <a href="">
+                        <img src="/images/reports.svg" alt="">
+                    </a>
+                    <a href="/admin/category">
+                        <img src="/images/categories.svg" alt="">
+                    </a>
+                    <a href="/admin/category">
+                        <img src="/images/bnr.svg" alt="">
+                    </a>
+                    <a href="/admin/products/cupons/allcupons">
+                        <img src="/images/voucher.svg" alt="">
+                    </a>
+                    <a href="/admin/product/offers/seeOffers">
+                        <img src="/images/offer.svg" alt="">
+                    </a>
+                    <a href="/admin/products/cupons/allcupons">
+                        <img src="/images/returns.svg" alt="">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <script>
+            let sideToggle = document.querySelector("#sidebartoggle");
+            let sidebar = document.querySelector("#side");
+            sideToggle.addEventListener("click", () => {
+                sidebar.classList.toggle("active");
+            });
+        </script>
+            <div class="content_section">
+                <div class="overview_section flex-column align-items-end justify-content-between">
+                    <div class="head_inp">
+                        <h5>Overview</h5>
+                        <a href="/admin/logout">Logout</a>
+                    </div>
+                    <div class="head_inp d-flex  h-auto pb-2">
+                        <div style="height: 80px;width: 150px;background-color: red;" class="rounded-1 d-flex align-items-center">
+                            <div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-badge-dollar-sign"><path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                            </div>
+                            <div>
+
+                                Total Sales
+                            </div>
+                        </div>
+                        <div>
+                            Total Orders
+                        </div>
+                        <div>
+                            Total Orders
+                        </div>
+                        <div>
+                            Total Orders
+                        </div>
+                        <div>
+                            Total Orders
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="items_section" style="display: flex;flex-direction: column;align-items: end;justify-content: end;background-color: white;">
+
+
+                </div>
+            </div>
+    </div>
+    
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<!-- <script src="/javascript/script.js"></script> -->
+<script defer src="/javascript/admin.js"></script>
+</body>
+
+</html>

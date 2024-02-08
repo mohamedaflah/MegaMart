@@ -9,6 +9,7 @@ async function adminHomeShowuser(req, res) {
   let usersData = await userDb.find().sort({ joinDate: -1 });
   res.render("admins/admin", { usersData });
 }
+
 async function adminLoginGet(req, res) {
   if (req.session.adminAuth) {
     res.redirect("/admin/");
