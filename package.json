@@ -17,7 +17,7 @@
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
-    "easyinvoice": "^3.0.25",
+    "easyinvoice": "^3.0.11",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
@@ -32,13 +32,15 @@
     "nocache": "^4.0.0",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.9.5",
-    "nodemon": "^3.0.1",
     "passport": "^0.6.0",
     "passport-google-oauth": "^2.0.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-google-oauth20": "^2.0.0",
-    "razorpay": "^2.9.2",
+    "razorpay": "^0.0.0",
     "sharp": "^0.32.6",
     "speakeasy": "^2.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
   }
 }
