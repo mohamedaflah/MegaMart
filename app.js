@@ -20,6 +20,7 @@ app.use(
   })
 );
 
+
 const router = require("./router/userRoute");
 const adminRoute = require("./router/adminRoute");
 const { updateCouponStatus, updateProductOffer } = require("./auth/cron");
@@ -36,6 +37,12 @@ app.use((req, res) => {
 const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`app started`);
+  // console.log(" ██╗  ██╗██╗   ██╗██████╗ ██╗   ██╗");
+  // console.log(" ██║ ██╔╝╚██╗ ██╔╝██╔══██╗██║   ██║");
+  // console.log(" █████╔╝  ╚████╔╝ ██║  ██║██║   ██║");
+  // console.log(" ██╔═██╗   ╚██╔╝  ██║  ██║██║   ██║");
+  // console.log(" ██║  ██╗   ██║   ██████╔╝╚██████╔╝");
+  // console.log(" ╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ");
   updateCouponStatus()
   updateProductOffer()
 });

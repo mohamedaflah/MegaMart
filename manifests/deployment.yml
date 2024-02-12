@@ -1,0 +1,92 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: megamart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: megamart
+  template:
+    metadata:
+      labels:
+        app: megamart
+    spec:
+      containers:
+        - image: aflu/e-commerce3
+          name: megamart
+          ports:
+            - containerPort: 5001
+          env:
+            - name: PORT
+              value: "5001"
+            - name: GOOGLE_CLIENT_ID
+              value: "554296135447-r1gvbhjmir3vpsojtbm8s4sv1omqpmnh.apps.googleusercontent.com"
+            - name: GOOGLE_CLIENT_SECRET
+              value: "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"
+            - name: SECRET
+              value: "mhaflu"
+            - name: GOOGLE_LOGIN_CLINET_ID
+              value: "6271277622-qr316mllvigdh8tj0ca67csaphmc7t5a.apps.googleusercontent.com"
+            - name: FIREBASE_API_KEY
+              value: "AIzaSyDQJqvcBRyCGJqIe5rqR7pA4V6nuc-AV24"
+            - name: FIREBASE_AUTH_DOMAIN
+              value: "megamart-bb04d.firebaseapp.com"
+            - name: FIREBASE_PROJECT_ID
+              value: "megamart-bb04d"
+            - name: FIREBASE_STORAGE_BUCKET
+              value: "megamart-bb04d.appspot.com"
+            - name: FIREBASE_MESSAGING_SENDER_ID
+              value: "626032194043"
+            - name: FIREBASE_APP_ID
+              value: "1:626032194043:web:7ed92f011c71cb0ef65b5e"
+            - name: FIREBASE_MEASUREMENT_ID
+              value: "G-6F416HPER1"
+            - name: MONGO_URL
+              value: "mongodb+srv://megamart043:lkfAUpjbizZ7oeNT@cluster0.obommw7.mongodb.net/?retryWrites=true&w=majority"
+            - name: GOOGLE_LOGIN_SECRET
+              value: "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"
+            - name: LOGIN_CLIENT_ID
+              value: "6271277622-ddil3s0uouqvrol0kdhobdifmerg2n7p.apps.googleusercontent.com"
+            - name: LOGIN_SECRET_ID
+              value: "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"
+            - name: USER_EMAIL
+              value: "mohamedaflah186@gmail.com"
+            - name: USER_SECRETPASS
+              value: "frih rrud anvu ldpa"
+            - name: ADMIN_COLLECTION
+              value: "Admin"
+            - name: CART_COLLECTION
+              value: "Cart"
+            - name: CATEGORY_COLLECTION
+              value: "Category"
+            - name: ORDERS_COLLECTION
+              value: "Orders"
+            - name: PRODUCTS_COLLECTION
+              value: "Products"
+            - name: USER_COLLECTION
+              value: "User"
+            - name: ADDRESS_COLLECTION
+              value: "Address"
+            - name: BRAND_COLLECTION
+              value: "brand"
+            - name: OTP_COLLECTION
+              value: "OTP"
+            - name: WALLET_COLLECTION
+              value: "Walet"
+            - name: WHISHLIST_COLLECTION
+              value: "Whishlist"
+            - name: COUPON_COLLECTION
+              value: "Coupon"
+            - name: RETURN_COLLECTION
+              value: "returns"
+            - name: REFERAL_COLLECTION
+              value: "referal"
+            - name: CATEGORY_OFFER
+              value: "cateogoryOffer"
+            - name: PRODUCT_OFFER
+              value: "ProductOffer"
+            - name: RAZORPAY_KEYID
+              value: "rzp_test_4DklPLkGmokBbK"
+            - name: RAZORPAY_KEY_SECRET
+              value: "agNynpaGXFl4sYyf6LuewLrn"

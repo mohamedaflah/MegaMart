@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: megamart-service
+spec:
+  selector:
+    app: megamart
+  ports:
+   - protocol: TCP
+     port: 5001
+     targetPort: 5001
+     nodePort: 30000
+  type: NodePort   
+

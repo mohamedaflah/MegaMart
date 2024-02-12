@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:14-alpine
 
 WORKDIR /app
 
@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 5001
 
-CMD npm run devStart
+CMD ["node","app.js"]
