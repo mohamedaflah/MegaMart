@@ -1,5 +1,5 @@
 const passport = require("passport");
-const bcrypt=require('bcrypt')
+const bcrypt=require('bcryptjs')
 const passwordGenerator = require("generate-password");
 require("dotenv").config();
 const UserCollection = require("../model/collections/UserDb");

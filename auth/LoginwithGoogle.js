@@ -1,6 +1,6 @@
 const passport = require("passport");
 require("dotenv").config();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const passGenerator = require("generate-password");
 const UserCollection = require("../model/collections/UserDb");
 const { sendMailforUser } = require("../helper/sendmail");

@@ -37,12 +37,12 @@ app.use((req, res) => {
 const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`app started`);
-  // console.log(" ██╗  ██╗██╗   ██╗██████╗ ██╗   ██╗");
-  // console.log(" ██║ ██╔╝╚██╗ ██╔╝██╔══██╗██║   ██║");
-  // console.log(" █████╔╝  ╚████╔╝ ██║  ██║██║   ██║");
-  // console.log(" ██╔═██╗   ╚██╔╝  ██║  ██║██║   ██║");
-  // console.log(" ██║  ██╗   ██║   ██████╔╝╚██████╔╝");
-  // console.log(" ╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ");
+  console.log(" ██╗  ██╗██╗   ██╗██████╗ ██╗   ██╗");
+  console.log(" ██║ ██╔╝╚██╗ ██╔╝██╔══██╗██║   ██║");
+  console.log(" █████╔╝  ╚████╔╝ ██║  ██║██║   ██║");
+  console.log(" ██╔═██╗   ╚██╔╝  ██║  ██║██║   ██║");
+  console.log(" ██║  ██╗   ██║   ██████╔╝╚██████╔╝");
+  console.log(" ╚═╝  ╚═╝   ╚═╝   ╚═════╝  ╚═════╝ ");
   updateCouponStatus()
   updateProductOffer()
 });

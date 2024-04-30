@@ -1,7 +1,7 @@
 const adminDb = require("../model/collections/adminDb");
 const userDb = require("../model/collections/UserDb");
 const orderHelper = require("../helper/orderhelper");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const fs = require("fs");
 
 const { ObjectId } = require("bson");
