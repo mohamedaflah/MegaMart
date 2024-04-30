@@ -38,7 +38,7 @@
     "passport-google-oauth": "^2.0.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-google-oauth20": "^2.0.0",
-    "razorpay": "^2.9.2",
+    "razorpay": "^2.9.3",
     "sharp": "^0.32.6",
     "speakeasy": "^2.0.0",
     "whatwg-url": "^8.5.0"
